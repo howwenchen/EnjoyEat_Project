@@ -5,6 +5,11 @@ namespace EnjoyEat.Models
 {
     public partial class Member
     {
+        public Member()
+        {
+            MemberPoints = new HashSet<MemberPoint>();
+        }
+
         public int MemberId { get; set; }
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
@@ -17,5 +22,9 @@ namespace EnjoyEat.Models
         public string LevelName { get; set; } = null!;
         public byte[] Account { get; set; } = null!;
         public byte[] Password { get; set; } = null!;
+
+        public virtual MemberLogin? MemberLogin { get; set; }
+        public virtual TransactionRecord? TransactionRecord { get; set; }
+        public virtual ICollection<MemberPoint> MemberPoints { get; set; }
     }
 }
