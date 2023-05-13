@@ -1,0 +1,21 @@
+﻿#menuItem {
+    padding-bottom: 0;
+}
+
+#menu {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+}
+
+.menuTop {
+    padding: 12px;
+    border: 2px solid #ffffff;
+    width: 40%;
+}
+
+.menuDetail {
+    padding: 12px;
+    border: 2px solid #ffffff;
+    width: 40%;
+}
