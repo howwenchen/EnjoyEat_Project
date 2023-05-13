@@ -1,0 +1,53 @@
+﻿@model IEnumerable<EnjoyEat.Models.ViewModel.ReservationViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConfirmationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberofGuest)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReservationTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConfirmationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberofGuest)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReservationTime)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PhoneNumber">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.PhoneNumber">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.PhoneNumber">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

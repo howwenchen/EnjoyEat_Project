@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace EnjoyEat.Models
+namespace EnjoyEat.Models.ViewModel
 {
-
-    public partial class Reservation
+    public class ReservationViewModel
     {
+        [Key]
+
         public string PhoneNumber { get; set; } = null!;
         public DateTime? ReservationDate { get; set; }
         public DateTime? ConfirmationDate { get; set; }
