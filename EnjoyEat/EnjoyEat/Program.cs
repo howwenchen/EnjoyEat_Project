@@ -1,3 +1,6 @@
+using EnjoyEat.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace EnjoyEat
 {
 	public class Program
@@ -6,10 +9,14 @@ namespace EnjoyEat
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			// Add services to the container.
-			builder.Services.AddControllersWithViews();
+            // Add services to DI the container.
+            var EnjoyEatConnectionString = builder.Configuration.GetConnectionString("EnjoyEat");
+            builder.Services.AddDbContext<db_a989fe_thm101team6Context>(options =>
+            options.UseSqlServer(EnjoyEatConnectionString));
 
-			var app = builder.Build();
+            builder.Services.AddControllersWithViews();
+
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())
