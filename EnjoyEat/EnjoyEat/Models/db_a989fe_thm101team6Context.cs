@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using EnjoyEat.Models.ViewModel;
 
 
 namespace EnjoyEat.Models
@@ -583,6 +584,6 @@ namespace EnjoyEat.Models
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-      
+        public DbSet<EnjoyEat.Models.ViewModel.MemberViewModel>? MemberViewModel { get; set; }
     }
 }
