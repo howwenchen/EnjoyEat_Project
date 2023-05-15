@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using EnjoyEat.Models.ViewModel;
 
 namespace EnjoyEat.Models
 {
@@ -21,7 +20,6 @@ namespace EnjoyEat.Models
         public virtual DbSet<Authority> Authorities { get; set; } = null!;
         public virtual DbSet<AuthorityUse> AuthorityUses { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
-        public virtual DbSet<Customer> Customers { get; set; } = null!;
         public virtual DbSet<CustomerService> CustomerServices { get; set; } = null!;
         public virtual DbSet<Department> Departments { get; set; } = null!;
         public virtual DbSet<Employee> Employees { get; set; } = null!;
@@ -121,6 +119,12 @@ namespace EnjoyEat.Models
                     .HasColumnName("EmployeesID");
 
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AuthorityUses)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AuthorityUse_Authority");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -130,25 +134,6 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.CategoryName).HasMaxLength(20);
 
                 entity.Property(e => e.Description).HasColumnType("text");
-            });
-
-            modelBuilder.Entity<Customer>(entity =>
-            {
-                entity.Property(e => e.CustomerId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("CustomerID");
-
-                entity.Property(e => e.Address).HasMaxLength(50);
-
-                entity.Property(e => e.Email).HasMaxLength(30);
-
-                entity.Property(e => e.FirstName).HasMaxLength(30);
-
-                entity.Property(e => e.LastName).HasMaxLength(30);
-
-                entity.Property(e => e.Phone)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<CustomerService>(entity =>
@@ -233,6 +218,12 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.Password).HasMaxLength(20);
 
                 entity.Property(e => e.UserName).HasMaxLength(15);
+
+                entity.HasOne(d => d.Employees)
+                    .WithOne(p => p.EmployeesLogin)
+                    .HasForeignKey<EmployeesLogin>(d => d.EmployeesId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmployeesLogin_Employees");
             });
 
             modelBuilder.Entity<EmployeesSalary>(entity =>
@@ -259,6 +250,12 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.TotalSalary).HasColumnType("money");
 
                 entity.Property(e => e.Wage).HasColumnType("money");
+
+                entity.HasOne(d => d.Employee)
+                    .WithOne(p => p.EmployeesSalary)
+                    .HasForeignKey<EmployeesSalary>(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmployeesSalary_Employees");
             });
 
             modelBuilder.Entity<Level>(entity =>
@@ -371,21 +368,23 @@ namespace EnjoyEat.Models
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.OrderId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("OrderID");
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
                 entity.Property(e => e.TableId).HasColumnName("TableID");
 
-                entity.HasOne(d => d.Customer)
+                entity.HasOne(d => d.Member)
                     .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.CustomerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Orders_Customers");
+                    .HasForeignKey(d => d.MemberId)
+                    .HasConstraintName("FK_Orders_Members");
+
+                entity.HasOne(d => d.Table)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.TableId)
+                    .HasConstraintName("FK_Orders_Orders");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
@@ -545,6 +544,8 @@ namespace EnjoyEat.Models
             {
                 entity.ToTable("Table");
 
+                entity.Property(e => e.TableId).HasColumnName("TableID");
+
                 entity.Property(e => e.Capacity).HasColumnName("capacity");
 
                 entity.Property(e => e.Location).HasMaxLength(10);
@@ -582,7 +583,5 @@ namespace EnjoyEat.Models
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-        public DbSet<EnjoyEat.Models.ViewModel.MemberViewModel>? MemberViewModel { get; set; }
     }
 }
