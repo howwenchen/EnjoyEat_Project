@@ -1,0 +1,406 @@
+﻿@model IEnumerable<EnjoyEat.Models.OrderDetail>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>訂單結帳</title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+
+    <!-- Favicons -->
+    <link href="~/img/favicon.png" rel="icon" />
+    <link href="~/img/apple-touch-icon.png" rel="apple-touch-icon" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+          rel="stylesheet" />
+
+    <!-- Vendor CSS Files -->
+    <link href="~/vendor/animate.css/animate.min.css" rel="stylesheet" />
+    <link href="~/vendor/aos/aos.css" rel="stylesheet" />
+    <link href="~/vendor/bootstrap/css/bootstrap.min.css"
+          rel="stylesheet" />
+    <link href="~/vendor/bootstrap-icons/bootstrap-icons.css"
+          rel="stylesheet" />
+    <link href="~/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+    <link href="~/vendor/glightbox/css/glightbox.min.css"
+          rel="stylesheet" />
+    <link href="~/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+    
+
+    <!-- Template Main CSS File -->
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/checkoutpagestyle.css" rel="stylesheet" />
+</head>
+<body>
+    <section id="hero" class="align-items-center overflow-auto">
+        <!-- ======= Header ======= -->
+        <header id="header" class="sticky-top d-flex align-items-center">
+            <div class="container-fluid container-xl d-flex align-items-center justify-content-lg-between">
+                <h1 class="logo me-auto me-lg-0">
+                    <a href="index.html">Restaurantly</a>
+                </h1>
+                <!-- Uncomment below if you prefer to use an image logo -->
+                <!-- <a href="index.html" class="logo me-auto me-lg-0"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+                <nav id="navbar" class="navbar order-last order-lg-0">
+                    <ul>
+                        <li><a class="nav-link scrollto" href="#hero">Home</a></li>
+                        <li><a class="nav-link scrollto" href="#about">About</a></li>
+                        <li><a class="nav-link scrollto" href="#menu">Menu</a></li>
+                        <li>
+                            <a class="nav-link scrollto" href="#specials">Specials</a>
+                        </li>
+                        <li><a class="nav-link scrollto" href="#events">Events</a></li>
+                        <li><a class="nav-link scrollto" href="#chefs">Chefs</a></li>
+                        <li><a class="nav-link scrollto" href="#gallery">Gallery</a></li>
+                        <li class="dropdown">
+                            <a href="#">
+                                <span>Drop Down</span> <i class="bi bi-chevron-down"></i>
+                            </a>
+                            <ul>
+                                <li><a href="#">Drop Down 1</a></li>
+                                <li class="dropdown">
+                                    <a href="#">
+                                        <span>Deep Drop Down</span>
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                    <ul>
+                                        <li><a href="#">Deep Drop Down 1</a></li>
+                                        <li><a href="#">Deep Drop Down 2</a></li>
+                                        <li><a href="#">Deep Drop Down 3</a></li>
+                                        <li><a href="#">Deep Drop Down 4</a></li>
+                                        <li><a href="#">Deep Drop Down 5</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">Drop Down 2</a></li>
+                                <li><a href="#">Drop Down 3</a></li>
+                                <li><a href="#">Drop Down 4</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+                    </ul>
+                    <i class="bi bi-list mobile-nav-toggle"></i>
+                </nav>
+                <!-- .navbar -->
+                <a href="#book-a-table"
+                   class="book-a-table-btn scrollto d-none d-lg-flex">Book a table</a>
+            </div>
+        </header>
+        <!-- End Header -->
+        <!--======= Container =======-->
+
+        <div class="container position-relative text-center text-lg-start"
+             data-aos="zoom-in"
+             data-aos-delay="100">
+            <div name="content-body"
+                 oncontextmenu="return false"
+                 class="snippet-body">
+                <div class="d-flex flex-column justify-content-center align-items-center bg-dark"
+                     id="order-heading">
+                    <div class="text-uppercase">
+                        <p>Order detail</p>
+                    </div>
+
+                    <div class="pt-1">
+                        <p>
+                            Order #12615 is currently<b class="text-dark"> processing</b>
+                        </p>
+                    </div>
+                </div>
+                <div class="wrapper">
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr class="text-uppercase text-muted">
+                                    <th scope="col">product</th>
+                                    <th scope="col" class="text-right">total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Babyblends: 1meal/day</th>
+                                    <td class="text-right"><b>$69.86</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-center list py-1">
+                        <div><b>1px</b></div>
+                        <div class="mx-3">
+                            <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                                 alt="apple"
+                                 class="rounded-circle"
+                                 width="30"
+                                 height="30" />
+                        </div>
+                        <div class="order-item">Apple</div>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-center list my-2 py-1">
+                        <div><b>4px</b></div>
+                        <div class="mx-3">
+                            <img src="https://images.unsplash.com/photo-1602081593819-65e7a8cee0dd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
+                                 alt="apple"
+                                 class="rounded-circle"
+                                 width="30"
+                                 height="30" />
+                        </div>
+                        <div class="order-item">Mango</div>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-center list my-2 py-1">
+                        <div><b>2px</b></div>
+                        <div class="mx-3">
+                            <img src="https://images.unsplash.com/photo-1584183187885-071d53d42531?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+                                 alt="apple"
+                                 class="rounded-circle"
+                                 width="30"
+                                 height="30" />
+                        </div>
+                        <div class="order-item">Carrot Apple Ginger</div>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-center list my-2 py-1">
+                        <div><b>3px</b></div>
+                        <div class="mx-3">
+                            <img src="https://images.unsplash.com/photo-1602096934878-5028bf10ca50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+                                 alt="apple"
+                                 class="rounded-circle"
+                                 width="30"
+                                 height="30" />
+                        </div>
+                        <div class="order-item">Pear</div>
+                    </div>
+                    <div class="pt-2 border-bottom mb-3"></div>
+                    <div class="d-flex justify-content-start align-items-center pl-3">
+                        <fieldset>
+                            <legend>Payment Method</legend>
+
+                            <div class="form__radios">
+                                <div class="form__radio">
+                                    <label for="visa">
+                                        <svg class="icon">
+                                            <use xlink:href="#icon-visa" />
+                                        </svg>Visa Payment
+                                    </label>
+                                    <input checked
+                                           id="visa"
+                                           name="payment-method"
+                                           type="radio" />
+                                </div>
+
+                                <div class="form__radio">
+                                    <label for="paypal">
+                                        <svg class="icon">
+                                            <use xlink:href="#icon-paypal" />
+                                        </svg>PayPal
+                                    </label>
+                                    <input id="paypal" name="payment-method" type="radio" />
+                                </div>
+
+                                <div class="form__radio">
+                                    <label for="mastercard">
+                                        <svg class="icon">
+                                            <use xlink:href="#icon-mastercard" />
+                                        </svg>Master Card
+                                    </label>
+                                    <input id="mastercard" name="payment-method" type="radio" />
+                                </div>
+                            </div>
+                        </fieldset>
+                        <!-- <div class="text-muted">Payment Method</div>
+                        <div class="ml-auto">
+                          <img
+                            src="https://www.freepnglogos.com/uploads/mastercard-png/mastercard-logo-logok-15.png"
+                            alt=""
+                            width="30"
+                            height="30"
+                          />
+                          <label>Mastercard ******5342</label>
+                        </div> -->
+                    </div>
+                    <div class="d-flex justify-content-start align-items-center py-1 pl-3">
+                        <div class="text-muted">Shipping</div>
+                        <div class="ml-auto"><label>Free</label></div>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-center pb-4 pl-3 border-bottom">
+                        <div class="text-muted">
+                            <button class="text-white btn">50% Discount</button>
+                        </div>
+                        <div class="ml-auto price">-$34.94</div>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-center pl-3 py-3 mb-4 border-bottom">
+                        <div class="text-muted">Today's Total</div>
+                        <div class="ml-auto h5">$34.94</div>
+                    </div>
+                    <div class="row border rounded p-1 my-3">
+                        <div class="col-md-6 py-3">
+                            <div class="d-flex flex-column align-items start">
+                                <b>Billing Address</b>
+                                <p class="text-justify pt-2">
+                                    James Thompson, 356 Jonathon Apt.220,
+                                </p>
+                                <p class="text-justify">New York</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 py-3">
+                            <div class="d-flex flex-column align-items start">
+                                <b>Shipping Address</b>
+                                <p class="text-justify pt-2">
+                                    James Thompson, 356 Jonathon Apt.220,
+                                </p>
+                                <p class="text-justify">New York</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pl-3 font-weight-bold">Related Subsriptions</div>
+                    <div class="d-sm-flex justify-content-between rounded my-3 subscriptions">
+                        <div><b>#9632</b></div>
+                        <div>December 08, 2020</div>
+                        <div>Status: Processing</div>
+                        <div>Total: <b> $68.8 for 10 items</b></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- End Container -->
+        <!-- ======= Footer ======= -->
+        <footer id="footer">
+            <div class="footer-top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-6">
+                            <div class="footer-info">
+                                <h3>Restaurantly</h3>
+                                <p>
+                                    A108 Adam Street <br />
+                                    NY 535022, USA<br /><br />
+                                    <strong>Phone:</strong> +1 5589 55488 55<br />
+                                    <strong>Email:</strong> info@example.com<br />
+                                </p>
+                                <div class="social-links mt-3">
+                                    <a href="#" class="twitter">
+                                        <i class="bx bxl-twitter"></i>
+                                    </a>
+                                    <a href="#" class="facebook">
+                                        <i class="bx bxl-facebook"></i>
+                                    </a>
+                                    <a href="#" class="instagram">
+                                        <i class="bx bxl-instagram"></i>
+                                    </a>
+                                    <a href="#" class="google-plus">
+                                        <i class="bx bxl-skype"></i>
+                                    </a>
+                                    <a href="#" class="linkedin">
+                                        <i class="bx bxl-linkedin"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-6 footer-links">
+                            <h4>Useful Links</h4>
+                            <ul>
+                                <li>
+                                    <i class="bx bx-chevron-right"></i> <a href="#">Home</a>
+                                </li>
+                                <li>
+                                    <i class="bx bx-chevron-right"></i> <a href="#">About us</a>
+                                </li>
+                                <li>
+                                    <i class="bx bx-chevron-right"></i> <a href="#">Services</a>
+                                </li>
+                                <li>
+                                    <i class="bx bx-chevron-right"></i>
+                                    <a href="#">Terms of service</a>
+                                </li>
+                                <li>
+                                    <i class="bx bx-chevron-right"></i>
+                                    <a href="#">Privacy policy</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 footer-links">
+                            <h4>Our Services</h4>
+                            <ul>
+                                <li>
+                                    <i class="bx bx-chevron-right"></i>
+                                    <a href="#">Web Design</a>
+                                </li>
+                                <li>
+                                    <i class="bx bx-chevron-right"></i>
+                                    <a href="#">Web Development</a>
+                                </li>
+                                <li>
+                                    <i class="bx bx-chevron-right"></i>
+                                    <a href="#">Product Management</a>
+                                </li>
+                                <li>
+                                    <i class="bx bx-chevron-right"></i>
+                                    <a href="#">Marketing</a>
+                                </li>
+                                <li>
+                                    <i class="bx bx-chevron-right"></i>
+                                    <a href="#">Graphic Design</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 footer-newsletter">
+                            <h4>Our Newsletter</h4>
+                            <p>
+                                Tamen quem nulla quae legam multos aute sint culpa legam
+                                noster magna
+                            </p>
+                            <form action="" method="post">
+                                <input type="email" name="email" /><input type="submit"
+                                                                          value="Subscribe" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="copyright">
+                    &copy; Copyright <strong><span>Restaurantly</span></strong>. All Rights Reserved
+                </div>
+                <div class="credits">
+                    <!-- All the links in the footer should remain intact. -->
+                    <!-- You can delete the links only if you purchased the pro version. -->
+                    <!-- Licensing information: https://bootstrapmade.com/license/ -->
+                    <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/restaurantly-restaurant-template/ -->
+                    Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+                </div>
+            </div>
+        </footer>
+        <!-- End Footer -->
+    </section>
+    <div id="preloader"></div>
+    <a href="#"
+       class="back-to-top d-flex align-items-center justify-content-center">
+        <i class="bi bi-arrow-up-short"></i>
+    </a>
+
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/aos/aos.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
+

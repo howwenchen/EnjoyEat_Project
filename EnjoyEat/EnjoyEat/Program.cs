@@ -41,7 +41,11 @@ namespace EnjoyEat
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
 
-			app.Run();
+            app.MapControllerRoute(
+                name: "CheckoutPage",
+                pattern: "{controller=CheckoutPage}/{action=Index}/{id?}");
+
+            app.Run();
 		}
 	}
 }
