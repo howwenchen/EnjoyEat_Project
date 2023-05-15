@@ -1,0 +1,237 @@
+﻿@section Styles
+	{
+	<style>
+		thead {
+			background-color: maroon;
+			color: aliceblue;
+		}
+	</style>
+}
+
+
+<div id="app" class="container">
+	<button @@click="update(null)">Update</button>
+	<button @@click="edit(1)">edit</button>
+	<button @@click="cancel()">cancel</button>
+	<button @@click="deleteEmployee(3)">deleteEmployee</button>
+
+	<div class="form-group">
+		@*篩選欄位*@
+		<div class="row" style="width:50%;margin-left:auto;margin-right:0px">
+			<label class="col-md-4">關鍵字:</label>
+			<input class="form-control col-md-8" placeholder="請輸入篩選關鍵字"
+				   v-model="filter" @@keyup="filterEmployeeDTOes" />
+		</div>
+	</div>
+	<div class="form-group">
+		@*新增按鍵*@
+		<!-- Modal trigger button -->
+		<button type="button" @@click="showInsertPage" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId">
+			新增員工紀錄
+		</button>
+	</div>
+	<div class="form-group">
+		@*新增紀錄畫面*@
+		<div class="modal fade" id="insertPage" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalTitleId">Modal title</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						@*頁面內容Body*@
+						<div class="form-group">
+							<label class="form-label">FirstName:</label>
+							<input class="form-control" v-model="firstName" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">LastName:</label>
+							<input class="form-control" v-model="lastName" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">Title:</label>
+							<input class="form-control" v-model="title" />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+						<button type="button" @@click="insert" class="btn btn-primary">新增</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<td>編輯</td>
+					<td>EmployeeId</td>
+					<td>FirstName</td>
+					<td>LastName</td>
+					<td>Title</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="item in EmployeeDTOes">
+					<template v-if="item.Edit==true">
+						@*編輯範本*@
+						<td>
+							<button class="btn btn-success" @@click="update(item)">修改</button>
+							<button class="btn btn-warning" @@click="cancel()">取消</button>
+						</td>
+						<td>{{item.employeeId}}</td>
+						<td><input v-model="item.firstName" /></td>
+						<td><input v-model="item.lastName" /></td>
+						<td><input v-model="item.title" /></td>
+					</template>
+					<template v-else>
+						@*顯示範本*@
+						<td>
+							<button class="btn btn-primary" @@click="edit(item.employeeId)">編輯</button>
+							<button class="btn btn-danger" @@click="deleteEmployee(item.employeeId)">刪除</button> @*delete是VUE保留字 不可使用*@
+						</td>
+						<td>{{item.employeeId}}</td>
+						<td>{{item.firstName}}</td>
+						<td>{{item.lastName}}</td>
+						<td>{{item.title}}</td>
+					</template>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+
+
+</div>
+
+@section Scripts
+	{
+	<script src="~/lib/axios/axios.min.js"></script>
+	<script src="~/lib/vue/vue.global.prod.js"></script>
+	<script>
+		var baseAddress = "";
+		var vueApp = {
+			data() {
+				return {
+					EmployeeDTOes: [],
+					filter: "",
+					originalFirstName: "",
+					originalLastName: "",
+					originalTitle: "",
+					firstName: "",
+					lastName: "",
+					title: ""
+				};
+			},
+			mounted: function ()     //mounted 已經掛載好的 : 初始化
+			{
+				let _this = this;
+				_this.filterEmployeeDTOes();
+			},
+			methods: {
+				//篩選Filter
+				filterEmployeeDTOes: function () {
+					//alert("ggg");
+					let _this = this;
+					var request = {};
+					request.EmployeeId = isNaN(Number(_this.filter)) ? -1 : Number(_this.filter);
+					request.FirstName = request.LastName = request.Title = _this.filter;
+					axios.post(`${baseAddress}/odata/Employees/Filter`, request) //.post(){}呼叫
+						.then(response => {         //.then(){}回應
+							_this.EmployeeDTOes = response.data;
+							var EmployeeList = []; //陣列元素
+							for (var i = 0; i < _this.EmployeeDTOes.length; i++) {
+								var item = _this.EmployeeDTOes[i];
+								item.Edit = false;  //編輯修改名稱後，如果篩選不到會把這一筆資料在畫面中移除
+								EmployeeList.push(item);
+							}
+							_this.EmployeeDTOes = EmployeeList;
+						});
+				},
+				update: function (item) {
+					//alert("update");
+					let _this = this;
+					var request = {
+						EmployeeId: item.employeeId,
+						FirstName: item.firstName,
+						LastName: item.lastName,
+						Title: item.title
+					};
+					//axios的函式就是動詞
+					axios.put(`${baseAddress}/odata/Employees/${item.employeeId}`, request).then(response => {
+						alert(response.data);  //編輯修改成功
+						//改變頁面的狀態，先將原本的
+						_this.cancel();
+						_this.filterEmployeeDTOes();
+
+					});
+				},
+				cancel: function () {
+					//alert("cancel");
+					let _this = this;
+					var EmployeeList = [];
+					for (var i = 0; i < _this.EmployeeDTOes.length; i++) {
+						var item = _this.EmployeeDTOes[i];
+						if (item.Edit == true) {
+							item.Edit = false;
+							item.firstName = _this.originalFirstName;
+							item.lastName = _this.originalLastName;
+							item.title = _this.originalTitle;
+						}
+						EmployeeList.push(item);
+					}
+					_this.EmployeeDTOes = EmployeeList;
+				},
+				edit: function (employeeId) {
+					//alert("edit");
+					let _this = this;
+					var EmployeeList = [];
+					for (var i = 0; i < _this.EmployeeDTOes.length; i++) {
+						var item = _this.EmployeeDTOes[i];
+						if (employeeId == item.employeeId) {
+							item.Edit = true;
+							_this.originalFirstName = item.firstName;
+							_this.originalLastName = item.lastName;
+							_this.originalTitle = item.title;
+						}
+						EmployeeList.push(item);
+					}
+					_this.EmployeeDTOes = EmployeeList;
+				},
+				deleteEmployee: function (employeeId) {
+					//alert("deleteEmployee");
+					let _this = this;
+					var ret = confirm("確定要刪除嗎?");
+					if (ret == true) {
+						axios.delete(`${baseAddress}/odata/Employees/${employeeId}`).then(
+							response => {
+								alert(response.data); //到這邊可以刪除，但畫面還沒改變
+								_this.filterEmployeeDTOes(); //刷新畫面
+							});
+					}
+				},
+				showInsertPage: function () {
+					$("#insertPage").modal("show");
+				},
+				insert: function () {
+					var _this = this;
+					var empDTO = {
+						EmployeeId: 0, //Id不能不填
+						FirstName: _this.firstName,
+						LastName: _this.lastName,
+						Title: _this.title
+					};
+					axios.post(`${baseAddress}/odata/Employees`, empDTO).then(response => {
+						alert(response.data);
+						$("#insertPage").modal('hide');
+						_this.filterEmployeeDTOes();
+					})
+				}
+			}
+		};
+		var app = Vue.createApp(vueApp).mount("#app");  //掛載到app物件
+	</script>
+}
