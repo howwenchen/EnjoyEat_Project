@@ -1,6 +1,6 @@
 ﻿
 :root {
-    --color-background: #fae3ea;
+    --color-background: #b4b4b4;
     --color-primary: #fc8080;
     --font-family-base: Poppin, sans-serif;
     --font-size-h1: 1.25rem;
@@ -9,8 +9,8 @@
 
 
 * {
-    -webkit-box-sizing: inherit;
-    box-sizing: inherit;
+    padding:0;
+    margin:0;
 }
 
 html {
@@ -19,7 +19,6 @@ html {
 }
 
 body {
-    background-color: #fae3ea;
     background-color: var(--color-background);
     display: grid;
     font-family: Poppin, sans-serif;

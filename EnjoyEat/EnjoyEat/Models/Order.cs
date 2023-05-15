@@ -13,7 +13,7 @@ namespace EnjoyEat.Models
         }
 
         public int OrderId { get; set; }
-        public int CustomerId { get; set; }
+        public int? MemberId { get; set; }
         public DateTime OrderDate { get; set; }
         public bool IsTakeway { get; set; }
         public int? TableId { get; set; }
@@ -22,9 +22,8 @@ namespace EnjoyEat.Models
         public bool IsSuccess { get; set; }
         public double? CampaignDiscount { get; set; }
         public double? LevelDiscount { get; set; }
-        public double TotalDiscount { get; set; }
 
-        public virtual Customer Customer { get; set; } = null!;
+        public virtual Member? Member { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<Payment> Payments { get; set; }
         public virtual ICollection<TransactionRecord> TransactionRecords { get; set; }
