@@ -25,4 +25,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\OrderForHere\Data\" />
+    <Folder Include="Areas\OrderForHere\Models\" />
+  </ItemGroup>
+
 </Project>
