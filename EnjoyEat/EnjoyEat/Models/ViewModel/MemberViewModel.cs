@@ -16,11 +16,21 @@ namespace EnjoyEat.Models.ViewModel
         public string Phone { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string LevelName { get; set; } = null!;
-        public byte[] Account { get; set; } = null!;
         public byte[] Password { get; set; } = null!;
 
-        public virtual MemberLogin? MemberLogin { get; set; }
-        public virtual TransactionRecord? TransactionRecord { get; set; }
-        public virtual ICollection<MemberPoint> MemberPoints { get; set; }
+
+        public int OrderId { get; set; }
+        public int CustomerId { get; set; }
+        public DateTime OrderDate { get; set; }
+        public int TableId { get; set; }
+        public int CustomerCount { get; set; }
+        public int TotalPrice { get; set; }
+
+        public virtual Customer Customer { get; set; } = null!;
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<Payment> Payments { get; set; }
+        public virtual ICollection<TransactionRecord> TransactionRecords { get; set; }
+
+
     }
 }

@@ -9,5 +9,7 @@ namespace EnjoyEat.Models
         public string UserName { get; set; } = null!;
         public byte[] Password { get; set; } = null!;
         public DateTime LoginTime { get; set; }
+
+        public virtual Employee Employees { get; set; } = null!;
     }
 }
