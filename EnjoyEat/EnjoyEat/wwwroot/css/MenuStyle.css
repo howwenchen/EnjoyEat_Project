@@ -1,9 +1,11 @@
 ﻿#menuItem {
     padding-bottom: 0;
+    padding-top: 20px;
 }
 
 #menu {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     padding: 20px;
 }
@@ -11,11 +13,13 @@
 .menuTop {
     padding: 12px;
     border: 2px solid #ffffff;
-    width: 40%;
+    width: 50%;
+    min-width: 350px;
 }
 
 .menuDetail {
     padding: 12px;
     border: 2px solid #ffffff;
-    width: 40%;
+    width: 50%;
+    min-width: 350px;
 }
