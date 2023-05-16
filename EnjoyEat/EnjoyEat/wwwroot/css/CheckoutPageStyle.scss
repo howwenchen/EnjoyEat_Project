@@ -1,9 +1,9 @@
 ﻿
 :root {
-    --color-background: #b4b4b4;
-    --color-primary: #fc8080;
+    
+    --color-primary: #ff6a00;
     --font-family-base: Poppin, sans-serif;
-    --font-size-h1: 1.25rem;
+    --font-size-h1: 2rem;
     --font-size-h2: 1rem;
 }
 
@@ -18,8 +18,8 @@ html {
     box-sizing: border-box;
 }
 
-body {
-    background-color: var(--color-background);
+content_body {
+    background: var(--color-background);
     display: grid;
     font-family: Poppin, sans-serif;
     font-family: var(--font-family-base);
@@ -32,6 +32,7 @@ body {
     align-items: center;
     justify-items: center;
     place-items: center;
+    color:#000000;
 }
 
 address {
@@ -56,7 +57,7 @@ h1 {
     font-size: var(--font-size-h1);
     line-height: 1.2;
     margin-top: 0;
-    margin-bottom: 1.5em;
+    margin-bottom: 0.5em;
 }
 
 h2 {
@@ -80,7 +81,7 @@ input {
 }
 
 input[type="radio"] {
-    accent-color: #fc8080;
+    accent-color: #ff6a00;
     accent-color: var(--color-primary);
 }
 
@@ -90,12 +91,13 @@ table {
 }
 
 tbody {
-    color: #b4b4b4;
+    color: black;
 }
 
 td {
     padding-top: 0.125em;
     padding-bottom: 0.125em;
+    text-align:center;
 }
 
 tfoot {
@@ -119,7 +121,7 @@ tfoot {
     background-color: #fc8080;
     background-color: var(--color-primary);
     border-radius: 999em;
-    color: #fff;
+    color: black;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -146,15 +148,9 @@ tfoot {
     width: 100%;
 }
 
-.card {
-    border-radius: 1em;
-    background-color: #fc8080;
-    background-color: var(--color-primary);
-    color: #fff;
-    padding: 1em;
-}
 
 .form {
+    text-align:center;
     display: grid;
     grid-gap: 2em;
     gap: 2em;
@@ -172,7 +168,7 @@ tfoot {
     align-items: center;
     background-color: #fefdfe;
     border-radius: 1em;
-    -webkit-box-shadow: 0 0 1em rgba(0, 0, 0, 0.0625);
+    -webkit-box-shadow: 0 0 1em rgba(0, 0, 0, 0.0725);
     box-shadow: 0 0 1em rgba(0, 0, 0, 0.0625);
     display: -webkit-box;
     display: -ms-flexbox;
@@ -194,10 +190,11 @@ tfoot {
     gap: 1em;
 }
 
-.header {
+.form_header {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    align-items:center;
     -webkit-box-pack: center;
     -ms-flex-pack: center;
     justify-content: center;
@@ -205,26 +202,28 @@ tfoot {
     padding-bottom: 0.5em;
     padding-left: 1em;
     padding-right: 1em;
+    
 }
 
 .icon {
     height: 1em;
     display: inline-block;
-    fill: currentColor;
+    
     width: 1em;
     vertical-align: middle;
 }
 
 .iphone {
-    background-color: #fbf6f7;
+    
     background-image: -webkit-gradient(linear, left top, left bottom, from(#fbf6f7), to(#fff));
     background-image: -o-linear-gradient(top, #fbf6f7, #fff);
     background-image: linear-gradient(to bottom, #fbf6f7, #fff);
     border-radius: 2em;
-    height: 812px;
+    /*height: 812px;*/
     -webkit-box-shadow: 0 0 1em rgba(0, 0, 0, 0.0625);
     box-shadow: 0 0 1em rgba(0, 0, 0, 0.0625);
-    width: 375px;
+    width: 50vw;
     overflow: auto;
     padding: 2em;
+    min-width:358px;
 }
