@@ -2,9 +2,11 @@
 
 namespace EnjoyEat.Areas.backend.Controllers
 {
-    public class EmployeeManagement : Controller
+	[Area("backend")]
+	public class EmployeeManagement : Controller
     {
-        public IActionResult Index()
+
+		public IActionResult Index()
         {
             return View();
         }

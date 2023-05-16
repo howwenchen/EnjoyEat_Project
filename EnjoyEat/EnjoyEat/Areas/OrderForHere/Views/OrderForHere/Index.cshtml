@@ -1,113 +1,85 @@
-﻿@section Styles{
-	<link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
-}
-
-
-<div id="cartList" v-cloak>
-    <div class="scrollregion">
-        <div>
-            <!-- 標題 -->
-            <div class="container col userarea">
-                <div class="title w-100">
-                    <div class="himessage">
-                        <p>Hi, 顧客或會員, 請選擇您的餐點</p>
+﻿    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+             class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-secondary navbar-dark">
+                <a class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary">享食餐廳</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="img/user未登入.png" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-danger rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
+                        </div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">請先登入</h6>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Sidebar End -->
+    <!-- Content Start -->
+    <div class="content">
+        <!-- Navbar Start -->
+        <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+            <a href="#" class="sidebar-toggler flex-shrink-0">
+                <i class="fa fa-bars"></i>
+            </a>
+            <div class="navbar-nav align-items-center ms-auto">
+                <div class="nav-item dropdown">
+                    <img class="rounded-circle me-lg-2" src="img/user未登入.png" alt=""
+                         style="width: 40px; height: 40px;">
+                    <span class="d-none d-lg-inline-flex">未登入</span>
+                </div>
+            </div>
+        </nav>
+        <!-- Navbar End -->
+        <!-- Sign In Start -->
+        <div class="container-fluid">
+            <div class="row h-100 align-items-center justify-content-center">
+                <div class="col-12 ">
+                    <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>後臺管理</h3>
+                            <h3>登入</h3>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="floatingInput" placeholder="帳號" required>
+                            <label for="floatingInput">員工帳號</label>
+                        </div>
+                        <div class="form-floating mb-4">
+                            <input type="password" class="form-control" id="floatingPassword" placeholder="密碼" required>
+                            <label for="floatingPassword">員工密碼</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">登入</button>
                     </div>
                 </div>
             </div>
         </div>
-
-        <fieldset class="mx-3 my-4">
-            <legend class="p-3">
-                <b><i class="fas fa-shopping-cart"></i> 購物車</b>
-            </legend>
-            <!-- 購物車清單 -->
-            <div class="container-fluid">
-                <div class="cartList">
-                    <ol class="list-group">
-                        <li class="row list-group-item d-flex justify-content-between align-items-start">
-                            <div class="col-3 px-0">
-                                <img class="w-100 rounded">
-                            </div>
-                            <div class="col-5 px-0">
-                                <div class="ms-2 me-auto">
-                                    <div class="fw-bold productName">{{item.productName}}</div>
-                                    <div v-if="item.discountAmount != 1">
-                                        <span>$ </span>
-                                        <span class="originalPrice">{{item.unitPrice * item.qty}} </span>
-                                        <span class="discountPrice" name="finalPrice">{{discountPrice(item)}}</span>
-                                    </div>
-                                    <div v-else>
-                                        <span>$ </span>
-                                        <span name="finalPrice">{{item.unitPrice * item.qty}} </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row col-4 px-0">
-                                <div class="col-6 text-center px-0">
-                                    <button class="btnCount" v-on:click="increase(item)">▲</button>
-                                    <div>{{item.qty}}</div>
-                                    <button class="btnCount" v-on:click="decrease(item)">▼</button>
-                                </div>
-                                <div class="col-6 text-center d-flex align-items-center justify-content-center">
-                                    <div>
-                                        <button class="btnDelete" v-on:click="deleteItem(index)">
-                                            <i class="fa-sharp fa-solid fa-xmark"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ol>
-                </div>
-                <form action="Success" method="post" class="d-none" id="cart">
-                    <input name="orderId" v-model="orderId" />
-                    <button type="submit" ref="orderingSend"></button>
-                </form>
-                <form action="OrderList" method="post" class="d-none">
-                    <button type="submit" ref="backToMenu"></button>
-                </form>
-            </div>
-            <hr>
-            <div class="cartTotal">此筆訂單總額: {{cartTotal()}} 元</div>
-        </fieldset>
-    </div>
-
-    <!-- 底部按鈕 -->
-    <div class="orderCheck my-3">
-        <div class="container row w-100">
-            <div class="col col-xl-6 text-center">
-                <button class="bottombtntext btnBacktoMenu w-100 py-2" v-on:click="backToMenu">
-                    加點商品
-                </button>
-            </div>
-            <div class="col col-xl-6 text-center">
-                <button type="button" class="bottombtntext btnCartConfirm w-100 py-2" data-bs-toggle="modal"
-                        data-bs-target="#delieveBackdrop">
-                    送出訂單
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="delieveBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-         aria-labelledby="delieveBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="delieveBackdropLabel">訂單送出提示</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    確認訂單無誤並送出?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btnInModal btnModalCancel" data-bs-dismiss="modal">取消</button>
-                    <button class="btnInModal btnModalConfirm" v-on:click="confirmSend">確認送出</button>
+        <!-- Table End -->
+        <!-- Footer Start -->
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded-top p-4">
+                <div class="row">
+                    <div class="col-12 col-sm-6 text-center text-sm-start">
+                        &copy; <a href="#">享食高級餐廳</a>後臺管理系統
+                    </div>
+                    <div class="col-12 col-sm-6 text-center text-sm-end">
+                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                        Designed By <a href="https://htmlcodex.com">THM101 Team6</a>
+                        <br>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-
+    <!-- Content End -->
