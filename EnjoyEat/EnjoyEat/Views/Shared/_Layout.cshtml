@@ -50,7 +50,7 @@
                     <li><a class="nav-link scrollto" asp-area="OrderForHere" asp-controller="OrderForHere" asp-action="Index">內用點餐</a></li>
                     <li><a class="nav-link scrollto" href="">外帶訂餐</a></li>
                     <li><a class="nav-link scrollto" href="">聯絡我們</a></li>
-                    <li><a class="nav-link scrollto" href="">會員登入</a></li>
+                    <li><a class="nav-link scrollto"asp-controller="MemberLogin" asp-action="Index">會員登入</a></li>
                     <li><a class="nav-link scrollto" asp-controller="MemberManagement" asp-action="Index">會員管理</a></li>
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
@@ -145,12 +145,15 @@
     <script src="~/vendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="~/vendor/php-email-form/validate.js"></script>
     <script src="~/vendor/swiper/swiper-bundle.min.js"></script>
-
+ 
     <!-- Template Main JS File -->
     <script src="~/js/main.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
