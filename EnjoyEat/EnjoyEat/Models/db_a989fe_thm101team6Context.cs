@@ -118,12 +118,6 @@ namespace EnjoyEat.Models
                     .HasColumnName("EmployeesID");
 
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
-
-                entity.HasOne(d => d.Role)
-                    .WithMany(p => p.AuthorityUses)
-                    .HasForeignKey(d => d.RoleId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_AuthorityUse_Authority");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -217,12 +211,6 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.Password).HasMaxLength(20);
 
                 entity.Property(e => e.UserName).HasMaxLength(15);
-
-                entity.HasOne(d => d.Employees)
-                    .WithOne(p => p.EmployeesLogin)
-                    .HasForeignKey<EmployeesLogin>(d => d.EmployeesId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EmployeesLogin_Employees");
             });
 
             modelBuilder.Entity<EmployeesSalary>(entity =>
@@ -249,12 +237,6 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.TotalSalary).HasColumnType("money");
 
                 entity.Property(e => e.Wage).HasColumnType("money");
-
-                entity.HasOne(d => d.Employee)
-                    .WithOne(p => p.EmployeesSalary)
-                    .HasForeignKey<EmployeesSalary>(d => d.EmployeeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_EmployeesSalary_Employees");
             });
 
             modelBuilder.Entity<Level>(entity =>
@@ -367,7 +349,9 @@ namespace EnjoyEat.Models
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+                entity.Property(e => e.OrderId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("OrderID");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -379,11 +363,6 @@ namespace EnjoyEat.Models
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.MemberId)
                     .HasConstraintName("FK_Orders_Members");
-
-                entity.HasOne(d => d.Table)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.TableId)
-                    .HasConstraintName("FK_Orders_Orders");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
@@ -542,8 +521,6 @@ namespace EnjoyEat.Models
             modelBuilder.Entity<Table>(entity =>
             {
                 entity.ToTable("Table");
-
-                entity.Property(e => e.TableId).HasColumnName("TableID");
 
                 entity.Property(e => e.Capacity).HasColumnName("capacity");
 

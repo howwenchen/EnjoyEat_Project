@@ -3,18 +3,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EnjoyEat
 {
-	public class Program
+    public class Program
 	{
 		public static void Main(string[] args)
+
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to DI the container.
-            var EnjoyEatConnectionString = builder.Configuration.GetConnectionString("EnjoyEat");
-            builder.Services.AddDbContext<db_a989fe_thm101team6Context>(options =>
-            options.UseSqlServer(EnjoyEatConnectionString));
+			// Add services to DI the container.
+			var EnjoyEatConnectionString = builder.Configuration.GetConnectionString("EnjoyEat");
+			builder.Services.AddDbContext<db_a989fe_thm101team6Context>(options =>
+			options.UseSqlServer(EnjoyEatConnectionString));
 
-            builder.Services.AddControllersWithViews();
+			builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 
@@ -41,7 +42,11 @@ namespace EnjoyEat
 				name: "default",
 				pattern: "{controller=Home}/{action=Index}/{id?}");
 
-			app.Run();
+            app.MapControllerRoute(
+                name: "CheckoutPage",
+                pattern: "{controller=CheckoutPage}/{action=Index}/{id?}");
+
+            app.Run();
 		}
 	}
 }
