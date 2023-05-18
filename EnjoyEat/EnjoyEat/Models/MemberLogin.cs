@@ -8,7 +8,6 @@ namespace EnjoyEat.Models
         public int MemberId { get; set; }
         public string Account { get; set; } = null!;
         public byte[] Password { get; set; } = null!;
-        public DateTime LoginTime { get; set; }
 
         public virtual Member Member { get; set; } = null!;
     }

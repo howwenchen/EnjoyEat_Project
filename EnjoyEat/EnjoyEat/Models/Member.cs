@@ -21,11 +21,8 @@ namespace EnjoyEat.Models
         public string Phone { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string LevelName { get; set; } = null!;
-        public byte[] Account { get; set; } = null!;
-        public byte[] Password { get; set; } = null!;
 
         public virtual MemberLogin? MemberLogin { get; set; }
-        public virtual TransactionRecord? TransactionRecord { get; set; }
         public virtual ICollection<MemberPoint> MemberPoints { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
     }

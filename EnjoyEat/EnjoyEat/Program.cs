@@ -37,15 +37,15 @@ namespace EnjoyEat
 
 			app.MapControllerRoute(
 				name: "Area",
-				pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-				);
+				pattern: "{area:exists}/{controller}/{action}/{id?}",
+				defaults: new { controller = "Home", action = "Index"}
+			);
+
 			app.MapControllerRoute(
 				name: "default",
-				pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            app.MapControllerRoute(
-                name: "CheckoutPage",
-                pattern: "{controller=CheckoutPage}/{action=Index}/{id?}");
+				pattern: "{controller}/{action}/{id?}",
+				defaults: new { controller = "Home", action = "Index" }
+			);
 
             app.Run();
 		}
