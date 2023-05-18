@@ -1,0 +1,56 @@
+﻿@section Styles
+{
+    <link href="~/orderforhere/orderforherelogincss/orderforhere.css" rel="stylesheet" />
+}
+
+<!-- Start  -->
+<div class="form-container">
+    <h2>內用點餐</h2>
+    <form>
+        <label for="table-number">內用桌號:</label>
+        <input type="text" id="table-number" name="table-number" required>
+        <br><br>
+        <label for="party-size">用餐人數:</label>
+        <input type="text" id="party-size" name="party-size" required>
+        <br><br>
+        <label for="member-phone">會員電話:</label>
+        <input type="tel" id="member-phone" name="member-phone" placeholder="可直接點餐或快速註冊">
+        <br><br>
+        <div class="register-button">
+            <button id="register-btn">快速註冊</button>
+        </div>
+        <div class="register-info">
+            <p>尚未成為會員？</p>
+        </div>
+        <div class="start-order-button">
+            <button><a class="button-link" style="color:white" asp-area="OrderForHere" asp-controller="StartOrder" asp-action="Index">開始點餐</a></button>
+        </div>
+    </form>
+</div>
+<!-- End -->
+<!-- 快速註冊 -->
+<div class="dialog-overlay" id="dialog-overlay"></div>
+<div class="dialog-container" id="dialog">
+    <h3>快速註冊</h3>
+    <form>
+        <label for="name">姓名:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="phone">電話:</label>
+        <input type="tel" id="phone" name="phone" required>
+        <br>
+        <div class="button-container">
+            <button class="confirm-btn">確認</button>
+            <button class="close-btn" id="close-btn">取消</button>
+        </div>
+    </form>
+    <div id="success-message" class="success-message">
+        註冊成功！
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/orderforhere/orderforherelogin.min.js"></script>
+}
+

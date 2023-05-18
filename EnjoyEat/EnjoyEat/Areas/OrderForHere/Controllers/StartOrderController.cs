@@ -3,7 +3,7 @@
 namespace EnjoyEat.Areas.OrderForHere.Controllers
 {
     [Area("OrderForHere")]
-    public class OrderForHere : Controller
+    public class StartOrderController : Controller
     {
         public IActionResult Index()
         {
