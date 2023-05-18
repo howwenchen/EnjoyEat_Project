@@ -20,8 +20,6 @@ namespace EnjoyEat.Controllers
         }
         public IActionResult EditPassword()
         {
-<<<<<<< Updated upstream
-=======
             using (var _context = new db_a989fe_thm101team6Context())
             {
                 var memberData = _context.Members;
@@ -42,10 +40,10 @@ namespace EnjoyEat.Controllers
                 return View(viewModel);
             }
         }
-        public IActionResult EditPassword()
-        {
->>>>>>> Stashed changes
-            return View();
-        }
+        //public IActionResult EditPassword()
+        //{
+
+        //    return View();
+        //}
     }
 }
