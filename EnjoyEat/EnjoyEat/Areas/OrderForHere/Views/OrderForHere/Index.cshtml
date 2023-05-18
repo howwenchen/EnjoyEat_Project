@@ -1,1 +1,131 @@
+<<<<<<< HEAD
 ﻿
+=======
+<<<<<<< Updated upstream
+﻿@section Styles{
+	<link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
+=======
+﻿@section Styles
+{
+	<link href="~/orderforhere/orderforherelogincss/orderforherelogin.min.css" rel="stylesheet" />
+>>>>>>> Stashed changes
+}
+
+
+<div id="cartList" v-cloak>
+    <div class="scrollregion">
+        <div>
+            <!-- 標題 -->
+            <div class="container col userarea">
+                <div class="title w-100">
+                    <div class="himessage">
+                        <p>Hi, 顧客或會員, 請選擇您的餐點</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <fieldset class="mx-3 my-4">
+            <legend class="p-3">
+                <b><i class="fas fa-shopping-cart"></i> 購物車</b>
+            </legend>
+            <!-- 購物車清單 -->
+            <div class="container-fluid">
+                <div class="cartList">
+                    <ol class="list-group">
+                        <li class="row list-group-item d-flex justify-content-between align-items-start">
+                            <div class="col-3 px-0">
+                                <img class="w-100 rounded">
+                            </div>
+                            <div class="col-5 px-0">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold productName">{{item.productName}}</div>
+                                    <div v-if="item.discountAmount != 1">
+                                        <span>$ </span>
+                                        <span class="originalPrice">{{item.unitPrice * item.qty}} </span>
+                                        <span class="discountPrice" name="finalPrice">{{discountPrice(item)}}</span>
+                                    </div>
+                                    <div v-else>
+                                        <span>$ </span>
+                                        <span name="finalPrice">{{item.unitPrice * item.qty}} </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-4 px-0">
+                                <div class="col-6 text-center px-0">
+                                    <button class="btnCount" v-on:click="increase(item)">▲</button>
+                                    <div>{{item.qty}}</div>
+                                    <button class="btnCount" v-on:click="decrease(item)">▼</button>
+                                </div>
+                                <div class="col-6 text-center d-flex align-items-center justify-content-center">
+                                    <div>
+                                        <button class="btnDelete" v-on:click="deleteItem(index)">
+                                            <i class="fa-sharp fa-solid fa-xmark"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+                <form action="Success" method="post" class="d-none" id="cart">
+                    <input name="orderId" v-model="orderId" />
+                    <button type="submit" ref="orderingSend"></button>
+                </form>
+                <form action="OrderList" method="post" class="d-none">
+                    <button type="submit" ref="backToMenu"></button>
+                </form>
+            </div>
+            <hr>
+            <div class="cartTotal">此筆訂單總額: {{cartTotal()}} 元</div>
+        </fieldset>
+    </div>
+
+    <!-- 底部按鈕 -->
+    <div class="orderCheck my-3">
+        <div class="container row w-100">
+            <div class="col col-xl-6 text-center">
+                <button class="bottombtntext btnBacktoMenu w-100 py-2" v-on:click="backToMenu">
+                    加點商品
+                </button>
+            </div>
+            <div class="col col-xl-6 text-center">
+                <button type="button" class="bottombtntext btnCartConfirm w-100 py-2" data-bs-toggle="modal"
+                        data-bs-target="#delieveBackdrop">
+                    送出訂單
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="delieveBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="delieveBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="delieveBackdropLabel">訂單送出提示</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    確認訂單無誤並送出?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btnInModal btnModalCancel" data-bs-dismiss="modal">取消</button>
+                    <button class="btnInModal btnModalConfirm" v-on:click="confirmSend">確認送出</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<<<<<<< Updated upstream
+
+=======
+@section Scripts
+{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/orderforhere/orderforherelogin.min.js"></script>
+}
+>>>>>>> Stashed changes
+>>>>>>> AreaCreateOrderForHereViews
