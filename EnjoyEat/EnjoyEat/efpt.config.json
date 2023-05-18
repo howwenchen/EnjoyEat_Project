@@ -1,0 +1,89 @@
+﻿{
+   "CodeGenerationMode": 2,
+   "ContextClassName": "SQL8005.site4now.netContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Areas\/OrderForHere\/Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "EnjoyEat",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[dbo].[Categories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[CustomerService]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Levels]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberLevel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberLogin]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MemberPoints]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Members]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OrderDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Orders]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Products]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Reservation]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ReservationInformation]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Table]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "sql8005.db_a989fe_thm101team6.dbo",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSpatial": false,
+   "UseT4": false
+}
