@@ -16,6 +16,7 @@ namespace EnjoyEat
 			options.UseSqlServer(EnjoyEatConnectionString));
 
 			builder.Services.AddControllersWithViews();
+		
 
             var app = builder.Build();
 

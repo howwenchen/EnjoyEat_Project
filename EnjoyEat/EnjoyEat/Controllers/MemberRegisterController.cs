@@ -1,5 +1,4 @@
 ﻿using EnjoyEat.DTOs;
-using EnjoyEat.Models;
 using EnjoyEat.Models.ViewModel;
 using EnjoyEat.Services;
 using Microsoft.AspNetCore.Mvc;
