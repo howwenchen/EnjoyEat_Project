@@ -5,9 +5,15 @@
 }
 <!-- =======MemberManagement navbar  Section ======= -->
 <nav>
-    <div id="memberNavbar">
-        <h5 id="userName">某某某您好</h5>
-        <button class="logout">登出</button>
+    <div id="memberNavbar" class="d-flex">
+        <h5 id="userName">{{ member.firstName }} {{ member.lastName }}您好</h5>
+        <button class="btn">
+            登出
+            <span class="first"></span>
+            <span class="second"></span>
+            <span class="third"></span>
+            <span class="fourth"></span>
+        </button>
     </div>
 </nav>
 <!-- End navbar -->
@@ -19,10 +25,24 @@
         <section id="why-us" class="why-us">
             <div class="container" data-aos="fade-up">
 
-            <div class="section-title">
+            <div class="section-title d-flex">
                 <h2>會員資訊</h2>
-                <button class="infoedit">修改會員資料</button> @*用ajax改*@
-                <button class="passwordedit">重新設定密碼</button>
+                    <div class="d-flex modify">
+                    <button class="btn">
+                        修改會員資料
+                        <span class="first"></span>
+                        <span class="second"></span>
+                        <span class="third"></span>
+                        <span class="fourth"></span>
+                    </button> @*用ajax改*@
+                    <button class="btn">
+                        重新設定密碼
+                        <span class="first"></span>
+                        <span class="second"></span>
+                        <span class="third"></span>
+                        <span class="fourth"></span>
+                    </button>
+                    </div>
             </div>
 
             <!--memberdata-->
@@ -36,7 +56,7 @@
 
                 <div class="col-lg-4 mt-4 mt-lg-0">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                        001
+                            {{ member.memberId }}
                     </div>
                 </div>
 
@@ -48,7 +68,7 @@
 
                 <div class="col-lg-4 mt-4 mt-lg-0">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                       0987654321
+                            {{ member.phone }}
                     </div>
                 </div>
 
@@ -60,7 +80,7 @@
 
                 <div class="col-lg-4 mt-4 mt-lg-0">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                        王小明
+                            {{ member.firstName }} {{ member.lastName }}
                     </div>
                 </div>
 
@@ -72,7 +92,7 @@
 
                 <div class="col-lg-4 mt-4 mt-lg-0">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                        台北市中正區濟南路一段321號
+                            {{ member.address }}
                     </div>
                 </div><div class="col-lg-2">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
@@ -82,7 +102,7 @@
 
                 <div class="col-lg-4 mt-4 mt-lg-0">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                        2000/07/15
+                            {{ member.birthday }}
                     </div>
                 </div>
 
@@ -135,23 +155,24 @@
                         <div class="col-lg-9 d-flex">
                             <div class="row">
                                 <div class="col-lg-9">您的會員等級:</div>
-                                <div class="col-lg-3">貴族</div>
+                                <div class="col-lg-3">{{ member.levelName }}</div>
 
                                 <div class="col-lg-6">累積消費金額:</div>
-                                <div class="col-lg-6">$4,234,567元／16次</div>
+                                <div class="col-lg-6">${{ member.memberPoints }}元／16次</div>
                             </div>
                         </div>
 
                         <h3>累計進度bar</h3>
                         <div >
-                            <div class="progress-wrapper">
+                            <div class="progressWrapper">
                                 <progress id="progress" max="25000"></progress>
-                                <div class="progress-labels">
+                                <div class="progressLabels">
                                     <span>0</span>
                                     <span>25000</span>
                                 </div>
 
                             </div>
+                            <div class="dataContent"></div>
                         </div>
                 </div>
                    
@@ -169,52 +190,40 @@
                 <h2>會員歷史訂單</h2>
             </div>
 
-                @*<table class="table" id="CustomersTable" style="width:100%">
+
+                <table class="table" id="CustomersTable">
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model)
+                               訂單編號
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.ContactName)
+                               訂單日期
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.ContactTitle)
+                                訂單金額
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Address)
+                                付款方式
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.City)
+                               桌號
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Region)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.PostalCode)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Country)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Phone)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Fax)
+                                餐點明細
                             </th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach (var item in Model) {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.CompanyName)
+                                {{order.OrderId}}
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ContactName)
+                                {{order.OrderDate}}
                         </td>
-                        <td>
+                        @*<td>
                             @Html.DisplayFor(modelItem => item.ContactTitle)
                         </td>
                         <td>
@@ -237,14 +246,14 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Fax)
-                        </td>
+                        </td>*@
                         <td>
                             <button></button>
                         </td>
                     </tr>
-                    }
+                    
                     </tbody>
-                </table>*@
+                </table>
 
         </div>
     </section><!-- End Events Section -->
@@ -252,25 +261,19 @@
     </div>
 
 </main><!-- End #main -->
+
+
 @section Scripts {
+    <script src="~/js/memebermanagement.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
     <script>
-        let progress = document.getElementById("progress");
-        let progressValue = 16000;
-        let remainingValue = 25000 - progressValue;
-
-        progress.value = progressValue;
-
-        if (remainingValue > 0) {
-            progress.max = 25000;
-            progress.setAttribute(
-                "data-content",
-                `還需消費 ${remainingValue} 元才能升級為黃金會員`
-            );
-        } else {
-            progress.max = progressValue;
-            progress.setAttribute("data-content", "已升級為黃金會員");
-        }
-
+        var app = new Vue({
+            el: '.container',
+            data: {
+                member: @Html.Raw(Json.Serialize(Model)),
+                order: @Html.Raw(Json.Serialize(Model))
+            }
+        })
     </script>
 }
