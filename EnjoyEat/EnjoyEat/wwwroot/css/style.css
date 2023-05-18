@@ -132,6 +132,7 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 997;
   margin: 5px;
   padding: 16px 0;
+  position: fixed;
 }
 
 #header.header-scrolled {

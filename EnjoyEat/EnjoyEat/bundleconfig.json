@@ -10,5 +10,26 @@
     "inputFiles": [
       "wwwroot/css/HomeStyle.css"
     ]
+<<<<<<< Updated upstream
+=======
+  },
+  {
+    "outputFileName": "wwwroot/OrderForHereLogincss/OrderForHereLogin.min.css",
+    "inputFiles": [
+      "wwwroot/OrderForHereLogincss/OrderForHereLogin.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/OrderForHere/OrderForHereLogin.min.js",
+    "inputFiles": [
+      "wwwroot/OrderForHere/OrderForHereLogin.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/OrderForHere/OrderForHereLogincss/OrderForHereLogin.min.css",
+    "inputFiles": [
+      "wwwroot/OrderForHere/OrderForHereLogincss/OrderForHereLogin.css"
+    ]
+>>>>>>> Stashed changes
   }
 ]
