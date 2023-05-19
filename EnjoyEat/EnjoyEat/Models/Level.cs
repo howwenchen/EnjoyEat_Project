@@ -16,5 +16,6 @@ namespace EnjoyEat.Models
 
         public virtual ICollection<MemberLevel> MemberLevels { get; set; }
         public virtual ICollection<Member> Members { get; set; }
+
     }
 }
