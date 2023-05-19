@@ -1,5 +1,5 @@
 ﻿@section Styles{
-    <link href="~/css/Reservations.css" rel="stylesheet" />
+    <link href="~/css/reservations.css" rel="stylesheet" />
 }
 
 <main id="main">
@@ -68,9 +68,10 @@
                             <label for="text">您已選擇預訂</label>
                             <span><button id="adultShow">大人</button></span>
                             <span><button id="kidShow">小孩</button></span>
-                            <span><img src="/right-arrow.png" alt="" id="rightArrow"></span>
+                            <span><img src="~/img/right-arrow.png" alt="" id="rightArrow" /></span>
+
                             <span><button id="dateShow">訂位日期</button></span>
-                            <span><img src="/right-arrow.png" alt="" id="rightArrow"></span>
+                            <span><img src="~/img/right-arrow.png" alt="" id="rightArrow" /></span>
                             <span><button id="timeShow">訂位時段</button></span>
                         </div>
                         <div class="text-center book-a-table php-email-form " id="reservationNext">
@@ -83,8 +84,10 @@
     </section>
 </main>
      <!-- End Book A Table Section -->
-    @section Scripts{
-    @*<script src="~js/Reservations.js"></script>*@
+    @section Scripts
+    {
+    <script src="~/js/reservations.js"></script>
+
     }
 
 

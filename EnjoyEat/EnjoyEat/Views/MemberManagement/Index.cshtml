@@ -114,7 +114,7 @@
 
                 <div class="col-lg-4 mt-4 mt-lg-0">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                        thm101team66@gamil.com
+                            {{ member.email }}
                     </div>
                 </div>
 
@@ -174,7 +174,6 @@
                             </div>
                             <div class="dataContent col-lg-8"></div>
                             <h3>折扣率:{{member.discount}}</h3>
-                            <
                         </div>
                 </div>
                    
@@ -285,6 +284,7 @@
                 percent: "",
                 orders: {},
                 orderdetails: [],
+                MembersInfo : [],
             },
             methods: {
                 update: function () {
@@ -433,7 +433,13 @@
                     didOpen: () => {
                         Swal.showLoading()
                     },
-                })
+                }),
+                GetMembers(){
+                    axios.get("/MemberManagement/GetMember"),
+                    then(response => {
+                            this.MembersInfo = response.data
+                    })
+                }
             },
             mounted: function () {
                 let self = this;
