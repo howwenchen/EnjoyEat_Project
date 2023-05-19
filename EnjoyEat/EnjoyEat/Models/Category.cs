@@ -7,15 +7,12 @@ namespace EnjoyEat.Models
     {
         public Category()
         {
-            Products = new HashSet<Product>();
+            SubCategories = new HashSet<SubCategory>();
         }
 
         public byte CategoryId { get; set; }
         public string CategoryName { get; set; } = null!;
-        public string? Description { get; set; }
-        public bool IsActive { get; set; }
-        public byte DisplayOrder { get; set; }
 
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<SubCategory> SubCategories { get; set; }
     }
 }

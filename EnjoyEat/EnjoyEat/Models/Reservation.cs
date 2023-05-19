@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace EnjoyEat.Models
 {
-
     public partial class Reservation
     {
         public string PhoneNumber { get; set; } = null!;

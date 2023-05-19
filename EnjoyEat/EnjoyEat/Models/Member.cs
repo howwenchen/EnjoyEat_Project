@@ -7,7 +7,6 @@ namespace EnjoyEat.Models
     {
         public Member()
         {
-            MemberPoints = new HashSet<MemberPoint>();
             Orders = new HashSet<Order>();
         }
 
@@ -22,8 +21,9 @@ namespace EnjoyEat.Models
         public string Email { get; set; } = null!;
         public string LevelName { get; set; } = null!;
 
+        public virtual Level LevelNameNavigation { get; set; } = null!;
+        public virtual MemberLevel MemberNavigation { get; set; } = null!;
         public virtual MemberLogin? MemberLogin { get; set; }
-        public virtual ICollection<MemberPoint> MemberPoints { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
     }
 }

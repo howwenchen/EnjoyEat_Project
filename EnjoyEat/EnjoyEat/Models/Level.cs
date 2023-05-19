@@ -8,11 +8,13 @@ namespace EnjoyEat.Models
         public Level()
         {
             MemberLevels = new HashSet<MemberLevel>();
+            Members = new HashSet<Member>();
         }
 
         public string LevelName { get; set; } = null!;
-        public int DiscountRate { get; set; }
+        public double DiscountRate { get; set; }
 
         public virtual ICollection<MemberLevel> MemberLevels { get; set; }
+        public virtual ICollection<Member> Members { get; set; }
     }
 }
