@@ -12,6 +12,7 @@
 
 .menuTop {
     padding: 12px;
+    padding-bottom: 45px;
     border: 2px solid #ffffff;
     width: 50%;
     min-width: 350px;
@@ -19,7 +20,29 @@
 
 .menuDetail {
     padding: 12px;
+    padding-bottom: 45px;
     border: 2px solid #ffffff;
     width: 50%;
     min-width: 350px;
+<<<<<<< Updated upstream
 }
+=======
+}
+
+.imgTopten {
+    width: 100px;
+}
+
+.noFour, .noThree, .noTwo, .noOne {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col {
+    text-align: center;
+    min-width: 110px;
+}
+
+
+/* ①②③④⑤⑥⑦⑧⑨⑩ */
+>>>>>>> Stashed changes
