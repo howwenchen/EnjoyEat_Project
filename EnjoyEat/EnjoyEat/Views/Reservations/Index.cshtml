@@ -8,7 +8,7 @@
         <div class="container" data-aos="fade-up">
           <div class="section-title">
             <h2>立即訂位</h2>
-            <label>訂位</label>
+            <p>訂位</p>
           </div>
           <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
                 <div class="row">
@@ -32,15 +32,9 @@
                         </select>
                     </div>
                 </div>
+                <div>
                 <label>用餐日期</label>
                 <!-- 月曆這邊要調整 -->
-                <div class="col-lg-2 col-md-6 form-group" id="mealTimePicker">
-                    <select name="" id="mealdate" class="book-a-table form-control"></select>
-                </div>
-                <div id="calendar">
-                    <div class="col-lg-4 col-md-6 form-group d-flex"></div>
-                    <span><script type='text/javascript' src='./calendar.js'></script></span>
-                    <!-- <span><script type='text/javascript' src='./calendar.js'></script></span> -->
                 </div>
                 <label>用餐時段</label>
                 <div class="col-lg-2 col-md-6 form-group" id="mealTimePicker">
@@ -62,31 +56,36 @@
                             frameborder="0" allowfullscreen>
                     </iframe>
                 </div>
-                <div id="finalReservation">
-                    <div class="form-group">
-                        <div aria-hidden="true" id="yourReservation">
-                            <label for="text">您已選擇預訂</label>
-                            <span><button id="adultShow">大人</button></span>
-                            <span><button id="kidShow">小孩</button></span>
-                            <span><img src="~/img/right-arrow.png" alt="" id="rightArrow" /></span>
-
-                            <span><button id="dateShow">訂位日期</button></span>
-                            <span><img src="~/img/right-arrow.png" alt="" id="rightArrow" /></span>
-                            <span><button id="timeShow">訂位時段</button></span>
-                        </div>
-                        <div class="text-center book-a-table php-email-form " id="reservationNext">
-                            <button type="submit" id="reservationNow">下一步，填寫聯絡資訊</button>
-                        </div>
-                    </div>
-                </div>
           </form>
+          
+           
         </div>
     </section>
+    <footer class="footer">
+        <div class="form-group fixed-footer-content" id="finalReservation">
+            <div aria-hidden="true" id="yourReservation">
+                <p for="text">您已選擇預訂</p>
+                <span><button id="adultShow">大人</button></span>
+                <span><button id="kidShow">小孩</button></span>
+                <span><img src="~/img/right-arrow.png" alt="" id="rightArrow" /></span>
+
+                <span><button id="dateShow">訂位日期</button></span>
+                <span><img src="~/img/right-arrow.png" alt="" id="rightArrow" /></span>
+                <span><button id="timeShow">訂位時段</button></span>
+            </div>
+            <div class="text-center book-a-table php-email-form " id="reservationNext">
+                <button type="submit" id="reservationNow">下一步，填寫聯絡資訊</button>
+            </div>
+        </div>
+    </footer>
 </main>
 <!-- End Book A Table Section -->
 @section Scripts
 {
 <script src="~/js/reservations.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.1"></script>
+
 }
 
 
