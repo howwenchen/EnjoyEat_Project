@@ -9,21 +9,34 @@
 	<link href="~/orderforhere/startordercss/nice-select.css" rel="stylesheet" />
 	<link href="~/orderforhere/startordercss/slicknav.min.css" rel="stylesheet" />
 	<link href="~/orderforhere/startordercss/style.css" rel="stylesheet" />
+	<link href="~/orderforhere/startordercss/owl.carousel.min.css" rel="stylesheet" />
     <style>
+        body{
+            background-color: rgba(12, 11, 9, 0.3);
+        }
         section{
-            margin: 50px
+            margin: 50px;
+        }
+        #header{
+            margin: 0px;
         }
 
+        #header .cartPrice{
+            color: white;
+        }
 
+        #header .cartPrice:hover{
+            color: orange;
+        }
     </style>
 }
 
 <!-- ======= Header ======= -->
-<header id="header" class="fixed-top d-flex align-items-center" style="margin:0px;">
+<header id="header" class="fixed-top d-flex align-items-center" >
 	<div class="container-fluid container-xl d-flex align-items-center justify-content-lg-between">
-		<h1 class="logo me-auto me-lg-0"><a href="#">享食 Enjoy Eat</a></h1>
-        <a href="#"><img src="~/img/cart/cart.png" alt=""></a>
-        <div class="cart__price">消費金額: <span>$0.00</span></div>
+		<h1 class="logo me-auto me-lg-0"><a href="#">享食點餐趣</a></h1>
+        <div class="cart__price" style="color: white;">消費金額: <span style="color: white;">$0.00</span></div>
+        <a href="#" class="cartPrice"><i class="fa fa-shopping-cart" style="font-size: 24px;"></i></a>
 	</div>
 </header>
 
@@ -34,15 +47,20 @@
             <div class="row">
                 <div class="col-lg-7 col-md-7">
                     <div class="shop__option__search">
-                        <form action="#">
-                            <select>
-                                <option value="">商品種類</option>
-                                <option value="">Red Velvet</option>
-                                <option value="">Cup Cake</option>
-                                <option value="">Biscuit</option>
-                            </select>
-                            <input type="text" placeholder="Search">
-                            <button type="submit"><i class="fa fa-search"></i></button>
+                        <form action="#" style="border:none">
+                            <div class="shop__last__option">
+                                <div class="row" >
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="shop__pagination shop__pagination d-flex justify-content-between">
+                                            <a href="#" class="flex-fill">沙拉</a>
+                                            <a href="#" class="flex-fill">麵包</a>
+                                            <a href="#" class="flex-fill">主食</a>
+                                            <a href="#" class="flex-fill">湯品</a>
+                                            <a href="#" class="flex-fill">甜點</a>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -205,33 +223,10 @@
             
            
         </div>
-        <div class="shop__last__option">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="shop__pagination">
-                        <a href="#">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#"><span class="arrow_carrot-right"></span></a>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </section>
 
-<footer>
-	<div class="container">
-		<div class="row">
-			<div class="col">
-				<h5>選購明細</h5>
-				<!-- 選購明细的内容 -->
-			</div>
-		</div>
-	</div>
-</footer>
 
-<!-- 明細表 End-->
 @section Scripts
 {
 	<script src="~/orderforhere/startorderjs/bootstrap.min.js"></script>
