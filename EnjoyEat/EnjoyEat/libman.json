@@ -7,12 +7,21 @@
       "destination": "wwwroot/vue/"
     },
     {
+<<<<<<< HEAD
       "library": "axios@1.4.0",
       "destination": "wwwroot/axios/"
     },
     {
       "library": "font-awesome@6.4.0",
       "destination": "wwwroot/lib/font-awesome/"
+=======
+      "library": "font-awesome@6.4.0",
+      "destination": "wwwroot/font-awesome/"
+    },
+    {
+      "library": "axios@1.4.0",
+      "destination": "wwwroot/axios/"
+>>>>>>> cdf3d17041df5c564c377398d3015c3487816bdd
     }
   ]
 }

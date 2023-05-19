@@ -10,6 +10,6 @@ namespace EnjoyEat.Models
         public int PointsId { get; set; }
 
         public virtual Level LevelNameNavigation { get; set; } = null!;
-        public virtual MemberPoint Points { get; set; } = null!;
+        public virtual Member? Member { get; set; }
     }
 }

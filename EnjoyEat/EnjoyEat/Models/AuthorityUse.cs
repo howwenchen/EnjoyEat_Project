@@ -13,6 +13,7 @@ namespace EnjoyEat.Models
         public int EmployeesId { get; set; }
         public int RoleId { get; set; }
 
+        public virtual Authority Role { get; set; } = null!;
         public virtual ICollection<Personnel> Personnel { get; set; }
     }
 }
