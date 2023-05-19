@@ -46,7 +46,7 @@
                     <li><a class="nav-link scrollto" href="">關於我們</a></li>
                     <li><a class="nav-link scrollto" asp-controller="Menu" asp-action="Index">菜單</a></li>
                     <li><a class="nav-link scrollto" asp-area="" asp-controller="Home" asp-action="News">最新消息</a></li>
-                    <li><a class="nav-link scrollto" href="">訂位</a></li>
+                    <li><a class="nav-link scrollto" asp-area="" asp-controller="Reservations" asp-action="Index">訂位</a></li>
                     <li><a class="nav-link scrollto" asp-area="OrderForHere" asp-controller="OrderLogin" asp-action="Index">內用點餐</a></li>
                     <li><a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index">後臺管理</a></li>
                     <li><a class="nav-link scrollto" href="">外帶訂餐</a></li>
@@ -138,7 +138,6 @@
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
         <i class="bi bi-arrow-up-short"></i>
     </a>
-
     <!-- Vendor JS Files -->
     <script src="~/vendor/aos/aos.js"></script>
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
