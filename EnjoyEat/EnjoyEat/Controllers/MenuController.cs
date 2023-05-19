@@ -14,7 +14,7 @@ namespace EnjoyEat.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        
         public IActionResult Index()
         {  
             return View();
@@ -31,21 +31,3 @@ namespace EnjoyEat.Controllers
         }
     }
 }
-
-        //[HttpGet]
-        //public ActionResult Index()
-        //{
-        //    var emps = new List<MenuViewModel> {
-        //        new MenuViewModel {ProductName="rico", UnitPrice=35},
-        //        new MenuViewModel {ProductName="sherry",UnitPrice=30},
-        //        new MenuViewModel {ProductName="fifi",UnitPrice=4 },
-        //        new MenuViewModel {ProductName="rico2",UnitPrice=34 },
-        //        new MenuViewModel {ProductName="sherry2",UnitPrice=29 },
-        //        new MenuViewModel {ProductName="fifi2",UnitPrice=3 },
-        //        new MenuViewModel {ProductName="rico3",UnitPrice=33 },
-        //        new MenuViewModel {ProductName="sherry3",UnitPrice=28 },
-        //        new MenuViewModel {ProductName="fifi3",UnitPrice=2},
-        //        new MenuViewModel {ProductName="Vue",UnitPrice=1}
-        //    };
-        //    var serverModel = JsonConvert.SerializeObject(emps);
-        //    return View(new { serverModel });
