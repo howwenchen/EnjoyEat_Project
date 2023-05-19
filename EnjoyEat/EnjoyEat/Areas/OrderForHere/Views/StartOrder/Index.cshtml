@@ -1,209 +1,245 @@
 ﻿@section Styles
 {
-	<link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
+	<link href="~/orderforhere/startordercss/barfiller.css" rel="stylesheet" />
+	<link href="~/orderforhere/startordercss/bootstrap.min.css" rel="stylesheet" />
+	<link href="~/orderforhere/startordercss/elegant-icons.css" rel="stylesheet" />
+	<link href="~/orderforhere/startordercss/flaticon.css" rel="stylesheet" />
+	<link href="~/orderforhere/startordercss/magnific-popup.css" rel="stylesheet" />
+	<link href="~/orderforhere/startordercss/nice-select.css" rel="stylesheet" />
+	<link href="~/orderforhere/startordercss/slicknav.min.css" rel="stylesheet" />
+	<link href="~/orderforhere/startordercss/style.css" rel="stylesheet" />
     <style>
-        body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                background-color: rgba(0, 0, 0, 0.9);
-                font-family: Arial, Helvetica, sans-serif;
-                flex-direction: column;
-            }
+        section{
+            margin: 50px
+        }
 
-            .header {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 10px;
-                background-color: #f1f1f1;
-            }
 
-            .cart{
-                margin-right: 10px;
-            }
-            .carousel-item img {
-                width: 200px;
-                height: 200px;
-                margin-bottom: 50px;
-                object-fit: contain;
-            }
-
-            .food-item {
-                display: flex;
-                padding: 10px;
-                border-bottom: 1px solid #ccc;
-            }
-
-            .food-image {
-                width: 100px;
-                height: 100px;
-                margin-right: 10px;
-            }
-
-            .food-details {
-                flex-grow: 1;
-            }
-
-            .food-name {
-                font-size: 16px;
-                font-weight: bold;
-            }
-
-            .food-description {
-                margin-top: 5px;
-                font-size: 14px;
-                color: #666;
-            }
-
-            .add-to-cart {
-                display: flex;
-                align-items: center;
-                margin-top: 10px;
-            }
-
-            .add-button {
-                padding: 5px 10px;
-                background-color: #4caf50;
-                color: white;
-                border: none;
-                cursor: pointer;
-            }
-
-            .total-price {
-                margin-left: 10px;
-                font-weight: bold;
-            }
-
-            .order-details {
-                margin-top: 20px;
-            }
-
-            .order-details h4 {
-                margin-bottom: 10px;
-            }
-
-            .order-item {
-                margin-bottom: 5px;
-            }
-
-    @@media (min-width: 1000px) {
-                body {
-                    height: auto;
-                }
-
-                .form-container {
-                    width: 400px;
-                }
-            }
-
-            /* 手機設備的樣式調整 */
-    @@media (max-width: 414px) {
-
-                /* iPhone 12 的裝置寬度為 414px */
-                .carousel-item img {
-                    max-width: 80%;
-                    /* 調整圖片的寬度 */
-                    max-height: auto;
-                    /* 調整圖片的高度，保持原始寬高比例 */
-                    object-fit: contain;
-                }
-            }
-        </style>
+    </style>
 }
 
 <!-- ======= Header ======= -->
-<header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container-fluid container-xl d-flex align-items-center justify-content-lg-between">
-
-        <h1 class="logo me-auto me-lg-0"><a href="#">享食 Enjoy Eat</a></h1>
-        <a href="#" class="cart btn btn-primary">
-            <i class="fas fa-shopping-cart"></i>
-        </a>
-    </div>
+<header id="header" class="fixed-top d-flex align-items-center" style="margin:0px;">
+	<div class="container-fluid container-xl d-flex align-items-center justify-content-lg-between">
+		<h1 class="logo me-auto me-lg-0"><a href="#">享食 Enjoy Eat</a></h1>
+        <a href="#"><img src="~/img/cart/cart.png" alt=""></a>
+        <div class="cart__price">消費金額: <span>$0.00</span></div>
+	</div>
 </header>
-<!-- End Header -->
-<!-- 輪播 Carousel-->
-<div class="container-fluid mt-4">
-    <div class="row">
-        <div class="col">
-            <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="..." class="d-block mx-auto" alt="Image 1">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="..." class="d-block mx-auto" alt="Image 2">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="..." class="d-block mx-auto" alt="Image 3">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="..." class="d-block mx-auto" alt="Image 4">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="..." class="d-block mx-auto" alt="Image 5">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="..." class="d-block mx-auto" alt="Image 6">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="..." class="d-block mx-auto" alt="Image 7">
+
+
+<section class="shop spad">
+    <div class="container">
+        <div class="shop__option">
+            <div class="row">
+                <div class="col-lg-7 col-md-7">
+                    <div class="shop__option__search">
+                        <form action="#">
+                            <select>
+                                <option value="">商品種類</option>
+                                <option value="">Red Velvet</option>
+                                <option value="">Cup Cake</option>
+                                <option value="">Biscuit</option>
+                            </select>
+                            <input type="text" placeholder="Search">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
                     </div>
                 </div>
-
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-                        data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">上一張</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-                        data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">下一張</span>
-                </button>
-
-                <ol class="carousel-indicators">
-                    <li data-bs-target="#carouselExample" data-bs-slide-to="0" class="active"></li>
-                    <li data-bs-target="#carouselExample" data-bs-slide-to="1"></li>
-                    <li data-bs-target="#carouselExample" data-bs-slide-to="2"></li>
-                    <li data-bs-target="#carouselExample" data-bs-slide-to="3"></li>
-                    <li data-bs-target="#carouselExample" data-bs-slide-to="4"></li>
-                    <li data-bs-target="#carouselExample" data-bs-slide-to="5"></li>
-                    <li data-bs-target="#carouselExample" data-bs-slide-to="6"></li>
-                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+						<img src="~/img/menu/bread-barrel.jpg" style="width:200px; border-radius:15px"/>
+                        <div class="product__label">
+                            <span>Cupcake</span>
+                        </div>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="#">Dozen Cupcakes</a></h6>
+                        <div class="product__item__price">$32.00</div>
+                        <div class="cart_add">
+                            <a href="#">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="~/img/menu/caesar.jpg" style="width:200px; border-radius:15px"/>
+                        <div class="product__label">
+                            <span>Cupcake</span>
+                        </div>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="#">Cookies and Cream</a></h6>
+                        <div class="product__item__price">$30.00</div>
+                        <div class="cart_add">
+                            <a href="#">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="~/img/menu/cake.jpg" style="width:200px; border-radius:15px" />
+                        <div class="product__label">
+                            <span>Cupcake</span>
+                        </div>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="#">Gluten Free Mini Dozen</a></h6>
+                        <div class="product__item__price">$31.00</div>
+                        <div class="cart_add">
+                            <a href="#">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="~/img/menu/greek-salad.jpg" style="width:200px; border-radius:15px" />
+                        <div class="product__label">
+                            <span>Cupcake</span>
+                        </div>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="#">Cookie Dough</a></h6>
+                        <div class="product__item__price">$25.00</div>
+                        <div class="cart_add">
+                            <a href="#">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="~/img/menu/lobster-bisque.jpg" style="width:200px; border-radius:15px" />
+                        <div class="product__label">
+                            <span>Cupcake</span>
+                        </div>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="#">Vanilla Salted Caramel</a></h6>
+                        <div class="product__item__price">$05.00</div>
+                        <div class="cart_add">
+                            <a href="#">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="~/img/menu/lobster-roll.jpg" style="width:200px; border-radius:15px" />
+                        <div class="product__label">
+                            <span>Cupcake</span>
+                        </div>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="#">German Chocolate</a></h6>
+                        <div class="product__item__price">$14.00</div>
+                        <div class="cart_add">
+                            <a href="#">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="~/img/menu/mozzarella.jpg" style="width:200px; border-radius:15px" />
+                        <div class="product__label">
+                            <span>Cupcake</span>
+                        </div>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="#">Dulce De Leche</a></h6>
+                        <div class="product__item__price">$32.00</div>
+                        <div class="cart_add">
+                            <a href="#">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="~/img/menu/spinach-salad.jpg" style="width:200px; border-radius:15px" />
+                        <div class="product__label">
+                            <span>Cupcake</span>
+                        </div>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="#">Mississippi Mud</a></h6>
+                        <div class="product__item__price">$08.00</div>
+                        <div class="cart_add">
+                            <a href="#">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img src="~/img/menu/tuscan-grilled.jpg" style="width:200px; border-radius:15px" />
+                        <div class="product__label">
+                            <span>Cupcake</span>
+                        </div>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="#">VEGAN/GLUTEN FREE</a></h6>
+                        <div class="product__item__price">$98.85</div>
+                        <div class="cart_add">
+                            <a href="#">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+           
+        </div>
+        <div class="shop__last__option">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="shop__pagination">
+                        <a href="#">1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#"><span class="arrow_carrot-right"></span></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- End 輪播 Carousel-->
-<!-- 食物選購 Start  -->
-<div class="mt-4 food-item">
-    <div class="food-image">
-        <img src="...">
-    </div>
-    <div class="food-details">
-        <div class="food-name">食物名稱</div>
-        <div class="food-description">
-            <!-- 食物詳細介紹的 HTML -->
-        </div>
-        <div class="add-to-cart">
-            <button class="add-button">加入</button>
-            <div class="total-price">總價錢：$0</div>
-        </div>
-    </div>
-</div>
+</section>
 
-<!-- 食物選購 End -->
-<!-- 明細表 Start-->
-<div class="mt-4 order-details">
-    <h4>選購食物的明細</h4>
-    <div class="order-item">
-        <!-- 選購食物的明細項目的 HTML -->
-
-    </div>
-    <!-- 其他選購食物的明細項目 -->
-</div>
+<footer>
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<h5>選購明細</h5>
+				<!-- 選購明细的内容 -->
+			</div>
+		</div>
+	</div>
+</footer>
 
 <!-- 明細表 End-->
+@section Scripts
+{
+	<script src="~/orderforhere/startorderjs/bootstrap.min.js"></script>
+	<script src="~/orderforhere/startorderjs/jquery.barfiller.js"></script>
+	<script src="~/orderforhere/startorderjs/jquery.magnific-popup.min.js"></script>
+	<script src="~/orderforhere/startorderjs/jquery.nicescroll.min.js"></script>
+	<script src="~/orderforhere/startorderjs/jquery.slicknav.js"></script>
+    <script src="~/orderforhere/startorderjs/jquery.nice-select.min.js"></script>
+	<script src="~/orderforhere/startorderjs/jquery-3.3.1.min.js"></script>
+	<script src="~/orderforhere/startorderjs/main.js"></script>
+}

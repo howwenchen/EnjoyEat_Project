@@ -2,6 +2,7 @@
 
 @section Styles{
     <link href="~/css/membermanagement.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 }
 <!-- =======MemberManagement navbar  Section ======= -->
 <nav>
@@ -158,7 +159,7 @@
                                 <div class="col-lg-3">{{ member.levelName }}</div>
 
                                 <div class="col-lg-6">累積消費金額:</div>
-                                <div class="col-lg-6">${{ member.memberPoints }}元／16次</div>
+                                <div class="col-lg-6">${{ member.memberPoints }}元</div>
                             </div>
                         </div>
 
@@ -234,13 +235,33 @@
                             {{order.OrderTable}}
                         </td>
                         <td>
-                            <button class="btn">
-                                展開
-                                <span class="first"></span>
-                                <span class="second"></span>
-                                <span class="third"></span>
-                                <span class="fourth"></span>
-                            </button>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId">
+                                    Launch
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalTitleId">Modal title</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="container-fluid">
+                                                    Add rows here
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                         </td>
                     </tr>
                     
@@ -263,192 +284,15 @@
         var app = new Vue({
             el: '.container',
             data: {
-                member:{
-                    discount:1,
-                    total: null,
-                    min: null,
-                    max: null,
-                    name: "",
-                    birth: "",
-                    mail: "",
-                    phone: "",
-                    products: [],
-                },
-                acc: "",
-                name: "",
-                pass: "",
-                bd: "",
-                mail: "",
-                tel: "",
-                progressbar: "",
-                percent: "",
-                orders: {},
-                orderdetails: [],
-                MembersInfo : [],
-            },
-            methods: {
-                update: function () {
-                    let body = {
-                        Account: this.acc,
-                        Password: "reds1210",
-                        Name: this.name,
-                        Email: this.mail,
-                        Phone: this.tel,
-                        Birth: this.bd,
-                    }
-                    console.log(body)
-                    let jstr = JSON.stringify(body);
-                    fetch("/api/member/EditMember", {
-                        method: 'PUT',
-                        headers: { "Content-Type": "application/json" },
-                        body: jstr
-                    })
-                        .then((e) => e.json()).then((r) => {
-                            if (result && result.status != 400) {
-                                Swal.fire({
-                                    allowOutsideClick: 'false',
-                                    icon: 'success',
-                                    color: '#FFF',
-                                    iconColor: '#D8CDB9',
-                                    confirmButtonColor: '#721B29',
-                                    background: '#333',
-                                    title: '資料已更新!',
-                                })
-                            } else {
-                                Swal.fire({
-                                    allowOutsideClick: 'false',
-                                    icon: 'error',
-                                    color: '#FFF',
-                                    iconColor: '#D8CDB9',
-                                    confirmButtonColor: '#721B29',
-                                    background: '#333',
-                                    text: '有地方還沒填或是格式錯誤喔!',
-                                })
-                            }
-                        })
-                },
-                logout: function () {
-                    fetch("/api/member/Logout").then(() => {
-                        Swal.fire({
-                            allowOutsideClick: 'false',
-                            title: '登出成功',
-                            color: '#FFF',
-                            iconColor: '#D8CDB9',
-                            background: '#333',
-                            timer: 1000,
-                            didOpen: () => {
-                                Swal.showLoading()
-                            },
-                            willClose: () => {
-                                window.location.assign("/home/index")
-                            }
-                        })
-                    })
-                }
-            },
-            beforeCreate: function () {
-                let self = this;
-                setTimeout(() => {
-                    fetch("/api/member/GetCurrentMember").then((e) => e.json()).then((r) => {
-                        var memberData = JSON.parse(r.object);
-                        switch (r.status) {
-                            case 1: {
-                                Swal.fire({
-                                    allowOutsideClick: 'false',
-                                    icon: 'info',
-                                    color: '#FFF',
-                                    iconColor: '#D8CDB9',
-                                    background: '#333',
-                                    text: '請先登入喔!',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                }).then((result) => {
-                                    if (result.dismiss === Swal.DismissReason.timer) {
-                                        window.location.assign(r.url);
-                                    }
-                                });
-                            }
-                                break;
-                            case 2: {
-                                Swal.fire({
-                                    allowOutsideClick: 'false',
-                                    icon: 'error',
-                                    title: '您尚未註冊會員!',
-                                    color: '#FFF',
-                                    iconColor: '#D8CDB9',
-                                    confirmButtonColor: '#721B29',
-                                    background: '#333',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                }).then((result) => {
-                                    if (result.dismiss === Swal.DismissReason.timer) {
-                                        window.location.assign(r.url);
-                                    }
-                                })
-                            }
-                                break;
-                            case 0: {
-                                self.model = memberData;
-                                self.acc = memberData.account;
-                                self.name = memberData.name;
-                                self.bd = memberData.birth.slice(0, 10);
-                                self.mail = memberData.mail;
-                                self.tel = memberData.phone;
-                                self.percent = Math.round(memberData.total / memberData.max * 100) > 100 ? 100 : Math.round((memberData.total - memberData.min) / (memberData.max - memberData.min) * 100);
-                                self.progressbar = `width: ${self.percent}%`;
-                                Swal.fire({
-                                    allowOutsideClick: 'false',
-                                    icon: 'success',
-                                    color: '#FFF',
-                                    iconColor: '#D8CDB9',
-                                    confirmButtonColor: '#721B29',
-                                    background: '#333',
-                                });
-                                switch (self.model.min) {
-                                    case 70000: self.lvl = "Platinum"; self.badge = "../images/icons/drinks_p.png";
-                                        break;
-                                    case 30000: self.lvl = "Gold"; self.badge = "../images/icons/drinks_g.png";
-                                        break;
-                                    case 10000: self.lvl = "Silver"; self.badge = "../images/icons/drinks_s.png";
-                                        break;
-                                    case 5000: self.lvl = "Bronze"; self.badge = "../images/icons/drinks_b.png";
-                                        break;
-                                    default: self.lvl = "Regular"; self.badge = "../images/icons/drinks_icon.png";
-                                        break;
-                                }
-                            }
-                                break;
-                        }
-                    });
-                }, 50)
-                Swal.fire({
-                    allowOutsideClick: 'false',
-                    title: '請稍後',
-                    color: '#FFF',
-                    iconColor: '#D8CDB9',
-                    confirmButtonColor: '#721B29',
-                    background: '#333',
-                    html: '請勿關閉視窗',
-                    timer: 12000,
-                    didOpen: () => {
-                        Swal.showLoading()
-                    },
-                }),
-                GetMembers(){
+                member:[];
+
+            }
+            methods:{
+                GetMembers() {
                     axios.get("/MemberManagement/GetMember"),
                     then(response => {
-                            this.MembersInfo = response.data
-                    })
-                }
-            },
-            mounted: function () {
-                let self = this;
-                fetch("/api/member/GetOrders").then((e) => e.json())
-                    .then((r) => {
-                        self.orders = r;
+                        this.member = response.data
                     })
             }
-        })
-        })
     </script>
 }
