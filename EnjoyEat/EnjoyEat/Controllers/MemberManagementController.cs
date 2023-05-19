@@ -24,9 +24,9 @@ namespace EnjoyEat.Controllers
                 return View();
         }
 
-        //public async IActionResult GetMember()
-        //{
-        //    var member =  _db.Members.Include(p =>p.Orders);
-        //}
+        public async IActionResult GetMember()
+        {
+            var member = _db.Members.Include(p => p.Orders).Include(p=>p.Level);
+        }
     }
 }
