@@ -22,6 +22,8 @@ namespace EnjoyEat.Models
         public string Email { get; set; } = null!;
         public string Education { get; set; } = null!;
 
+        public virtual EmployeesLogin? EmployeesLogin { get; set; }
+        public virtual EmployeesSalary? EmployeesSalary { get; set; }
         public virtual ICollection<Attendance> Attendances { get; set; }
         public virtual ICollection<CustomerService> CustomerServices { get; set; }
         public virtual ICollection<Personnel> Personnel { get; set; }

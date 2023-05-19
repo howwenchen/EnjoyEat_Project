@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using EnjoyEat.Models.ViewModel;
 
 
 namespace EnjoyEat.Models
@@ -22,7 +21,6 @@ namespace EnjoyEat.Models
         public virtual DbSet<Authority> Authorities { get; set; } = null!;
         public virtual DbSet<AuthorityUse> AuthorityUses { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
-        public virtual DbSet<Customer> Customers { get; set; } = null!;
         public virtual DbSet<CustomerService> CustomerServices { get; set; } = null!;
         public virtual DbSet<Department> Departments { get; set; } = null!;
         public virtual DbSet<Employee> Employees { get; set; } = null!;
@@ -33,6 +31,7 @@ namespace EnjoyEat.Models
         public virtual DbSet<MemberLevel> MemberLevels { get; set; } = null!;
         public virtual DbSet<MemberLogin> MemberLogins { get; set; } = null!;
         public virtual DbSet<MemberPoint> MemberPoints { get; set; } = null!;
+        public virtual DbSet<News> News { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
         public virtual DbSet<Payment> Payments { get; set; } = null!;
@@ -42,13 +41,11 @@ namespace EnjoyEat.Models
         public virtual DbSet<Reservation> Reservations { get; set; } = null!;
         public virtual DbSet<ReservationInformation> ReservationInformations { get; set; } = null!;
         public virtual DbSet<Table> Tables { get; set; } = null!;
-        public virtual DbSet<TransactionRecord> TransactionRecords { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+            { 
                 optionsBuilder.UseSqlServer("Data Source=SQL8005.site4now.net;Initial Catalog=db_a989fe_thm101team6;User Id=db_a989fe_thm101team6_admin;Password=THM101TEAM6");
             }
         }
@@ -122,6 +119,12 @@ namespace EnjoyEat.Models
                     .HasColumnName("EmployeesID");
 
                 entity.Property(e => e.RoleId).HasColumnName("RoleID");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.AuthorityUses)
+                    .HasForeignKey(d => d.RoleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AuthorityUse_Authority");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -131,25 +134,6 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.CategoryName).HasMaxLength(20);
 
                 entity.Property(e => e.Description).HasColumnType("text");
-            });
-
-            modelBuilder.Entity<Customer>(entity =>
-            {
-                entity.Property(e => e.CustomerId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("CustomerID");
-
-                entity.Property(e => e.Address).HasMaxLength(50);
-
-                entity.Property(e => e.Email).HasMaxLength(30);
-
-                entity.Property(e => e.FirstName).HasMaxLength(30);
-
-                entity.Property(e => e.LastName).HasMaxLength(30);
-
-                entity.Property(e => e.Phone)
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<CustomerService>(entity =>
@@ -234,6 +218,12 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.Password).HasMaxLength(20);
 
                 entity.Property(e => e.UserName).HasMaxLength(15);
+
+                entity.HasOne(d => d.Employees)
+                    .WithOne(p => p.EmployeesLogin)
+                    .HasForeignKey<EmployeesLogin>(d => d.EmployeesId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmployeesLogin_Employees");
             });
 
             modelBuilder.Entity<EmployeesSalary>(entity =>
@@ -260,6 +250,12 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.TotalSalary).HasColumnType("money");
 
                 entity.Property(e => e.Wage).HasColumnType("money");
+
+                entity.HasOne(d => d.Employee)
+                    .WithOne(p => p.EmployeesSalary)
+                    .HasForeignKey<EmployeesSalary>(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmployeesSalary_Employees");
             });
 
             modelBuilder.Entity<Level>(entity =>
@@ -275,8 +271,6 @@ namespace EnjoyEat.Models
                     .ValueGeneratedNever()
                     .HasColumnName("MemberID");
 
-                entity.Property(e => e.Account).HasMaxLength(20);
-
                 entity.Property(e => e.Address).HasMaxLength(60);
 
                 entity.Property(e => e.Birthday).HasColumnType("datetime");
@@ -290,8 +284,6 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.LastName).HasMaxLength(10);
 
                 entity.Property(e => e.LevelName).HasMaxLength(10);
-
-                entity.Property(e => e.Password).HasMaxLength(20);
 
                 entity.Property(e => e.Phone).HasMaxLength(15);
 
@@ -338,8 +330,6 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Account).HasMaxLength(20);
 
-                entity.Property(e => e.LoginTime).HasColumnType("datetime");
-
                 entity.Property(e => e.Password).HasMaxLength(20);
 
                 entity.HasOne(d => d.Member)
@@ -370,23 +360,42 @@ namespace EnjoyEat.Models
                     .HasConstraintName("FK_Member_MembersPoints");
             });
 
+            modelBuilder.Entity<News>(entity =>
+            {
+                entity.Property(e => e.NewsId).HasColumnName("NewsID");
+
+                entity.Property(e => e.Category).HasMaxLength(16);
+
+                entity.Property(e => e.Content).HasColumnType("text");
+
+                entity.Property(e => e.ImageUrl).HasMaxLength(100);
+
+                entity.Property(e => e.LastModified).HasColumnType("datetime");
+
+                entity.Property(e => e.PublishDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Title).HasMaxLength(16);
+            });
+
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.OrderId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("OrderID");
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
 
                 entity.Property(e => e.TableId).HasColumnName("TableID");
 
-                entity.HasOne(d => d.Customer)
+                entity.HasOne(d => d.Member)
                     .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.CustomerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Orders_Customers");
+                    .HasForeignKey(d => d.MemberId)
+                    .HasConstraintName("FK_Orders_Members");
+
+                entity.HasOne(d => d.Table)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.TableId)
+                    .HasConstraintName("FK_Orders_Orders");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
@@ -481,9 +490,7 @@ namespace EnjoyEat.Models
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.Property(e => e.ProductId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ProductID");
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
@@ -546,6 +553,8 @@ namespace EnjoyEat.Models
             {
                 entity.ToTable("Table");
 
+                entity.Property(e => e.TableId).HasColumnName("TableID");
+
                 entity.Property(e => e.Capacity).HasColumnName("capacity");
 
                 entity.Property(e => e.Location).HasMaxLength(10);
@@ -556,34 +565,9 @@ namespace EnjoyEat.Models
                     .HasDefaultValueSql("(N'空閒')");
             });
 
-            modelBuilder.Entity<TransactionRecord>(entity =>
-            {
-                entity.HasKey(e => e.MemberId);
-
-                entity.Property(e => e.MemberId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MemberID");
-
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
-
-                entity.HasOne(d => d.Member)
-                    .WithOne(p => p.TransactionRecord)
-                    .HasForeignKey<TransactionRecord>(d => d.MemberId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Members_TransactionRecords");
-
-                entity.HasOne(d => d.Order)
-                    .WithMany(p => p.TransactionRecords)
-                    .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Orders_TransactionRecords");
-            });
-
             OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-        public DbSet<EnjoyEat.Models.ViewModel.MemberViewModel>? MemberViewModel { get; set; }
     }
 }

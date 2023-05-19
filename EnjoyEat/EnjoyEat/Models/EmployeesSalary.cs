@@ -14,5 +14,7 @@ namespace EnjoyEat.Models
         public double? Hours { get; set; }
         public decimal TotalSalary { get; set; }
         public DateTime PaymentDate { get; set; }
+
+        public virtual Employee Employee { get; set; } = null!;
     }
 }

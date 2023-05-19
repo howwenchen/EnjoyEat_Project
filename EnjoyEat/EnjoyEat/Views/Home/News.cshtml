@@ -1,0 +1,96 @@
+﻿@section Styles{
+<style>
+
+
+</style>
+}
+
+<div id="app">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-3 mb-4" v-for="item in newsItems" :key="item.id" @@click="openModal(item)">
+                <div class="card h-100">
+                    <img :src="item.imageUrl" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.category }}</h5>
+                        <p class="card-text">{{ item.content }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
+                    <a class="page-link" href="#" @@click.prevent="changePage(currentPage - 1)">Previous</a>
+                </li>
+                <li class="page-item" :class="{ 'active': n === currentPage }" v-for="n in totalPages" :key="n">
+                    <a class="page-link" href="#" @@click.prevent="changePage(n)">{{ n }}</a>
+                </li>
+                <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
+                    <a class="page-link" href="#" @@click.prevent="changePage(currentPage + 1)">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="modal fade" id="newsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ currentItem.category }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img :src="currentItem.imageUrl" class="img-fluid mb-3" alt="...">
+                    <p>{{ currentItem.content }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <a href="~/axios/axios.js.map">~/axios/axios.js.map</a>
+    <a href="~/axios/axios.min.js.map">~/axios/axios.min.js.map</a>
+    <script src="~/axios/axios.min.js"></script>
+    <script src="~/axios/axios.js"></script>
+    <script src="~/vue/vue.global.min.js"></script>
+    <script src="~/vue/vue.global.prod.min.js"></script>
+    <script src="~/vue/vue.global.prod.js"></script>
+    <script src="~/vue/vue.global.js"></script>
+    <script>
+        new Vue({
+          el: '#app',
+          data: {
+            newsItems: [],
+            currentPage: 1,
+            totalPages: 0,
+            currentItem: null,
+          },
+          created() {
+            this.fetchData();
+          },
+          methods: {
+            fetchData() {
+              axios.get('/api/news?page=' + this.currentPage)
+                .then(response => {
+                  this.newsItems = response.data.items;
+                  this.totalPages = response.data.totalPages;
+                });
+            },
+            changePage(pageNumber) {
+              if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+                this.currentPage = pageNumber;
+                this.fetchData();
+              }
+            },
+            openModal(item) {
+              this.currentItem = item;
+              const modal = new bootstrap.Modal(document.getElementById('newsModal'));
+              modal.show();
+            },
+          },
+        });
+    </script>
+
+}

@@ -12,6 +12,7 @@ namespace EnjoyEat.Models.ViewModel
         public string LastName { get; set; } = null!;
         public string Gender { get; set; } = null!;
         public DateTime Birthday { get; set; }
+        public DateTime RegisterDay { get; set; }
         public string Address { get; set; } = null!;
         public string Phone { get; set; } = null!;
         public string Email { get; set; } = null!;
@@ -19,8 +20,14 @@ namespace EnjoyEat.Models.ViewModel
         public byte[] Account { get; set; } = null!;
         public byte[] Password { get; set; } = null!;
 
+
         public virtual MemberLogin? MemberLogin { get; set; }
-        public virtual TransactionRecord? TransactionRecord { get; set; }
         public virtual ICollection<MemberPoint> MemberPoints { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
+
+        public virtual Customer Customer { get; set; } = null!;
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+
+
     }
 }

@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>享食EnjoyEat 首頁</title>
+    <title>享食EnjoyEat</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -27,7 +27,7 @@
 
     <!-- Template Main CSS File -->
     <link href="~/css/style.min.css" rel="stylesheet">
-
+    
     <!--預設檔案-->
     @*<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />*@
     @await RenderSectionAsync("Styles", required: false)
@@ -45,11 +45,13 @@
                 <ul>
                     <li><a class="nav-link scrollto" href="">關於我們</a></li>
                     <li><a class="nav-link scrollto" asp-controller="Menu" asp-action="Index">菜單</a></li>
-                    <li><a class="nav-link scrollto" href="">最新消息</a></li>
+                    <li><a class="nav-link scrollto" asp-area="" asp-controller="Home" asp-action="News">最新消息</a></li>
                     <li><a class="nav-link scrollto" href="">訂位</a></li>
+                    <li><a class="nav-link scrollto" asp-area="OrderForHere" asp-controller="OrderLogin" asp-action="Index">內用點餐</a></li>
+                    <li><a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index">後臺管理</a></li>
                     <li><a class="nav-link scrollto" href="">外帶訂餐</a></li>
                     <li><a class="nav-link scrollto" href="">聯絡我們</a></li>
-                    <li><a class="nav-link scrollto" href="">會員登入</a></li>
+                    <li><a class="nav-link scrollto" asp-controller="MemberLogin" asp-action="Index">會員登入</a></li>
                     <li><a class="nav-link scrollto" asp-controller="MemberManagement" asp-action="Index">會員管理</a></li>
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
@@ -95,25 +97,22 @@
 
                     <div class="col-lg-3 col-md-6 footer-links">
                         <ul>
-                            <li><i class="bx bx-chevron-right"></i> <a asp-controller="Home" asp-action="Index">Home</a></li>
                             <li><i class="bx bx-chevron-right"></i> <a href="#">關於我們</a></li>
                             <li><i class="bx bx-chevron-right"></i> <a href="#">聯絡我們</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">最新消息</a></li>
                         </ul>
                     </div>
 
                     <div class="col-lg-3 col-md-6 footer-links">
                         <ul>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#">最新消息</a></li>
                             <li><i class="bx bx-chevron-right"></i> <a asp-controller="Menu" asp-action="Index">菜單</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">內用訂餐</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">外帶訂餐</a></li>
-
                         </ul>
                     </div>
 
                     <div class="col-lg-3 col-md-6 footer-links">
                         <ul>
                             <li><i class="bx bx-chevron-right"></i> <a href="#">訂位</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a href="#">外帶訂餐</a></li>
 
                         </ul>
 
@@ -147,12 +146,15 @@
     <script src="~/vendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="~/vendor/php-email-form/validate.js"></script>
     <script src="~/vendor/swiper/swiper-bundle.min.js"></script>
-
+ 
     <!-- Template Main JS File -->
     <script src="~/js/main.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
