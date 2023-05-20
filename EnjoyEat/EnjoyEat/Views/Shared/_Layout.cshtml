@@ -25,6 +25,7 @@
     <link href="~/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="~/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
+
     <!-- Template Main CSS File -->
     <link href="~/css/style.min.css" rel="stylesheet">
     
@@ -51,7 +52,7 @@
                     <li><a class="nav-link scrollto" asp-area="OrderForHere" asp-controller="OrderLogin" asp-action="Index">內用點餐</a></li>
                     <li><a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index">後臺管理</a></li>
                     <li><a class="nav-link scrollto" href="">外帶訂餐</a></li>
-                    <li><a class="nav-link scrollto" href="">聯絡我們</a></li>
+                    <li><a class="nav-link scrollto" asp-controller="ContactUs" asp-action="ContactUs">聯絡我們</a></li>
                     <li><a class="nav-link scrollto" asp-controller="MemberLogin" asp-action="Index">會員登入</a></li>
                     <li><a class="nav-link scrollto" asp-controller="MemberManagement" asp-action="Index">會員管理</a></li>
                     <li><a class="nav-link scrollto" asp-area="OrderForHere" asp-controller="FeedBack" asp-action="FeedBack">意見表</a></li>
@@ -147,6 +148,8 @@
     <script src="~/vendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="~/vendor/php-email-form/validate.js"></script>
     <script src="~/vendor/swiper/swiper-bundle.min.js"></script>
+
+
  
     <!-- Template Main JS File -->
     <script src="~/js/main.js"></script>
@@ -156,6 +159,7 @@
     <script src="~/vue/vue.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
 
 </body>
 </html>

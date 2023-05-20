@@ -25,5 +25,7 @@ namespace EnjoyEat.Models
         public virtual MemberLevel MemberNavigation { get; set; } = null!;
         public virtual MemberLogin? MemberLogin { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
+        public string Account { get; internal set; } = null;
+        public string Password { get; internal set; } = null;
     }
 }
