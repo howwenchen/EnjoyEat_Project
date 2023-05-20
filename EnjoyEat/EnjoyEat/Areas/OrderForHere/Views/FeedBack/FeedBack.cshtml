@@ -1,0 +1,210 @@
+﻿@section Styles{
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.2/dist/sweetalert2.min.css">
+    <style>
+        body {
+            color: aliceblue;
+            background-color: #222220;
+        }
+
+        .datepicker {
+            width: 100%;
+            height: 38px;
+            border: 1px solid #ced4da;
+            border-radius: 0.375rem;
+            padding: 6px 12px 6px 12px;
+        }
+
+        h2 {
+            text-align: center;
+            padding: 50px 0px 30px 0px;
+            color: white;
+        }
+
+        h5 {
+            margin: 10px 0 10px 0;
+            font-size: medium;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        span {
+            color: red;
+        }
+
+        .check-area {
+            border: 1px solid #D8CDB9;
+            padding: 20px 0px 20px 0px;
+            border-radius: 0.375rem;
+            color: white;
+        }
+
+        .inputform div {
+            text-align: left;
+            margin: 0 5% 0 5%;
+        }
+
+        .inputform input {
+            border: 1px solid #D8CDB9;
+            border-radius: 0.375rem;
+        }
+
+        .detaildata {
+            border: 1px solid #D8CDB9;
+            border-radius: 0.375rem;
+            width: 100%;
+            height: 200px;
+        }
+
+        label {
+            padding: 5px 10px 5px 0;
+        }
+
+        .input-btn {
+            margin: 0;
+        }
+
+        .inpName, .inpEmail, .inpDetail {
+            padding: 6px 12px 6px 12px;
+            width: 100%;
+            color: white;
+        }
+
+        input[type=radio]:disabled {
+            background: var(--inputDisabled);
+        }
+
+            input[type=radio]:disabled:before {
+                background: white;
+            }
+
+        .satisfaction {
+            line-height: 34px;
+        }
+        /*star*/
+        .star-widget input {
+            display: none;
+        }
+
+        .star-widget label {
+            color: #999;
+            float: right;
+            transition: all 0.2s ease;
+        }
+
+        .star-widget input:not(:checked) ~ label:hover,
+        .star-widget input:not(:checked) ~ label:hover ~ label,
+        .star-widget input:checked ~ label {
+            color: #fd4;
+        }
+
+        /*button*/
+        .btn-return, .btn-submit {
+            border: 0;
+            border-radius: 0.375rem;
+            width: 100%;
+            height: 38px;
+            display: inline;
+        }
+
+        .btn-return {
+            background-color: white;
+            color: #222220;
+        }
+
+        .btn-submit {
+            background-color: #721B29;
+            color: white;
+        }
+
+            .btn-submit:active, .btn-return:active {
+                background-color: #C28C2E;
+                color: #222220;
+            }
+
+        [v-cloak] {
+            display: none;
+        }
+
+    </style>
+}
+<main>
+    <h2>顧客滿意度調查</h2>
+    <p class="container">本問卷蒐集之資訊僅作為內部服務改善使用，<br>絕不外洩或另作其他用途，敬請放心填寫。</p>
+    <div id="satisfaction">
+        <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
+            <div class="row">
+                <label class="col-lg-6 col-md-6">姓名</label>
+                <label class="col-lg-6 col-md-6">是否是第一次用餐</label>
+
+                <div class="col-lg-6 col-md-6 form-group d-flex">
+                    <input name="Name" id="formName" class="book-a-table form-control " />
+                </div>
+                <div class="col-lg-6 col-md-6 form-group d-flex">
+                    <select name="time" id="mealTime" class="book-a-table form-control">
+                        <option value="" disabled>請選擇用餐次數</option>
+                        <option value="">1~5次</option>
+                        <option value="">6~10次</option>
+                        <option value="">10次以上</option>
+                    </select>
+                </div>
+                <label>電子郵件</label>
+                <div class="col-lg-6 col-md-6 form-group d-flex">
+                    <input name="Email" id="formEmail" class="book-a-table form-control " />
+                </div>
+            </div>
+
+
+            <label>用餐日期</label>
+            <!-- 月曆這邊要調整 -->
+            <div class="col-lg-2 col-md-6 form-group" id="mealTimePicker">
+                <select name="" id="mealdate" class="book-a-table form-control"></select>
+            </div>
+            <div id="calendar">
+                <div class="col-lg-4 col-md-6 form-group d-flex"></div>
+                <span><script type='text/javascript' src='./calendar.js'></script></span>
+                <!-- <span><script type='text/javascript' src='./calendar.js'></script></span> -->
+            </div>
+            <label>用餐時段</label>
+            <div class="col-lg-2 col-md-6 form-group" id="mealTimePicker">
+                <select name="time" id="mealTime" class="book-a-table form-control">
+                    <option value="" disabled>請選擇用餐時段</option>
+                    <option value="">11:00</option>
+                    <option value="">13:00</option>
+                    <option value="">15:00</option>
+                    <option value="">17:00</option>
+                    <option value="">19:00</option>
+                </select>
+            </div>
+            <br>
+            <label>餐廳位置</label>
+            <br>
+            <div data-aos="fade-up">
+                <iframe style="border: 0; width: 50%; height: 250px"
+                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
+                        frameborder="0" allowfullscreen>
+                </iframe>
+            </div>
+            <div id="finalReservation">
+                <div class="form-group">
+                    <div aria-hidden="true" id="yourReservation">
+                        <label for="text">您已選擇預訂</label>
+                        <span><button id="adultShow">大人</button></span>
+                        <span><button id="kidShow">小孩</button></span>
+                        <span><img src="~/img/right-arrow.png" alt="" id="rightArrow" /></span>
+
+                        <span><button id="dateShow">訂位日期</button></span>
+                        <span><img src="~/img/right-arrow.png" alt="" id="rightArrow" /></span>
+                        <span><button id="timeShow">訂位時段</button></span>
+                    </div>
+                    <div class="text-center book-a-table php-email-form " id="reservationNext">
+                        <button type="submit" id="reservationNow">下一步，填寫聯絡資訊</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.2/dist/sweetalert2.min.js"></script>
