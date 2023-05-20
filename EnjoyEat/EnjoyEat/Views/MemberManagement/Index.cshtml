@@ -5,8 +5,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 }
 <!-- =======MemberManagement navbar  Section ======= -->
+<div id="member" v-cloak>
 <nav>
-    <div id="memberNavbar" class="d-flex">
+    <div id="memberNavbar" class="d-flex" v-for="member in memberInfo">
         <h5 id="userName">{{ member.firstName }} {{ member.lastName }}您好</h5>
         <button class="btn">
             登出
@@ -20,7 +21,7 @@
 <!-- End navbar -->
 
 <main id="main">
-    <div class="contaimer">
+    <div class="container">
     <!-- ======= MemberInformation Section ======= -->
     @*原本是why-us*@
         <section id="why-us" class="why-us">
@@ -35,8 +36,8 @@
                         <span class="second"></span>
                         <span class="third"></span>
                         <span class="fourth"></span>
-                    </button> @*用ajax改*@
-                    <button class="btn">
+                    </button>
+                    <button class="btn" >
                         重新設定密碼
                         <span class="first"></span>
                         <span class="second"></span>
@@ -47,7 +48,7 @@
             </div>
 
             <!--memberdata-->
-            <div class="row">
+            <div class="row" v-for="member in memberInfo">
 
                 <div class="col-lg-2">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
@@ -275,25 +276,35 @@
 
 </main><!-- End #main -->
 
+</div>
+
 
 @section Scripts {
     <script src="~/js/memebermanagement.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
-    <script>
+   <script>
         var app = new Vue({
-            el: '.container',
+            el: '#member',
             data: {
-                member:[];
+                memberInfo: [],
+                txt:"1",
+            },
+            mounted: 
+                function () {
+                    let _this = this;
+
+                    axios.get("/MemberManagement/GetMember")
+                        .then(response => {
+                            console.log("test",response.data)
+                            //_this.memberInfo = response.data
+                        })
+                
 
             }
-            methods:{
-                GetMembers() {
-                    axios.get("/MemberManagement/GetMember"),
-                    then(response => {
-                            console(response.data)
-                        //this.member = response.data
-                    })
-            }
+        })
+
+
+
     </script>
 }
