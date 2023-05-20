@@ -7,6 +7,7 @@ namespace EnjoyEat.Models
 {
     public partial class db_a989fe_thm101team6Context : DbContext
     {
+
         public db_a989fe_thm101team6Context()
         {
         }
@@ -14,8 +15,8 @@ namespace EnjoyEat.Models
         public db_a989fe_thm101team6Context(DbContextOptions<db_a989fe_thm101team6Context> options)
             : base(options)
         {
-        }
 
+        }
         public virtual DbSet<Attendance> Attendances { get; set; } = null!;
         public virtual DbSet<Authority> Authorities { get; set; } = null!;
         public virtual DbSet<AuthorityUse> AuthorityUses { get; set; } = null!;
@@ -45,7 +46,6 @@ namespace EnjoyEat.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Data Source=SQL8005.site4now.net;Initial Catalog=db_a989fe_thm101team6;User Id=db_a989fe_thm101team6_admin;Password=THM101TEAM6");
             }
         }
@@ -561,6 +561,16 @@ namespace EnjoyEat.Models
             });
 
             OnModelCreatingPartial(modelBuilder);
+        }
+
+        internal bool MemberLogin(Member member)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void Member(Member member)
+        {
+            throw new NotImplementedException();
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
