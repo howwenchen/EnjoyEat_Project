@@ -291,7 +291,8 @@
                 GetMembers() {
                     axios.get("/MemberManagement/GetMember"),
                     then(response => {
-                        this.member = response.data
+                            console(response.data)
+                        //this.member = response.data
                     })
             }
     </script>

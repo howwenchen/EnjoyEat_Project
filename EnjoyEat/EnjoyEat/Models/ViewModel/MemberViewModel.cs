@@ -17,13 +17,18 @@ namespace EnjoyEat.Models.ViewModel
         public string Email { get; set; } = null!;
         public string LevelName { get; set; } = null!;
 
+        public List<MemberOrderViewModel> Orders { get; set; }
+
+        public double DiscountRate { get; set; }
+
+
+    }
+
+    public class MemberOrderViewModel
+    {
         public int OrderId { get; set; }
         public DateTime OrderDate { get; set; }
         public short? TableId { get; set; }
         public int TotalPrice { get; set; }
-
-        public int DiscountRate { get; set; }
-
-
     }
 }
