@@ -1915,7 +1915,6 @@ ol {
 }
 
 .cart__total {
-  background: #fdf3ea;
   padding: 35px 40px 40px;
 }
 .cart__total h6 {
@@ -1944,9 +1943,11 @@ ol {
   display: block;
   background: #111111;
   color: #ffffff;
-  padding: 12px 10px;
+  padding: 10px 10px;
   text-align: center;
-  letter-spacing: 2px;
+  letter-spacing: 12px;
+  line-height: 30px;
+  font-size: 18px;
 }
 
 /*---------------------
