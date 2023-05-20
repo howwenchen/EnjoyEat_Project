@@ -1,96 +1,134 @@
 ﻿@section Styles{
-<style>
-
-
-</style>
+    <style>
+    .pagination .page-link {
+        background-color: black;
+        color: white;
+        border-color: lightgray;
+    }
+    .pagenumber{
+        background-color:white;
+        color:black;
+    }
+    .modal-body h5{
+        padding:5px ;
+        display:inline-block;
+        color:white;
+        background-color:darkgrey;
+        border-radius:0.7em;
+        font-weight:800;
+    }
+    .modal-header{
+        background-color:rgba(0,0,0,0.7);
+        color:white;
+    }
+    
+    </style>
 }
 
 <div id="app">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-lg-3 mb-4" v-for="item in newsItems" :key="item.id" @@click="openModal(item)">
-                <div class="card h-100">
-                    <img :src="item.imageUrl" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ item.category }}</h5>
-                        <p class="card-text">{{ item.content }}</p>
+    <div class="row">
+        <div class="col-sm-6 col-lg-3 mb-4" v-for="news in currentPageNews" v-bind:key="news.newsId">
+            <div class="card" v-on:click="showModal(news.newsId)">
+                <img v-bind:src="news.imageUrl" class="card-img-top" alt="圖片加載中">
+                <div class="card-body">
+                    <h5 class="card-title text-body">{{ news.category }}</h5>
+                    <p class="card-text text-body">{{ news.title }}</p>
+                </div>
+            </div>
+
+            <!-- 跳窗 -->
+            <div class="modal fade" tabindex="-1" v-bind:id="'modal' + news.newsId">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <!-- 跳窗內容 -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{ modalNews.title }}</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body text-body">
+                            <h5>{{ modalNews.category }}</h5>
+                            <p>{{ modalNews.content }}</p>
+                        </div>
+                        <div class="modal-footer text-body">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-                    <a class="page-link" href="#" @@click.prevent="changePage(currentPage - 1)">Previous</a>
-                </li>
-                <li class="page-item" :class="{ 'active': n === currentPage }" v-for="n in totalPages" :key="n">
-                    <a class="page-link" href="#" @@click.prevent="changePage(n)">{{ n }}</a>
-                </li>
-                <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-                    <a class="page-link" href="#" @@click.prevent="changePage(currentPage + 1)">Next</a>
-                </li>
-            </ul>
-        </nav>
     </div>
-    <div class="modal fade" id="newsModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ currentItem.category }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <img :src="currentItem.imageUrl" class="img-fluid mb-3" alt="...">
-                    <p>{{ currentItem.content }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- 分頁 -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" v-on:click="previousPage">
+                <a class="page-link" href="#">Previous</a>
+            </li>
+            <li class="page-item " v-for="page in pageNumbers" v-on:key="page">
+                <a class="page-link" href="#" v-on:click="changePage(page)">{{ page }}</a>
+            </li>
+            <li class="page-item" v-on:click="nextPage">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 
 @section Scripts{
-    <a href="~/axios/axios.js.map">~/axios/axios.js.map</a>
-    <a href="~/axios/axios.min.js.map">~/axios/axios.min.js.map</a>
-    <script src="~/axios/axios.min.js"></script>
-    <script src="~/axios/axios.js"></script>
-    <script src="~/vue/vue.global.min.js"></script>
-    <script src="~/vue/vue.global.prod.min.js"></script>
-    <script src="~/vue/vue.global.prod.js"></script>
-    <script src="~/vue/vue.global.js"></script>
     <script>
-        new Vue({
-          el: '#app',
-          data: {
-            newsItems: [],
-            currentPage: 1,
-            totalPages: 0,
-            currentItem: null,
-          },
-          created() {
-            this.fetchData();
-          },
-          methods: {
-            fetchData() {
-              axios.get('/api/news?page=' + this.currentPage)
-                .then(response => {
-                  this.newsItems = response.data.items;
-                  this.totalPages = response.data.totalPages;
-                });
+        const app = new Vue({
+            el: '#app',
+            data: {
+                currentPageNews: [],
+                currentPage: 1,
+                pageNumbers: [],
+                modalNews:{}
             },
-            changePage(pageNumber) {
-              if (pageNumber >= 1 && pageNumber <= this.totalPages) {
-                this.currentPage = pageNumber;
-                this.fetchData();
-              }
+            mounted: function () {
+                this.getPageCount();
+                this.changePage(this.currentPage);
             },
-            openModal(item) {
-              this.currentItem = item;
-              const modal = new bootstrap.Modal(document.getElementById('newsModal'));
-              modal.show();
-            },
-          },
+            methods: {
+                showModal: function (newsId) {
+                    console.log(`Clicked newsId: ${newsId}`);
+                    this.modalNews = this.currentPageNews.find(news => news.newsId === newsId);
+                    if (this.modalNews) {
+                        var myModal = new bootstrap.Modal(document.getElementById('modal' + newsId));
+                        myModal.show();
+                    } else {
+                        console.log(`No news item found with newsId ${newsId}`);}
+                },
+                changePage: function (page) {
+                    axios.get("https://localhost:7071/Home/GetNews/" + page)
+                        .then(response => {
+                            this.currentPageNews = response.data;
+                            this.currentPage = page;
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                },
+                getPageCount: function () {
+                    axios.get("https://localhost:7071/Home/GetPageCount")
+                        .then(response => {
+                            this.pageNumbers = Array.from({ length: response.data }, (_, index) => index + 1);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                },
+                nextPage: function () {
+                    if (this.currentPage < this.pageNumbers.length) {
+                        this.changePage(this.currentPage + 1);
+                    }
+                },
+                previousPage: function () {
+                    if (this.currentPage > 1) {
+                        this.changePage(this.currentPage - 1);
+                    }
+                },
+            }
         });
     </script>
-
 }
+

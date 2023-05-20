@@ -28,8 +28,9 @@
     <!-- Template Main CSS File -->
     <link href="~/css/style.min.css" rel="stylesheet">
     
+
     <!--預設檔案-->
-    @*<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />*@
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
@@ -150,10 +151,15 @@
     <!-- Template Main JS File -->
     <script src="~/js/main.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+<<<<<<< HEAD
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+=======
+    <script src="~/axios/axios.min.js"></script>
+    <script src="~/vue/vue.min.js"></script>
+
+>>>>>>> CheckoutPage
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>
