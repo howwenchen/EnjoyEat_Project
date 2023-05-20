@@ -366,7 +366,7 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Category).HasMaxLength(16);
 
-                entity.Property(e => e.Content).HasColumnType("text");
+                entity.Property(e => e.Content).HasColumnType("ntext");
 
                 entity.Property(e => e.ImageUrl).HasMaxLength(100);
 

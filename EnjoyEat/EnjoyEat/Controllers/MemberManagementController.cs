@@ -25,7 +25,7 @@ namespace EnjoyEat.Controllers
                     Phone = m.Phone,
                     Email = m.Email,
                     LevelName = m.LevelName,
-                    Password = m.Password,
+                    //Password = m.Password,
                 });
                 return View(viewModel);
             }
