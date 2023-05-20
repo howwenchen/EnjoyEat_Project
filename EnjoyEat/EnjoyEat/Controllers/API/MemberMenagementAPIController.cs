@@ -1,38 +1,29 @@
 ﻿using EnjoyEat.Models;
 using EnjoyEat.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using static NuGet.Packaging.PackagingConstants;
 
-namespace EnjoyEat.Controllers
+namespace EnjoyEat.Controllers.API
 {
-    public class MemberManagementController : Controller
+    [Route("api/member/[action]")]
+    [ApiController]
+    public class MemberMenagementAPIController :ControllerBase
     {
-        private readonly db_a989fe_thm101team6Context _db;
-        public MemberManagementController(db_a989fe_thm101team6Context db)
+        private readonly db_a989fe_thm101team6Context db;
+        public MemberMenagementAPIController(db_a989fe_thm101team6Context db)
         {
-            this._db = db;
-        }
-    
-            public IActionResult Index()
-        {
-                return View();
-            
+            this.db = db;
         }
 
-        public IActionResult EditPassword()
-        { 
-                return View();
-        }
-
-        public async Task<IActionResult> GetMember()
+        [HttpGet]
+        public IActionResult GetMember()
         {
             var userId = 20230006;
-            var user=_db.Members.FirstOrDefault(x =>x.MemberId == userId);
-            if(user == null){
+            var user = db.Members.FirstOrDefault(x => x.MemberId == userId);
+            if (user == null)
+            {
                 return NotFound();
             }
-            var member=new MemberViewModel()
+            var member = new MemberViewModel()
             {
                 MemberId = user.MemberId,
                 FirstName = user.FirstName,
