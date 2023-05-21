@@ -1,5 +1,4 @@
 ﻿@section Styles{
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.2/dist/sweetalert2.min.css">
     <style>
         body {
             color: aliceblue;
@@ -143,10 +142,11 @@
                 </div>
                 <div class="col-lg-6 col-md-6 form-group d-flex">
                     <select name="time" id="mealTime" class="book-a-table form-control">
-                        <option value="" disabled>請選擇用餐次數</option>
-                        <option value="">1~5次</option>
-                        <option value="">6~10次</option>
-                        <option value="">10次以上</option>
+                        <option value="times" disabled>請選擇</option>
+                        <option value="times">第1次</option>
+                        <option value="times">第2~5次</option>
+                        <option value="times">第6~10次</option>
+                        <option value="times">10次以上</option>
                     </select>
                 </div>
                 <label>電子郵件</label>
@@ -155,56 +155,142 @@
                 </div>
             </div>
 
+            <br>
+            <label>用餐資訊來源</label>
+            <div class=" form-group d-flex">
+                    <select name="source" id="source" class="book-a-table form-control">
+                        <option value="" disabled>請選擇</option>
+                        <option value="">曾經來過</option>
+                        <option value="">媒體報導</option>
+                        <option value="">社群媒體</option>
+                        <option value="">剛好路過</option>
+                        <option value="">朋友推薦</option>
+                        <option value="">其他</option>
+                    </select>
+            </div>
 
-            <label>用餐日期</label>
-            <!-- 月曆這邊要調整 -->
-            <div class="col-lg-2 col-md-6 form-group" id="mealTimePicker">
-                <select name="" id="mealdate" class="book-a-table form-control"></select>
-            </div>
-            <div id="calendar">
-                <div class="col-lg-4 col-md-6 form-group d-flex"></div>
-                <span><script type='text/javascript' src='./calendar.js'></script></span>
-                <!-- <span><script type='text/javascript' src='./calendar.js'></script></span> -->
-            </div>
-            <label>用餐時段</label>
-            <div class="col-lg-2 col-md-6 form-group" id="mealTimePicker">
-                <select name="time" id="mealTime" class="book-a-table form-control">
-                    <option value="" disabled>請選擇用餐時段</option>
-                    <option value="">11:00</option>
-                    <option value="">13:00</option>
-                    <option value="">15:00</option>
-                    <option value="">17:00</option>
-                    <option value="">19:00</option>
+            <br>
+            <label>今日用餐目的</label>
+            <div class="form-group">
+                <select name="" id="mealTime" class="book-a-table form-control">
+                    <option value="" disabled>請選擇</option>
+                    <option value="">朋友/家族聚餐</option>
+                    <option value="">慶生</option>
+                    <option value="">優惠活動</option>
+                    <option value="">慕名而來</option>
                 </select>
             </div>
             <br>
-            <label>餐廳位置</label>
-            <br>
-            <div data-aos="fade-up">
-                <iframe style="border: 0; width: 50%; height: 250px"
-                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
-                        frameborder="0" allowfullscreen>
-                </iframe>
-            </div>
-            <div id="finalReservation">
-                <div class="form-group">
-                    <div aria-hidden="true" id="yourReservation">
-                        <label for="text">您已選擇預訂</label>
-                        <span><button id="adultShow">大人</button></span>
-                        <span><button id="kidShow">小孩</button></span>
-                        <span><img src="~/img/right-arrow.png" alt="" id="rightArrow" /></span>
 
-                        <span><button id="dateShow">訂位日期</button></span>
-                        <span><img src="~/img/right-arrow.png" alt="" id="rightArrow" /></span>
-                        <span><button id="timeShow">訂位時段</button></span>
-                    </div>
-                    <div class="text-center book-a-table php-email-form " id="reservationNext">
-                        <button type="submit" id="reservationNow">下一步，填寫聯絡資訊</button>
-                    </div>
+            <label>用餐滿意度</label>
+            <div class="row">
+                <div class="satisfaction col-3 m-0">環境<span>*</span></div>
+                <div class="col-9 m-0 star-widget">
+                    <template v-for="item in env">
+                        <input type="radio" :id="item.id" :value="item.value"  equired>
+                        <label :for="item.id"><i class="fa-solid fa-star"></i></label>
+                    </template>
                 </div>
             </div>
+
+            <div class="satisfaction col-3 m-0">服務<span>*</span></div>
+            <div class="col-9 m-0 star-widget">
+                <template v-for="item in serve">
+                    <input type="radio" :id="item.id" :value="item.value" v-model="feedbackInfo.Serve" required>
+                    <label :for="item.id"><i class="fa-solid fa-star"></i></label>
+                </template>
+            </div>
+
+            <div class="satisfaction col-3 m-0">餐點<span>*</span></div>
+            <div class="col-9 m-0 star-widget">
+                <template v-for="item in dish">
+                    <input type="radio" :id="item.id" :value="item.value" v-model="feedbackInfo.Dish" required>
+                    <label :for="item.id"><i class="fa-solid fa-star"></i></label>
+                </template>
+            </div>
+
+            <div class="satisfaction col-3 m-0">價位<span>*</span></div>
+            <div class="col-9 m-0 star-widget">
+                <template v-for="item in price">
+                    <input type="radio" :id="item.id" :value="item.value" v-model="feedbackInfo.Price" required>
+                    <label :for="item.id"><i class="fa-solid fa-star"></i></label>
+                </template>
+            </div>
+
+            <div class="satisfaction col-3 m-0">整體<span>*</span></div>
+            <div class="col-9 m-0 star-widget">
+                <template v-for="item in overall">
+                    <input type="radio" :id="item.id" :value="item.value" v-model="feedbackInfo.Overall" required>
+                    <label :for="item.id"><i class="fa-sharp fa-light fa-star"></i></label>
+                </template>
+            </div>
+
+
         </form>
     </div>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.2/dist/sweetalert2.min.js"></script>
+@section Scripts {
+    <script>
+        var app = new Vue({
+            el: '#satisfaction',
+            data: {
+                memberInfo: {},
+                freq: [
+                    { value: 1, txt: '第1次' },
+                    { value: 2, txt: '第2-3次' },
+                    { value: 4, txt: '第4-6次' },
+                    { value: 7, txt: '7次以上' },
+                ],
+                env: [
+                    { value: 5, id: 'env5' },
+                    { value: 4, id: 'env4' },
+                    { value: 3, id: 'env3' },
+                    { value: 2, id: 'env2' },
+                    { value: 1, id: 'env1' }
+                ],
+                serve: [
+                    { value: 5, id: 'serve5' },
+                    { value: 4, id: 'serve4' },
+                    { value: 3, id: 'serve3' },
+                    { value: 2, id: 'serve2' },
+                    { value: 1, id: 'serve1' }
+                ],
+                dish: [
+                    { value: 5, id: 'dish5' },
+                    { value: 4, id: 'dish4' },
+                    { value: 3, id: 'dish3' },
+                    { value: 2, id: 'dish2' },
+                    { value: 1, id: 'dish1' }
+                ],
+                price: [
+                    { value: 5, id: 'price5' },
+                    { value: 4, id: 'price4' },
+                    { value: 3, id: 'price3' },
+                    { value: 2, id: 'price2' },
+                    { value: 1, id: 'price1' }
+                ],
+                overall: [
+                    { value: 5, id: 'overall5' },
+                    { value: 4, id: 'overall4' },
+                    { value: 3, id: 'overall3' },
+                    { value: 2, id: 'overall2' },
+                    { value: 1, id: 'overall1' }
+                ],
+                feedbackInfo: {
+                    orderId: @ViewBag.order,
+                    Name: '',
+                    Email: '',
+                    Age: null,
+                    Freq: null,
+                    Environment: null,
+                    Serve: null,
+                    Dish: null,
+                    Price: null,
+                    Overall: null,
+                    Suggestion: '',
+                },
+            })
+    </script>
+    
+}
