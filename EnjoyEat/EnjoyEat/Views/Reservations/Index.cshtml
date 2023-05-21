@@ -33,9 +33,9 @@
                             </select>
                         </div>
                     </div>
-                    <div id="d1" class="col-lg-2 col-md-6 form-group">
-                        <!-- datepicker這邊要調整 -->
-                        <label for="datepicker">用餐日期</label>
+                    <!-- datepicke -->
+                    <label for="datepicker">用餐日期</label>
+                    <div id="calendar">
                         <date-picker v-model="ReserveDate"
                                      value-type="format"
                                      name="ReserveDate"
@@ -54,9 +54,9 @@
                             <option value="">19:00</option>
                         </select>
                     </div>
-                    <br>
+                    <br/>
                     <label>餐廳位置</label>
-                    <br>
+                    <br/>
                     <div data-aos="fade-up">
                         <iframe style="border: 0; width: 50%; height: 250px"
                                 src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
@@ -80,9 +80,29 @@
                 <span><button id="timeShow">訂位時段</button></span>
             </div>
             <div class="text-center book-a-table php-email-form " id="reservationNext">
-                <button type="submit" id="reservationNow">下一步，填寫聯絡資訊</button>
+                <button type="submit" id="show" >下一步，填寫聯絡資訊</button>
             </div>
-        </div>
+            <dialog id="infoModal" class="text-center book-a-table php-email-form">
+                <h1 id="houseRule">規則與注意事項</h1>
+                <div id="ruleContainer" >
+                    <p>【預約時的注意事項】</p>
+                    <p>-餐廳接受一個月內的線上訂位。</p>
+                    <p>-用餐時間120分鐘。</p>
+                    <p>-只為有效聯絡電話之預訂保留座位。</p>
+                    <p>-於線上訂位成功後，若餐廳無法聯繫上訂位人做訂位確認時，本餐廳將保有取消其訂位之權利。</p>
+                    <p>-為確保客人用餐權益，若需取消或更改訂位，請提前告知。</p>
+                    <p>-訂位將保留15分鐘，若逾時將自動取消訂位。</p>
+                    <p>-線上預訂系統將自動安排座位，如需指定座位請致電至餐廳。</p>
+                    <p>-特殊節日恕不接受線上預訂。</p>
+                    <p>-本餐廳保留條款內容變更與解釋、暫停或終止本線上訂位之權利。</p>
+                    <p>服裝儀容：</p>
+                    <p>賓客請避免穿著拖鞋，男士請避免穿著無袖背心</p>
+                </div>
+                <div id="noticeRule" >
+                    <p>* 請詳細閱讀規則與注意事項</p>
+                    <button href="https://localhost:7071/Reservations/booking" id="confirmRulebBtn">我已閱讀並同意規則與注意事項</button>
+                </div>
+            </dialog>
     </footer>
 </main>
 <!-- End Book A Table Section -->
@@ -91,6 +111,16 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
     <script>
+        /*填完用餐訊息轉到dialog*/
+        let btn = document.querySelector("#show");
+        let infoModal = document.querySelector("#infoModal");
+        let close = document.querySelector("#close");
+        btn.addEventListener("click", function () {
+            infoModal.showModal();
+        });
+        confirmRulebBtn.addEventListener("click", function () {
+            infoModal.close();
+        });
 
     </script>
     <script src="~/js/reservations.js"></script>

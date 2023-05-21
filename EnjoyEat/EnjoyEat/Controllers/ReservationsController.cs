@@ -14,5 +14,10 @@ namespace EnjoyEat.Controllers
         {
             return View();
         }
+        public IActionResult booking()
+        {
+            return View();
+        }
+
     }
 }
