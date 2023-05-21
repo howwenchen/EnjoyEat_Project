@@ -9,10 +9,11 @@ namespace EnjoyEat.Controllers
     public class MemberManagementController : Controller
     {
         private readonly db_a989fe_thm101team6Context _db;
-        public MemberManagementController(db_a989fe_thm101team6Context projectContext)
+        public MemberManagementController(db_a989fe_thm101team6Context db)
         {
-            this._db = projectContext;
+            this._db = db;
         }
+    
             public IActionResult Index()
         {
                 return View();
@@ -24,9 +25,7 @@ namespace EnjoyEat.Controllers
                 return View();
         }
 
-        public async IActionResult GetMember()
-        {
-            var member = _db.Members.Include(p => p.Orders).Include(p=>p.Level);
-        }
+       
+        
     }
 }
