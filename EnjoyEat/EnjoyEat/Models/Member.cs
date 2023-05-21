@@ -22,7 +22,6 @@ namespace EnjoyEat.Models
         public string LevelName { get; set; } = null!;
 
         public virtual Level LevelNameNavigation { get; set; } = null!;
-        public virtual MemberLevel MemberNavigation { get; set; } = null!;
         public virtual MemberLogin? MemberLogin { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
     }

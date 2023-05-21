@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using EnjoyEat.Models.ViewModel;
 
 namespace EnjoyEat.Controllers
 {
@@ -18,6 +19,7 @@ namespace EnjoyEat.Controllers
             _context = context;
         }
 
+        
 
         public IActionResult Index()
         {
@@ -33,10 +35,23 @@ namespace EnjoyEat.Controllers
         [Route("Home/GetNews/{page?}")]
         public IActionResult GetNews(int page = 1)
         {
+
+            var News = _context.News.Select(i => new NewsViewModel
+            {
+                NewsId = i.NewsId,
+                Title = i.Title,
+                Category = i.Category,
+                Content = i.Content,
+                ImageUrl = i.ImageUrl,
+                PublishDate = i.PublishDate,
+                LastModified = i.LastModified
+            })
+            ;
+            
             int pageSize = 8;
             int skipCount = (page - 1) * pageSize;
 
-            var totalNewsCount = _context.News.Count();
+            var totalNewsCount = News.Count();
             var totalPageCount = (int)Math.Ceiling(totalNewsCount / (double)pageSize);
 
             if (totalPageCount == 0)
@@ -49,8 +64,8 @@ namespace EnjoyEat.Controllers
                 return BadRequest("The requested page number exceeds the total page count.");
             }
 
-            var news = _context.News.Skip(skipCount).Take(pageSize).ToList();
-            return Json(news);
+            var newsItem = News.Skip(skipCount).Take(pageSize).ToList();
+            return Json(newsItem);
         }
 
 
@@ -59,8 +74,12 @@ namespace EnjoyEat.Controllers
         [Route("Home/GetPageCount")]
         public IActionResult GetPageCount()
         {
+            var News = _context.News.Select(i => new NewsViewModel
+            {
+                NewsId = i.NewsId,
+            });
             int pageSize = 8;
-            var pageCount = (int)Math.Ceiling(_context.News.Count() / (double)pageSize);
+            var pageCount = (int)Math.Ceiling(News.Count() / (double)pageSize);
 
             // 回傳頁數
             return Json(pageCount);
