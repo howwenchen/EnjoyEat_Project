@@ -4,7 +4,7 @@
 }
 
 <!-- Start  -->
-<div class="form-container">
+<div class="form-container" id="Login">
     <h2>內用點餐</h2>
     <form>
         <label for="table-number">內用桌號:</label>
@@ -35,8 +35,9 @@
     <form>
         <label for="name">姓名:</label>
         <input type="text" id="name" name="name" required>
-
-        <label for="phone">電話:</label>
+        <label for="name">帳號:</label>
+        <input type="text" id="account" name="account" required>
+        <label for="phone">電話(預設密碼):</label>
         <input type="tel" id="phone" name="phone" required>
         <br>
         <div class="button-container">
@@ -52,5 +53,9 @@
 @section Scripts
 {
     <script src="~/orderforhere/orderforherelogin.min.js"></script>
+
+    <script>
+
+    </script>
 }
 
