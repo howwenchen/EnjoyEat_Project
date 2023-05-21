@@ -7,8 +7,10 @@
 <!-- =======MemberManagement navbar  Section ======= -->
 <div id="member" v-cloak>
 <nav>
-    <div id="memberNavbar" class="d-flex" v-for="member in memberInfo">
-        <h5 id="userName">{{ member.firstName }} {{ member.lastName }}您好</h5>
+    
+        
+        <div id="memberNavbar" class="d-flex"  >
+            <h5 id="userName">{{ memberInfo.firstName }} {{ memberInfo.lastName }}您好</h5>
         <button class="btn">
             登出
             <span class="first"></span>
@@ -25,7 +27,7 @@
     <!-- ======= MemberInformation Section ======= -->
     @*原本是why-us*@
         <section id="why-us" class="why-us">
-            <div class="container" data-aos="fade-up">
+                <div class="container" data-aos="fade-up" >
 
             <div class="section-title d-flex">
                 <h2>會員資訊</h2>
@@ -48,7 +50,7 @@
             </div>
 
             <!--memberdata-->
-            <div class="row" v-for="member in memberInfo">
+            <div class="row" >
 
                 <div class="col-lg-2">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
@@ -58,7 +60,7 @@
 
                 <div class="col-lg-4 mt-4 mt-lg-0">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            {{ member.memberId }}
+                            {{ memberInfo.memberId }}
                     </div>
                 </div>
 
@@ -70,7 +72,7 @@
 
                 <div class="col-lg-4 mt-4 mt-lg-0">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            {{ member.phone }}
+                            {{ memberInfo.phone }}
                     </div>
                 </div>
 
@@ -82,7 +84,7 @@
 
                 <div class="col-lg-4 mt-4 mt-lg-0">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            {{ member.firstName }} {{ member.lastName }}
+                            {{ memberInfo.firstName }} {{ memberInfo.lastName }}
                     </div>
                 </div>
 
@@ -94,7 +96,7 @@
 
                 <div class="col-lg-4 mt-4 mt-lg-0">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            {{ member.address }}
+                            {{ memberInfo.address }}
                     </div>
                 </div><div class="col-lg-2">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
@@ -104,7 +106,7 @@
 
                 <div class="col-lg-4 mt-4 mt-lg-0">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            {{ member.birthday }}
+                            {{ memberInfo.birthday }}
                     </div>
                 </div>
 
@@ -116,7 +118,7 @@
 
                 <div class="col-lg-4 mt-4 mt-lg-0">
                     <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            {{ member.email }}
+                            {{ memberInfo.email }}
                     </div>
                 </div>
 
@@ -140,7 +142,7 @@
 
     <!--MemberLevel section-->
     <section id="top-ten" class="top-ten">
-        <div class="container" data-aos="fade-up">
+                <div class="container" data-aos="fade-up" >
 
             <div class="section-title">
                 <h2>會員等級</h2>
@@ -156,11 +158,11 @@
 
                         <div class="col-lg-9 d-flex">
                             <div class="row">
-                                <div class="col-lg-9">您的會員等級:</div>
-                                <div class="col-lg-3">{{ member.levelName }}</div>
+                                <div class="col-lg-6">您的會員等級:</div>
+                                <div class="col-lg-3">{{ memberInfo.levelName }}</div>
 
                                 <div class="col-lg-6">累積消費金額:</div>
-                                <div class="col-lg-6">${{ member.memberPoints }}元</div>
+                                <div class="col-lg-6">$100000元</div>
                             </div>
                         </div>
 
@@ -175,7 +177,7 @@
 
                             </div>
                             <div class="dataContent col-lg-8"></div>
-                            <h3>折扣率:{{member.discount}}</h3>
+                            <h3>折扣率:{{memberInfo.discountRate}}</h3>
                         </div>
                 </div>
                    
@@ -186,7 +188,7 @@
     <!--Top10 carousul section end-->
 
     <!-- ======= OrderHistory Section ======= -->
-    <section id="events" class="events">
+   @* <section id="events" class="events">
         <div class="container" data-aos="fade-up">
 
             <div class="section-title">
@@ -270,7 +272,7 @@
                 </table>
 
         </div>
-    </section><!-- End Events Section -->
+    </section><!-- End Events Section -->*@
 
     </div>
 
@@ -288,16 +290,16 @@
             el: '#member',
             data: {
                 memberInfo: [],
-                txt:"1",
+                
             },
             mounted: 
                 function () {
                     let _this = this;
 
-                    axios.get("/MemberManagement/GetMember")
+                    axios.get("https://localhost:7071/api/member/GetMember")
                         .then(response => {
                             console.log("test",response.data)
-                            //_this.memberInfo = response.data
+                            _this.memberInfo = response.data
                         })
                 
 

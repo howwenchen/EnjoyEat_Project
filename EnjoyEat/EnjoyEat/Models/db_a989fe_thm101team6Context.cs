@@ -7,7 +7,6 @@ namespace EnjoyEat.Models
 {
     public partial class db_a989fe_thm101team6Context : DbContext
     {
-
         public db_a989fe_thm101team6Context()
         {
         }
@@ -15,8 +14,8 @@ namespace EnjoyEat.Models
         public db_a989fe_thm101team6Context(DbContextOptions<db_a989fe_thm101team6Context> options)
             : base(options)
         {
-
         }
+
         public virtual DbSet<Attendance> Attendances { get; set; } = null!;
         public virtual DbSet<Authority> Authorities { get; set; } = null!;
         public virtual DbSet<AuthorityUse> AuthorityUses { get; set; } = null!;
@@ -28,7 +27,6 @@ namespace EnjoyEat.Models
         public virtual DbSet<EmployeesSalary> EmployeesSalaries { get; set; } = null!;
         public virtual DbSet<Level> Levels { get; set; } = null!;
         public virtual DbSet<Member> Members { get; set; } = null!;
-        public virtual DbSet<MemberLevel> MemberLevels { get; set; } = null!;
         public virtual DbSet<MemberLogin> MemberLogins { get; set; } = null!;
         public virtual DbSet<News> News { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
@@ -46,6 +44,7 @@ namespace EnjoyEat.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseSqlServer("Data Source=SQL8005.site4now.net;Initial Catalog=db_a989fe_thm101team6;User Id=db_a989fe_thm101team6_admin;Password=THM101TEAM6");
             }
         }
@@ -180,7 +179,7 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Address).HasMaxLength(60);
 
-                entity.Property(e => e.Birthday).HasColumnType("datetime");
+                entity.Property(e => e.Birthday).HasColumnType("date");
 
                 entity.Property(e => e.Education).HasMaxLength(10);
 
@@ -263,9 +262,7 @@ namespace EnjoyEat.Models
 
             modelBuilder.Entity<Member>(entity =>
             {
-                entity.Property(e => e.MemberId)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("MemberID");
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
                 entity.Property(e => e.Address).HasMaxLength(60);
 
@@ -275,7 +272,7 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.FirstName).HasMaxLength(10);
 
-                entity.Property(e => e.Gender).HasColumnType("text");
+                entity.Property(e => e.Gender).HasMaxLength(2);
 
                 entity.Property(e => e.LastName).HasMaxLength(10);
 
@@ -290,33 +287,6 @@ namespace EnjoyEat.Models
                     .HasForeignKey(d => d.LevelName)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Members_Levels");
-
-                entity.HasOne(d => d.MemberNavigation)
-                    .WithOne(p => p.Member)
-                    .HasForeignKey<Member>(d => d.MemberId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Members_MemberLevel");
-            });
-
-            modelBuilder.Entity<MemberLevel>(entity =>
-            {
-                entity.HasKey(e => e.MemberId);
-
-                entity.ToTable("MemberLevel");
-
-                entity.Property(e => e.MemberId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MemberID");
-
-                entity.Property(e => e.LevelName).HasMaxLength(10);
-
-                entity.Property(e => e.PointsId).HasColumnName("PointsID");
-
-                entity.HasOne(d => d.LevelNameNavigation)
-                    .WithMany(p => p.MemberLevels)
-                    .HasForeignKey(d => d.LevelName)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Levels_MemberLevel");
             });
 
             modelBuilder.Entity<MemberLogin>(entity =>
@@ -561,16 +531,6 @@ namespace EnjoyEat.Models
             });
 
             OnModelCreatingPartial(modelBuilder);
-        }
-
-        internal bool MemberLogin(Member member)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void Member(Member member)
-        {
-            throw new NotImplementedException();
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

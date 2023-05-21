@@ -1,6 +1,7 @@
 ﻿using EnjoyEat.Models;
 using EnjoyEat.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EnjoyEat.Controllers.API
 {
@@ -14,11 +15,12 @@ namespace EnjoyEat.Controllers.API
             this.db = db;
         }
 
+        //抓取會員資料
         [HttpGet]
         public IActionResult GetMember()
         {
             var userId = 20230006;
-            var user = db.Members.FirstOrDefault(x => x.MemberId == userId);
+            var user = db.Members.Include(x=>x.Orders).Include(x=>x.LevelNameNavigation).FirstOrDefault(x => x.MemberId == userId);
             if (user == null)
             {
                 return NotFound();
@@ -42,7 +44,9 @@ namespace EnjoyEat.Controllers.API
                     TableId = x.TableId,
                     TotalPrice = x.TotalPrice,
                 }).ToList(),
+
             };
+            //var order=new me
             return Ok(member);
         }
     }
