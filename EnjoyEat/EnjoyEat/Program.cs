@@ -16,9 +16,9 @@ namespace EnjoyEat
 			options.UseSqlServer(EnjoyEatConnectionString));
 
 			builder.Services.AddControllersWithViews();
-		
 
-            var app = builder.Build();
+
+			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())
@@ -38,11 +38,17 @@ namespace EnjoyEat
 			app.MapControllerRoute(
 				name: "Area",
 				pattern: "{area:exists}/{controller}/{action}/{id?}",
-				defaults: new { controller = "Home", action = "Index"}
+				defaults: new { controller = "Home", action = "Index" }
 			);
 
 			app.MapControllerRoute(
 				name: "default",
+				pattern: "{controller}/{action}/{id?}",
+				defaults: new { controller = "Home", action = "Index" }
+			);
+
+			app.MapControllerRoute(
+				name: "Index",
 				pattern: "{controller}/{action}/{id?}",
 				defaults: new { controller = "Home", action = "Index" }
 			);

@@ -1,4 +1,10 @@
-﻿#adultPicker {
+﻿.container label{
+    color: #AAAAAA;
+    font-family: "Poppins",sans-serif;
+    font-size:14px;
+
+}
+#adultPicker {
     margin: 5px;
 }
 
@@ -11,13 +17,18 @@
 }
 
 #finalReservation {
-    border: 1px solid #d9ba85;
-    background-color: #d9ba85;
+    z-index: 10000;
+    width: 100%;
+    text-align: center;
     position: fixed;
-    bottom: 0px;
+    bottom: 0;
     left: 0px;
     right: 0px;
-    z-index: 10000;
+    width: 100%;
+    background-color: #d9ba85;
+    border: 1px solid #d9ba85;
+    color: white;
+    font-size: 16px;
 }
 
 #yourReservation {
@@ -28,15 +39,14 @@
     display: flex;
     justify-content: center;
 }
-
-    #yourReservation button {
-        background: #cda45e;
-        color: #fff;
-        transition: 0.4s;
-        border-radius: 50px;
-        border: 0;
-        margin: 2px;
-    }
+#finalReservation button {
+    background: #cda45e;
+    color: #fff;
+    transition: 0.4s;
+    border-radius: 50px;
+    border: 0;
+    margin: 2px;
+}
 
 #reservationNow {
     width: 100%;
@@ -73,9 +83,14 @@
     margin-left: 50px;
 }
 
-#contactUs {
-    width: 100%;
+#contactUsForm {
+    display: flex;
     justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+#customercomment {
+    margin-top:100px;
 }
 
 #contactQuestion {
@@ -93,105 +108,42 @@
     color: #aba18c;
     height: 44px;
 }
-
-/* 日曆 */
-/* 整体设置 */
-* {
-    margin: 0px;
-    padding: 0px;
-}
-
-/**
- * 设置日历的大小
- */
-.calendar {
-    width: 240px;
-    height: 400px;
-    display: block;
-}
-
-    /**
- * 设置日历顶部盒子
- */
-    .calendar .calendar-title-box {
-        position: relative;
-        width: 100%;
-        height: 36px;
-        line-height: 36px;
-        text-align: center;
-        border-bottom: 1px solid #ddd;
-    }
-
-    /**
- * 设置上个月的按钮图标
- */
-    .calendar .prev-month {
-        position: absolute;
-        top: 12px;
-        left: 0px;
-        display: inline-block;
-        width: 0px;
-        height: 0px;
-        border-left: 0px;
-        border-top: 6px solid transparent;
-        border-right: 8px solid #999;
-        border-bottom: 6px solid transparent;
-        cursor: pointer;
-    }
-
-    /**
- * 设置下个月的按钮图标
- */
-    .calendar .next-month {
-        position: absolute;
-        top: 12px;
-        right: 0px;
-        display: inline-block;
-        width: 0px;
-        height: 0px;
-        border-right: 0px;
-        border-top: 6px solid transparent;
-        border-left: 8px solid #999;
-        border-bottom: 6px solid transparent;
-        cursor: pointer;
-    }
-
-/* 设置日历表格样式 */
-.calendar-table {
+/*booking*/
+.datepicker {
     width: 100%;
-    border-collapse: collapse;
-    text-align: center;
+    border: 0px;
 }
 
-    /* 表格行高 */
-    .calendar-table tr {
-        height: 30px;
-        line-height: 30px;
+    .datepicker input {
+        height: 38px;
     }
 
-/* 当前天 颜色特殊显示 */
-.currentDay {
-    color: red;
+.people-member:focus {
+    background-color: #D8CDB9;
+}
+/*datepicker*/
+.mx-calendar-content .cell.disabled {
+    background-color: #F2E6E6;
+    color: #666;
+    font-weight: lighter;
 }
 
-/* 本月 文字颜色 */
-.currentMonth {
-    color: #999;
+.mx-calendar-content .cell.active {
+    background-color: #721B29;
 }
 
-/* 其他月颜色 */
-.otherMonth {
-    color: #ede;
+.mx-datepicker-main {
+    color: #333;
+    font-weight: bold;
 }
 
-.calendar-body-box {
-    width: 200px;
-    height: 200px;
-    margin: 0%;
+.mx-calendar-content .cell:hover {
+    background-color: #721B29;
+    color: white;
 }
 
-.calendar-table {
-    width: 200px;
-    height: 200px;
-    margin: 0%;
+option:disabled {
+    background-color: #F2E6E6;
+    color: #666;
 }
+
