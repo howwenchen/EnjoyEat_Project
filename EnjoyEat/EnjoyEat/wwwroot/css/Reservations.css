@@ -57,6 +57,7 @@
 #sameMemberDiv {
     height: 40px;
     color: #bab3a6;
+    padding-left: 15px;
 }
 
 #sameMemberCheck {
@@ -115,31 +116,35 @@
 .datepicker {
     width: 100%;
     border: 0px;
-    
 }
-#calendar {
+.calendar {
     margin-left: -5px;
     left: 0px;
     padding: .375rem 2.25rem .375rem .75rem;
 }
-#calendar input {
+#datepicker input {
     height: 38px;
     color: black;
     background-color: #fff;
     border-radius: .25rem;
     font-weight: 400;
     line-height: 1.5;
-    width:100%;
+    width: 100%;
+    margin-left: -5px;
+    display: block;
+    padding: .375rem 2.25rem .375rem .75rem;
+}
+input::placeholder {
+    color: red; /* 在這裡更改顏色為你想要的顏色 */
 }
 
 .mx-calendar-content .cell.disabled {
     background-color: #F2E6E6;
-    color: #666;
     font-weight: lighter;
 }
 
 .mx-calendar-content .cell.active {
-    background-color: #721B29;
+    background-color: #721b29;
 }
 
 .mx-datepicker-main {
@@ -148,8 +153,8 @@
 }
 
 .mx-calendar-content .cell:hover {
-    background-color: #721B29;
-    color: white;
+   /* background-color: #721B29;
+    color: white;*/
 }
 
 option:disabled {
@@ -183,4 +188,8 @@ dialog::backdrop {
     font-family: "Poppins",sans-serif;
     font-size: 14px;
     color:red;
+}
+
+#finalReservation .nono {
+    background-color: #aaa
 }

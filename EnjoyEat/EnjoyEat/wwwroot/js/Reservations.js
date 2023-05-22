@@ -5,9 +5,6 @@ let app = new Vue({
         test: "ss",
         ReserveDate: "",
     },
-    methods: {
-
-    }
 });
 
 
