@@ -1,0 +1,25 @@
+diff a/EnjoyEat/EnjoyEat/Controllers/MemberLoginController.cs b/EnjoyEat/EnjoyEat/Controllers/MemberLoginController.cs	(rejected hunks)
+@@ -1,12 +0,12 @@
+-﻿using Microsoft.AspNetCore.Mvc;
++﻿//using Microsoft.AspNetCore.Mvc;
+ 
+-namespace EnjoyEat.Controllers
+-{
+-    public class MemberLoginController : Controller
+-    {
+-        public IActionResult Index()
+-        {
+-            return View();
+-        }
+-    }
+-}
++//namespace EnjoyEat.Controllers
++//{
++//    public class MemberLoginController : Controller
++//    {
++//        public IActionResult Index()
++//        {
++//            return View();
++//        }
++//    }
++//}

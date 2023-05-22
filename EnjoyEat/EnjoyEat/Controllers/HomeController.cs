@@ -1,28 +1,89 @@
 ﻿using EnjoyEat.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Linq;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using EnjoyEat.Models.ViewModel;
 
 namespace EnjoyEat.Controllers
 {
-	public class HomeController : Controller
-	{
-		private readonly ILogger<HomeController> _logger;
+    public class HomeController : Controller
+    {
+        public readonly db_a989fe_thm101team6Context _context;
+        public readonly ILogger<HomeController> _logger;
 
-		public HomeController(ILogger<HomeController> logger)
-		{
-			_logger = logger;
-		}
+        public HomeController(ILogger<HomeController> logger, db_a989fe_thm101team6Context context)
+        {
+            _logger = logger;
+            _context = context;
+        }
 
-		public IActionResult Index()
-		{
-			return View();
-		}
+        
 
-		public IActionResult Privacy()
-		{
-			return View();
-		}
+        public IActionResult Index()
+        {
+            return View();
+        }
 
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("Home/GetNews/{page?}")]
+        public IActionResult GetNews(int page = 1)
+        {
+
+            var News = _context.News.Select(i => new NewsViewModel
+            {
+                NewsId = i.NewsId,
+                Title = i.Title,
+                Category = i.Category,
+                Content = i.Content,
+                ImageUrl = i.ImageUrl,
+                PublishDate = i.PublishDate,
+                LastModified = i.LastModified
+            })
+            ;
+            
+            int pageSize = 8;
+            int skipCount = (page - 1) * pageSize;
+
+            var totalNewsCount = News.Count();
+            var totalPageCount = (int)Math.Ceiling(totalNewsCount / (double)pageSize);
+
+            if (totalPageCount == 0)
+            {
+                return BadRequest("No news available.");
+            }
+
+            if (page > totalPageCount)
+            {
+                return BadRequest("The requested page number exceeds the total page count.");
+            }
+
+            var newsItem = News.Skip(skipCount).Take(pageSize).ToList();
+            return Json(newsItem);
+        }
+
+
+
+        [HttpGet]
+        [Route("Home/GetPageCount")]
+        public IActionResult GetPageCount()
+        {
+            var News = _context.News.Select(i => new NewsViewModel
+            {
+                NewsId = i.NewsId,
+            });
+            int pageSize = 8;
+            var pageCount = (int)Math.Ceiling(News.Count() / (double)pageSize);
+
+            // 回傳頁數
+            return Json(pageCount);
+        }
         public IActionResult News()
         {
             return View();
