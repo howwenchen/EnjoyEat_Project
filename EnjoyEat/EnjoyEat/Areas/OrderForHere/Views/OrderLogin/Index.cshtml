@@ -1,61 +1,92 @@
 ﻿@section Styles
-{
-    <link href="~/orderforhere/orderforherelogincss/orderforhere.css" rel="stylesheet" />
+	{
+	<link href="~/orderforhere/orderforherelogincss/orderforhere.css" rel="stylesheet" />
 }
 
 <!-- Start  -->
 <div class="form-container" id="Login">
-    <h2>內用點餐</h2>
-    <form>
-        <label for="table-number">內用桌號:</label>
-        <input type="text" id="table-number" name="table-number" required>
-        <br><br>
-        <label for="party-size">用餐人數:</label>
-        <input type="text" id="party-size" name="party-size" required>
-        <br><br>
-        <label for="member-phone">會員電話:</label>
-        <input type="tel" id="member-phone" name="member-phone" placeholder="可直接點餐或快速註冊">
-        <br><br>
-        <div class="register-button">
-            <button id="register-btn">快速註冊</button>
-        </div>
-        <div class="register-info">
-            <p>尚未成為會員？</p>
-        </div>
-        <div class="start-order-button" >
-            <a class="btn btn-outline-warning btn-lg" asp-area="OrderForHere" asp-controller="StartOrder" asp-action="Index">開始點餐</a>
-        </div>
-    </form>
+	<h2>內用點餐</h2>
+	<form>
+		<label for="table-number">內用桌號:</label>
+		<input type="text" id="table-number" name="table-number" required>
+		<br><br>
+		<label for="party-size">用餐人數:</label>
+		<input type="text" id="party-size" name="party-size" required>
+		<br><br>
+		<label for="member-phone">會員電話:</label>
+		<input type="tel" id="member-phone" name="member-phone" placeholder="可直接點餐或快速註冊">
+		<br><br>
+		<div class="register-button">
+			<button id="register-btn">快速註冊</button>
+		</div>
+		<div class="register-info">
+			<p>尚未成為會員？</p>
+		</div>
+		<div class="start-order-button">
+			<a class="btn btn-outline-warning btn-lg" asp-area="OrderForHere" asp-controller="StartOrder" asp-action="Index">開始點餐</a>
+		</div>
+	</form>
 </div>
 <!-- End -->
 <!-- 快速註冊 -->
 <div class="dialog-overlay" id="dialog-overlay"></div>
 <div class="dialog-container" id="dialog">
-    <h3>快速註冊</h3>
-    <form>
-        <label for="name">姓名:</label>
-        <input type="text" id="name" name="name" required>
-        <label for="name">帳號:</label>
-        <input type="text" id="account" name="account" required>
-        <label for="phone">電話(預設密碼):</label>
-        <input type="tel" id="phone" name="phone" required>
-        <br>
-        <div class="button-container">
-            <button class="confirm-btn">確認</button>
-            <button class="close-btn" id="close-btn">取消</button>
-        </div>
-    </form>
-    <div id="success-message" class="success-message">
-        註冊成功！
-    </div>
+	<h3>快速註冊</h3>
+	<form>
+		<label for="name">姓:</label>
+		<input type="text" id="lastname" name="lastname" v-model="lastname" required>
+		<label for="name">名:</label>
+		<input type="text" id="firstname" name="firstname" v-model="firstname" required>
+		<label for="name">帳號:</label>
+		<input type="text" id="account" name="account" v-model="account" required>
+		<label for="phone">電話(預設密碼):</label>
+		<input type="tel" id="phone" name="phone" v-model="phone" required>
+		@*<span v-if="phoneCheckLoading">檢查中...</span>
+		<span v-if="phoneCheckResult">已存在相同的電話</span>*@
+		<br>
+		<div class="button-container">
+			<button class="confirm-btn" v-on:click="Register">確認</button>
+			<button class="close-btn" id="close-btn">取消</button>
+		</div>
+	</form>
+	<@*div id="success-message" class="success-message">
+		   註冊成功！
+		   </div>*@
 </div>
 
 @section Scripts
-{
-    <script src="~/orderforhere/orderforherelogin.min.js"></script>
-
-    <script>
-
-    </script>
+	{
+	<script src="~/orderforhere/orderforherelogin.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
+	<script>
+		var app = new Vue({
+			el: '#dialog',
+			data: {
+				lastname: '',
+				firstname: '',
+				account: '',
+				phone: ''
+			},
+			methods: {
+				Register: function () {
+					let self = this;
+					reqs = {
+						lastname: self.lastname,
+						firstname: self.firstname,
+						account: self.account,
+						phone: self.phone
+					}
+					fetch("/api/OrderLoginApi/QuickRegister", {
+						method: 'POST',
+						body: JSON.stringify(reqs),
+						headers: new Headers({
+							'Content-type': 'application/json'
+						})
+					}).then(resp => console.log(resp));
+				}
+			}
+		})
+	</script>
 }
 

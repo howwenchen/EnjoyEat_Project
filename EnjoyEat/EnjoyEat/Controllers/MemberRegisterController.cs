@@ -44,7 +44,7 @@ namespace EnjoyEat.Controllers
                     return View(model);
                 }
                 //檢查帳號是否已存在於資料庫
-                var user = _context.Members.FirstOrDefault(x => x.Account == model.Account);
+                var user = "";//_context.Members.FirstOrDefault(x => x.Account == model.Account);
                 if (user != null)
                 {
                     ModelState.AddModelError("Account", "該帳號已被使用");
@@ -57,8 +57,8 @@ namespace EnjoyEat.Controllers
                     .Include(ml => ml.Member) // 導航到Member資料表
                     .Select(ml => new MemberLoginViewModel
                     {
-                        Account = ml.Account,
-                        Password = ml.Password
+                        Account = "", //ml.Account
+						Password = ml.Password
 
                     }).ToList();
                 // 使用密碼加密服務將密碼加密
