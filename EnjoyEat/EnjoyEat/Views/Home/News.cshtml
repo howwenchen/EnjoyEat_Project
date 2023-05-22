@@ -63,7 +63,7 @@
             <li class="page-item" v-on:click="previousPage">
                 <a class="page-link" href="#">Previous</a>
             </li>
-            <li class="page-item " v-for="page in pageNumbers" v-on:key="page">
+            <li class="page-item " v-for="page in pageNumbers" v-bind:key="page">
                 <a class="page-link" href="#" v-on:click="changePage(page)">{{ page }}</a>
             </li>
             <li class="page-item" v-on:click="nextPage">
@@ -76,6 +76,7 @@
 
 @section Scripts{
     <script>
+        Vue.config.devtools = true;
         const app = new Vue({
             el: '#app',
             data: {
