@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace EnjoyEat.Models
+﻿namespace EnjoyEat.Models.ViewModel
 {
-    public partial class Reservation
+    public class ReservationViewModel
     {
         public string PhoneNumber { get; set; } = null!;
         public DateTime ReservationDate { get; set; }
