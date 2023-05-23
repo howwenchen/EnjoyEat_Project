@@ -7,7 +7,7 @@ namespace EnjoyEat.Controllers.API
 {
     [Route("api/member/[action]")]
     [ApiController]
-    public class MemberMenagementAPIController :ControllerBase
+    public class MemberMenagementAPIController : ControllerBase
     {
         private readonly db_a989fe_thm101team6Context db;
         public MemberMenagementAPIController(db_a989fe_thm101team6Context db)
@@ -20,7 +20,7 @@ namespace EnjoyEat.Controllers.API
         public IActionResult GetMember()
         {
             var userId = 20230006;
-            var user = db.Members.Include(x=>x.Orders).Include(x=>x.LevelNameNavigation).FirstOrDefault(x => x.MemberId == userId);
+            var user = db.Members.Include(x => x.Orders).Include(x => x.LevelNameNavigation).FirstOrDefault(x => x.MemberId == userId);
             if (user == null)
             {
                 return NotFound();
@@ -36,18 +36,37 @@ namespace EnjoyEat.Controllers.API
                 Address = user.Address,
                 Phone = user.Phone,
                 LevelName = user.LevelName,
-                DiscountRate = user.LevelNameNavigation.DiscountRate,
+                LevelDiscount = user.LevelDiscount,
                 Orders = user.Orders.Select(x => new MemberOrderViewModel
                 {
                     OrderDate = x.OrderDate,
                     OrderId = x.OrderId,
                     TableId = x.TableId,
                     TotalPrice = x.TotalPrice,
+                    IsTakeway = x.IsTakeway,
                 }).ToList(),
 
             };
-            //var order=new me
             return Ok(member);
         }
+
+
+        //把等級寫回資料庫
+        [HttpPut]
+        public async Task<IActionResult> EditMember([FromBody] MemberViewModel memberViewModel)
+        {
+            var id = 20230006;
+            Member member = await db.Members.FindAsync(id);
+            if (member == null)
+            {
+                return NotFound();
+            }
+            member.LevelName = memberViewModel.LevelName;
+            member.LevelDiscount = memberViewModel.LevelDiscount;
+            db.Entry(member).State = EntityState.Modified;
+            await db.SaveChangesAsync();
+            return Ok();
+        }
+
     }
 }
