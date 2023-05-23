@@ -40,6 +40,14 @@ namespace EnjoyEat.Areas.OrderForHere.API
 				return "手機號碼已使用過";
 			}
 
+			//判斷帳號是否使用過
+			var accountHas = await _context.MemberLogins.Where(a => a.Account == condition.Account).Select(x => x).ToListAsync();
+			if (accountHas.Count > 0)
+			{
+				result.IsSucess = false;
+				return "帳號已使用過";
+			}
+
 			Member mbr = new Member
 			{
 				MemberId = condition.MemberId,
@@ -47,19 +55,36 @@ namespace EnjoyEat.Areas.OrderForHere.API
 				LastName = condition.LastName,
 				Phone = condition.Phone,
 			};
+            EnjoyEat.Models.MemberLogin mbrAccount = new EnjoyEat.Models.MemberLogin
+            {
+				MemberId = condition.MemberId,
+				Account = condition.Account
+			};
 
 			_context.Members.Add(mbr);
 			try
 			{
 				await _context.SaveChangesAsync();
 			}
-			catch (Exception ex)
+			catch 
 			{
 				return "新增會員失敗";
 			}
-			result.IsSucess = true;
-			return "新增會員成功";
-        }
+			
+			_context.MemberLogins.Add(mbrAccount);
+			try
+			{
+				await _context.SaveChangesAsync();
+				result.IsSucess = true;
+				return "新增會員成功";
+			}
+			catch
+			{
+				return "新增會員失敗";
+			}
+
+
+		}
 
 	}
 }

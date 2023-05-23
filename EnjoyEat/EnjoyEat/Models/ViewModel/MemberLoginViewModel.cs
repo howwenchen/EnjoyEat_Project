@@ -15,7 +15,7 @@ namespace EnjoyEat.Models.ViewModel
         [Required]
         [DataType(DataType.Password)]
         [Display(Name ="密碼")]
-        public byte[] Password { get; internal set; } = null!;
+        public string Password { get; internal set; } = null!;
 
         public virtual Member Member { get; set; } = null!;
     }
