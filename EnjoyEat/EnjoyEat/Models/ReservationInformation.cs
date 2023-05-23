@@ -7,8 +7,7 @@ namespace EnjoyEat.Models
     {
         public string PhoneNumber { get; set; } = null!;
         public string? ReservationName { get; set; }
-        public string? EMail { get; set; }
-
-        public virtual Reservation PhoneNumberNavigation { get; set; } = null!;
+        public string? Email { get; set; }
+        public string? Note { get; set; }
     }
 }

@@ -1,7 +1,11 @@
-﻿using EnjoyEat.Models;
+﻿using EnjoyEat.Areas.OrderForHere.Models;
+using EnjoyEat.Controllers;
+using EnjoyEat.Models;
 using EnjoyEat.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Drawing.Printing;
 
 namespace EnjoyEat.Controllers
 {
@@ -14,20 +18,36 @@ namespace EnjoyEat.Controllers
             _context = context;
         }
 
-        
+        [HttpGet]
         public IActionResult Index()
-        {  
-            return View();
-
-            //var temp = _cnntext.Product.Select(opt => new MenuViewModel()
-            //{
-            //    ProductId = _context.Products.First().ProductId,
-            //    ProductName = _context.Products.First().ProductName,
-            //    UnitPrice = _context.Products.First().UnitPrice,
-            //    CategoryId = _context.Category.First().CategoryId,
-            //    CategoryMaame = _context.Category.Category
-            //});
-            //return View(temp);
+        {
+            var dbContext = _context.Products.Include(t => t.SubCategory);
+            var temp = dbContext.Select(pro => new MenuViewModel
+            {
+                ProductId = pro.ProductId,
+                MealImg = pro.MealImg,
+                ProductName = pro.ProductName,
+                UnitPrice = pro.UnitPrice,
+                Description = pro.Description,
+                CategoryName = pro.SubCategory.Category.CategoryName
+            });
+            //var categories = _context.SubCategories.Include(x => x.Products)
+            //    .Select(c => new SubCategoriesViewModel
+            //    {
+            //        CategoryId = c.CategoryId,
+            //        SubCategoryId = c.SubCategoryId,
+            //        SubCategoriesName = c.SubCategoriesName,
+            //        Products = (ICollection<Product>)c.Products.Select(p => new MenuViewModel
+            //        {
+            //            ProductId = p.ProductId,
+            //            ProductName = p.ProductName,
+            //            UnitPrice = p.UnitPrice,
+            //            Costs = p.Costs,
+            //            Stock = p.Stock,
+            //            Description = p.Description,
+            //        })
+            //    });
+            return View(temp);
         }
     }
 }
