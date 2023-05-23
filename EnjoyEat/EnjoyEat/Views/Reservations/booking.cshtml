@@ -1,0 +1,90 @@
+﻿@section Styles{
+    <link href="~/css/reservations.css" rel="stylesheet" />
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.css">
+<main id="main">
+    <!-- ======= Book A Table Section ======= -->
+    <section id="book-a-table" class="book-a-table">
+        <div class="container" data-aos="fade-up">
+            <div class="section-title">
+                <h2>確認訂位與填寫聯絡資訊</h2>
+            </div>
+            <form action="forms/book-a-table.php"
+                  method="post"
+                  role="form"
+                  class="php-email-form"
+                  data-aos="fade-up"
+                  data-aos-delay="100">
+                <div class="row">
+                    <div class="form-check" id="sameMemberDiv">
+                        <input class="" type="checkbox" value="" id="sameMemberCheck" role="radio">
+                        <label class="form-check-label" for="" id="sameMember">
+                            同會員資訊
+                        </label>
+                    </div>
+                    <div class="validate"></div>
+                </div>
+                <div class="col-lg-4 col-md-6 form-group" id="NameCheck">
+                    <input type="text"
+                           name="name"
+                           class="form-control"
+                           id="name"
+                           placeholder="訂位人姓名"
+                           data-rule="minlen:4"
+                           data-msg="請輸入至少三個字元" />
+                    <br />
+                    <input class="" type="checkbox" value="" id="femaleCheck" role="radio">
+                    <label for="text" id="female">女士</label>
+                    <input class="" type="checkbox" value="" id="maleCheck" role="radio">
+                    <label for="text" id="female">男士</label>
+                    <div class="validate"></div>
+                </div>
+                <div class="col-lg-4 col-md-6 form-group mt-3 mt-md-0">
+                    <input type="email"
+                           class="form-control"
+                           name="email"
+                           id="email"
+                           placeholder="您的Email"
+                           data-rule="email"
+                           data-msg="請輸入完整的Email訊息" />
+                    <div class="validate"></div>
+                </div>
+                <div class="col-lg-4 col-md-6 form-group mt-3 mt-md-0">
+                    <input type="text"
+                           class="form-control"
+                           name="phone"
+                           id="phone"
+                           placeholder="您的手機號碼"
+                           data-rule="minlen:4"
+                           data-msg="請輸入完整的手機號碼" />
+                    <div class="validate"></div>
+                </div>
+                <div class="form-group mt-2">
+                    <textarea class="form-control"
+                              name="message"
+                              rows="5"
+                              placeholder="備註"></textarea>
+                    <div class="validate"></div>
+                </div>
+                <div class="mb-3">
+                    <div class="loading">Loading</div>
+                    <div class="error-message"></div>
+                    <div class="sent-message">
+                        Your booking request was sent. We will call back or send an
+                        Email to confirm your reservation. Thank you!
+                    </div>
+                </div>
+                <button type="submit" id="bookReturn">返回上一頁</button>
+                <button type="submit" id="bookNow" onclick="openDialog()">確認訂位</button>
+            </form>
+        </div>
+    </section>
+<!-- End Book A Table Section -->
+    @section Scripts
+        {
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
+        <script>
+        </script>
+        <script src="~/js/reservations.js"></script>
+    }
