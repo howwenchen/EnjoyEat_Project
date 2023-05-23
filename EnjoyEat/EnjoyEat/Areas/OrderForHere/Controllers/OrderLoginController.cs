@@ -1,4 +1,4 @@
-﻿using EnjoyEat.Areas.OrderForHere.Models.ViewModel;
+﻿using EnjoyEat.Models.ViewModel;
 using EnjoyEat.Models;
 using Microsoft.AspNetCore.Mvc;
 

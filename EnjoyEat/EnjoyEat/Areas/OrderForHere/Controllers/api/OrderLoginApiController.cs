@@ -1,6 +1,6 @@
 ﻿using EnjoyEat.Areas.OrderForHere.Models;
-using EnjoyEat.Areas.OrderForHere.Models.ViewModel;
 using EnjoyEat.Models;
+using EnjoyEat.Models.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace EnjoyEat.Areas.OrderForHere.API
 {
-	[Route("api/OrderLoginApi/{action}")]
+    [Route("api/OrderLoginApi/{action}")]
 	[ApiController]
 	public class OrderLoginApiController : ControllerBase
 	{
