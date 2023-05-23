@@ -210,7 +210,9 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.LoginTime).HasColumnType("datetime");
 
-                entity.Property(e => e.Password).HasMaxLength(20);
+                entity.Property(e => e.Password)
+                    .HasMaxLength(64)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.UserName).HasMaxLength(15);
 
@@ -299,9 +301,13 @@ namespace EnjoyEat.Models
                     .ValueGeneratedNever()
                     .HasColumnName("MemberID");
 
-                entity.Property(e => e.Account).HasMaxLength(20);
+                entity.Property(e => e.Account)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.Password).HasMaxLength(20);
+                entity.Property(e => e.Password)
+                    .HasMaxLength(64)
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Member)
                     .WithOne(p => p.MemberLogin)
