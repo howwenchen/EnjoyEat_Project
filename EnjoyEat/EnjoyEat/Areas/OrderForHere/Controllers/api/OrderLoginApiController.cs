@@ -94,6 +94,19 @@ namespace EnjoyEat.Areas.OrderForHere.API
 			}
 
 			return "新增會員成功";
-		}	
+		}
+
+		//[HttpGet]
+		//public async Task<string> CheckMember(Member mb)
+		//{
+		//	Result result = new Result() { IsSucess = false };
+
+		//	var member = await _context.Members.FirstOrDefaultAsync(x => x.Phone == mb.Phone);
+		//	if (member == null)
+		//	{
+		//		return "該號碼尚未成為會員!";
+		//	}
+		//	return "開始點餐";
+		//}
 	}
 }

@@ -6,10 +6,10 @@ namespace EnjoyEat.Areas.backend.Controllers.API
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class EmployeeManagementController : ControllerBase
+	public class EmployeeManagementAPIController : ControllerBase
 	{
 		private readonly db_a989fe_thm101team6Context _context;
-		public EmployeeManagementController(db_a989fe_thm101team6Context context)
+		public EmployeeManagementAPIController(db_a989fe_thm101team6Context context)
 		{
 			_context = context;
 		}
