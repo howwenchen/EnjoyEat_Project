@@ -32,7 +32,7 @@ namespace EnjoyEat.Controllers.API
                 LastName = user.LastName,
                 Email = user.Email,
                 Gender = user.Gender,
-                Birthday = user.Birthday,
+                Birthday = (DateTime)user.Birthday,
                 Address = user.Address,
                 Phone = user.Phone,
                 LevelName = user.LevelName,
