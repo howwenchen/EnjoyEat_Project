@@ -7,11 +7,9 @@
 <!-- =======MemberManagement navbar  Section ======= -->
 <div id="member" v-cloak>
     <nav>
-
-
         <div id="memberNavbar" class="d-flex">
-            <h5 id="userName">{{ memberInfo.firstName }}{{ memberInfo.lastName }}您好</h5>
-            <button class="btn" @@click="update">
+            <h5 id="userName">{{fullName}}您好</h5>
+            <button class="btn">
                 登出
                 <span class="first"></span>
                 <span class="second"></span>
@@ -32,8 +30,8 @@
                     <div class="section-title d-flex">
                         <h2>會員資訊</h2>
                         <div class="d-flex modify">
-                            <button class="btn">
-                                修改會員資料
+                            <button class="btn" @@click="modify">
+                                {{buttonText}}
                                 <span class="first"></span>
                                 <span class="second"></span>
                                 <span class="third"></span>
@@ -59,9 +57,7 @@
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                                {{ memberInfo.memberId }}
-                            </div>
+                            <input class="box noedit" data-aos="zoom-in" data-aos-delay="100"  :value="memberInfo.memberId" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2 mt-4 mt-lg-0">
@@ -71,21 +67,27 @@
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                                {{ memberInfo.phone }}
-                            </div>
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.phone" :value="memberInfo.phone" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2">
                             <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                                姓名:
+                                姓:
                             </div>
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.lastName" :value="memberInfo.lastName" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2">
                             <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                                {{ memberInfo.firstName }}{{ memberInfo.lastName }}
+                                名:
                             </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.firstName" :value="memberInfo.firstName" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2 mt-4 mt-lg-0">
@@ -95,19 +97,17 @@
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                                {{ memberInfo.address }}
-                            </div>
-                        </div><div class="col-lg-2">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.address" :value="memberInfo.address" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2">
                             <div class="box" data-aos="zoom-in" data-aos-delay="100">
                                 出生日期:
                             </div>
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                                {{ memberInfo.birthday }}
-                            </div>
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.birthday" :value="memberInfo.birthday" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2 mt-4 mt-lg-0">
@@ -117,9 +117,7 @@
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                                {{ memberInfo.email }}
-                            </div>
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.email" :value="memberInfo.email" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2 mt-4 mt-lg-0">
@@ -129,9 +127,7 @@
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                                {{ memberInfo.gender }}
-                            </div>
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.gender" :value="memberInfo.gender" :disabled="dis" />
                         </div>
 
                     </div>
@@ -238,33 +234,30 @@
                                     {{order.tableId}}
                                 </td>
                                 <td>
-                                    <!-- Modal 展開 -->
-                                    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId">
-                                        展開
-                                    </button>
-
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
+                                    <div class="seemore modal fade" id="seemoreModal" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="modalTitleId">餐點明細</h5>
+                                                <div class="modal-header border-0">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="fa-solid fa-receipt"></i>餐點明細紀錄</h1>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div class="container-fluid">
-                                                        Add rows here
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <button type="button" class="btn btn-primary">Save</button>
+                                                    <template v-for="order in orders.orderList">
+                                                        <div>
+                                                            <h3>訂單號碼：{{order.orderId}}</h3>
+                                                            <div class="shoplist">
+                                                                <ul class="list my-3">
+                                                                    <li v-for="productName in order.productName"><i class="fa-solid fa-martini-glass-empty"></i>{{productName}}</li>
+                                                                </ul>
+                                                            </div>
+                                                            <p>消費金額：{{order.total}} <i class="fa-solid fa-coins"></i></p>
+                                                        </div>
+                                                        <hr />
+                                                    </template>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </td>
                             </tr>
 
@@ -291,6 +284,8 @@
                 price: 0,
                 upgradeValue: 0,
                 remainingValue: 0,
+                dis: true,
+                buttonText: "修改會員資料",
             },
             computed: {
                 //進度條計算
@@ -324,26 +319,66 @@
                         return this.upgradeValue = 20000;
                     }
                 },
+                //全名寫法
+                fullName: function () {
+                    return this.memberInfo.lastName + this.memberInfo.firstName;
+                },
+                //編輯會員資料樣式
+                editClass: function () {
+                    if (this.dis == true) {
+                        return 'box noedit'
+                    }
+                    return 'box edit'
+                },
             },
-            methods:{
-                update:function(){
+            methods: {
+                submitInfo: function () {
                     var request = {
-                    LevelName: this.memberInfo.levelName,
-                    levelDiscount: this.memberInfo.levelDiscount
-                };
-                    axios.put("https://localhost:7071/api/member/EditMember", request)
-                    .then(response=>alert(response.data))
-                }
+                        FirstName: this.memberInfo.firstName,
+                        LastName: this.memberInfo.lastName,
+                        Address: this.memberInfo.address,
+                        Email: this.memberInfo.email,
+                        Birthday: this.memberInfo.birthday,
+                        Gender: this.memberInfo.gender,
+                    };
+                    axios.put("https://localhost:7071/api/member/EditMemberInfo", request)
+                        .then()
+                },
+                modify:
+                    function () {
+                        if (this.buttonText == "修改會員資料") {
+                            this.buttonText = "儲存修改";
+                            return this.dis = false;
+                        };
+                        if (this.buttonText == "儲存修改") {
+                            this.buttonText = "修改會員資料";
+                            this.submitInfo();
+                            return this.dis = true; 
+                        };
             },
+        },
             mounted:
-                function () {
-                    let _this = this;
-                    axios.get("https://localhost:7071/api/member/GetMember")
-                        .then(response => {
-                            _this.memberInfo = response.data
-                        })
-                }
-        });
+            function () {
+                let _this = this;
+                axios.get("https://localhost:7071/api/member/GetMember")
+                    .then(response => {
+                        _this.memberInfo = response.data;
+                        //_this.memberInfo.firstname = response.data.firstname;
+                        //_this.memberInfo.lastname = response.data.lastname;
+                        //_this.memberInfo.phone = response.data.phone;
+                        //_this.memberInfo.email = response.data.email;
+                        //_this.memberInfo.birthday = response.data.birthday;
+                        //_this.memberInfo.address = response.data.address;
+
+                        var request = {
+                            LevelName: _this.memberInfo.levelName,
+                            levelDiscount: _this.memberInfo.levelDiscount
+                        };
+                        axios.put("https://localhost:7071/api/member/WriteLev", request)
+                            .then()
+                    })
+            }
+                                });
 
     </script>
 }
