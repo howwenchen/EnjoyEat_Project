@@ -1,4 +1,5 @@
-﻿using EnjoyEat.Areas.OrderForHere.Models.ViewModel;
+﻿using EnjoyEat.Areas.OrderForHere.Models;
+using EnjoyEat.Areas.OrderForHere.Models.ViewModel;
 using EnjoyEat.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,31 +20,45 @@ namespace EnjoyEat.Areas.OrderForHere.API
 		}
 
         [HttpPost]
-        public async Task<Result> QuickRegister(RegisterViewModel condition)
+        public async Task<string> QuickRegister(RegisterViewModel condition)
         {
 			Result result = new Result() { IsSucess = false };
-
-			string pattern = @"/(\d{2,3}-?|\(\d{2,3}\))\d{3,4}-?\d{4}|09\d{2}(\d{6}|-\d{3}-\d{3})/g";
+			//判斷輸入的電話號碼格式是否正確
+			string pattern = @"09\d{2}(\d{6}|-\d{3}-\d{3})";
 			Regex regex = new Regex(pattern);
 
 			if (!regex.IsMatch(condition.Phone))
 			{
-				result.ReturnMessage = "格式錯誤";
-				return result;
+				return "請輸入有效的手機號碼";
 			}
-
+			// 判斷手機號碼是否有使用過
 			var alreadyHas = await _context.Members.Where(x => x.Phone == condition.Phone).Select(x => x).ToListAsync();
 
-			if(alreadyHas.Count > 0)
+			if (alreadyHas.Count > 0)
 			{
 				result.IsSucess = false;
-				return result;
+				return "手機號碼已使用過";
 			}
 
-			// TODO ...
+			Member mbr = new Member
+			{
+				MemberId = condition.MemberId,
+				FirstName = condition.FirstName,
+				LastName = condition.LastName,
+				Phone = condition.Phone,
+			};
 
+			_context.Members.Add(mbr);
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (Exception ex)
+			{
+				return "新增會員失敗";
+			}
 			result.IsSucess = true;
-			return result;
+			return "新增會員成功";
         }
 
 	}

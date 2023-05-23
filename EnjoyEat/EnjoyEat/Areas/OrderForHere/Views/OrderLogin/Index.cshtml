@@ -39,7 +39,7 @@
 		<input type="text" id="firstname" name="firstname" v-model="firstname" required>
 		<label for="name">帳號:</label>
 		<input type="text" id="account" name="account" v-model="account" required>
-		<label for="phone">電話(預設密碼):</label>
+		<label for="phone">手機號碼(預設密碼):</label>
 		<input type="tel" id="phone" name="phone" v-model="phone" required>
 		@*<span v-if="phoneCheckLoading">檢查中...</span>
 		<span v-if="phoneCheckResult">已存在相同的電話</span>*@
@@ -49,9 +49,7 @@
 			<button class="close-btn" id="close-btn">取消</button>
 		</div>
 	</form>
-	<@*div id="success-message" class="success-message">
-		   註冊成功！
-		   </div>*@
+
 </div>
 
 @section Scripts
