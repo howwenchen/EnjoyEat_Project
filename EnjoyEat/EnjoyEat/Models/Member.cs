@@ -20,7 +20,7 @@ namespace EnjoyEat.Models
         public string Phone { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string LevelName { get; set; } = null!;
-        public double? LevelDiscount { get; set; }
+        public double LevelDiscount { get; set; }
 
         public virtual Level LevelNameNavigation { get; set; } = null!;
         public virtual MemberLogin? MemberLogin { get; set; }
