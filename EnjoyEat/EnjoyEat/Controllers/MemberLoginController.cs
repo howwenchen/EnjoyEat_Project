@@ -32,25 +32,24 @@ namespace EnjoyEat.Controllers
         }
     }
 }
-        /*
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        
-        public IActionResult Login(MemberLoginViewModel model)
-        {
-           var user=_db.Members.FirstOrDefault(x=>x.Account==model.Account&&
-           x.Password==model.Password);
-        
-            if(user!=null)
-            {
-                ViewBag.Error = "帳號密碼錯誤";
-                return View("Login");
-            }
+/*
+[HttpPost]
+[ValidateAntiForgeryToken]
 
-            return View();
-        }
-        
+public IActionResult Login(MemberLoginViewModel model)
+{
+   var user=_db.Members.FirstOrDefault(x=>x.Account==model.Account&&
+   x.Password==model.Password);
+
+    if(user!=null)
+    {
+        ViewBag.Error = "帳號密碼錯誤";
+        return View("Login");
     }
+
+    return View();
 }
-        */
-            
+
+}
+}
+*/

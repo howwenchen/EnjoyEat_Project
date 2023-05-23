@@ -13,19 +13,19 @@ namespace EnjoyEat.Controllers
         {
             this._db = db;
         }
-    
-            public IActionResult Index()
+
+        public IActionResult Index()
         {
-                return View();
-            
+            return View();
+
         }
 
         public IActionResult EditPassword()
-        { 
-                return View();
+        {
+            return View();
         }
 
-       
-        
+
+
     }
 }
