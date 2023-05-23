@@ -61,12 +61,39 @@ namespace EnjoyEat.Areas.OrderForHere.API
 			try
 			{
 				await _context.SaveChangesAsync();
-				return "新增會員成功";
+				//return "新增會員成功";
 			}
 			catch
 			{
 				return "新增會員失敗";
 			}
-		}
+
+
+			//將填入的電話號碼預設為密碼
+			Member member = _context.Members.Include(x => x.MemberLogin).FirstOrDefault(m => m.Phone == condition.Phone);
+			{
+				if (member != null)
+				{
+					EnjoyEat.Models.MemberLogin ml = new EnjoyEat.Models.MemberLogin
+					{
+						MemberId = member.MemberId,
+						Account = condition.Account,
+						Password = member.Phone
+					};
+					_context.MemberLogins.Add(ml);
+					try
+					{
+						await _context.SaveChangesAsync();
+						result.IsSucess = true;
+					}
+					catch
+					{
+						return "新增會員失敗";
+					}
+				}
+			}
+
+			return "新增會員成功";
+		}	
 	}
 }

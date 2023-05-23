@@ -41,14 +41,25 @@
 		<input type="text" id="account" name="account" v-model="account" required>
 		<label for="phone">手機號碼(預設密碼):</label>
 		<input type="tel" id="phone" name="phone" v-model="phone" required>
-		@*<span v-if="phoneCheckLoading">檢查中...</span>
-		<span v-if="phoneCheckResult">已存在相同的電話</span>*@
 		<br>
 		<div class="button-container">
-			<button class="confirm-btn" v-on:click="Register">確認</button>
+			<button class="confirm-btn" v-on:click="Register" @*data-bs-toggle="modal" data-bs-target="#showModal"*@>確認</button>
 			<button class="close-btn" id="close-btn">取消</button>
 		</div>
 	</form>
+
+	@*modal*@
+	<!-- Modal -->
+@*	<div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">{{show}}</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+			</div>
+		</div>
+	</div>*@
 
 </div>
 
@@ -56,7 +67,6 @@
 	{
 	<script src="~/axios/axios.min.js"></script>
 	<script src="~/orderforhere/orderforherelogin.min.js"></script>
-@*	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>*@
 	<script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 	<script>
@@ -66,7 +76,9 @@
 				lastname: '',
 				firstname: '',
 				account: '',
-				phone: ''
+				phone: '',
+				//show: ' ',
+				//showModal: false,
 			},
 			methods: {
 				Register: function () {
@@ -94,8 +106,22 @@
 					})
 						.then(response => {
 							console.log('success', response);
-						});
+							// modal畫面
+							if (response.data === "新增會員成功") {
+								//self.showModal = true; // 註冊成功
+								//self.show='新增成功';
+								alert('新增成功');
+							} else {
+								//self.showModal = true; // 註冊失敗
+								//self.show = '新增失敗';
+								alert('新增成功');
+							}
+						})
+						.catch(error => {
+							console.error('error', error);
+							self.showFailModal = true; // 註冊失敗
 
+						});
 				}
 			}
 		})
