@@ -15,7 +15,7 @@
 		<input type="text" id="party-size" name="party-size" required>
 		<br><br>
 		<label for="member-phone">會員電話:</label>
-		<input type="tel" id="member-phone" name="member-phone" placeholder="可直接點餐或快速註冊">
+		<input type="tel" id="member-phone" name="member-phone" placeholder="可直接點餐或快速註冊" v-model="checkPhone">
 		<br><br>
 		<div class="register-button">
 			<button id="register-btn">快速註冊</button>
@@ -24,7 +24,7 @@
 			<p>尚未成為會員？</p>
 		</div>
 		<div class="start-order-button">
-			<a class="btn btn-outline-warning btn-lg" asp-area="OrderForHere" asp-controller="StartOrder" asp-action="Index">開始點餐</a>
+			<button v-on:click="CheckMember" class="btn btn-outline-warning btn-lg">開始點餐</button>
 		</div>
 	</form>
 </div>
@@ -44,22 +44,22 @@
 		<input type="tel" id="phone" name="phone" v-model="phone" required>
 		<br>
 		<div class="button-container">
-			<button class="confirm-btn" v-on:click="Register" @*data-bs-toggle="modal" data-bs-target="#showModal"*@>確認</button>
+			<button class="confirm-btn" v-on:click="Register" data-bs-toggle="modal" data-bs-target="#showModal">確認</button>
 			<button class="close-btn" id="close-btn">取消</button>
 		</div>
 	</form>
 
 	@*modal*@
 	<!-- Modal -->
-@*	<div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">{{show}}</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-			</div>
-		</div>
+	@*	<div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+	<div class="modal-content">
+	<div class="modal-header">
+	<h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black; margin-left:90px;"> {{show}} </h1>
+	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	</div>
+	</div>
+	</div>
 	</div>*@
 
 </div>
@@ -74,12 +74,13 @@
 		var app = new Vue({
 			//el: '#dialog',
 			data: {
+				checkPhone:'',
 				lastname: '',
 				firstname: '',
 				account: '',
 				phone: '',
-				//show: ' ',
-				//showModal: false,
+				show: '',
+				showModal: false,
 			},
 			methods: {
 				Register: function () {
@@ -100,34 +101,46 @@
 					//	})
 					//	.then(response => console.log("success", response));
 
-					axios.post('/api/OrderLoginApi/QuickRegister', request, {
-						headers: {
-							'Content-Type': 'application/json'
-						}
-					})
+					axios.post('/api/OrderLoginApi/QuickRegister', request)
 						.then(response => {
 							console.log('success', response);
 							// modal畫面
-							if (response.data === "新增會員成功") {
+							if (response.data == '新增會員成功') {
 								//self.showModal = true; // 註冊成功
-								//self.show='新增成功';
+								//self.show ='新增成功';
 								alert('新增成功');
+
 							} else {
 								//self.showModal = true; // 註冊失敗
 								//self.show = '新增失敗';
 								alert('新增失敗');
+
 							}
 						})
 						.catch(error => {
 							console.error('error', error);
-							self.showModal = true; // 註冊失敗
+							//self.showModal = true; // 註冊失敗
+							//self.show = '新增失敗';
 							alert('新增失敗');
+						});
+				},
+				CheckMember: function () {
+					let self = this;
+					axios.get('/api/OrderLoginApi/CheckMember', { Phone: self.phone })
+						.then(response => {
+							if (responose.data == "開始點餐") {
+								setTimeout(() => {
+									window.location.href = 'https://localhost:7071/OrderForHere/StartOrder/Index'; 
+								}, 2000);
+							}
+
 						});
 				}
 			}
+
 		})
-		app.$mount('#dialog')
-		app.$mount('#Login')
+		app.$mount('#dialog');
+		app.$mount('#Login');
 	</script>
 }
 

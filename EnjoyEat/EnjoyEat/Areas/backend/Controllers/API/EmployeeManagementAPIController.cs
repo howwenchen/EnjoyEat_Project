@@ -1,31 +1,43 @@
-﻿using EnjoyEat.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EnjoyEat.Areas.backend.Controllers.API
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	public class EmployeeManagementAPIController : ControllerBase
+	public class EmployeeManagementApiController : ControllerBase
 	{
-		private readonly db_a989fe_thm101team6Context _context;
-		public EmployeeManagementAPIController(db_a989fe_thm101team6Context context)
+		// GET: api/<EmployeeManagementApiController>
+		[HttpGet]
+		public IEnumerable<string> Get()
 		{
-			_context = context;
+			return new string[] { "value1", "value2" };
 		}
 
-		//public object All()
-		//{
-		//	//return _context.Employees.Select(emp =>
-		//	//{
-		//	//	emp = new
-		//	//	{
+		// GET api/<EmployeeManagementApiController>/5
+		[HttpGet("{id}")]
+		public string Get(int id)
+		{
+			return "value";
+		}
 
-		//	//	}
+		// POST api/<EmployeeManagementApiController>
+		[HttpPost]
+		public void Post([FromBody] string value)
+		{
+		}
 
-		//	//});
-		
-		//}
+		// PUT api/<EmployeeManagementApiController>/5
+		[HttpPut("{id}")]
+		public void Put(int id, [FromBody] string value)
+		{
+		}
 
+		// DELETE api/<EmployeeManagementApiController>/5
+		[HttpDelete("{id}")]
+		public void Delete(int id)
+		{
+		}
 	}
 }

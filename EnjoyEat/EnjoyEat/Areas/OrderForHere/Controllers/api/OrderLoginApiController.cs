@@ -85,6 +85,7 @@ namespace EnjoyEat.Areas.OrderForHere.API
 					{
 						await _context.SaveChangesAsync();
 						result.IsSucess = true;
+						return "新增會員成功";
 					}
 					catch
 					{
@@ -96,17 +97,19 @@ namespace EnjoyEat.Areas.OrderForHere.API
 			return "新增會員成功";
 		}
 
-		//[HttpGet]
-		//public async Task<string> CheckMember(Member mb)
-		//{
-		//	Result result = new Result() { IsSucess = false };
+		[HttpGet]
+		public async Task<string> CheckMember(Member mb)
+		{
+			Result result = new Result() { IsSucess = false };
 
-		//	var member = await _context.Members.FirstOrDefaultAsync(x => x.Phone == mb.Phone);
-		//	if (member == null)
-		//	{
-		//		return "該號碼尚未成為會員!";
-		//	}
-		//	return "開始點餐";
-		//}
+			var member = await _context.Members.FirstOrDefaultAsync(x => x.Phone == mb.Phone);
+			if (member == null)
+			{
+				result.IsSucess = false;
+				return "該號碼尚未成為會員!";
+			}
+			result.IsSucess = true;
+			return "開始點餐";
+		}
 	}
 }
