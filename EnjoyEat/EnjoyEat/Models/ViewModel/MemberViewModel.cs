@@ -31,5 +31,18 @@ namespace EnjoyEat.Models.ViewModel
         public short? TableId { get; set; }
         public int TotalPrice { get; set; }
         public bool IsTakeway { get; set; }
+        public virtual ICollection<MemberOrderDetailViewModel> OrderDetails { get; set; }
+    }
+
+    public class MemberOrderDetailViewModel
+    {
+        public int OrderId { get; set; }
+        public int ProductId { get; set; }
+        public int OrderDetialId { get; set; }
+        public decimal UnitPrice { get; set; }
+        public short Quantity { get; set; }
+        public float Discount { get; set; }
+        public int SubtotalPrice { get; set; }
+
     }
 }

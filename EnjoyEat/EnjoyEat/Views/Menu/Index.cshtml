@@ -1,0 +1,252 @@
+@model IEnumerable<EnjoyEat.Models.ViewModel.MenuViewModel>
+@section Styles {
+    <link href="~/css/menustyle.css" rel="stylesheet" />
+}
+<!-- ======= Menu Section ======= -->
+<div id="app">
+    <div class="section-title">
+        <h2>Menu</h2>
+        <p>Check Our Tasty Menu</p>
+    </div>
+
+    <section id="menuItem" class="menu section-bg">
+        <div class="row" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-lg-12 d-flex justify-content-center">
+                <ul id="menu-flters">
+                    <li data-filter="*" class="filter-active">全部</li>
+                    <li data-filter=".filter-appetizer">前菜</li>
+                    <li data-filter=".filter-soups">湯品</li>
+                    <li data-filter=".filter-mainMeal">主餐</li>
+                    <li data-filter=".filter-snacks">點心</li>
+                    <li data-filter=".filter-dessert">甜點</li>
+                    <li data-filter=".filter-beverage">飲料</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="menu" class="menu section-bg">
+        <div class="menuDetail" data-aos="fade-up">
+            <div class="row menu-container" data-aos="fade-up" data-aos-delay="200">
+                @foreach (var pro in Model){
+                <div class="col-lg-6 menu-item @pro.CategoryName">
+                        <img src="@Url.Content(pro.MealImg)" class="menu-img" alt="">
+                    <div class="menu-content">
+                        <a href="#">@pro.ProductName</a><span>@pro.UnitPrice</span>
+                    </div>
+                    <div class="menu-ingredients">
+                        @pro.Description
+                    </div>
+                </div>}
+            </div>
+        </div>
+        @*<div class="menuDetail" data-aos="fade-up">
+        <div class="row menu-container" data-aos="fade-up" data-aos-delay="200">
+        <div class="col-lg-6 menu-item filter-appetizer">
+        <img src="~/img/food/appetizer1.jpg" class="menu-img" alt="">
+        <div class="menu-content">
+        <a href="#">蘆筍沙拉</a><span>$150</span>
+        </div>
+        <div class="menu-ingredients">
+        蘆筍、水煮蛋、黃瓜、蛋黃醬
+        </div>
+        </div>
+
+        <div class="col-lg-6 menu-item filter-appetizer">
+        <img src="~/img/food/appetizer2.jpg" class="menu-img" alt="">
+        <div class="menu-content">
+        <a href="#">凱薩沙拉</a><span>$150</span>
+        </div>
+        <div class="menu-ingredients">
+        生菜、帕馬森芝士、麵包丁、培根、基本調料
+        </div>
+        </div>
+
+        <div class="col-lg-6 menu-item filter-appetizer">
+        <img src="~/img/menu/cake.jpg" class="menu-img" alt="">
+        <div class="menu-content">
+        <a href="#">鮭魚餅/2塊</a><span>$150</span>
+        </div>
+        <div class="menu-ingredients">
+        燻鮭魚、沙拉醬、餅乾
+        </div>
+        </div>
+
+        <div class="col-lg-6 menu-item filter-appetizer">
+        <img src="~/img/menu/caesar.jpg" class="menu-img" alt="">
+        <div class="menu-content">
+        <a href="#">番茄薄餅/2片</a><span>$150</span>
+        </div>
+        <div class="menu-ingredients">
+        番茄、法棍
+        </div>
+        </div>
+
+        <div class="col-lg-6 menu-item filter-appetizer">
+        <img src="~/img/menu/tuscan-grilled.jpg" class="menu-img" alt="">
+        <div class="menu-content">
+        <a href="#">鮭魚沙拉</a><span>$150</span>
+        </div>
+        <div class="menu-ingredients">
+        鮭魚、鮭魚卵、蛋、酪梨醬
+        </div>
+        </div>
+
+        <div class="col-lg-6 menu-item filter-appetizer">
+        <img src="~/img/menu/mozzarella.jpg" class="menu-img" alt="">
+        <div class="menu-content">
+        <a href="#">Mozzarella Stick</a><span>$4.95</span>
+        </div>
+        <div class="menu-ingredients">
+        Lorem, deren, trataro, filede, nerada
+        </div>
+        </div>
+
+        <div class="col-lg-6 menu-item filter-soups">
+        <img src="~/img/menu/greek-salad.jpg" class="menu-img" alt="">
+        <div class="menu-content">
+        <a href="#">Greek Salad</a><span>$9.95</span>
+        </div>
+        <div class="menu-ingredients">
+        Fresh spinach, crisp romaine, tomatoes, and Greek olives
+        </div>
+        </div>
+
+        <div class="col-lg-6 menu-item filter-soups">
+        <img src="~/img/menu/spinach-salad.jpg" class="menu-img" alt="">
+        <div class="menu-content">
+        <a href="#">Spinach Salad</a><span>$9.95</span>
+        </div>
+        <div class="menu-ingredients">
+        Fresh spinach with mushrooms, hard boiled egg, and warm bacon vinaigrette
+        </div>
+        </div>
+
+        <div class="col-lg-6 menu-item filter-mainMeal">
+        <img src="~/img/menu/lobster-roll.jpg" class="menu-img" alt="">
+        <div class="menu-content">
+        <a href="#">Lobster Roll</a><span>$12.95</span>
+        </div>
+        <div class="menu-ingredients">
+        Plump lobster meat, mayo and crisp lettuce on a toasted bulky roll
+        </div>
+        </div>
+
+        <div class="col-lg-6 menu-item filter-beverage">
+        <img src="~/img/menu/lobster-roll.jpg" class="menu-img" alt="">
+        <div class="menu-content">
+        <a href="#">可樂</a><span>$12.95</span>
+        </div>
+        <div class="menu-ingredients">
+        Plump lobster meat, mayo and crisp lettuce on a toasted bulky roll
+        </div>
+        </div>
+        </div>
+        </div>*@
+        <div class="menuTop" data-aos="fade-up">
+            <div class="noOne">
+                <div class="col">
+                    <img src="~/img/specials-1.png" class="imgTopten" alt="...">
+                    <div class="menu">
+                        <h4><i class="fa-solid fa-crown"></i>蘆筍沙拉</h4><h4>$150</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="noTwo">
+                <div class="col">
+                    <img src="~/img/specials-1.png" class="imgTopten" alt="...">
+                    <div class="menu">
+                        <h4>① 蘆筍沙拉</h4><h4>$150</h4>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="~/img/specials-1.png" class="imgTopten" alt="...">
+                    <div class="menu">
+                        <h4>① 蘆筍沙拉</h4><h4>$150</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="noThree">
+                <div class="col">
+                    <img src="~/img/specials-1.png" class="imgTopten" alt="...">
+                    <div class="menu">
+                        <h4>① 蘆筍沙拉</h4><h4>$150</h4>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="~/img/specials-1.png" class="imgTopten" alt="...">
+                    <div class="menu">
+                        <h4>① 蘆筍沙拉</h4><h4>$150</h4>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="~/img/specials-1.png" class="imgTopten" alt="...">
+                    <div class="menu">
+                        <h4>① 蘆筍沙拉</h4><h4>$150</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="noFour">
+                <div class="col">
+                    <img src="~/img/specials-1.png" class="imgTopten" alt="...">
+                    <div class="menu">
+                        <h4>① 蘆筍沙拉</h4><h4>$150</h4>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="~/img/specials-1.png" class="imgTopten" alt="...">
+                    <div class="menu">
+                        <h4>① 蘆筍沙拉</h4><h4>$150</h4>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="~/img/specials-1.png" class="imgTopten" alt="...">
+                    <div class="menu">
+                        <h4>① 蘆筍沙拉</h4><h4>$150</h4>
+                    </div>
+                </div>
+                <div class="col">
+                    <img src="~/img/specials-1.png" class="imgTopten" alt="...">
+                    <div class="menu">
+                        <h4>① 蘆筍沙拉</h4><h4>$150</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- ======= Menu Section End ======= -->
+@section Scripts
+    {
+    <script src="~/axios/axios.min.js"></script>
+    <script src="~/vue/vue.min.js"></script>
+
+    <script>
+        //var app = new Vue({
+        //    el: '#app',
+        //    data: {
+        //        temp: [],
+        //    },
+        //    mounted:
+        //        function () {
+        //            let _this = this;
+        //            var request = {}
+        //            axios.get("https://localhost:7071/Menu/index", request)
+        //                .then(response => {
+        //                    alert(JSON.stringify(response.data));
+        //                    //console.log("test")
+        //                    //_this.temp = response.data;
+        //                    //var tempList = [];
+        //                    //for (var i = 0; i < _this.temp.length; i++) {
+        //                    //    var item = _this.EmployeeDTOes[i];
+        //                    //    tempList.push(item);
+        //                    //}
+        //                    //_this.temp = tempList;
+        //                })
+        //                .catch(error => {
+        //                    console.log(error);
+        //                });
+        //        },
+        //})
+    </script>
+}

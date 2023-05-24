@@ -1,4 +1,5 @@
-﻿using EnjoyEat.Models;
+﻿using EnjoyEat.Areas.OrderForHere.Models;
+using EnjoyEat.Models;
 using EnjoyEat.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -56,34 +57,12 @@ namespace EnjoyEat.Controllers.API
         //public IActionResult GetOrder()
         //{
         //    var userId = 20230006;
-        //    var user = db.Members.Include(x => x.Orders).Include(x => x.LevelNameNavigation).FirstOrDefault(x => x.MemberId == userId);
-        //    if (user == null)
+        //    var orders = db.OrderDetails.Where(o => o.Order.MemberId == userId).Select();
+        //    var orderDetail = new MemberOrderDetailViewModel
         //    {
-        //        return NotFound();
-        //    }
-        //    var member = new MemberViewModel()
-        //    {
-        //        MemberId = user.MemberId,
-        //        FirstName = user.FirstName,
-        //        LastName = user.LastName,
-        //        Email = user.Email,
-        //        Gender = user.Gender,
-        //        Birthday = user.Birthday,
-        //        Address = user.Address,
-        //        Phone = user.Phone,
-        //        LevelName = user.LevelName,
-        //        LevelDiscount = user.LevelDiscount,
-        //        Orders = user.Orders.Select(x => new MemberOrderViewModel
-        //        {
-        //            OrderDate = x.OrderDate,
-        //            OrderId = x.OrderId,
-        //            TableId = x.TableId,
-        //            TotalPrice = x.TotalPrice,
-        //            IsTakeway = x.IsTakeway,
-        //        }).ToList(),
-
+                
         //    };
-        //    return Ok(member);
+        //    return Ok(orderDetail);
         //}
 
         //把等級寫回資料庫
