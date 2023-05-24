@@ -29,7 +29,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <template v-for="order in orderInfo">
+                    <template v-for="order in orderInfo" :key="order.orderId">
                         <div>
                             <ul class="list my-3">
                                 <li>產品名稱:{{order.productName}}</li>
@@ -263,7 +263,7 @@
                                 </td>
                                 <td>
                                     <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @@click="getDetails(order.orderId)">
                                         展開
                                     </button>
 
@@ -295,6 +295,7 @@
                 remainingValue: 0,
                 dis: true,
                 buttonText: "修改會員資料",
+                selectedOrderId:0,
             },
             computed: {
                 //進度條計算
@@ -392,8 +393,16 @@
                     axios.put("https://localhost:7071/api/member/WriteLev", request)
                         .then()
                 },
-                //getDetails:function
-
+                getDetails: function (selectedOrderId) {
+                    let _this = this;
+                    axios.get("https://localhost:7071/api/member/GetOrder")
+                        .then(response => {
+                            _this.orderInfo = response.data;
+                            _this.selectedOrderId = selectedOrderId
+                            _this.orderInfo = _this.orderInfo.filter(order => order.orderId == _this.selectedOrderId)
+                            return _this.orderInfo
+                        })
+                },
             },
             mounted:
                 function () {
@@ -401,8 +410,6 @@
                     axios.get("https://localhost:7071/api/member/GetMember")
                         .then(response => {
                             _this.memberInfo = response.data;
-                            axios.get("https://localhost:7071/api/member/GetOrder")
-                                .then(res=>_this.orderInfo = res.data)
                         })
                 }
         });

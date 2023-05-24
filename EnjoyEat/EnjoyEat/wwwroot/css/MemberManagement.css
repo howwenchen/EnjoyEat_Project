@@ -167,7 +167,9 @@ span {
     color:blue;
 }
 
+
 /*modal樣式*/
+
 .modal-content {
     background-color: rgba(100,100, 100, .6);
     --bs-modal-footer-border-color: #D8CDB9;
