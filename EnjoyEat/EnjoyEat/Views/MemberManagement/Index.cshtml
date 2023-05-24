@@ -9,7 +9,7 @@
     <nav>
         <div id="memberNavbar" class="d-flex">
             <h5 id="userName">{{fullName}}您好</h5>
-            <button class="btn">
+            <button class="btn" @@click="upgrade">
                 登出
                 <span class="first"></span>
                 <span class="second"></span>
@@ -235,7 +235,7 @@
                                 </td>
                                 <td>
 
-                                    <!-- Modal -->
+                                   @* <!-- Modal -->
                                     <div class="seemore modal fade" id="seemoreModal" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
@@ -254,7 +254,7 @@
                                                             </div>
                                                             <p>消費金額：{{order.total}} <i class="fa-solid fa-coins"></i></p>
                                                         </div>
-                                                        <hr />
+                                                        <hr />*@
 
                                                     </template>
                                                 </div>
@@ -359,6 +359,14 @@
                             return this.dis = true;
                         };
                     },
+                upgrade:function(){
+                    var request = {
+                        LevelName: this.memberInfo.levelName,
+                        levelDiscount: this.memberInfo.levelDiscount
+                    };
+                    axios.put("https://localhost:7071/api/member/WriteLev", request)
+                        .then()
+                },
 
             },
             mounted:
@@ -368,12 +376,12 @@
                         .then(response => {
                             _this.memberInfo = response.data;
 
-                            var request = {
-                                LevelName: _this.memberInfo.levelName,
-                                levelDiscount: _this.memberInfo.levelDiscount
-                            };
-                            axios.put("https://localhost:7071/api/member/WriteLev", request)
-                                .then()
+                            //var request = {
+                            //    LevelName: _this.memberInfo.levelName,
+                            //    levelDiscount: _this.memberInfo.levelDiscount
+                            //};
+                            //axios.put("https://localhost:7071/api/member/WriteLev", request)
+                            //    .then()
                         })
                 }
         });
