@@ -57,7 +57,7 @@
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <input class="box noedit" data-aos="zoom-in" data-aos-delay="100"  :value="memberInfo.memberId" :disabled="dis" />
+                            <input class="box noedit" data-aos="zoom-in" data-aos-delay="100" :value="memberInfo.memberId" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2 mt-4 mt-lg-0">
@@ -234,8 +234,9 @@
                                     {{order.tableId}}
                                 </td>
                                 <td>
+
                                     <!-- Modal -->
-                                   @* <div class="seemore modal fade" id="seemoreModal" tabindex="-1" aria-hidden="true">
+                                    <div class="seemore modal fade" id="seemoreModal" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header border-0">
@@ -254,11 +255,12 @@
                                                             <p>消費金額：{{order.total}} <i class="fa-solid fa-coins"></i></p>
                                                         </div>
                                                         <hr />
+
                                                     </template>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>*@
+                                    </div>
                                 </td>
                             </tr>
 
@@ -354,32 +356,27 @@
                         if (this.buttonText == "儲存修改") {
                             this.buttonText = "修改會員資料";
                             this.submitInfo();
-                            return this.dis = true; 
+                            return this.dis = true;
                         };
-            },
-        },
-            mounted:
-            function () {
-                let _this = this;
-                axios.get("https://localhost:7071/api/member/GetMember")
-                    .then(response => {
-                        _this.memberInfo = response.data;
-                        //_this.memberInfo.firstname = response.data.firstname;
-                        //_this.memberInfo.lastname = response.data.lastname;
-                        //_this.memberInfo.phone = response.data.phone;
-                        //_this.memberInfo.email = response.data.email;
-                        //_this.memberInfo.birthday = response.data.birthday;
-                        //_this.memberInfo.address = response.data.address;
+                    },
 
-                        var request = {
-                            LevelName: _this.memberInfo.levelName,
-                            levelDiscount: _this.memberInfo.levelDiscount
-                        };
-                        axios.put("https://localhost:7071/api/member/WriteLev", request)
-                            .then()
-                    })
-            }
-                                });
+            },
+            mounted:
+                function () {
+                    let _this = this;
+                    axios.get("https://localhost:7071/api/member/GetMember")
+                        .then(response => {
+                            _this.memberInfo = response.data;
+
+                            var request = {
+                                LevelName: _this.memberInfo.levelName,
+                                levelDiscount: _this.memberInfo.levelDiscount
+                            };
+                            axios.put("https://localhost:7071/api/member/WriteLev", request)
+                                .then()
+                        })
+                }
+        });
 
     </script>
 }
