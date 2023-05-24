@@ -21,6 +21,7 @@ namespace EnjoyEat.Models
         public bool IsSuccess { get; set; }
         public double? CampaignDiscount { get; set; }
         public double? LevelDiscount { get; set; }
+        public double? FinalPrice { get; set; }
 
         public virtual Member? Member { get; set; }
         public virtual Table? Table { get; set; }

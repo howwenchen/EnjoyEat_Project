@@ -344,6 +344,8 @@ namespace EnjoyEat.Models
             {
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
+                entity.Property(e => e.FinalPrice).HasComputedColumnSql("(([TotalPrice]-[CampaignDiscount])*[LevelDiscount])", false);
+
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
@@ -497,7 +499,7 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.ReservationDate).HasColumnType("date");
 
-                entity.Property(e => e.ReservationTime).HasColumnType("date");
+                entity.Property(e => e.ReservationTime).HasMaxLength(10);
             });
 
             modelBuilder.Entity<ReservationInformation>(entity =>

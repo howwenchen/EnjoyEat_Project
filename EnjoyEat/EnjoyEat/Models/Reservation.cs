@@ -11,12 +11,12 @@ namespace EnjoyEat.Models
         }
 
         public int ReserveId { get; set; }
-        public string PhoneNumber { get; set; } = null!;
-        public DateTime ReservationDate { get; set; }
+        public string? PhoneNumber { get; set; }
+        public DateTime? ReservationDate { get; set; }
         public DateTime? ConfirmationDate { get; set; }
-        public string NumberofAdultGuest { get; set; } = null!;
+        public string? NumberofAdultGuest { get; set; }
         public string? NumberofKidGuest { get; set; }
-        public DateTime ReservationTime { get; set; }
+        public string? ReservationTime { get; set; }
 
         public virtual ICollection<ReservationInformation> ReservationInformations { get; set; }
     }
