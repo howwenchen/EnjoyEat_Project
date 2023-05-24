@@ -59,13 +59,14 @@ namespace EnjoyEat.Controllers.API
         public IActionResult GetOrder()
         {
             var userId = 20230006;
-            var orders = db.OrderDetails.Where(o => o.Order.MemberId == userId).Select(od => new MemberOrderDetailViewModel
+            var orders = db.OrderDetails.Include(x =>x.Product).Where(o => o.Order.MemberId == userId).Select(od => new MemberOrderDetailViewModel
             {
                 OrderId = od.OrderId,
                 ProductId = od.ProductId,
                 Quantity = od.Quantity,
                 UnitPrice = od.UnitPrice,
                 SubtotalPrice = od.SubtotalPrice,
+                ProductName =od.Product.ProductName,
             }).ToList();
 
             // 延遲載入 OrderDetails

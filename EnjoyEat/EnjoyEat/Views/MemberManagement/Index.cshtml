@@ -20,6 +20,34 @@
     </nav>
     <!-- End navbar -->
 
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">餐點明細</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <template v-for="order in orderInfo">
+                        <div>
+                            <ul class="list my-3">
+                                <li>產品名稱:{{order.productName}}</li>
+                                <li>數量:{{order.quantity}}份</li>
+                                <li>單價:{{order.unitPrice}}元</li>
+                                <li>小計金額:{{order.subtotalPrice}}元</li>
+                            </ul>
+                        </div>
+                        <hr />
+                    </template>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉明細</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <main id="main">
         <div class="container">
             <!-- ======= MemberInformation Section ======= -->
@@ -51,83 +79,83 @@
                     <div class="row">
 
                         <div class="col-lg-2">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="box" data-aos="zoom-in" >
                                 會員編號:
                             </div>
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <input class="box noedit" data-aos="zoom-in" data-aos-delay="100" :value="memberInfo.memberId" :disabled="dis" />
+                            <input class="box noedit" data-aos="zoom-in"  :value="memberInfo.memberId" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2 mt-4 mt-lg-0">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="box" data-aos="zoom-in" >
                                 聯絡電話:
                             </div>
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.phone" :value="memberInfo.phone" :disabled="dis" />
+                            <input :class="editClass" data-aos="zoom-in"  v-model="memberInfo.phone" :value="memberInfo.phone" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="150">
                                 姓:
                             </div>
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.lastName" :value="memberInfo.lastName" :disabled="dis" />
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="150" v-model="memberInfo.lastName" :value="memberInfo.lastName" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="150">
                                 名:
                             </div>
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.firstName" :value="memberInfo.firstName" :disabled="dis" />
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="150" v-model="memberInfo.firstName" :value="memberInfo.firstName" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2 mt-4 mt-lg-0">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="200">
                                 通訊地址:
                             </div>
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.address" :value="memberInfo.address" :disabled="dis" />
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="200" v-model="memberInfo.address" :value="memberInfo.address" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="200">
                                 出生日期:
                             </div>
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.birthday" :value="memberInfo.birthday" :disabled="dis" />
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="200" v-model="memberInfo.birthday" :value="memberInfo.birthday" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2 mt-4 mt-lg-0">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="250">
                                 Email:
                             </div>
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.email" :value="memberInfo.email" :disabled="dis" />
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="250" v-model="memberInfo.email" :value="memberInfo.email" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2 mt-4 mt-lg-0">
-                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="250">
                                 性別:
                             </div>
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.gender" :value="memberInfo.gender" :disabled="dis" />
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="250" v-model="memberInfo.gender" :value="memberInfo.gender" :disabled="dis" />
                         </div>
 
                     </div>
@@ -150,7 +178,7 @@
                                 <img src="~/img/specials-4.png" />
                             </div>
 
-                            <div class="col-lg-9 d-flex">
+                            <div id="x" class="col-lg-9 d-flex">
                                 <div class="row">
                                     <div class="col-lg-6">您的會員等級:</div>
                                     <div class="col-lg-3">{{upgradeLev}}</div>
@@ -234,39 +262,16 @@
                                     {{order.tableId}}
                                 </td>
                                 <td>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        展開
+                                    </button>
 
-                                   @* <!-- Modal -->
-                                    <div class="seemore modal fade" id="seemoreModal" tabindex="-1" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header border-0">
-                                                    <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="fa-solid fa-receipt"></i>餐點明細紀錄</h1>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <template v-for="order in orders.orderList">
-                                                        <div>
-                                                            <h3>訂單號碼：{{order.orderId}}</h3>
-                                                            <div class="shoplist">
-                                                                <ul class="list my-3">
-                                                                    <li v-for="productName in order.productName"><i class="fa-solid fa-martini-glass-empty"></i>{{productName}}</li>
-                                                                </ul>
-                                                            </div>
-                                                            <p>消費金額：{{order.total}} <i class="fa-solid fa-coins"></i></p>
-                                                        </div>
-                                                        <hr />*@
-
-                                                    </template>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </td>
                             </tr>
 
                         </tbody>
                     </table>
-
                 </div>
             </section><!-- End Events Section -->
 
@@ -278,12 +283,13 @@
 
 
 @section Scripts {
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.2/dist/sweetalert2.min.js"></script>
     <script>
         var app = new Vue({
             el: '#member',
             data: {
                 memberInfo: [],
+                orderInfo: [],
                 price: 0,
                 upgradeValue: 0,
                 remainingValue: 0,
@@ -335,6 +341,19 @@
                 },
             },
             methods: {
+                showSweetAlert:function() {
+                    Swal.fire({
+                        allowOutsideClick: 'false',
+                        icon: 'info',
+                        color: '#FFF',
+                        iconColor: '#D8CDB9',
+                        background: '#40e0d0',
+                        text: '請先登入喔!',
+                        target: window.document.getElementById('x'),
+                        showConfirmButton: false,
+                        
+                    })
+                },
                 submitInfo: function () {
                     var request = {
                         FirstName: this.memberInfo.firstName,
@@ -351,15 +370,21 @@
                     function () {
                         if (this.buttonText == "修改會員資料") {
                             this.buttonText = "儲存修改";
+                            setTimeout(() => {
+                                window.scrollBy(0, 0.001);
+                            }, 1000);
                             return this.dis = false;
                         };
                         if (this.buttonText == "儲存修改") {
                             this.buttonText = "修改會員資料";
                             this.submitInfo();
+                            setTimeout(() => {
+                                window.scrollBy(0, -0.001);
+                            }, 1000);
                             return this.dis = true;
                         };
                     },
-                upgrade:function(){
+                upgrade: function () {
                     var request = {
                         LevelName: this.memberInfo.levelName,
                         levelDiscount: this.memberInfo.levelDiscount
@@ -367,6 +392,7 @@
                     axios.put("https://localhost:7071/api/member/WriteLev", request)
                         .then()
                 },
+                //getDetails:function
 
             },
             mounted:
@@ -375,13 +401,8 @@
                     axios.get("https://localhost:7071/api/member/GetMember")
                         .then(response => {
                             _this.memberInfo = response.data;
-
-                            //var request = {
-                            //    LevelName: _this.memberInfo.levelName,
-                            //    levelDiscount: _this.memberInfo.levelDiscount
-                            //};
-                            //axios.put("https://localhost:7071/api/member/WriteLev", request)
-                            //    .then()
+                            axios.get("https://localhost:7071/api/member/GetOrder")
+                                .then(res=>_this.orderInfo = res.data)
                         })
                 }
         });
