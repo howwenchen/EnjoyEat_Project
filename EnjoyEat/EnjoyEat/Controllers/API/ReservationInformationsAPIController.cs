@@ -25,7 +25,7 @@ namespace EnjoyEat.Controllers.API
             {
                 PhoneNumber = reservationinformationViewModel.PhoneNumber,
                 ReservationName = reservationinformationViewModel.ReservationName,
-                EMail = reservationinformationViewModel.EMail,
+                Email = reservationinformationViewModel.Email,
                 Note = reservationinformationViewModel.Note,
             };
             db.ReservationInformations.Add(reservationInformation);

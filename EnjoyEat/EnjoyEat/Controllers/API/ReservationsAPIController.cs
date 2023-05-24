@@ -19,11 +19,12 @@ namespace EnjoyEat.Controllers.API
         // POST: api/ReservationsAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<string> PostReservation(ReservationViewModel reservationViewModel)
+        public async Task<IActionResult> PostReservation(ReservationViewModel reservationViewModel)
         {
+
             Reservation reservation = new Reservation
             {
-                PhoneNumber = reservationViewModel.PhoneNumber,
+                ReserveId = reservationViewModel.ReserveId,
                 ReservationDate = reservationViewModel.ReservationDate,
                 NumberofAdultGuest = reservationViewModel.NumberofAdultGuest,
                 NumberofKidGuest = reservationViewModel.NumberofKidGuest,
@@ -32,7 +33,7 @@ namespace EnjoyEat.Controllers.API
             };
             db.Reservations.Add(reservation);
             await db.SaveChangesAsync();
-            return "轉下一頁";
+            return Ok(reservation);
         }
 
         private bool ReservationExists(string id)

@@ -86,10 +86,10 @@
                                        required />
                             </div>
                             <div class="col-md-6 form-group mt-3 mt-md-0">
-                                <select class="book-a-table form-control form-select" id="commentOption" >
-                                    <option value="" disabled selected v-model="serviceOption">請選擇服務項目</option>
-                                    <template v-for="sq in servicelist">
-                                        <option>{{sq.txt}}</option>
+                                <select class="book-a-table form-control form-select" id="commentOption" v-model="serviceOption">
+                                    <option value="" disabled selected>請選擇服務項目</option>
+                                    <template >
+                                        <option v-for="sq in servicelist" :value="sq.value">{{sq.txt}}</option>
                                     </template>
                                 </select>
                             </div>
@@ -141,10 +141,10 @@
                 serviceOption: "",
                 message: "",
                 servicelist: [
-                    { value: 1, txt: '餐點品質 Food Quality' },
-                    { value: 2, txt: '服務品質 Service Courtesy' },
-                    { value: 3, txt: '宴會及餐敘 Banquet / Catering' },
-                    { value: 4, txt: '其他 Others' }],
+                    { value: '餐點品質', txt: '餐點品質' },
+                    { value: '服務品質', txt: '服務品質' },
+                    { value: '宴會及餐敘', txt: '宴會及餐敘' },
+                    { value: '其他', txt: '其他' }],
                 },
             methods: {
                 submit: function () {
