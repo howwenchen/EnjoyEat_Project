@@ -7,6 +7,11 @@
     align-items: center;
 }
 
+/*折扣率*/
+#bar {
+    margin-top: 20px;
+}
+
 /*修改資料區*/
 /*圖片區*/
 .circle {
@@ -49,12 +54,15 @@ progress {
     margin-top: 5px;
     font-size: 12px;
 }
+.dataContent {
+    margin-top: 5px;
+}
 
 /*修改與重設button樣式*/
 .btn {
     border: none;
     padding: 10px 20px;
-    margin:10px;
+    margin: 10px;
     font-size: 14px;
     position: relative;
     background: transparent;
@@ -136,7 +144,20 @@ span {
     left: 0;
 }
 
-
+/*表格樣式*/
 #CustomersTable{
     color:white;
+}
+
+.events .section-title h2 {
+    color: #aaa;
+}
+
+/*會員資料*/
+.noedit{
+    color: white;
+}
+
+.edit{
+    color:blue;
 }

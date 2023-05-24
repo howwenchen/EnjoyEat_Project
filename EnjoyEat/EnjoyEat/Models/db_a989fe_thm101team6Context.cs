@@ -476,13 +476,10 @@ namespace EnjoyEat.Models
 
             modelBuilder.Entity<Reservation>(entity =>
             {
-                entity.HasKey(e => e.PhoneNumber);
+                entity.HasKey(e => e.ReserveId)
+                    .HasName("PK_Reservation_1");
 
                 entity.ToTable("Reservation");
-
-                entity.Property(e => e.PhoneNumber)
-                    .HasMaxLength(10)
-                    .IsFixedLength();
 
                 entity.Property(e => e.ConfirmationDate).HasColumnType("date");
 
@@ -491,6 +488,10 @@ namespace EnjoyEat.Models
                     .IsFixedLength();
 
                 entity.Property(e => e.NumberofKidGuest)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(10)
                     .IsFixedLength();
 
@@ -511,11 +512,16 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 
-                entity.Property(e => e.Note).HasMaxLength(100);
+                entity.Property(e => e.Note).HasColumnType("text");
 
                 entity.Property(e => e.ReservationName)
                     .HasMaxLength(10)
                     .IsFixedLength();
+
+                entity.HasOne(d => d.Reserve)
+                    .WithMany(p => p.ReservationInformations)
+                    .HasForeignKey(d => d.ReserveId)
+                    .HasConstraintName("FK_ReservationInformation_Reservation");
             });
 
             modelBuilder.Entity<SubCategory>(entity =>

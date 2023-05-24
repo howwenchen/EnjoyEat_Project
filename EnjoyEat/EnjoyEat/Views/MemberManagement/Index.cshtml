@@ -6,307 +6,380 @@
 }
 <!-- =======MemberManagement navbar  Section ======= -->
 <div id="member" v-cloak>
-<nav>
-    
-        
-        <div id="memberNavbar" class="d-flex"  >
-            <h5 id="userName">{{ memberInfo.firstName }} {{ memberInfo.lastName }}您好</h5>
-        <button class="btn">
-            登出
-            <span class="first"></span>
-            <span class="second"></span>
-            <span class="third"></span>
-            <span class="fourth"></span>
-        </button>
-    </div>
-</nav>
-<!-- End navbar -->
-
-<main id="main">
-    <div class="container">
-    <!-- ======= MemberInformation Section ======= -->
-    @*原本是why-us*@
-        <section id="why-us" class="why-us">
-                <div class="container" data-aos="fade-up" >
-
-            <div class="section-title d-flex">
-                <h2>會員資訊</h2>
-                    <div class="d-flex modify">
-                    <button class="btn">
-                        修改會員資料
-                        <span class="first"></span>
-                        <span class="second"></span>
-                        <span class="third"></span>
-                        <span class="fourth"></span>
-                    </button>
-                    <button class="btn" >
-                        重新設定密碼
-                        <span class="first"></span>
-                        <span class="second"></span>
-                        <span class="third"></span>
-                        <span class="fourth"></span>
-                    </button>
-                    </div>
-            </div>
-
-            <!--memberdata-->
-            <div class="row" >
-
-                <div class="col-lg-2">
-                    <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                       會員編號:
-                    </div>
-                </div>
-
-                <div class="col-lg-4 mt-4 mt-lg-0">
-                    <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            {{ memberInfo.memberId }}
-                    </div>
-                </div>
-
-                <div class="col-lg-2 mt-4 mt-lg-0">
-                    <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                       聯絡電話:
-                    </div>
-                </div>
-
-                <div class="col-lg-4 mt-4 mt-lg-0">
-                    <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            {{ memberInfo.phone }}
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                        姓名:
-                    </div>
-                </div>
-
-                <div class="col-lg-4 mt-4 mt-lg-0">
-                    <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            {{ memberInfo.firstName }} {{ memberInfo.lastName }}
-                    </div>
-                </div>
-
-                <div class="col-lg-2 mt-4 mt-lg-0">
-                    <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                        通訊地址:
-                    </div>
-                </div>
-
-                <div class="col-lg-4 mt-4 mt-lg-0">
-                    <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            {{ memberInfo.address }}
-                    </div>
-                </div><div class="col-lg-2">
-                    <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                        出生日期:
-                    </div>
-                </div>
-
-                <div class="col-lg-4 mt-4 mt-lg-0">
-                    <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            {{ memberInfo.birthday }}
-                    </div>
-                </div>
-
-                <div class="col-lg-2 mt-4 mt-lg-0">
-                    <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                        Email:
-                    </div>
-                </div>
-
-                <div class="col-lg-4 mt-4 mt-lg-0">
-                    <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            {{ memberInfo.email }}
-                    </div>
-                </div>
-
-                    <div class="col-lg-2 mt-4 mt-lg-0">
-                        <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            性別:
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 mt-4 mt-lg-0">
-                        <div class="box" data-aos="zoom-in" data-aos-delay="100">
-                            男
-                        </div>
-                    </div>
-
-            </div>
-
+    <nav>
+        <div id="memberNavbar" class="d-flex">
+            <h5 id="userName">{{fullName}}您好</h5>
+            <button class="btn">
+                登出
+                <span class="first"></span>
+                <span class="second"></span>
+                <span class="third"></span>
+                <span class="fourth"></span>
+            </button>
         </div>
-    </section><!-- End Why Us Section -->
+    </nav>
+    <!-- End navbar -->
 
+    <main id="main">
+        <div class="container">
+            <!-- ======= MemberInformation Section ======= -->
+            @*原本是why-us*@
+            <section id="why-us" class="why-us">
+                <div class="container" data-aos="fade-up">
 
-    <!--MemberLevel section-->
-    <section id="top-ten" class="top-ten">
-                <div class="container" data-aos="fade-up" >
-
-            <div class="section-title">
-                <h2>會員等級</h2>
-            </div>
-
-            <!--會員等級設定-->
-            <div class="memberLevelContent">
-                <div class="row">
-
-                        <div class="circle col-lg-3">
-                            <img src="~/img/specials-4.png" />
+                    <div class="section-title d-flex">
+                        <h2>會員資訊</h2>
+                        <div class="d-flex modify">
+                            <button class="btn" @@click="modify">
+                                {{buttonText}}
+                                <span class="first"></span>
+                                <span class="second"></span>
+                                <span class="third"></span>
+                                <span class="fourth"></span>
+                            </button>
+                            <button class="btn">
+                                重新設定密碼
+                                <span class="first"></span>
+                                <span class="second"></span>
+                                <span class="third"></span>
+                                <span class="fourth"></span>
+                            </button>
                         </div>
+                    </div>
 
-                        <div class="col-lg-9 d-flex">
-                            <div class="row">
-                                <div class="col-lg-6">您的會員等級:</div>
-                                <div class="col-lg-3">{{ memberInfo.levelName }}</div>
+                    <!--memberdata-->
+                    <div class="row">
 
-                                <div class="col-lg-6">累積消費金額:</div>
-                                <div class="col-lg-6">$100000元</div>
+                        <div class="col-lg-2">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                                會員編號:
                             </div>
                         </div>
 
-                        <h3>累計進度bar</h3>
-                        <div >
-                            <div class="progressWrapper">
-                                <progress id="progress" max="25000"></progress>
-                                <div class="progressLabels">
-                                    <span>0</span>
-                                    <span>25000</span>
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input class="box noedit" data-aos="zoom-in" data-aos-delay="100"  :value="memberInfo.memberId" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2 mt-4 mt-lg-0">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                                聯絡電話:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.phone" :value="memberInfo.phone" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                                姓:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.lastName" :value="memberInfo.lastName" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                                名:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.firstName" :value="memberInfo.firstName" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2 mt-4 mt-lg-0">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                                通訊地址:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.address" :value="memberInfo.address" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                                出生日期:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.birthday" :value="memberInfo.birthday" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2 mt-4 mt-lg-0">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                                Email:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.email" :value="memberInfo.email" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2 mt-4 mt-lg-0">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="100">
+                                性別:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="100" v-model="memberInfo.gender" :value="memberInfo.gender" :disabled="dis" />
+                        </div>
+
+                    </div>
+
+                </div>
+            </section><!-- End MemberInformation Section -->
+            <!--MemberLevel section-->
+            <section id="top-ten" class="top-ten">
+                <div class="container" data-aos="fade-up">
+
+                    <div class="section-title">
+                        <h2>會員等級</h2>
+                    </div>
+
+                    <!--會員等級設定-->
+                    <div class="memberLevelContent">
+                        <div class="row">
+
+                            <div class="circle col-lg-3">
+                                <img src="~/img/specials-4.png" />
+                            </div>
+
+                            <div class="col-lg-9 d-flex">
+                                <div class="row">
+                                    <div class="col-lg-6">您的會員等級:</div>
+                                    <div class="col-lg-3">{{upgradeLev}}</div>
+
+                                    <div class="col-lg-6">累積消費金額:</div>
+                                    <div class="col-lg-6">${{countPrice}}元</div>
                                 </div>
-
                             </div>
-                            <div class="dataContent col-lg-8"></div>
-                            <h3>折扣率:{{memberInfo.discountRate}}</h3>
+
+                            <h3 id="bar">累計進度bar</h3>
+                            <div>
+                                <div class="progressWrapper">
+                                    <progress id="progress" :value="countPrice" :max="upgradeVal"></progress>
+                                    <div class="progressLabels">
+                                        <span>0</span>
+                                        <span>{{upgradeVal}}</span>
+                                    </div>
+                                    {{dataContent}}
+                                </div>
+                                <div class="dataContent col-lg-8"></div>
+                                <h3>折扣率:{{memberInfo.levelDiscount}}</h3>
+                            </div>
                         </div>
+
+
+                    </div>
                 </div>
-                   
+            </section>
+            <!--MemberLevel section end-->
+            <!-- ======= OrderHistory Section ======= -->
+            <section id="events" class="events">
+                <div class="container" data-aos="fade-up">
 
-            </div>
-        </div>
-    </section>
-    <!--Top10 carousul section end-->
-
-    <!-- ======= OrderHistory Section ======= -->
-   @* <section id="events" class="events">
-        <div class="container" data-aos="fade-up">
-
-            <div class="section-title">
-                <h2>會員歷史訂單</h2>
-            </div>
+                    <div class="section-title">
+                        <h2>會員歷史訂單</h2>
+                    </div>
 
 
-                <table class="table" id="CustomersTable">
-                    <thead>
-                        <tr>
-                            <th>
-                               訂單編號
-                            </th>
-                            <th>
-                               訂單日期
-                            </th>
-                            <th>
-                                訂單金額
-                            </th>
-                            <th>
-                                付款方式
-                            </th>
-                            <th>
-                               桌號
-                            </th>
-                            <th>
-                                餐點明細
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                             {{order.OrderId}}
-                        </td>
-                        <td>
-                            {{order.OrderDate}}
-                        </td>
-                        <td>
-                            {{order.OrderPrice}}
-                        </td>
-                        <td>
-                            {{order.OrderPayment}}
-                        </td>
-                        <td>
-                            {{order.OrderTable}}
-                        </td>
-                        <td>
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId">
-                                    Launch
-                                </button>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="modalId" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="modalTitleId">Modal title</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="container-fluid">
-                                                    Add rows here
+                    <table class="table" id="CustomersTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    訂單編號
+                                </th>
+                                <th>
+                                    訂單日期
+                                </th>
+                                <th>
+                                    訂單金額
+                                </th>
+                                <th>
+                                    付款方式
+                                </th>
+                                <th>
+                                    桌號
+                                </th>
+                                <th>
+                                    餐點明細
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="order in memberInfo.orders">
+                                <td>
+                                    {{order.orderId}}
+                                </td>
+                                <td>
+                                    {{order.orderDate}}
+                                </td>
+                                <td>
+                                    {{order.totalPrice}}
+                                </td>
+                                <td v-if="order.isTakeway">
+                                    外帶
+                                </td>
+                                <td v-else>
+                                    內用
+                                </td>
+                                <td>
+                                    {{order.tableId}}
+                                </td>
+                                <td>
+                                    <!-- Modal -->
+                                   @* <div class="seemore modal fade" id="seemoreModal" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header border-0">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="fa-solid fa-receipt"></i>餐點明細紀錄</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <template v-for="order in orders.orderList">
+                                                        <div>
+                                                            <h3>訂單號碼：{{order.orderId}}</h3>
+                                                            <div class="shoplist">
+                                                                <ul class="list my-3">
+                                                                    <li v-for="productName in order.productName"><i class="fa-solid fa-martini-glass-empty"></i>{{productName}}</li>
+                                                                </ul>
+                                                            </div>
+                                                            <p>消費金額：{{order.total}} <i class="fa-solid fa-coins"></i></p>
+                                                        </div>
+                                                        <hr />
+                                                    </template>
                                                 </div>
                                             </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary">Save</button>
-                                            </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    </div>*@
+                                </td>
+                            </tr>
 
+                        </tbody>
+                    </table>
 
-                        </td>
-                    </tr>
-                    
-                    </tbody>
-                </table>
+                </div>
+            </section><!-- End Events Section -->
 
         </div>
-    </section><!-- End Events Section -->*@
 
-    </div>
-
-</main><!-- End #main -->
+    </main><!-- End #main -->
 
 </div>
 
 
 @section Scripts {
-    <script src="~/js/memebermanagement.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
-   <script>
+    <script>
         var app = new Vue({
             el: '#member',
             data: {
                 memberInfo: [],
-                
+                price: 0,
+                upgradeValue: 0,
+                remainingValue: 0,
+                dis: true,
+                buttonText: "修改會員資料",
             },
-            mounted: 
-                function () {
-                    let _this = this;
+            computed: {
+                //進度條計算
+                countPrice: function () {
+                    for (let order of this.memberInfo.orders) {
+                        this.price += order.totalPrice;
+                    }
+                    return this.price;
+                },
+                dataContent: function () {
+                    this.remainingValue = this.upgradeValue - this.price;
+                    return this.remainingValue > 0 ? `還需消費 ${this.remainingValue} 元才能升級至下一個階級` : "已達到最高等級";
+                },
+                //等級計算
+                upgradeLev: function () {
+                    if (this.price < 10000) {
+                        this.memberInfo.levelDiscount = 0.95;
+                        return this.memberInfo.levelName = "平民";
+                    } else if (this.price >= 10000 && this.price < 20000) {
+                        this.memberInfo.levelDiscount = 0.9;
+                        return this.memberInfo.levelName = "貴族";
+                    } else {
+                        this.memberInfo.levelDiscount = 0.8;
+                        return this.memberInfo.levelName = "皇家";
+                    }
+                },
+                upgradeVal: function () {
+                    if (this.memberInfo.levelName === "平民") {
+                        return this.upgradeValue = 10000;
+                    } else {
+                        return this.upgradeValue = 20000;
+                    }
+                },
+                //全名寫法
+                fullName: function () {
+                    return this.memberInfo.lastName + this.memberInfo.firstName;
+                },
+                //編輯會員資料樣式
+                editClass: function () {
+                    if (this.dis == true) {
+                        return 'box noedit'
+                    }
+                    return 'box edit'
+                },
+            },
+            methods: {
+                submitInfo: function () {
+                    var request = {
+                        FirstName: this.memberInfo.firstName,
+                        LastName: this.memberInfo.lastName,
+                        Address: this.memberInfo.address,
+                        Email: this.memberInfo.email,
+                        Birthday: this.memberInfo.birthday,
+                        Gender: this.memberInfo.gender,
+                    };
+                    axios.put("https://localhost:7071/api/member/EditMemberInfo", request)
+                        .then()
+                },
+                modify:
+                    function () {
+                        if (this.buttonText == "修改會員資料") {
+                            this.buttonText = "儲存修改";
+                            return this.dis = false;
+                        };
+                        if (this.buttonText == "儲存修改") {
+                            this.buttonText = "修改會員資料";
+                            this.submitInfo();
+                            return this.dis = true; 
+                        };
+            },
+        },
+            mounted:
+            function () {
+                let _this = this;
+                axios.get("https://localhost:7071/api/member/GetMember")
+                    .then(response => {
+                        _this.memberInfo = response.data;
+                        //_this.memberInfo.firstname = response.data.firstname;
+                        //_this.memberInfo.lastname = response.data.lastname;
+                        //_this.memberInfo.phone = response.data.phone;
+                        //_this.memberInfo.email = response.data.email;
+                        //_this.memberInfo.birthday = response.data.birthday;
+                        //_this.memberInfo.address = response.data.address;
 
-                    axios.get("https://localhost:7071/api/member/GetMember")
-                        .then(response => {
-                            console.log("test",response.data)
-                            _this.memberInfo = response.data
-                        })
-                
-
+                        var request = {
+                            LevelName: _this.memberInfo.levelName,
+                            levelDiscount: _this.memberInfo.levelDiscount
+                        };
+                        axios.put("https://localhost:7071/api/member/WriteLev", request)
+                            .then()
+                    })
             }
-        })
-
-
+                                });
 
     </script>
 }
