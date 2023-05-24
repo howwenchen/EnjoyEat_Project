@@ -363,15 +363,19 @@ namespace EnjoyEat.Models
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.HasIndex(e => e.OrderDetailId, "IX_OrderDetails");
-
-                entity.Property(e => e.OrderDetailId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("OrderDetailID");
+                entity.HasKey(e => new { e.OrderId, e.ProductId });
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.Property(e => e.OrderDetialId)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("OrderDetialID");
+
+                entity.Property(e => e.Quantity).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.UnitPrice).HasColumnType("money");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
@@ -511,6 +515,8 @@ namespace EnjoyEat.Models
                     .HasMaxLength(10)
                     .HasColumnName("E-mail")
                     .IsFixedLength();
+
+                entity.Property(e => e.Note).HasMaxLength(100);
 
                 entity.Property(e => e.ReservationName)
                     .HasMaxLength(10)

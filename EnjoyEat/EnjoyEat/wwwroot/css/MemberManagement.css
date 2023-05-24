@@ -144,11 +144,20 @@ span {
     left: 0;
 }
 
-
+/*表格樣式*/
 #CustomersTable{
     color:white;
 }
 
 .events .section-title h2 {
     color: #aaa;
+}
+
+/*會員資料*/
+.noedit{
+    color: white;
+}
+
+.edit{
+    color:blue;
 }

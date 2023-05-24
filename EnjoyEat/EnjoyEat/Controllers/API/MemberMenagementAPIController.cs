@@ -51,9 +51,44 @@ namespace EnjoyEat.Controllers.API
         }
 
 
+        //取得餐點明細
+        //[HttpGet]
+        //public IActionResult GetOrder()
+        //{
+        //    var userId = 20230006;
+        //    var user = db.Members.Include(x => x.Orders).Include(x => x.LevelNameNavigation).FirstOrDefault(x => x.MemberId == userId);
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var member = new MemberViewModel()
+        //    {
+        //        MemberId = user.MemberId,
+        //        FirstName = user.FirstName,
+        //        LastName = user.LastName,
+        //        Email = user.Email,
+        //        Gender = user.Gender,
+        //        Birthday = user.Birthday,
+        //        Address = user.Address,
+        //        Phone = user.Phone,
+        //        LevelName = user.LevelName,
+        //        LevelDiscount = user.LevelDiscount,
+        //        Orders = user.Orders.Select(x => new MemberOrderViewModel
+        //        {
+        //            OrderDate = x.OrderDate,
+        //            OrderId = x.OrderId,
+        //            TableId = x.TableId,
+        //            TotalPrice = x.TotalPrice,
+        //            IsTakeway = x.IsTakeway,
+        //        }).ToList(),
+
+        //    };
+        //    return Ok(member);
+        //}
+
         //把等級寫回資料庫
         [HttpPut]
-        public async Task<IActionResult> EditMember([FromBody] MemberViewModel memberViewModel)
+        public async Task<IActionResult> WriteLev([FromBody] MemberViewModel memberViewModel)
         {
             var id = 20230006;
             Member member = await db.Members.FindAsync(id);
@@ -63,10 +98,34 @@ namespace EnjoyEat.Controllers.API
             }
             member.LevelName = memberViewModel.LevelName;
             member.LevelDiscount = memberViewModel.LevelDiscount;
+
             db.Entry(member).State = EntityState.Modified;
             await db.SaveChangesAsync();
             return Ok();
         }
 
+        //修改會員資料
+        [HttpPut]
+        public async Task<IActionResult> EditMemberInfo([FromBody] MemberViewModel memberViewModel)
+        {
+            var id = 20230006;
+            Member member = await db.Members.FindAsync(id);
+            if (member == null)
+            {
+                return NotFound();
+            }
+
+            member.FirstName = memberViewModel.FirstName;
+            member.LastName = memberViewModel.LastName;
+            member.Address = memberViewModel.Address;
+            member.Email = memberViewModel.Email;
+            member.Birthday = memberViewModel.Birthday;
+            member.Gender = memberViewModel.Gender;
+
+
+            db.Entry(member).State = EntityState.Modified;
+            await db.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
