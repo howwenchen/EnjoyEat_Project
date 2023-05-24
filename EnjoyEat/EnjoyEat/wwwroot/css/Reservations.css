@@ -54,6 +54,7 @@
     text-align: center;
 }
 
+/*booking頁面*/
 #sameMemberDiv {
     height: 40px;
     color: #bab3a6;
@@ -76,7 +77,22 @@
 #maleCheck {
     height: 15px;
 }
-
+#bookReturn {
+    background: #cda45e;
+    border: 0;
+    padding: 10px 35px;
+    color: #fff;
+    transition: .4s;
+    border-radius: 50px;
+}
+#bookNow {
+    background: #cda45e;
+    border: 0;
+    padding: 10px 35px;
+    color: #fff;
+    transition: .4s;
+    border-radius: 50px;
+}
 /*datepicker*/
 .datepicker {
     width: 100%;

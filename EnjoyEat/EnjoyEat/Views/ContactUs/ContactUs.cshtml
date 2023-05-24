@@ -86,8 +86,8 @@
                                        required />
                             </div>
                             <div class="col-md-6 form-group mt-3 mt-md-0">
-                                <select class="book-a-table form-control form-select" id="commentOption" v-model="serviceOption">
-                                    <option value="" disabled selected>請選擇服務項目</option>
+                                <select class="book-a-table form-control form-select" id="commentOption" >
+                                    <option value="" disabled selected v-model="serviceOption">請選擇服務項目</option>
                                     <template v-for="sq in servicelist">
                                         <option>{{sq.txt}}</option>
                                     </template>
@@ -117,11 +117,11 @@
                                 Your message has been sent. Thank you!
                                 </div>*@
                             </div>
-                            <div class="text-center">
-                                <button id="submitbtn" @@click="submit">送出</button>
-                            </div>
                         </div>
                     </form>
+                    <div class="text-center">
+                        <button  id="submitbtn" @@click="submit">送出</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -150,12 +150,12 @@
                 submit: function () {
                     let _this = this;
                     var request = {
-                        CustomerName: _this.name,
-                        Email: _this.email,
-                        Phone: _this.phone,
-                        QuestionKeynote: _this.subject,
-                        ServiceOption: _this.serviceOption,
-                        QuestionContent: _this.message,
+                        CustomerName: this.name,
+                        Email: this.email,
+                        Phone: this.phone,
+                        QuestionKeynote: this.subject,
+                        ServiceOption: this.serviceOption,
+                        QuestionContent: this.message,
                     }
                     axios.post("https://localhost:7071/api/ContactUs/PostCustomerService", request)
                         .then(

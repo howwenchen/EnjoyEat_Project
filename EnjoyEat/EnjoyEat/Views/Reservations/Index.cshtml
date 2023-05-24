@@ -11,7 +11,7 @@
                     <h2>立即訂位</h2>
                     <p>訂位</p>
                 </div>
-                <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
+                <form role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
                     <div class="row">
                         <label>用餐人數</label>
                         <div class="col-lg-4 col-md-6 form-group d-flex">
@@ -131,6 +131,7 @@
 <!-- End Book A Table Section -->
 @section Scripts
     {
+    <script src="~/axios/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
     <script>
@@ -195,12 +196,23 @@
             },
             methods: {
                 next: function () {
+                    let _this=this;
+                    var request={
+                        ReservationDate: _this.ReserveDate,
+                        NumberofAdultGuest: _this.adultNumber,
+                        NumberofKidGuest: _this.kidNumber,
+                        ReservationTime: _this.mealTime,
+                    }
                     if (this.adultNumber != '' || this.kidNumber != '' || this.ReserveDate != null || this.mealTime != '') {
                         window.location.href = `Reservations/booking`
+                        axios.post("https://localhost:7071/api/Reservations/PostReservation", request)
+                            .then(
+                                response => {
+                                    alert(response.data);
+                                })
                     }
                 }
             },
         });
     </script>
-    @* <script src="~/js/reservations.js"></script>*@
     }
