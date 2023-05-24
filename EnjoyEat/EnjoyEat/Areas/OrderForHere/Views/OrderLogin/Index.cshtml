@@ -9,13 +9,13 @@
 	<h2>內用點餐</h2>
 	<form>
 		<label for="table-number">內用桌號:</label>
-		<input type="text" id="table-number" name="table-number" required>
+		<input type="text" id="table-number" name="table-number" required v-model="tableNumber">
 		<br><br>
 		<label for="party-size">用餐人數:</label>
-		<input type="text" id="party-size" name="party-size" required>
+		<input type="text" id="party-size" name="party-size" required v-model="partySize">
 		<br><br>
 		<label for="member-phone">會員電話:</label>
-		<input type="tel" id="member-phone" name="member-phone" placeholder="可直接點餐或快速註冊" v-model="checkPhone">
+		<input type="tel" id="member-phone" name="member-phone" placeholder="可直接點餐或快速註冊" v-model="memberPhone">
 		<br><br>
 		<div class="register-button">
 			<button id="register-btn">快速註冊</button>
@@ -74,7 +74,9 @@
 		var app = new Vue({
 			//el: '#dialog',
 			data: {
-				checkPhone:'',
+				memberPhone: '',
+				tableNumber: '',
+				partySize: '',
 				lastname: '',
 				firstname: '',
 				account: '',
@@ -126,19 +128,21 @@
 				},
 				CheckMember: function () {
 					let self = this;
+
 					axios.get('/api/OrderLoginApi/CheckMember', { Phone: self.phone })
 						.then(response => {
 							if (responose.data == "開始點餐") {
 								setTimeout(() => {
-									window.location.href = 'https://localhost:7071/OrderForHere/StartOrder/Index'; 
+									window.location.href = 'https://localhost:7071/OrderForHere/StartOrder/Index';
 								}, 2000);
 							}
 
-						});
-				}
+						})
+				};
 			}
+		}
 
-		})
+				})
 		app.$mount('#dialog');
 		app.$mount('#Login');
 	</script>
