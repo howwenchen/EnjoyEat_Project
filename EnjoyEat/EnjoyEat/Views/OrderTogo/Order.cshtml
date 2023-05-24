@@ -70,17 +70,72 @@
                 </div>
             </div>
         }
-    </div>
+        </div>
 </section>
-
- @section Scripts
- {
-            @*    <script src="~/orderforhere/startorderjs/bootstrap.min.js"></script>
+@section Scripts
+    {
     <script src="~/orderforhere/startorderjs/jquery.barfiller.js"></script>
-    <script src="~/orderforhere/startorderjs/jquery.magnific-popup.min.js"></script>
-    <script src="~/orderforhere/startorderjs/jquery.nicescroll.min.js"></script>
-    <script src="~/orderforhere/startorderjs/jquery.slicknav.js"></script>
-    <script src="~/orderforhere/startorderjs/jquery.nice-select.min.js"></script>
-    <script src="~/orderforhere/startorderjs/jquery-3.3.1.min.js"></script>*@
-    <script src="~/orderforhere/startorderjs/main.js"></script>
-}
+        <script src="~/orderforhere/startorderjs/jquery.magnific-popup.min.js"></script>
+        <script src="~/orderforhere/startorderjs/jquery.nicescroll.min.js"></script>
+        <script src="~/orderforhere/startorderjs/jquery.slicknav.js"></script>
+        <script src="~/orderforhere/startorderjs/jquery.nice-select.min.js"></script>
+        <script src="~/orderforhere/startorderjs/jquery-3.3.1.min.js"></script>
+    <script>
+        (function () {
+            /**
+             * Easy selector helper function
+             */
+            const select = (el, all = false) => {
+                el = el.trim()
+                if (all) {
+                    return [...document.querySelectorAll(el)]
+                } else {
+                    return document.querySelector(el)
+                }
+            }
+
+            /**
+             * Easy event listener function
+             */
+            const on = (type, el, listener, all = false) => {
+                let selectEl = select(el, all)
+                if (selectEl) {
+                    if (all) {
+                        selectEl.forEach(e => e.addEventListener(type, listener))
+                    } else {
+                        selectEl.addEventListener(type, listener)
+                    }
+                }
+            }
+            /**
+             * Menu isotope and filter
+             */
+            window.addEventListener('load', () => {
+                let orderContainer = select('');
+                if (orderContainer) {
+                    let menuIsotope = new Isotope(orderContainer, {
+                        itemSelector: '.menu-item',
+                        layoutMode: 'fitRows'
+                    });
+
+                    let menuFilters = select('#menu-flters li', true);
+
+                    on('click', '#menu-flters li', function (e) {
+                        e.preventDefault();
+                        menuFilters.forEach(function (el) {
+                            el.classList.remove('filter-active');
+                        });
+                        this.classList.add('filter-active');
+
+                        menuIsotope.arrange({
+                            filter: this.getAttribute('data-filter')
+                        });
+                        menuIsotope.on('arrangeComplete', function () {
+                            AOS.refresh()
+                        });
+                    }, true);
+                }
+            });
+        })()
+    </script>
+    }
