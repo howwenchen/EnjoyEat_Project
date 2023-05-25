@@ -43,6 +43,7 @@ namespace EnjoyEat.Models.ViewModel
         public short Quantity { get; set; }
         public float Discount { get; set; }
         public int SubtotalPrice { get; set; }
+        public string ProductName { get; set; } = null!;
 
     }
 }

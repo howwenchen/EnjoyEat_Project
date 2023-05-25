@@ -34,7 +34,7 @@ namespace EnjoyEat.Controllers.API
 
             db.CustomerServices.Add(customerservice);
             await db.SaveChangesAsync();
-            return "我們已收到您的建議，將盡快回覆您";
+            return "我們已收到您的建議，將盡快回覆您!";
         }
 
 

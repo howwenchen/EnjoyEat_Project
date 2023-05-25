@@ -18,6 +18,9 @@ namespace EnjoyEat.Controllers
         {
             return View();
         }
-
+        public IActionResult success()
+        {
+            return View();
+        }
     }
 }

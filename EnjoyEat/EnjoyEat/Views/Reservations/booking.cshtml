@@ -1,90 +1,156 @@
 ﻿@section Styles{
     <link href="~/css/reservations.css" rel="stylesheet" />
+
 }
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.css">
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
 <main id="main">
     <!-- ======= Book A Table Section ======= -->
+
     <section id="book-a-table" class="book-a-table">
-        <div class="container" data-aos="fade-up">
-            <div class="section-title">
-                <h2>確認訂位與填寫聯絡資訊</h2>
-            </div>
-            <form action="forms/book-a-table.php"
-                  method="post"
-                  role="form"
-                  class="php-email-form"
-                  data-aos="fade-up"
-                  data-aos-delay="100">
-                <div class="row">
-                    <div class="form-check" id="sameMemberDiv">
-                        <input class="" type="checkbox" value="" id="sameMemberCheck" role="radio">
-                        <label class="form-check-label" for="" id="sameMember">
-                            同會員資訊
-                        </label>
+        <div id="d1">
+            <div class="container" data-aos="fade-up">
+                <div class="section-title">
+                    <h2>確認訂位與填寫聯絡資訊</h2>
+                </div>
+                <form role="form"
+                      class="php-email-form"
+                      data-aos="fade-up"
+                      data-aos-delay="100">
+                    <div class="row">
+                        <div class="form-check" id="sameMemberDiv">
+                            <input class="" type="checkbox" value="" id="sameMemberCheck" role="radio">
+                            <label class="form-check-label" for="" id="sameMember">
+                                同會員資訊
+                            </label>
+                        </div>
+                        <div class="validate"></div>
                     </div>
-                    <div class="validate"></div>
-                </div>
-                <div class="col-lg-4 col-md-6 form-group" id="NameCheck">
-                    <input type="text"
-                           name="name"
-                           class="form-control"
-                           id="name"
-                           placeholder="訂位人姓名"
-                           data-rule="minlen:4"
-                           data-msg="請輸入至少三個字元" />
-                    <br />
-                    <input class="" type="checkbox" value="" id="femaleCheck" role="radio">
-                    <label for="text" id="female">女士</label>
-                    <input class="" type="checkbox" value="" id="maleCheck" role="radio">
-                    <label for="text" id="female">男士</label>
-                    <div class="validate"></div>
-                </div>
-                <div class="col-lg-4 col-md-6 form-group mt-3 mt-md-0">
-                    <input type="email"
-                           class="form-control"
-                           name="email"
-                           id="email"
-                           placeholder="您的Email"
-                           data-rule="email"
-                           data-msg="請輸入完整的Email訊息" />
-                    <div class="validate"></div>
-                </div>
-                <div class="col-lg-4 col-md-6 form-group mt-3 mt-md-0">
-                    <input type="text"
-                           class="form-control"
-                           name="phone"
-                           id="phone"
-                           placeholder="您的手機號碼"
-                           data-rule="minlen:4"
-                           data-msg="請輸入完整的手機號碼" />
-                    <div class="validate"></div>
-                </div>
-                <div class="form-group mt-2">
-                    <textarea class="form-control"
-                              name="message"
-                              rows="5"
-                              placeholder="備註"></textarea>
-                    <div class="validate"></div>
-                </div>
-                <div class="mb-3">
-                    <div class="loading">Loading</div>
-                    <div class="error-message"></div>
-                    <div class="sent-message">
+                    <div class="col-lg-4 col-md-6 form-group" id="NameCheck">
+                        <input type="text"
+                               name="name"
+                               class="form-control"
+                               id="name"
+                               v-model="name"
+                               placeholder="訂位人姓名"
+                               data-rule="minlen:4"
+                               data-msg="請輸入至少三個字元" />
+                        <br />
+                        <input class="" type="checkbox" value="" id="femaleCheck" role="radio">
+                        <label for="text" id="female">女士</label>
+                        <input class="" type="checkbox" value="" id="maleCheck" role="radio">
+                        <label for="text" id="female">男士</label>
+                        <div class="validate"></div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 form-group mt-3 mt-md-0">
+                        <input type="email"
+                               class="form-control"
+                               name="email"
+                               id="email"
+                               placeholder="您的Email"
+                               data-rule="email"
+                               v-model="email"
+                               data-msg="請輸入完整的Email訊息" />
+                        <div class="validate"></div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 form-group mt-3 mt-md-0">
+                        <input type="text"
+                               class="form-control"
+                               name="phone"
+                               id="phone"
+                               v-model="phone"
+                               placeholder="您的手機號碼"
+                               data-rule="minlen:4"
+                               data-msg="請輸入完整的手機號碼" />
+                        <div class="validate"></div>
+                    </div>
+                    <div class="form-group mt-2">
+                        <textarea class="form-control"
+                                  name="message"
+                                  rows="5"
+                                  v-model="note"
+                                  placeholder="備註"></textarea>
+                        <div class="validate"></div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="loading">Loading</div>
+                        <div class="error-message"></div>
+                        @*<div class="sent-message">
                         Your booking request was sent. We will call back or send an
                         Email to confirm your reservation. Thank you!
+                        </div>*@
                     </div>
-                </div>
-                <button type="submit" id="bookReturn">返回上一頁</button>
-                <button type="submit" id="bookNow" onclick="openDialog()">確認訂位</button>
-            </form>
+                    <button type="button" id="bookReturn" @@click="Return">返回上一頁</button>
+                    <button type="button" id="bookNow" @@click="BookNow">確認訂位</button>
+                </form>
+            </div>
         </div>
     </section>
+</main>
 <!-- End Book A Table Section -->
-    @section Scripts
-        {
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
-        <script>
-        </script>
-        <script src="~/js/reservations.js"></script>
-    }
+@section Scripts{
+    <script src="~/axios/axios.min.js"></script>
+    <script>
+        baseAddress = "https://localhost:7071";
+        let app = new Vue({
+            el: "#d1",
+            data: {
+                name: "",
+                email: "",
+                phone: "",
+                note: "",
+            },
+            methods: {
+                Return: function () {
+                    window.history.back();
+                },
+                BookNow: function () {
+                    let _this = this;
+                    var request = {
+                        PhoneNumber: _this.phone,
+                        ReservationName: _this.name,
+                        EMail: _this.email,
+                        Note: _this.note,
+                    }
+                    if (this.name != '' && this.email != '' && this.phone != null && this.note != '') {
+                    axios.post("https://localhost:7071/api/reservation/booking/PostReservationInformation", request)
+                        .then(
+                            response => {
+                                //alert(JSON.stringify(response.data));
+                                Swal.fire({
+                                    allowOutsideClick: false,
+                                    icon: 'success',
+                                    color: '#333',
+                                    iconColor: '#D8CDB9',
+                                    background: '#FFF',
+                                    title: '訂位成功',
+                                    //text: '',
+                                    html: '<div class="custom-swal-container"><div class="custom-swal-message">將轉至訂位成功畫面!</div></div>',
+                                    showConfirmButton: false,
+                                    timer: 2500,
+                                    position: 'center'
+                                }).then(result => {
+                                    if (result.dismiss === Swal.DismissReason.timer) {
+                                        window.location.assign("https://localhost:7071");
+                                    };
+                                })
+                            });
+                } else {
+                    Swal.fire({
+                        allowOutsideClick: false,
+                        icon: 'error',
+                        color: '#333',
+                        iconColor: '#D8CDB9',
+                        confirmButtonColor: '#721B29',
+                        background: '#FFF',
+                        html: '<div class="custom-swal-container"><div class="custom-swal-message">請填寫完整訊息，才能發送哦!</div></div>',
+                        // text: '有地方還沒填哦!',
+                    })
+                }
+            }
+         }
+     });
+    </script>
+}
