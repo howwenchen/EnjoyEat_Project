@@ -9,7 +9,7 @@
   <link href="~/css/checkoutpagestyle.css" rel="stylesheet" />
   <link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
 }
-<content_body>   
+<content_body id="app">   
         <!--======= Container =======-->
        <div class="iphone">
         <header class="form_header ">
@@ -36,9 +36,9 @@
                                 <div class="col text-center">人數</div>
                            </div>
                            <div class="row">
-                               <div class="col text-start">777777</div>
-                               <div class="col text-center">6666</div>
-                               <div class="col text-center">10</div>
+                               <div class="col text-start">{{OrderItem.orderId}}</div>
+                               <div class="col text-center">{{OrderItem.tableId}}</div>
+                               <div class="col text-center">{{OrderItem.customerCount}}</div>
                            </div>
                            <br />
                            <div class="row">
@@ -47,12 +47,9 @@
                                <div class="col text-center">品項數</div>
                            </div>
                            <div class="row">
-                                <div class="col text-start">
-                                 @{DateTime Now = DateTime.Now;} 
-                                 @Now
-                                </div>
-                                <div class="col text-center">處理中</div>
-                                <div class="col text-center">4</div>
+                                <div class="col text-start">{{dateformat(OrderItem.orderDate)}}</div>
+                                <div class="col text-center">{{OrderItem.IsSuccess}}</div>
+                                <div class="col text-center">{{OrderItem.totalItems}}</div>
                            </div>
                 <!--分隔線-->
                 <div class="pt-2 border-bottom mb-3"></div>
@@ -156,8 +153,8 @@
                                     <div>優惠碼折扣</div>
                                 </div>
                                 <div class="col">
-                                    <div class="text-end">-$100</div>
-                                    <div class="text-end">-$100</div>
+                                    <div class="text-end">-{{currency(OrderItem.levelDiscountSum)}}</div>
+                                    <div class="text-end">-{{currency(OrderItem.campaignDiscount)}}</div>
                                 </div>
                             </div>
                         </div>
@@ -169,9 +166,9 @@
                                         <div class="text-danger" style="font-size:larger">應付金額</div>
                                     </div>
                                     <div class="col">
-                                        <div class="text-end">$2,300</div>
-                                        <div class="text-end">-$200</div>
-                                        <div class="text-end text-danger" style="font-size:larger">$2,100</div>
+                                        <div class="text-end">{{currency(OrderItem.totalPrice)}}</div>
+                                        <div class="text-end">-{{currency(OrderItem.totalDiscount)}}</div>
+                                        <div class="text-end text-danger" style="font-size:larger">{{currency(OrderItem.finalPrice)}}</div>
                                     </div>
                                 </div>
                         </div>
@@ -188,4 +185,59 @@
 @section Scripts{
     <script src="~/js/main.js"></script>
     <script src="~/font-awesome/js/all.min.js"></script>
+
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                OrderItem: {},
+                MemberId: '20230006', //等購物車寫完要改掉，memberId要從購物車傳過來
+            },
+            created: function () {
+                this.getLatestOrderId();
+            },
+            methods: {
+                getLatestOrderId: function () {
+                    axios.get("/CheckoutPage/GetLatestOrder/" + this.MemberId)//等購物車寫完要拿掉this.
+                        .then(response => {
+                            this.getOrderItem(response.data);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                },
+                getOrderItem: function (orderId) {
+                    axios.get("/CheckoutPage/GetOrder/" + orderId)
+                        .then(response => {
+                            this.OrderItem = response.data;
+                            this.OrderItem.totalDiscount = this.OrderItem.totalPrice - this.OrderItem.finalPrice;
+                            this.OrderItem.levelDiscountSum = (this.OrderItem.totalPrice-this.OrderItem.campaignDiscount)
+                                *(1-this.OrderItem.levelDiscount);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                },
+                currency: function (value) {
+                    if (typeof value !== "number") {
+                        return value;
+                    }
+                    var formatter = new Intl.NumberFormat('zh-TW', {
+                        style: 'currency',
+                        currency: 'TWD',
+                        minimumFractionDigits: 0
+                    });
+                    return formatter.format(value);
+                },
+                dateformat: function (date) {
+                    var formattedDateTime = date.replace('T', ' ');
+                    return formattedDateTime;
+                }
+
+            }
+        });
+    </script>
+
+    
+
 }
