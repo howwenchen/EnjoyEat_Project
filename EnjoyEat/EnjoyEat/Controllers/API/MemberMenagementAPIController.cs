@@ -46,7 +46,7 @@ namespace EnjoyEat.Controllers.API
                     OrderDate = x.OrderDate,
                     OrderId = x.OrderId,
                     TableId = x.TableId,
-                    TotalPrice = x.TotalPrice,
+                    FinalPrice = x.FinalPrice,
                     IsTakeway = x.IsTakeway,
                 }).ToList(),
             };
@@ -59,13 +59,14 @@ namespace EnjoyEat.Controllers.API
         public IActionResult GetOrder()
         {
             var userId = 20230006;
-            var orders = db.OrderDetails.Where(o => o.Order.MemberId == userId).Select(od => new MemberOrderDetailViewModel
+            var orders = db.OrderDetails.Include(x =>x.Product).Where(o => o.Order.MemberId == userId).Select(od => new MemberOrderDetailViewModel
             {
                 OrderId = od.OrderId,
                 ProductId = od.ProductId,
                 Quantity = od.Quantity,
                 UnitPrice = od.UnitPrice,
                 SubtotalPrice = od.SubtotalPrice,
+                ProductName =od.Product.ProductName,
             }).ToList();
 
             // 延遲載入 OrderDetails
@@ -109,6 +110,7 @@ namespace EnjoyEat.Controllers.API
             member.LastName = memberViewModel.LastName;
             member.Address = memberViewModel.Address;
             member.Email = memberViewModel.Email;
+            member.Phone=memberViewModel.Phone;
             member.Birthday = memberViewModel.Birthday;
             member.Gender = memberViewModel.Gender;
 

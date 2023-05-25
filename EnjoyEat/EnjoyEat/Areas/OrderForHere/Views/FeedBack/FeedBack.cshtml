@@ -135,7 +135,7 @@
         <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
             <div class="row">
                 <label class="col-lg-6 col-md-6">姓名</label>
-                <label class="col-lg-6 col-md-6">是否是第一次用餐</label>
+                <label class="col-lg-6 col-md-6">用餐次數</label>
 
                 <div class="col-lg-6 col-md-6 form-group d-flex">
                     <input name="Name" id="formName" class="book-a-table form-control " />
@@ -192,12 +192,11 @@
                     </template>
                 </div>
             </div>
-
             <div class="satisfaction col-3 m-0">服務<span>*</span></div>
             <div class="col-9 m-0 star-widget">
                 <template v-for="item in serve">
                     <input type="radio" :id="item.id" :value="item.value" v-model="feedbackInfo.Serve" required>
-                    <label :for="item.id"><i class="fa-solid fa-star"></i></label>
+                    <label :for="item.id"><i class="fa-regular fa-star"></i></i></label>
                 </template>
             </div>
 

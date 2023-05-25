@@ -29,7 +29,7 @@ namespace EnjoyEat.Models.ViewModel
         public int OrderId { get; set; }
         public DateTime OrderDate { get; set; }
         public short? TableId { get; set; }
-        public int TotalPrice { get; set; }
+        public double? FinalPrice { get; set; }
         public bool IsTakeway { get; set; }
         public virtual ICollection<MemberOrderDetailViewModel> OrderDetails { get; set; }
     }
@@ -43,6 +43,7 @@ namespace EnjoyEat.Models.ViewModel
         public short Quantity { get; set; }
         public float Discount { get; set; }
         public int SubtotalPrice { get; set; }
+        public string ProductName { get; set; } = null!;
 
     }
 }
