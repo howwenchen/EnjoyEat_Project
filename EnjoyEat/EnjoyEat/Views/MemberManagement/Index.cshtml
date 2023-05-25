@@ -9,7 +9,7 @@
     <nav>
         <div id="memberNavbar" class="d-flex">
             <h5 id="userName">{{fullName}}您好</h5>
-            <button class="btn" @@click="upgrade">
+            <button class="btn" @@click="showSweetAlert">
                 登出
                 <span class="first"></span>
                 <span class="second"></span>
@@ -21,7 +21,7 @@
     <!-- End navbar -->
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" @@hidden="handleModalClose">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -29,7 +29,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <template v-for="order in orderInfo">
+                    <template v-for="order in orderInfo" :key="order.orderId">
                         <div>
                             <ul class="list my-3">
                                 <li>產品名稱:{{order.productName}}</li>
@@ -85,7 +85,7 @@
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <input class="box noedit" data-aos="zoom-in"  :value="memberInfo.memberId" :disabled="dis" />
+                            <input class="box noedit" data-aos="zoom-in"  :value="memberInfo.memberId" disabled />
                         </div>
 
                         <div class="col-lg-2 mt-4 mt-lg-0">
@@ -263,7 +263,7 @@
                                 </td>
                                 <td>
                                     <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @@click="getDetails(order.orderId)">
                                         展開
                                     </button>
 
@@ -283,7 +283,7 @@
 
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.5.2/dist/sweetalert2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
     <script>
         var app = new Vue({
             el: '#member',
@@ -295,6 +295,7 @@
                 remainingValue: 0,
                 dis: true,
                 buttonText: "修改會員資料",
+                selectedOrderId:0,
             },
             computed: {
                 //進度條計算
@@ -341,15 +342,18 @@
                 },
             },
             methods: {
+                handleModalClose:function() {
+                    document.body.classList.add('modal-closed');
+                },
                 showSweetAlert:function() {
                     Swal.fire({
-                        allowOutsideClick: 'false',
+                        allowOutsideClick: false,
                         icon: 'info',
                         color: '#FFF',
                         iconColor: '#D8CDB9',
-                        background: '#40e0d0',
+                        background: '#2F4F4F',
                         text: '請先登入喔!',
-                        target: window.document.getElementById('x'),
+                        position:'center',
                         showConfirmButton: false,
                         
                     })
@@ -359,6 +363,7 @@
                         FirstName: this.memberInfo.firstName,
                         LastName: this.memberInfo.lastName,
                         Address: this.memberInfo.address,
+                        Phone:this.memberInfo.phone,
                         Email: this.memberInfo.email,
                         Birthday: this.memberInfo.birthday,
                         Gender: this.memberInfo.gender,
@@ -392,8 +397,16 @@
                     axios.put("https://localhost:7071/api/member/WriteLev", request)
                         .then()
                 },
-                //getDetails:function
-
+                getDetails: function (selectedOrderId) {
+                    let _this = this;
+                    axios.get("https://localhost:7071/api/member/GetOrder")
+                        .then(response => {
+                            _this.orderInfo = response.data;
+                            _this.selectedOrderId = selectedOrderId
+                            _this.orderInfo = _this.orderInfo.filter(order => order.orderId == _this.selectedOrderId)
+                            return _this.orderInfo
+                        })
+                },
             },
             mounted:
                 function () {
@@ -401,8 +414,6 @@
                     axios.get("https://localhost:7071/api/member/GetMember")
                         .then(response => {
                             _this.memberInfo = response.data;
-                            axios.get("https://localhost:7071/api/member/GetOrder")
-                                .then(res=>_this.orderInfo = res.data)
                         })
                 }
         });

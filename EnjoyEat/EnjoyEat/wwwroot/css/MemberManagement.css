@@ -13,11 +13,7 @@
 }
 
 /*SweetAlert*/
-.swal2-container {
-    position: absolute;
-    height: 500px;
-    width: 500px;
-}
+
 /*圖片區*/
 .circle {
     border-radius: 50%; /* 設定圓形 */
@@ -167,7 +163,13 @@ span {
     color:blue;
 }
 
+
 /*modal樣式*/
+.modal-closed {
+    overflow: hidden;
+    width: 100vw;
+}
+
 .modal-content {
     background-color: rgba(100,100, 100, .6);
     --bs-modal-footer-border-color: #D8CDB9;

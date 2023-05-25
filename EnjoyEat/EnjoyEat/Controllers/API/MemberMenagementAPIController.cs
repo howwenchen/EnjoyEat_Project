@@ -110,6 +110,7 @@ namespace EnjoyEat.Controllers.API
             member.LastName = memberViewModel.LastName;
             member.Address = memberViewModel.Address;
             member.Email = memberViewModel.Email;
+            member.Phone=memberViewModel.Phone;
             member.Birthday = memberViewModel.Birthday;
             member.Gender = memberViewModel.Gender;
 
