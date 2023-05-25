@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace EnjoyEat.Models
+﻿namespace EnjoyEat.Models.ViewModel
 {
-    public partial class Order
+    public class CheckoutPageViewModel
     {
-        public Order()
-        {
-            OrderDetails = new HashSet<OrderDetail>();
-            Payments = new HashSet<Payment>();
-        }
-
         public int OrderId { get; set; }
         public int? MemberId { get; set; }
         public DateTime OrderDate { get; set; }
@@ -22,10 +13,10 @@ namespace EnjoyEat.Models
         public double? CampaignDiscount { get; set; }
         public double? LevelDiscount { get; set; }
         public double? FinalPrice { get; set; }
+        public string? FirstName { get; internal set; }
+        public string? LastName { get; internal set; }
 
-        public virtual Member? Member { get; set; }
-        public virtual Table? Table { get; set; }
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-        public virtual ICollection<Payment> Payments { get; set; }
+        public List<OrderDetail>? OrderDetails { get; set; }
+        public int TotalItems { get; set; }
     }
 }
