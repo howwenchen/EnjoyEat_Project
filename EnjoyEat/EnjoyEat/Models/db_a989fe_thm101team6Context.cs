@@ -25,6 +25,7 @@ namespace EnjoyEat.Models
         public virtual DbSet<Employee> Employees { get; set; } = null!;
         public virtual DbSet<EmployeesLogin> EmployeesLogins { get; set; } = null!;
         public virtual DbSet<EmployeesSalary> EmployeesSalaries { get; set; } = null!;
+        public virtual DbSet<FeedBack> FeedBacks { get; set; } = null!;
         public virtual DbSet<Level> Levels { get; set; } = null!;
         public virtual DbSet<Member> Members { get; set; } = null!;
         public virtual DbSet<MemberLogin> MemberLogins { get; set; } = null!;
@@ -257,6 +258,31 @@ namespace EnjoyEat.Models
                     .HasForeignKey<EmployeesSalary>(d => d.EmployeeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EmployeesSalary_Employees");
+            });
+
+            modelBuilder.Entity<FeedBack>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("FeedBack");
+
+                entity.Property(e => e.Age).HasMaxLength(20);
+
+                entity.Property(e => e.Email).HasMaxLength(20);
+
+                entity.Property(e => e.FeedBackName).HasMaxLength(20);
+
+                entity.Property(e => e.Frequency).HasMaxLength(20);
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.Property(e => e.Suggestion).HasColumnType("text");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany()
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FeedBack_Orders");
             });
 
             modelBuilder.Entity<Level>(entity =>
