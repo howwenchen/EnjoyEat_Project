@@ -12,7 +12,8 @@
     margin-top: 20px;
 }
 
-/*修改資料區*/
+/*SweetAlert*/
+
 /*圖片區*/
 .circle {
     border-radius: 50%; /* 設定圓形 */
@@ -160,4 +161,28 @@ span {
 
 .edit{
     color:blue;
+}
+
+
+/*modal樣式*/
+.modal-closed {
+    overflow: hidden;
+    width: 100vw;
+}
+
+.modal-content {
+    background-color: rgba(100,100, 100, .6);
+    --bs-modal-footer-border-color: #D8CDB9;
+    --bs-modal-header-border-color: #D8CDB9;
+}
+
+    .modal-content i {
+        color: #D8CDB9;
+        font-size: 2rem;
+    }
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
 }
