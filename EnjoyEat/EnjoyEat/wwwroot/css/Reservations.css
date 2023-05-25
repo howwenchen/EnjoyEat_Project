@@ -223,3 +223,37 @@ dialog {
     transition: .4s;
     border-radius: 50px;
 }
+/*reservation success頁面*/
+
+#bookConfirmInformation {
+    background-color: #696969;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 250px;
+    width: 50%;
+    margin: auto;
+    border-radius: 50px;
+    padding:20px;
+}
+
+#bookedInfornations {
+    margin: auto;
+}
+#ETInformation {
+    margin: auto;
+}
+#bookConfirmInformation label {
+    color: white;
+    font-family: "Poppins",sans-serif;
+    font-size: 14px;
+}
+#bookConfirmInformation span {
+    color: white;
+    font-family: "Poppins",sans-serif;
+    font-size: 14px;
+}
+#ETInformation span {
+    color: white;
+    font-family: "Poppins",sans-serif;
+    font-size: 14px;
+}
