@@ -97,6 +97,7 @@
         let app = new Vue({
             el: "#d1",
             data: {
+                reserveId:0,
                 name: "",
                 email: "",
                 phone: "",
@@ -108,11 +109,15 @@
                 },
                 BookNow: function () {
                     let _this = this;
+                    let searchString = window.location.search.replace("?", "");
+                    let value = searchString.split('=')[1];
+                    _this.reserveId = parseInt(value)
                     var request = {
                         PhoneNumber: _this.phone,
                         ReservationName: _this.name,
                         EMail: _this.email,
                         Note: _this.note,
+                        ReserveId: _this.reserveId,
                     }
                     if (this.name != '' && this.email != '' && this.phone != null && this.note != '') {
                     axios.post("https://localhost:7071/api/reservation/booking/PostReservationInformation", request)
@@ -150,7 +155,7 @@
                     })
                 }
             }
-         }
+         },
      });
     </script>
 }
