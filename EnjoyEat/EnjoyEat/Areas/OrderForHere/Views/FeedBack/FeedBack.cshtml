@@ -192,12 +192,11 @@
                     </template>
                 </div>
             </div>
-
             <div class="satisfaction col-3 m-0">服務<span>*</span></div>
             <div class="col-9 m-0 star-widget">
                 <template v-for="item in serve">
                     <input type="radio" :id="item.id" :value="item.value" v-model="feedbackInfo.Serve" required>
-                    <label :for="item.id"><i class="fa-solid fa-star"></i></label>
+                    <label :for="item.id"><i class="fa-regular fa-star"></i></i></label>
                 </template>
             </div>
 
