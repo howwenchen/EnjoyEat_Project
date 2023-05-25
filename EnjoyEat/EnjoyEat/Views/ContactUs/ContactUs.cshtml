@@ -1,6 +1,8 @@
 ﻿@section Styles{
     <link href="~/css/reservations.css" rel="stylesheet" />
+
 }
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
 <main id="main">
     <!-- ======= Contact Section ======= -->
     <section class="contact">
@@ -88,8 +90,8 @@
                             <div class="col-md-6 form-group mt-3 mt-md-0">
                                 <select class="book-a-table form-control form-select" id="commentOption" v-model="serviceOption">
                                     <option value="" disabled selected>請選擇服務項目</option>
-                                    <template v-for="sq in servicelist">
-                                        <option>{{sq.txt}}</option>
+                                    <template>
+                                        <option v-for="sq in servicelist" :value="sq.value">{{sq.txt}}</option>
                                     </template>
                                 </select>
                             </div>
@@ -117,11 +119,11 @@
                                 Your message has been sent. Thank you!
                                 </div>*@
                             </div>
-                            <div class="text-center">
-                                <button id="submitbtn" @@click="submit">送出</button>
-                            </div>
                         </div>
                     </form>
+                    <div class="text-center">
+                        <button id="submitbtn" @@click="submit">送出</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -141,29 +143,58 @@
                 serviceOption: "",
                 message: "",
                 servicelist: [
-                    { value: 1, txt: '餐點品質 Food Quality' },
-                    { value: 2, txt: '服務品質 Service Courtesy' },
-                    { value: 3, txt: '宴會及餐敘 Banquet / Catering' },
-                    { value: 4, txt: '其他 Others' }],
-                },
+                    { value: '餐點品質', txt: '餐點品質' },
+                    { value: '服務品質', txt: '服務品質' },
+                    { value: '宴會及餐敘', txt: '宴會及餐敘' },
+                    { value: '其他', txt: '其他' }],
+            },
             methods: {
                 submit: function () {
                     let _this = this;
                     var request = {
-                        CustomerName: _this.name,
-                        Email: _this.email,
-                        Phone: _this.phone,
-                        QuestionKeynote: _this.subject,
-                        ServiceOption: _this.serviceOption,
-                        QuestionContent: _this.message,
+                        CustomerName: this.name,
+                        Email: this.email,
+                        Phone: this.phone,
+                        QuestionKeynote: this.subject,
+                        ServiceOption: this.serviceOption,
+                        QuestionContent: this.message,
                     }
-                    axios.post("https://localhost:7071/api/ContactUs/PostCustomerService", request)
-                        .then(
-                            response => {
-                                alert(response.data);
-                            })
-                },
-            },
+                    if (this.name != '' && this.email != '' && this.phone != null && this.subject != '' && this.serviceOption != '' && this.message != '') {
+                        axios.post("https://localhost:7071/api/ContactUs/PostCustomerService", request)
+                            .then(response => {
+                                //alert(response.data);
+                                Swal.fire({
+                                    allowOutsideClick: false,
+                                    icon: 'success',
+                                    color: '#333',
+                                    iconColor: '#D8CDB9',
+                                    background: '#FFF',
+                                    title: '發送成功',
+                                    //text: '',
+                                    html: '<div class="custom-swal-container"><div class="custom-swal-message">我們收到您的建議，將會盡快回覆您!</div></div>',
+                                    showConfirmButton: false,
+                                    timer: 2500,
+                                    position: 'center'
+                                }).then(result => {
+                                    if (result.dismiss === Swal.DismissReason.timer) {
+                                        window.location.assign("https://localhost:7071");
+                                    };
+                                })
+                            });
+                    } else {
+                        Swal.fire({
+                            allowOutsideClick: false,
+                            icon: 'error',
+                            color: '#333',
+                            iconColor: '#D8CDB9',
+                            confirmButtonColor: '#721B29',
+                            background: '#FFF',
+                            html: '<div class="custom-swal-container"><div class="custom-swal-message">有地方還沒填哦!</div></div>',
+                            // text: '有地方還沒填哦!',
+                        })
+                    }
+                }
+            }
         })
     </script>
 }
