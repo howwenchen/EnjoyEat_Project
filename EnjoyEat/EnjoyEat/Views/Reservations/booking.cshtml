@@ -1,11 +1,14 @@
 ﻿@section Styles{
     <link href="~/css/reservations.css" rel="stylesheet" />
+
 }
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.css">
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
 <main id="main">
     <!-- ======= Book A Table Section ======= -->
+
     <section id="book-a-table" class="book-a-table">
         <div id="d1">
             <div class="container" data-aos="fade-up">
@@ -48,7 +51,7 @@
                                id="email"
                                placeholder="您的Email"
                                data-rule="email"
-                               v-model="email" 
+                               v-model="email"
                                data-msg="請輸入完整的Email訊息" />
                         <div class="validate"></div>
                     </div>
@@ -103,21 +106,51 @@
                 Return: function () {
                     window.history.back();
                 },
-                BookNow: function(){
+                BookNow: function () {
                     let _this = this;
                     var request = {
-                        PhoneNumber:_this.phone,
+                        PhoneNumber: _this.phone,
                         ReservationName: _this.name,
-                        EMail:_this.email,
-                        Note:_this.note,
+                        EMail: _this.email,
+                        Note: _this.note,
                     }
+                    if (this.name != '' && this.email != '' && this.phone != null && this.note != '') {
                     axios.post("https://localhost:7071/api/reservation/booking/PostReservationInformation", request)
-                    .then(
-                        response => {
-                                alert(JSON.stringify(response.data));
-                        })
+                        .then(
+                            response => {
+                                //alert(JSON.stringify(response.data));
+                                Swal.fire({
+                                    allowOutsideClick: false,
+                                    icon: 'success',
+                                    color: '#333',
+                                    iconColor: '#D8CDB9',
+                                    background: '#FFF',
+                                    title: '訂位成功',
+                                    //text: '',
+                                    html: '<div class="custom-swal-container"><div class="custom-swal-message">將轉至訂位成功畫面!</div></div>',
+                                    showConfirmButton: false,
+                                    timer: 2500,
+                                    position: 'center'
+                                }).then(result => {
+                                    if (result.dismiss === Swal.DismissReason.timer) {
+                                        window.location.assign("https://localhost:7071");
+                                    };
+                                })
+                            });
+                } else {
+                    Swal.fire({
+                        allowOutsideClick: false,
+                        icon: 'error',
+                        color: '#333',
+                        iconColor: '#D8CDB9',
+                        confirmButtonColor: '#721B29',
+                        background: '#FFF',
+                        html: '<div class="custom-swal-container"><div class="custom-swal-message">請填寫完整訊息，才能發送哦!</div></div>',
+                        // text: '有地方還沒填哦!',
+                    })
                 }
-            },
-        });
+            }
+         }
+     });
     </script>
-    }
+}
