@@ -11,20 +11,20 @@
                     <h2>立即訂位</h2>
                     <p>訂位</p>
                 </div>
-                <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
+                <form role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
                     <div class="row">
                         <label>用餐人數</label>
                         <div class="col-lg-4 col-md-6 form-group d-flex">
                             <select name="" id="adultPicker" class="book-a-table form-control form-select" v-model="adultNumber" required>
-                                <option value="" disabled>請選擇大人人數</option>
-                                <template v-for="ad in adultPicker">
-                                    <option>{{ad.txt}}</option>
+                                <option value="" disabled selected>請選擇大人人數</option>
+                                <template >
+                                    <option :value="ad.value" v-for="ad in adultPicker">{{ad.txt}}</option>
                                 </template>
                             </select>
                             <select name="" id="kidPicker" class="book-a-table form-control form-select" v-model="kidNumber">
-                                <option value="" disabled>請選擇小孩人數</option>
-                                <template v-for="k in kidPicker">
-                                    <option>{{k.txt}}</option>
+                                <option value="" disabled selected >請選擇小孩人數</option>
+                                <template >
+                                    <option :value="k.value" v-for="k in kidPicker">{{k.txt}}</option>
                                 </template>
                             </select>
                         </div>
@@ -43,9 +43,9 @@
                     <label>用餐時段</label>
                     <div class="col-lg-2 col-md-6 form-group" id="mealTimePicker">
                         <select name="time" id="mealTimePicker" class="book-a-table form-control" v-model="mealTime">
-                            <option value="" disabled>請選擇用餐時段</option>
-                            <template v-for="mt in mealTimePicker">
-                                <option>{{mt.txt}}</option>
+                            <option value="" disabled selected >請選擇用餐時段</option>
+                            <template>
+                                <option :value="mt.value" v-for="mt in mealTimePicker">{{mt.txt}}</option>
                             </template>
                         </select>
                     </div>
@@ -131,6 +131,7 @@
 <!-- End Book A Table Section -->
 @section Scripts
     {
+    <script src="~/axios/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
     <script>
@@ -156,23 +157,23 @@
                 dis: null,
                 disColor: "",
                 adultPicker: [
-                    { value: 1, txt: '1位大人' },
-                    { value: 2, txt: '2位大人' },
-                    { value: 3, txt: '3位大人' },
-                    { value: 4, txt: '4位大人' },
-                    { value: 5, txt: '5位大人' }],
+                    { value: '1位大人', txt: '1位大人' },
+                    { value: '2位大人', txt: '2位大人' },
+                    { value: '3位大人', txt: '3位大人' },
+                    { value: '4位大人', txt: '4位大人' },
+                    { value: '5位大人', txt: '5位大人' }],
                 kidPicker: [
-                    { value: 0, txt: '0位小孩' },
-                    { value: 1, txt: '1位小孩' },
-                    { value: 2, txt: '2位小孩' },
-                    { value: 3, txt: '3位小孩' },
-                    { value: 4, txt: '4位小孩' }],
+                    { value: '0位小孩', txt: '0位小孩' },
+                    { value: '1位小孩', txt: '1位小孩' },
+                    { value: '2位小孩', txt: '2位小孩' },
+                    { value: '3位小孩', txt: '3位小孩' },
+                    { value: '4位小孩', txt: '4位小孩' }],
                 mealTimePicker: [
-                    { value: 11, txt: '11: 00' },
-                    { value: 13, txt: '13: 00' },
-                    { value: 15, txt: '15: 00' },
-                    { value: 17, txt: '17: 00' },
-                    { value: 19, txt: '19: 00' }],
+                    { value:"11:00", txt: '11:00' },
+                    { value:"13:00", txt: '13:00' },
+                    { value:"15:00", txt: '15:00' },
+                    { value:"17:00", txt: '17:00' },
+                    { value:"19:00", txt: '19:00' }],
             },
             computed: {
                 disSet: function () {
@@ -195,12 +196,24 @@
             },
             methods: {
                 next: function () {
-                    if (this.adultNumber != '' || this.kidNumber != '' || this.ReserveDate != null || this.mealTime != '') {
-                        window.location.href = `Reservations/booking`
+                    let _this=this;
+                    var request={
+                        ReservationDate: _this.ReserveDate,
+                        NumberofAdultGuest: _this.adultNumber,
+                        NumberofKidGuest: _this.kidNumber,
+                        ReservationTime: _this.mealTime,
+                    }
+                    if (this.adultNumber != '' || this.kidNumber != '' || this.ReserveDate != null || this.mealTime != '') {   
+                        axios.post("https://localhost:7071/api/reservation/PostReservation", request)
+                            .then(
+                                response => {
+                                    window.location.href = `Reservations/booking`
+                                    alert(response.data);
+                                })
+
                     }
                 }
             },
         });
     </script>
-    @* <script src="~/js/reservations.js"></script>*@
     }

@@ -6,6 +6,7 @@
 }
 <!-- =======MemberManagement navbar  Section ======= -->
 <div id="member" v-cloak>
+<<<<<<< HEAD
 <nav>
     
         
@@ -136,9 +137,58 @@
 
             </div>
 
+=======
+    <nav>
+        <div id="memberNavbar" class="d-flex">
+            <h5 id="userName">{{fullName}}您好</h5>
+            <button class="btn" @@click="showSweetAlert">
+                登出
+                <span class="first"></span>
+                <span class="second"></span>
+                <span class="third"></span>
+                <span class="fourth"></span>
+            </button>
+>>>>>>> main
         </div>
     </section><!-- End Why Us Section -->
 
+<<<<<<< HEAD
+=======
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" @@hidden="handleModalClose">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">餐點明細</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <template v-for="order in orderInfo" :key="order.orderId">
+                        <div>
+                            <ul class="list my-3">
+                                <li>產品名稱:{{order.productName}}</li>
+                                <li>數量:{{order.quantity}}份</li>
+                                <li>單價:{{order.unitPrice}}元</li>
+                                <li>小計金額:{{order.subtotalPrice}}元</li>
+                            </ul>
+                        </div>
+                        <hr />
+                    </template>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉明細</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main id="main">
+        <div class="container">
+            <!-- ======= MemberInformation Section ======= -->
+            @*原本是why-us*@
+            <section id="why-us" class="why-us">
+                <div class="container" data-aos="fade-up">
+>>>>>>> main
 
     <!--MemberLevel section-->
     <section id="top-ten" class="top-ten">
@@ -161,6 +211,7 @@
                                 <div class="col-lg-6">您的會員等級:</div>
                                 <div class="col-lg-3">{{ memberInfo.levelName }}</div>
 
+<<<<<<< HEAD
                                 <div class="col-lg-6">累積消費金額:</div>
                                 <div class="col-lg-6">$100000元</div>
                             </div>
@@ -173,6 +224,115 @@
                                 <div class="progressLabels">
                                     <span>0</span>
                                     <span>25000</span>
+=======
+                        <div class="col-lg-2">
+                            <div class="box" data-aos="zoom-in" >
+                                會員編號:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input class="box noedit" data-aos="zoom-in"  :value="memberInfo.memberId" disabled />
+                        </div>
+
+                        <div class="col-lg-2 mt-4 mt-lg-0">
+                            <div class="box" data-aos="zoom-in" >
+                                聯絡電話:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in"  v-model="memberInfo.phone" :value="memberInfo.phone" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="150">
+                                姓:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="150" v-model="memberInfo.lastName" :value="memberInfo.lastName" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="150">
+                                名:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="150" v-model="memberInfo.firstName" :value="memberInfo.firstName" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2 mt-4 mt-lg-0">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="200">
+                                通訊地址:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="200" v-model="memberInfo.address" :value="memberInfo.address" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="200">
+                                出生日期:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="200" v-model="memberInfo.birthday" :value="memberInfo.birthday" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2 mt-4 mt-lg-0">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="250">
+                                Email:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="250" v-model="memberInfo.email" :value="memberInfo.email" :disabled="dis" />
+                        </div>
+
+                        <div class="col-lg-2 mt-4 mt-lg-0">
+                            <div class="box" data-aos="zoom-in" data-aos-delay="250">
+                                性別:
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mt-4 mt-lg-0">
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="250" v-model="memberInfo.gender" :value="memberInfo.gender" :disabled="dis" />
+                        </div>
+
+                    </div>
+
+                </div>
+            </section><!-- End MemberInformation Section -->
+            <!--MemberLevel section-->
+            <section id="top-ten" class="top-ten">
+                <div class="container" data-aos="fade-up">
+
+                    <div class="section-title">
+                        <h2>會員等級</h2>
+                    </div>
+
+                    <!--會員等級設定-->
+                    <div class="memberLevelContent">
+                        <div class="row">
+
+                            <div class="circle col-lg-3">
+                                <img src="~/img/specials-4.png" />
+                            </div>
+
+                            <div id="x" class="col-lg-9 d-flex">
+                                <div class="row">
+                                    <div class="col-lg-6">您的會員等級:</div>
+                                    <div class="col-lg-3">{{upgradeLev}}</div>
+
+                                    <div class="col-lg-6">累積消費金額:</div>
+                                    <div class="col-lg-6">${{countPrice}}元</div>
+>>>>>>> main
                                 </div>
 
                             </div>
@@ -196,6 +356,7 @@
             </div>
 
 
+<<<<<<< HEAD
                 <table class="table" id="CustomersTable">
                     <thead>
                         <tr>
@@ -270,6 +431,65 @@
                     
                     </tbody>
                 </table>
+=======
+                    <table class="table" id="CustomersTable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    訂單編號
+                                </th>
+                                <th>
+                                    訂單日期
+                                </th>
+                                <th>
+                                    訂單金額
+                                </th>
+                                <th>
+                                    付款方式
+                                </th>
+                                <th>
+                                    桌號
+                                </th>
+                                <th>
+                                    餐點明細
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="order in memberInfo.orders">
+                                <td>
+                                    {{order.orderId}}
+                                </td>
+                                <td>
+                                    {{order.orderDate}}
+                                </td>
+                                <td>
+                                    {{order.totalPrice}}
+                                </td>
+                                <td v-if="order.isTakeway">
+                                    外帶
+                                </td>
+                                <td v-else>
+                                    內用
+                                </td>
+                                <td>
+                                    {{order.tableId}}
+                                </td>
+                                <td>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @@click="getDetails(order.orderId)">
+                                        展開
+                                    </button>
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </section><!-- End Events Section -->
+>>>>>>> main
 
         </div>
     </section><!-- End Events Section -->*@
@@ -282,24 +502,156 @@
 
 
 @section Scripts {
+<<<<<<< HEAD
     <script src="~/js/memebermanagement.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 
    <script>
+=======
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <script>
+>>>>>>> main
         var app = new Vue({
             el: '#member',
             data: {
                 memberInfo: [],
+<<<<<<< HEAD
                 
             },
             mounted: 
+=======
+                orderInfo: [],
+                price: 0,
+                upgradeValue: 0,
+                remainingValue: 0,
+                dis: true,
+                buttonText: "修改會員資料",
+                selectedOrderId:0,
+            },
+            computed: {
+                //進度條計算
+                countPrice: function () {
+                    for (let order of this.memberInfo.orders) {
+                        this.price += order.totalPrice;
+                    }
+                    return this.price;
+                },
+                dataContent: function () {
+                    this.remainingValue = this.upgradeValue - this.price;
+                    return this.remainingValue > 0 ? `還需消費 ${this.remainingValue} 元才能升級至下一個階級` : "已達到最高等級";
+                },
+                //等級計算
+                upgradeLev: function () {
+                    if (this.price < 10000) {
+                        this.memberInfo.levelDiscount = 0.95;
+                        return this.memberInfo.levelName = "平民";
+                    } else if (this.price >= 10000 && this.price < 20000) {
+                        this.memberInfo.levelDiscount = 0.9;
+                        return this.memberInfo.levelName = "貴族";
+                    } else {
+                        this.memberInfo.levelDiscount = 0.8;
+                        return this.memberInfo.levelName = "皇家";
+                    }
+                },
+                upgradeVal: function () {
+                    if (this.memberInfo.levelName === "平民") {
+                        return this.upgradeValue = 10000;
+                    } else {
+                        return this.upgradeValue = 20000;
+                    }
+                },
+                //全名寫法
+                fullName: function () {
+                    return this.memberInfo.lastName + this.memberInfo.firstName;
+                },
+                //編輯會員資料樣式
+                editClass: function () {
+                    if (this.dis == true) {
+                        return 'box noedit'
+                    }
+                    return 'box edit'
+                },
+            },
+            methods: {
+                handleModalClose:function() {
+                    document.body.classList.add('modal-closed');
+                },
+                showSweetAlert:function() {
+                    Swal.fire({
+                        allowOutsideClick: false,
+                        icon: 'info',
+                        color: '#FFF',
+                        iconColor: '#D8CDB9',
+                        background: '#2F4F4F',
+                        text: '請先登入喔!',
+                        position:'center',
+                        showConfirmButton: false,
+                        
+                    })
+                },
+                submitInfo: function () {
+                    var request = {
+                        FirstName: this.memberInfo.firstName,
+                        LastName: this.memberInfo.lastName,
+                        Address: this.memberInfo.address,
+                        Phone:this.memberInfo.phone,
+                        Email: this.memberInfo.email,
+                        Birthday: this.memberInfo.birthday,
+                        Gender: this.memberInfo.gender,
+                    };
+                    axios.put("https://localhost:7071/api/member/EditMemberInfo", request)
+                        .then()
+                },
+                modify:
+                    function () {
+                        if (this.buttonText == "修改會員資料") {
+                            this.buttonText = "儲存修改";
+                            setTimeout(() => {
+                                window.scrollBy(0, 0.001);
+                            }, 1000);
+                            return this.dis = false;
+                        };
+                        if (this.buttonText == "儲存修改") {
+                            this.buttonText = "修改會員資料";
+                            this.submitInfo();
+                            setTimeout(() => {
+                                window.scrollBy(0, -0.001);
+                            }, 1000);
+                            return this.dis = true;
+                        };
+                    },
+                upgrade: function () {
+                    var request = {
+                        LevelName: this.memberInfo.levelName,
+                        levelDiscount: this.memberInfo.levelDiscount
+                    };
+                    axios.put("https://localhost:7071/api/member/WriteLev", request)
+                        .then()
+                },
+                getDetails: function (selectedOrderId) {
+                    let _this = this;
+                    axios.get("https://localhost:7071/api/member/GetOrder")
+                        .then(response => {
+                            _this.orderInfo = response.data;
+                            _this.selectedOrderId = selectedOrderId
+                            _this.orderInfo = _this.orderInfo.filter(order => order.orderId == _this.selectedOrderId)
+                            return _this.orderInfo
+                        })
+                },
+            },
+            mounted:
+>>>>>>> main
                 function () {
                     let _this = this;
 
                     axios.get("https://localhost:7071/api/member/GetMember")
                         .then(response => {
+<<<<<<< HEAD
                             console.log("test",response.data)
                             _this.memberInfo = response.data
+=======
+                            _this.memberInfo = response.data;
+>>>>>>> main
                         })
                 
 
