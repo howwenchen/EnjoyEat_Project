@@ -97,19 +97,36 @@ namespace EnjoyEat.Areas.OrderForHere.API
 			return "新增會員成功";
 		}
 
-		//[HttpGet]
-		//public async Task<string> CheckMember()
-		//{
-		//	Result result = new Result() { IsSucess = false };
+		[HttpGet]
+		 public short GetMaxGuests(short tableNumber)
+		{
+			var table = _context.Tables.FirstOrDefault(t => t.TableId == tableNumber);
+			if (table != null)
+			{
+				return table.Capacity;
+			}
+			else
+			{
+				return 0;
+			}
+		}
 
-		//	var member = await _context.Members.FirstOrDefaultAsync(x => x.Phone == Phone);
-		//	if (member == null)
-		//	{
-		//		result.IsSucess = false;
-		//		return "該號碼尚未成為會員!";
-		//	}
-		//	result.IsSucess = true;
-		//	return "開始點餐";
-		//}
+
+
+
+		[HttpPost]
+		public async Task<string> CheckMember(RegisterViewModel mbr)
+		{
+			Result result = new Result() { IsSucess = false };
+
+			var member = await _context.Members.FirstOrDefaultAsync(x => x.Phone == mbr.Phone);
+			if (member == null)
+			{
+				result.IsSucess = false;
+				return "該號碼尚未成為會員!";
+			}
+			result.IsSucess = true;
+			return "開始點餐";
+		}
 	}
 }

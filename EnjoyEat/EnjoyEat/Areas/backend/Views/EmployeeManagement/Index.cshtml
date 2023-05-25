@@ -122,24 +122,24 @@
 		var vueApp = {
 			data() {
 				return {
-					EmployeeManagementViewModel: [],
+					EmployeeManagementDTO: [],
 				};
 			},
 			mounted: function () {
 				let self = this;
-				self.EmployeeManagementViewModel();
+				self.EmployeeManagementDTO();
 			},
 			methods: {
 
 				edit: function (employeeId) {
 					let self = this;
 					var EmployeeList = [];
-					for (var i = 0; i < self.EmployeeManagementViewModel.length; i++) {
-						var item = self.EmployeeManagementViewModel[i];
+					for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
+						var item = self.EmployeeManagementDTO[i];
 						if (employeeId == item.employeeId) {
 							item.Edit = true;
 							self.
-										}
+												}
 					}
 				}
 
@@ -151,3 +151,4 @@
 
 	</script>
 	}
+
