@@ -97,6 +97,7 @@
         let app = new Vue({
             el: "#d1",
             data: {
+                reserveId:0,
                 name: "",
                 email: "",
                 phone: "",
@@ -108,17 +109,21 @@
                 },
                 BookNow: function () {
                     let _this = this;
+                    let searchString = window.location.search.replace("?", "");
+                    let value = searchString.split('=')[1];
+                    let id = parseInt(value);
+                    _this.reserveId = id;
                     var request = {
                         PhoneNumber: _this.phone,
                         ReservationName: _this.name,
                         EMail: _this.email,
                         Note: _this.note,
+                        ReserveId: _this.reserveId,
                     }
-                    if (this.name != '' && this.email != '' && this.phone != null && this.note != '') {
+                    if (this.name != '' && this.email != '' && this.phone != null) {
                     axios.post("https://localhost:7071/api/reservation/booking/PostReservationInformation", request)
                         .then(
                             response => {
-                                //alert(JSON.stringify(response.data));
                                 Swal.fire({
                                     allowOutsideClick: false,
                                     icon: 'success',
@@ -133,7 +138,7 @@
                                     position: 'center'
                                 }).then(result => {
                                     if (result.dismiss === Swal.DismissReason.timer) {
-                                        window.location.assign("https://localhost:7071");
+                                        window.location.href = `/Reservations/success?id=${id}`
                                     };
                                 })
                             });
@@ -150,7 +155,7 @@
                     })
                 }
             }
-         }
+         },
      });
     </script>
 }
