@@ -61,7 +61,6 @@ namespace EnjoyEat.Areas.OrderForHere.API
 			try
 			{
 				await _context.SaveChangesAsync();
-				//return "新增會員成功";
 			}
 			catch
 			{

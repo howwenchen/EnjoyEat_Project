@@ -44,23 +44,25 @@
 		<input type="tel" id="phone" name="phone" v-model="phone" required>
 		<br>
 		<div class="button-container">
-			<button class="confirm-btn" v-on:click="Register" @*data-bs-toggle="modal" data-bs-target="#showModal"*@>確認</button>
+			<button class="confirm-btn" v-on:click="Register" data-bs-toggle="modal" data-bs-target="#showModal">確認</button>
 			<button class="close-btn" id="close-btn">取消</button>
 		</div>
 	</form>
 
 	@*modal*@
 	<!-- Modal -->
-	@*	<div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-	<div class="modal-content">
-	<div class="modal-header">
-	<h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black; margin-left:90px;">{{show}}</h1>
-	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	<div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black; margin-left:90px;">{{show}}</h1>
+					@*<h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black; margin-left:90px;" v-if="showSuccess" >新增成功</h1>
+					<h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black; margin-left:90px;" v-if="showFail">新增失敗</h1>*@
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+			</div>
+		</div>
 	</div>
-	</div>
-	</div>
-	</div>*@
 
 </div>
 
@@ -85,7 +87,7 @@
 					let self = this;
 					if (self.maxGuests === 0) {
 						return ' ';
-					} else {
+					} else {                      //預設人數可以多加一位
 						return '座位最多人數: ' + (self.maxGuests + 1);
 					}
 				}
@@ -128,7 +130,7 @@
 
 	<script>
 		var app2 = new Vue({
-			el:'#dialog',
+			el: '#dialog',
 			data: {
 				memberPhone: '',
 				tableNumber: '',
@@ -138,8 +140,10 @@
 				firstname: '',
 				account: '',
 				phone: '',
-				//show: '',
-				//showModal: false,
+				////show:'',
+				//showSuccess: false,
+				//showFail: false,
+				showModal: false,
 			},
 			methods: {
 				Register: async function () {
@@ -151,40 +155,33 @@
 						account: self.account,
 						phone: self.phone
 					};
-					//fetch("/api/OrderLoginApi/QuickRegister",{
-					//		method: 'POST',
-					//		body: JSON.stringify(request),
-					//		headers: new Headers({
-					//			'Content-type': 'application/json'
-					//		})
-					//	})
-					//	.then(response => console.log("success", response));
 
 					await axios.post('/api/OrderLoginApi/QuickRegister', request)
 						.then(response => {
 							// modal畫面
 							if (response.data == '新增會員成功') {
 								console.log('success', response);
-								//self.show = '新增成功';
-								//console.log(self.show);
-								//self.showModal = true; // 註冊成功
+								//self.showSuccess = true;
+								self.show = '新增成功';
+								console.log(self.show);
+								self.showModal = true; // 註冊成功
 								alert('新增成功');
-
 							} else {
 								console.log('failed', response);
-								//self.show = '新增失敗';
-								//console.log(self.show);
-								//self.showModal = true; // 註冊失敗
+								//self.showFail = true;
+								self.show = '新增失敗';
+								console.log(self.show);
+								self.showModal = true; // 註冊失敗
 								alert('新增失敗');
 							}
 						})
 						.catch(error => {
 							console.log('error', response);
 							console.error('error', error);
-							//self.show = '新增無效';
-							//console.log(self.show);
-							//self.showModal = true; // 註冊失敗
-							alert('新增失敗');
+							self.show = '新增無效';
+							console.log(self.show);
+							self.showModal = true; // 註冊失敗
+							alert('新增無效');
 						});
 				}
 			}
