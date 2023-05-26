@@ -114,7 +114,7 @@ namespace EnjoyEat.Areas.OrderForHere.API
 
 
 		[HttpPost]
-		public async Task<string> CheckMember(RegisterViewModel mbr)
+		public async Task<IActionResult> CheckMember([FromBody] RegisterViewModel mbr)
 		{
 			Result result = new Result() { IsSucess = false };
 
@@ -122,10 +122,10 @@ namespace EnjoyEat.Areas.OrderForHere.API
 			if (member == null)
 			{
 				result.IsSucess = false;
-				return "該號碼尚未成為會員!";
+				return Ok("該號碼尚未成為會員!");
 			}
 			result.IsSucess = true;
-			return "開始點餐";
+			return Ok("開始點餐");
 		}
 	}
 }

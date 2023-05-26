@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using EnjoyEat.Models;
 using EnjoyEat.Models.ViewModel;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EnjoyEat.Controllers.API
 {
@@ -19,10 +20,11 @@ namespace EnjoyEat.Controllers.API
 		// POST: api/ReservationInformationsAPI
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<string> PostReservationInformation(ReservationInformationViewModel reservationinformationViewModel)
+		public async Task<IActionResult> PostReservationInformation(ReservationInformationViewModel reservationinformationViewModel)
 		{
 			ReservationInformation reservationInformation = new ReservationInformation
 			{
+				ReserveId = reservationinformationViewModel.ReserveId,
 				PhoneNumber = reservationinformationViewModel.PhoneNumber,
 				ReservationName = reservationinformationViewModel.ReservationName,
 				Email = reservationinformationViewModel.Email,
@@ -30,7 +32,8 @@ namespace EnjoyEat.Controllers.API
 			};
 			db.ReservationInformations.Add(reservationInformation);
 			await db.SaveChangesAsync();
-			return "訂位成功!";
+			var x = reservationInformation.ReserveId;
+			return Ok(x);
 		}
 
 		private bool ReservationInformationExists(string id)

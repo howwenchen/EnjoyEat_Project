@@ -465,7 +465,7 @@
                                     {{order.orderDate}}
                                 </td>
                                 <td>
-                                    {{order.totalPrice}}
+                                    {{order.finalPrice}}
                                 </td>
                                 <td v-if="order.isTakeway">
                                     外帶
@@ -532,7 +532,7 @@
                 //進度條計算
                 countPrice: function () {
                     for (let order of this.memberInfo.orders) {
-                        this.price += order.totalPrice;
+                        this.price += order.finalPrice;
                     }
                     return this.price;
                 },
@@ -639,7 +639,11 @@
                         })
                 },
             },
+<<<<<<< HEAD
             mounted:
+>>>>>>> main
+=======
+            mounted:{
 >>>>>>> main
                 function () {
                     let _this = this;
@@ -653,12 +657,18 @@
                             _this.memberInfo = response.data;
 >>>>>>> main
                         })
+<<<<<<< HEAD
                 
 
             }
         })
 
 
+=======
+                }
+            }
+        });
+>>>>>>> main
 
     </script>
 }

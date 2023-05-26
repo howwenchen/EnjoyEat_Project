@@ -46,7 +46,7 @@ namespace EnjoyEat.Controllers.API
 					OrderDate = x.OrderDate,
 					OrderId = x.OrderId,
 					TableId = x.TableId,
-					TotalPrice = x.TotalPrice,
+					FinalPrice = x.FinalPrice,
 					IsTakeway = x.IsTakeway,
 				}).ToList(),
 			};
