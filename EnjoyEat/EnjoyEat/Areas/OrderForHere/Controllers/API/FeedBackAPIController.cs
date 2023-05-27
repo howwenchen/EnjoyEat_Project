@@ -1,10 +1,12 @@
 ﻿using EnjoyEat.Models;
+using EnjoyEat.Models.ViewModel;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnjoyEat.Areas.OrderForHere.Controllers.API
 {
-    [Route("api/order/[action]")]
+    [Route("api/OrderForHere/[action]")]
     [ApiController]
     public class FeedBackAPIController : ControllerBase
     {
@@ -14,7 +16,27 @@ namespace EnjoyEat.Areas.OrderForHere.Controllers.API
             this.db = db;
         }
 
-        //[HttpPost]
-        //public IActionResult FeedBack
+        [HttpPost]
+        public async Task<IActionResult> PostFeedBack(FeedBackViewModel feedbackViewModel)
+        {
+            FeedBack feedback = new FeedBack()
+            {
+                OrderId = feedbackViewModel.OrderId,
+                FeedBackName = feedbackViewModel.FeedBackName,
+                Email = feedbackViewModel.Email,
+                Age = feedbackViewModel.Age,
+                Frequency = feedbackViewModel.Frequency,
+                Enviroment = feedbackViewModel.Enviroment,
+                Serve = feedbackViewModel.Serve,
+                Dish = feedbackViewModel.Dish,
+                Price = feedbackViewModel.Price,
+                Overall = feedbackViewModel.Overall,
+                Suggestion = feedbackViewModel.Suggestion,
+            };
+            db.Add(feedback);
+            db.SaveChanges();
+            return Ok(feedback);
+        }
     }
 }
+
