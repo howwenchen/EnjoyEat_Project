@@ -496,6 +496,12 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.MealImg).IsUnicode(false);
 
                 entity.Property(e => e.ProductName).HasMaxLength(30);
+
+                entity.HasOne(d => d.SubCategory)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.SubCategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Products_SubCategories");
             });
 
             modelBuilder.Entity<Reservation>(entity =>
