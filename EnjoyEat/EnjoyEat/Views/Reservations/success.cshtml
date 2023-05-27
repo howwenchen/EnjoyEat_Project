@@ -10,13 +10,13 @@
         </div>
     </div>
 </div>
-<form action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
+<form  role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
     <main id="main">
         <div id="bookConfirmInformation">
             <div class="container" id="bookedConfirm">
                 <div>
                     <div class="flex-shrink-0" style="text-align:center">
-                        <h6>X小姐/先生您好，以下為您的訂位資訊</h6>
+                        <h6>{{}}小姐/先生您好，以下為您的訂位資訊</h6>
                     </div>
                 </div>
             </div>
@@ -61,3 +61,31 @@
     </main>
 </form>
 <!-- End #main -->
+
+@section Scripts{
+    <script>
+        let app = new Vue({
+            el: '#bookConfirmInformation',
+            data: {
+                reserveInfo:[],
+                reserveId:0,
+            },
+            methods: {
+
+            },
+            mounted:
+                function () {
+                    let _this = this;
+                    let searchString = window.location.search.replace("?", "");
+                    let value = searchString.split('=')[1];
+                    _this.reserveId = parseInt(value);
+                    axios.get("https://localhost:7071/api/reservation/GetReservationInformation").then(response => {
+                        _this.reserveInfo = response.data;
+                        _this.reserveId = value;
+                        _this.reserveInfo = _this.reserveInfo.filter(reserve => reserve.reserveId == _this.reserveId)
+                        return _this.reserveInfo
+                    });
+                },
+        })
+    </script>
+}
