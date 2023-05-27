@@ -8,4 +8,11 @@
 		public string Account { get; set; }
 		public string Phone { get; set; }
 	}
+
+	public class QuickResult
+	{
+		public bool IsSucess { get; set; }
+		public string ReturnCode { get; set; }
+		public string ReturnMessage { get; set; }
+	}
 }

@@ -1,195 +1,193 @@
 ﻿@using EnjoyEat.Areas.OrderForHere
 @{
-    ViewData["Title"] = "Ordering&ShoppingCart";
-    Layout = "_Layout";
+	ViewData["Title"] = "Ordering&ShoppingCart";
+	Layout = "_Layout";
 }
 
 @section Styles{
-    <style>
-        .cart-button {
-            position: fixed;
-            bottom: 50px;
-            right: 50px;
-            z-index: 99; 
-        }
+	<style>
+		.cart-button {
+			position: fixed;
+			bottom: 50px;
+			right: 50px;
+			z-index: 99;
+		}
 
-        .cart-button {
-      
-      
-        }
+		.cart-button {
+		}
 
-        .shop__option__search{
-            width: 100%;
-            margin-bottom: 30px;
-        }
-    </style>
+		.shop__option__search {
+			width: 100%;
+			margin-bottom: 30px;
+		}
+	</style>
 
 }
 <div id="app">
-    <section class="shop spad">
-        <div class="container">
-            <div class="shop__option">
-                <div class="row">
-                    <div class="col-lg-7 col-md-7">
-                        <div class="shop__option__search">
-                            <form action="#">
-                                <select v-model="selectedSubCategory">
-                                    <option disabled value="">商品種類</option>
-                                    <option v-for="item in subCategories" :value="item.subCategoryId">{{ item.subCategoriesName }}</option>
-                                </select>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+	<section class="shop spad">
+		<div class="container">
+			<div class="shop__option">
+				<div class="row">
+					<div class="col-lg-7 col-md-7">
+						<div class="shop__option__search">
+							<form action="#">
+								<select v-model="selectedSubCategory">
+									<option disabled value="">商品種類</option>
+									<option v-for="item in subCategories" :value="item.subCategoryId">{{ item.subCategoriesName }}</option>
+								</select>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 
-            <!-- Product list -->
-            <div class="row align-items-center">
-                <div class="col-lg-3 col-md-6 col-sm-6 mb-3" v-for="product in filteredProducts" :key="product.productId">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg">
-                            <img :src="product.mealImg" style="width:200px; border-radius:15px" />
-                            <div class="product__label">
-                                <span class="badge bg-secondary">{{ getSubCategoryName(product.subCategoryId) }}</span>
-                            </div>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">{{ product.productName }}</a></h6>
-                            <div class="row">
-                                <div class="product__item__price col">${{ product.unitPrice }}</div>
-                                <div class="cart_add col  justify-content-end align-items-center">
-                                    <button class="btn btn-light btn-sm" @@click.prevent="removeFromCart(product)"><i class="fa fa-minus"></i></button>
-                                    <span>{{ getQuantity(product) }}</span>
-                                    <button class="btn btn-light btn-sm" @@click.prevent="addToCart(product)"><i class="fa fa-plus"></i></button>
-                                    <!-- <a href="#" @@click.prevent="addToCart(product)">Add to cart</a> -->
-                                </div>
-                            </div>
-                        </div>
+			<!-- Product list -->
+			<div class="row align-items-center">
+				<div class="col-lg-3 col-md-6 col-sm-6 mb-3" v-for="product in filteredProducts" :key="product.productId">
+					<div class="product__item">
+						<div class="product__item__pic set-bg">
+							<img :src="product.mealImg" style="width:200px; border-radius:15px" />
+							<div class="product__label">
+								<span class="badge bg-secondary">{{ getSubCategoryName(product.subCategoryId) }}</span>
+							</div>
+						</div>
+						<div class="product__item__text">
+							<h6><a href="#">{{ product.productName }}</a></h6>
+							<div class="row">
+								<div class="product__item__price col">${{ product.unitPrice }}</div>
+								<div class="cart_add col  justify-content-end align-items-center">
+									<button class="btn btn-light btn-sm" @@click.prevent="removeFromCart(product)"><i class="fa fa-minus"></i></button>
+									<span>{{ getQuantity(product) }}</span>
+									<button class="btn btn-light btn-sm" @@click.prevent="addToCart(product)"><i class="fa fa-plus"></i></button>
+									<!-- <a href="#" @@click.prevent="addToCart(product)">Add to cart</a> -->
+								</div>
+							</div>
+						</div>
 
-                    </div>
-                </div>
-            </div>
+					</div>
+				</div>
+			</div>
 
-            <!-- Add a button to trigger the modal -->
-            <button type="button" class="btn btn-dark cart-button border border-light position-realative" data-toggle="modal" data-target="#cartModal">
-                <i class="fas fa-shopping-cart fa-lg" style="color:#cda45e"></i>
-                <span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle p-2">${{ total }}</span>
-                <span class="visually-hidden">unread messages</span>
-            </button>
+			<!-- Add a button to trigger the modal -->
+			<button type="button" class="btn btn-dark cart-button border border-light position-realative" data-toggle="modal" data-target="#cartModal">
+				<i class="fas fa-shopping-cart fa-lg" style="color:#cda45e"></i>
+				<span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle p-2">${{ total }}</span>
+				<span class="visually-hidden">unread messages</span>
+			</button>
 
-            <!-- Cart Modal -->
-            <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title text-body" id="cartModalLabel">您的購物車內容</h5>
-                            <button type="button" class="close text-body" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body text-body">
-                            <!-- Cart -->
-                            <div v-for="item in cart" :key="item.productId">
-                                <button class="d-inline-block" @@click="removeFromCart(item)"><i class="fa fa-minus"></i></button>
-                                <p class="d-inline-block">{{ item.productName }} - {{ item.unitPrice }} x {{ item.quantity }}</p>
-                            </div>
+			<!-- Cart Modal -->
+			<div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title text-body" id="cartModalLabel">您的購物車內容</h5>
+							<button type="button" class="close text-body" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body text-body">
+							<!-- Cart -->
+							<div v-for="item in cart" :key="item.productId">
+								<button class="d-inline-block" @@click="removeFromCart(item)"><i class="fa fa-minus"></i></button>
+								<p class="d-inline-block">{{ item.productName }} - {{ item.unitPrice }} x {{ item.quantity }}</p>
+							</div>
 
-                            <!-- Total -->
-                            <p>總金額: {{ total }}</p>
+							<!-- Total -->
+							<p>總金額: {{ total }}</p>
 
-                            <!-- Checkout -->
-                            <button class="btn btn-dark" >結帳</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-    </section>
+							<!-- Checkout -->
+							<button class="btn btn-dark">結帳</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 </div>
 
 
-</div>
+
 @section Scripts{
 
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="~/orderforhere/startorderjs/bootstrap.min.js"></script>
-    <script src="~/orderforhere/startorderjs/jquery.barfiller.js"></script>
-    <script src="~/orderforhere/startorderjs/jquery.magnific-popup.min.js"></script>
-    <script src="~/orderforhere/startorderjs/jquery.nicescroll.min.js"></script>
-    <script src="~/orderforhere/startorderjs/jquery.slicknav.js"></script>
-    <script src="~/orderforhere/startorderjs/jquery.nice-select.min.js"></script>
-    <script src="~/orderforhere/startorderjs/jquery-3.3.1.min.js"></script>
-    <script src="~/orderforhere/startorderjs/main.js"></script>
-    <script>
-        new Vue({
-            el: '#app',
-            data: {
-                products: [],
-                cart: [],
-                total: 0,
-                selectedSubCategory: '',
-                subCategories: []
-            },
-            methods: {
-                addToCart(product) {
-                    let cartItem = this.cart.find(item => item.productId === product.productId);
-                    if (cartItem) {
-                        cartItem.quantity++;
-                    } else {
-                        this.cart.push({ ...product, quantity: 1 });
-                    }
-                    this.total += product.unitPrice;
-                },
-                removeFromCart(product) {
-                    let cartItem = this.cart.find(item => item.productId === product.productId);
-                    if (cartItem) {
-                        cartItem.quantity--;
-                        if (cartItem.quantity === 0) {
-                            this.cart = this.cart.filter(item => item.productId !== product.productId);
-                        }
-                        this.total -= product.unitPrice;
-                    }
-                },
-                getQuantity(product) {
-                    let cartItem = this.cart.find(item => item.productId === product.productId);
-                    return cartItem ? cartItem.quantity : 0;
-                },
-                getSubCategoryName(subCategoryId) {
-                    const subCategory = this.subCategories.find(i => i.subCategoryId === subCategoryId);
-                    return subCategory ? subCategory.subCategoriesName : '';
-                }
-            },
-            computed: {
-                filteredProducts() {
-                    if (this.selectedSubCategory) {
-                        return this.products.filter(product => product.subCategoryId === this.selectedSubCategory);
-                    }
-                    return this.products;
-                }
-            },
-            watch: {
-                cart: {
-                    handler: function (after, before) {
-                        fetch('/api/cart', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(after)
-                        });
-                    },
-                    deep: true
-                }
-            },
-            created: function () {
-                axios.get('/OrderForHere/StartOrder/SubCategories')
-                    .then(response => this.subCategories = response.data);
-                axios.get('/OrderForHere/StartOrder/Products')
-                    .then(response => this.products = response.data);
-            },
-        });
-    </script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="~/orderforhere/startorderjs/bootstrap.min.js"></script>
+	<script src="~/orderforhere/startorderjs/jquery.barfiller.js"></script>
+	<script src="~/orderforhere/startorderjs/jquery.magnific-popup.min.js"></script>
+	<script src="~/orderforhere/startorderjs/jquery.nicescroll.min.js"></script>
+	<script src="~/orderforhere/startorderjs/jquery.slicknav.js"></script>
+	<script src="~/orderforhere/startorderjs/jquery.nice-select.min.js"></script>
+	<script src="~/orderforhere/startorderjs/jquery-3.3.1.min.js"></script>
+	<script src="~/orderforhere/startorderjs/main.js"></script>
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				products: [],
+				cart: [],
+				total: 0,
+				selectedSubCategory: '',
+				subCategories: []
+			},
+			methods: {
+				addToCart(product) {
+					let cartItem = this.cart.find(item => item.productId === product.productId);
+					if (cartItem) {
+						cartItem.quantity++;
+					} else {
+						this.cart.push({ ...product, quantity: 1 });
+					}
+					this.total += product.unitPrice;
+				},
+				removeFromCart(product) {
+					let cartItem = this.cart.find(item => item.productId === product.productId);
+					if (cartItem) {
+						cartItem.quantity--;
+						if (cartItem.quantity === 0) {
+							this.cart = this.cart.filter(item => item.productId !== product.productId);
+						}
+						this.total -= product.unitPrice;
+					}
+				},
+				getQuantity(product) {
+					let cartItem = this.cart.find(item => item.productId === product.productId);
+					return cartItem ? cartItem.quantity : 0;
+				},
+				getSubCategoryName(subCategoryId) {
+					const subCategory = this.subCategories.find(i => i.subCategoryId === subCategoryId);
+					return subCategory ? subCategory.subCategoriesName : '';
+				}
+			},
+			computed: {
+				filteredProducts() {
+					if (this.selectedSubCategory) {
+						return this.products.filter(product => product.subCategoryId === this.selectedSubCategory);
+					}
+					return this.products;
+				}
+			},
+			watch: {
+				cart: {
+					handler: function (after, before) {
+						fetch('/api/cart', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(after)
+						});
+					},
+					deep: true
+				}
+			},
+			created: function () {
+				axios.get('/OrderForHere/StartOrder/SubCategories')
+					.then(response => this.subCategories = response.data);
+				axios.get('/OrderForHere/StartOrder/Products')
+					.then(response => this.products = response.data);
+			},
+		});
+	</script>
 
 
 }

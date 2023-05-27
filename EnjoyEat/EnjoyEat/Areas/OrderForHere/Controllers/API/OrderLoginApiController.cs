@@ -24,7 +24,7 @@ namespace EnjoyEat.Areas.OrderForHere.API
 		[HttpPost]
 		public async Task<string> QuickRegister(QuickRegisterViewModel condition)
 		{
-			Result result = new Result() { IsSucess = false };
+			QuickResult result = new QuickResult() { IsSucess = false };
 			//判斷輸入的電話號碼格式是否正確
 			string pattern = @"09\d{2}(\d{6}|-\d{3}-\d{3})";
 			Regex regex = new Regex(pattern);
@@ -118,7 +118,7 @@ namespace EnjoyEat.Areas.OrderForHere.API
 		[HttpPost]
 		public async Task<IActionResult> CheckMember([FromBody] QuickRegisterViewModel mbr)
 		{
-			Result result = new Result() { IsSucess = false };
+			QuickResult result = new QuickResult() { IsSucess = false };
 
 			var member = await _context.Members.FirstOrDefaultAsync(x => x.Phone == mbr.Phone);
 			if (member == null)
