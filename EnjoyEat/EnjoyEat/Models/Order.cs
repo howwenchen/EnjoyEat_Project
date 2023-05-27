@@ -25,6 +25,7 @@ namespace EnjoyEat.Models
 
         public virtual Member? Member { get; set; }
         public virtual Table? Table { get; set; }
+        public virtual FeedBack? FeedBack { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
         public virtual ICollection<Payment> Payments { get; set; }
     }
