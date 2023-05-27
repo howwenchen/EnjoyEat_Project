@@ -36,9 +36,9 @@ namespace EnjoyEat.Controllers.API
             return Ok(reservation);
         }
 
-        private bool ReservationExists(string id)
-        {
-            return (db.Reservations?.Any(e => e.PhoneNumber == id)).GetValueOrDefault();
-        }
+        //private bool ReservationExists(string id)
+        //{
+        //    return (db.Reservations?.Any(e => e.PhoneNumber == id)).GetValueOrDefault();
+        //}
     }
 }
