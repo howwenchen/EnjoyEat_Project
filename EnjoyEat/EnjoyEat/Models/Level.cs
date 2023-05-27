@@ -12,6 +12,7 @@ namespace EnjoyEat.Models
 
         public string LevelName { get; set; } = null!;
         public double DiscountRate { get; set; }
+        public int LevelId { get; set; }
 
         public virtual ICollection<Member> Members { get; set; }
     }

@@ -16,7 +16,7 @@ namespace EnjoyEat.Models
         public DateTime OrderDate { get; set; }
         public bool IsTakeway { get; set; }
         public short? TableId { get; set; }
-        public int CustomerCount { get; set; }
+        public int? CustomerCount { get; set; }
         public int TotalPrice { get; set; }
         public bool IsSuccess { get; set; }
         public double? CampaignDiscount { get; set; }
