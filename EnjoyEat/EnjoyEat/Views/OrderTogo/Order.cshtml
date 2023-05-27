@@ -24,118 +24,117 @@
         .product__item {
             text-align: center;
         }
+
+        #orderItem {
+            position: sticky;
+            /*top: 116px;*/
+            z-index: 997;
+            transition: top 0.5s ease;
+            border: 2px solid #cda45e;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #111111
+        }
+
+        .orderRow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px;
+        }
+
+        .Items > #menu-flters li {
+            margin-bottom: 0;
+        }
     </style>
 }
 
-<div class="section-title">
-    <h2>Order</h2>
-    <p>Check Our Tasty Menu</p>
-</div>
-
-<section id="orderItem" class="menu section-bg">
-    <div class="row" data-aos="fade-up" data-aos-delay="100">
-        <div class="col-lg-12 d-flex justify-content-center">
-            <ul id="menu-flters">
-                <li data-filter="*" class="filter-active">全部</li>
-                <li data-filter=".filter-appetizer">前菜</li>
-                <li data-filter=".filter-soups">湯品</li>
-                <li data-filter=".filter-mainMeal">主餐</li>
-                <li data-filter=".filter-snacks">點心</li>
-                <li data-filter=".filter-dessert">甜點</li>
-                <li data-filter=".filter-beverage">飲料</li>
-            </ul>
-        </div>
+<div class="#app">
+    <div class="section-title">
+        <h2>Order</h2>
+        <p>Check Our Tasty Menu</p>
     </div>
-</section>
 
-<section id="orderArea" class="shop spad menu section-bg" data-aos="fade-up">
-    <div class="row" data-aos="fade-up" data-aos-delay="100">
-        @foreach (var pro in Model)
-        {
-            <div class="col-lg-3 col-md-6 col-sm-6 menu-item @pro.CategoryName">
+    <section id="orderItem" class="menu">
+        <div class="orderRow" data-aos="fade-up" data-aos-delay="100">
+            <div class="Items">
+                <ul id="menu-flters">
+                    <li data-filter="*" class="filter-active">全部</li>
+                    <li data-filter=".filter-appetizer">前菜</li>
+                    <li data-filter=".filter-soups">湯品</li>
+                    <li data-filter=".filter-mainMeal">主餐</li>
+                    <li data-filter=".filter-snacks">點心</li>
+                    <li data-filter=".filter-dessert">甜點</li>
+                    <li data-filter=".filter-beverage">飲料</li>
+                </ul>
+            </div>
+            <div class="cartIcon">
+                <i class="fa fa-cart-shopping"></i>
+            </div>
+        </div>
+    </section>
+
+    <section id="orderArea" class="shop spad menu section-bg" data-aos="fade-up">
+        <div class="row" data-aos="fade-up" data-aos-delay="100">
+            <div v-for="t in temp" :class="{'col-lg-3':true,'col-md-6':true,'col-sm-6':true,'menu-item':true, [t.categoryName]:true}">
                 <div class="product__item">
                     <div class="product__item__pic set-bg">
-                        <img src="@Url.Content(pro.MealImg)" style="width:200px; border-radius:15px" />
+                        <img :src="baseUrl + t.mealImg" style="width:200px; border-radius:15px" />
                         <div class="product__label">
-                            <span>@pro.ProductName</span>
+                            <span>{{t.productName}}</span>
                         </div>
                     </div>
                     <div class="product__item__text">
-                        <h6><a href="#">@pro.Description</a></h6>
-                        <div class="product__item__price">$@pro.UnitPrice</div>
+                        <h6><a href="#">{{t.description}}</a></h6>
+                        <div class="product__item__price">${{t.unitPrice}}</div>
                         <div class="cart_add">
                             <a href="#">Add to cart</a>
                         </div>
                     </div>
                 </div>
             </div>
-        }
         </div>
-</section>
+    </section>
+</div>
 @section Scripts
     {
     <script src="~/orderforhere/startorderjs/jquery.barfiller.js"></script>
-        <script src="~/orderforhere/startorderjs/jquery.magnific-popup.min.js"></script>
-        <script src="~/orderforhere/startorderjs/jquery.nicescroll.min.js"></script>
-        <script src="~/orderforhere/startorderjs/jquery.slicknav.js"></script>
-        <script src="~/orderforhere/startorderjs/jquery.nice-select.min.js"></script>
-        <script src="~/orderforhere/startorderjs/jquery-3.3.1.min.js"></script>
+    <script src="~/orderforhere/startorderjs/jquery.magnific-popup.min.js"></script>
+    <script src="~/orderforhere/startorderjs/jquery.nicescroll.min.js"></script>
+    <script src="~/orderforhere/startorderjs/jquery.slicknav.js"></script>
+    <script src="~/orderforhere/startorderjs/jquery.nice-select.min.js"></script>
+    <script src="~/orderforhere/startorderjs/jquery-3.3.1.min.js"></script>
     <script>
-        (function () {
-            /**
-             * Easy selector helper function
-             */
-            const select = (el, all = false) => {
-                el = el.trim()
-                if (all) {
-                    return [...document.querySelectorAll(el)]
-                } else {
-                    return document.querySelector(el)
-                }
+        window.addEventListener('scroll', () => {
+            const element = document.querySelector('#orderItem');
+            const scrollPosition = window.scrollY;
+            if (window.innerWidth > 990) {
+                element.style.top = scrollPosition < 530 ? '116px' : '0px';
             }
-
-            /**
-             * Easy event listener function
-             */
-            const on = (type, el, listener, all = false) => {
-                let selectEl = select(el, all)
-                if (selectEl) {
-                    if (all) {
-                        selectEl.forEach(e => e.addEventListener(type, listener))
-                    } else {
-                        selectEl.addEventListener(type, listener)
-                    }
-                }
+            if (window.innerWidth <= 990 && window.innerWidth > 274) {
+                element.style.top = scrollPosition < 450 ? '60px' : '0px';
             }
-            /**
-             * Menu isotope and filter
-             */
-            window.addEventListener('load', () => {
-                let orderContainer = select('');
-                if (orderContainer) {
-                    let menuIsotope = new Isotope(orderContainer, {
-                        itemSelector: '.menu-item',
-                        layoutMode: 'fitRows'
-                    });
-
-                    let menuFilters = select('#menu-flters li', true);
-
-                    on('click', '#menu-flters li', function (e) {
-                        e.preventDefault();
-                        menuFilters.forEach(function (el) {
-                            el.classList.remove('filter-active');
+            if (window.innerWidth <= 274) {
+                element.style.top = scrollPosition < 450 ? '88px' : '0px';
+            }
+        });
+        var app = new Vue({
+            el: '#app',
+            data: {
+                baseUrl: '',
+                temp: [],
+            },
+            mounted: 
+                function () {
+                    let _this = this; 
+                    _this.baseUrl = window.location.origin + '/';
+                    axios.get("https://localhost:7071/api/menu/GetMenu")
+                        .then(response => {
+                            window.scrollBy(0, 1);
+                            _this.temp = response.data;
+                            console.log(JSON.stringify(response.data));
                         });
-                        this.classList.add('filter-active');
-
-                        menuIsotope.arrange({
-                            filter: this.getAttribute('data-filter')
-                        });
-                        menuIsotope.on('arrangeComplete', function () {
-                            AOS.refresh()
-                        });
-                    }, true);
                 }
-            });
-        })()
+        });
     </script>
     }
