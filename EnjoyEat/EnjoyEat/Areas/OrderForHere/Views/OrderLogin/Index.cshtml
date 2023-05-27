@@ -1,56 +1,191 @@
 ﻿@section Styles
-{
-    <link href="~/orderforhere/orderforherelogincss/orderforhere.css" rel="stylesheet" />
+	{
+	<link href="~/orderforhere/orderforherelogincss/orderforhere.css" rel="stylesheet" />
 }
 
+
 <!-- Start  -->
-<div class="form-container">
-    <h2>內用點餐</h2>
-    <form>
-        <label for="table-number">內用桌號:</label>
-        <input type="text" id="table-number" name="table-number" required>
-        <br><br>
-        <label for="party-size">用餐人數:</label>
-        <input type="text" id="party-size" name="party-size" required>
-        <br><br>
-        <label for="member-phone">會員電話:</label>
-        <input type="tel" id="member-phone" name="member-phone" placeholder="可直接點餐或快速註冊">
-        <br><br>
-        <div class="register-button">
-            <button id="register-btn">快速註冊</button>
-        </div>
-        <div class="register-info">
-            <p>尚未成為會員？</p>
-        </div>
-        <div class="start-order-button">
-            <button><a class="button-link" style="color:white" asp-area="OrderForHere" asp-controller="StartOrder" asp-action="Index">開始點餐</a></button>
-        </div>
-    </form>
+<div class="form-container" id="Login">
+	<h2>內用點餐</h2>
+	<form>
+		<label for="table-number">內用桌號:</label>
+		<input type="text" id="table-number" name="table-number" required v-model="tableNumber" @@input="checkMaxGuests">
+		<br><br>
+		<label for="party-size">用餐人數:</label>
+		<input type="text" id="party-size" name="party-size" required v-model="partySize" :placeholder="maxGuestsMessage">
+		<br><br>
+		<label for="member-phone">會員電話:</label>
+		<input type="tel" id="member-phone" name="member-phone" placeholder="可直接點餐或快速註冊" v-model="memberPhone">
+		<br><br>
+		<div class="register-button">
+			<button id="register-btn">快速註冊</button>
+		</div>
+		<div class="register-info">
+			<p>尚未成為會員？</p>
+		</div>
+		<div class="start-order-button">
+			<button v-on:click="CheckMember" class="btn btn-outline-warning btn-lg">開始點餐</button>
+		</div>
+	</form>
 </div>
 <!-- End -->
 <!-- 快速註冊 -->
 <div class="dialog-overlay" id="dialog-overlay"></div>
 <div class="dialog-container" id="dialog">
-    <h3>快速註冊</h3>
-    <form>
-        <label for="name">姓名:</label>
-        <input type="text" id="name" name="name" required>
+	<h3>快速註冊</h3>
+	<form>
+		<label for="name">姓:</label>
+		<input type="text" id="lastname" name="lastname" v-model="lastname" required>
+		<label for="name">名:</label>
+		<input type="text" id="firstname" name="firstname" v-model="firstname" required>
+		<label for="name">帳號:</label>
+		<input type="text" id="account" name="account" v-model="account" required>
+		<label for="phone">手機號碼(預設密碼):</label>
+		<input type="tel" id="phone" name="phone" v-model="phone" required>
+		<br>
+		<div class="button-container">
+			<button class="confirm-btn" v-on:click="Register" data-bs-toggle="modal" data-bs-target="#showModal">確認</button>
+			<button class="close-btn" id="close-btn">取消</button>
+		</div>
+	</form>
 
-        <label for="phone">電話:</label>
-        <input type="tel" id="phone" name="phone" required>
-        <br>
-        <div class="button-container">
-            <button class="confirm-btn">確認</button>
-            <button class="close-btn" id="close-btn">取消</button>
-        </div>
-    </form>
-    <div id="success-message" class="success-message">
-        註冊成功！
-    </div>
+	@*modal*@
+	<!-- Modal -->
+	<div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black; margin-left:90px;">{{show}}</h1>
+					@*<h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black; margin-left:90px;" v-if="showSuccess" >新增成功</h1>
+					<h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black; margin-left:90px;" v-if="showFail">新增失敗</h1>*@
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </div>
 
 @section Scripts
-{
-    <script src="~/orderforhere/orderforherelogin.min.js"></script>
+	{
+	<script src="~/axios/axios.min.js"></script>
+	<script src="~/orderforhere/orderforherelogin.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script>
+		var app = new Vue({
+			el: '#Login',
+			data: {
+				memberPhone: '',
+				tableNumber: '',
+				partySize: '',
+				maxGuests: 0,
+				phone: '',
+			},
+			computed: {
+				maxGuestsMessage: function () {
+					let self = this;
+					if (self.maxGuests === 0) {
+						return ' ';
+					} else {                      //預設人數可以多加一位
+						return '座位最多人數: ' + (self.maxGuests + 1);
+					}
+				}
+			},
+			methods: {
+				checkMaxGuests: function () {
+					let self = this;
+					axios.get('/api/OrderLoginApi/GetMaxGuests', {
+						params: {
+							tableNumber: parseInt(self.tableNumber)
+						}
+					})
+						.then(response => {
+							self.maxGuests = response.data;
+						})
+						.catch(error => {
+							console.log(error);
+						});
+				},
+				CheckMember: function () {
+					let self = this;
+					request = {
+						memberid: 0,
+						phone: self.phone
+					};
+					axios.post('/api/OrderLoginApi/CheckMember', request)
+						.then(response => {
+							if (responose.data == "開始點餐") {
+								setTimeout(() => {
+									window.location.href = 'https://localhost:7071/OrderForHere/StartOrder/Index';
+								}, 2000);
+							}
+							return "該號碼尚未成為會員!";
+						})
+				}
+			}
+		})
+
+	</script>
+
+	<script>
+		var app2 = new Vue({
+			el: '#dialog',
+			data: {
+				memberPhone: '',
+				tableNumber: '',
+				partySize: '',
+				maxGuests: 0,
+				lastname: '',
+				firstname: '',
+				account: '',
+				phone: '',
+				show: '',
+				//showSuccess: false,
+				//showFail: false,
+				showModal: false,
+			},
+			methods: {
+				Register: async function () {
+					let self = this;
+					request = {
+						memberid: 0,
+						lastname: self.lastname,
+						firstname: self.firstname,
+						account: self.account,
+						phone: self.phone
+					};
+
+					await axios.post('/api/OrderLoginApi/QuickRegister', request)
+						.then(response => {
+							// modal畫面
+							if (response.data == '新增會員成功') {
+								console.log('success', response);
+								//self.showSuccess = true;
+								self.show = '新增成功';
+								console.log(self.show);
+								self.showModal = true; // 註冊成功
+								alert('新增成功');
+							} else {
+								console.log('failed', response);
+								//self.showFail = true;
+								self.show = '新增失敗';
+								console.log(self.show);
+								self.showModal = true; // 註冊失敗
+								alert('新增失敗');
+							}
+						})
+						.catch(error => {
+							console.log('error', response);
+							console.error('error', error);
+							self.show = '新增無效';
+							console.log(self.show);
+							self.showModal = true; // 註冊失敗
+							alert('新增無效');
+						});
+				}
+			}
+		})
+	</script>
 }
 

@@ -129,6 +129,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\backend\Models\" />
     <Folder Include="Areas\OrderForHere\Data\" />
   </ItemGroup>
 
