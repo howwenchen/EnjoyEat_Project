@@ -20,6 +20,7 @@ namespace EnjoyEat.Models
         public string? Recipe { get; set; }
         public byte SubCategoryId { get; set; }
 
+        public virtual SubCategory SubCategory { get; set; } = null!;
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
