@@ -96,6 +96,12 @@
     transition: .4s;
     border-radius: 50px;
 }
+textarea {
+    resize: none; /*不讓使用者调整 <textarea> 元素的大小*/
+    overflow: auto; /*需要時顯示滾輪條  */
+    height:150px;
+}
+
 /*datepicker*/
 .datepicker {
     width: 100%;
@@ -121,8 +127,8 @@
     padding: .375rem 2.25rem .375rem .75rem;
 }
 
-input::placeholder {
-    color: red; /* 在這裡更改顏色為你想要的顏色 */
+#datepicker input::placeholder {
+    color: black;   /* 在這裡更改顏色為你想要的顏色 */
 }
 
 .mx-calendar-content .cell.disabled {
@@ -308,4 +314,38 @@ dialog::backdrop {
     transition: .4s;
     border-radius: 50px;
 >>>>>>> main
+}
+/*reservation success頁面*/
+
+#bookConfirmInformation {
+    background-color: #696969;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 250px;
+    width: 50%;
+    margin: auto;
+    border-radius: 50px;
+    padding:20px;
+}
+
+#bookedInfornations {
+    margin: auto;
+}
+#ETInformation {
+    margin: auto;
+}
+#bookConfirmInformation label {
+    color: white;
+    font-family: "Poppins",sans-serif;
+    font-size: 14px;
+}
+#bookConfirmInformation span {
+    color: white;
+    font-family: "Poppins",sans-serif;
+    font-size: 14px;
+}
+#ETInformation span {
+    color: white;
+    font-family: "Poppins",sans-serif;
+    font-size: 14px;
 }

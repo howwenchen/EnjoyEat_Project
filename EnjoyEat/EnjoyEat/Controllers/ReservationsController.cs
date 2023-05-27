@@ -1,5 +1,7 @@
 ﻿using EnjoyEat.Models;
+using EnjoyEat.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EnjoyEat.Controllers
 {
@@ -17,7 +19,7 @@ namespace EnjoyEat.Controllers
         public IActionResult booking()
         {
             return View();
-        }
+        }    
         public IActionResult success()
         {
             return View();

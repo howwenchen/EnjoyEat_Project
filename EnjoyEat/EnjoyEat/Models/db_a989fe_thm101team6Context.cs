@@ -262,9 +262,13 @@ namespace EnjoyEat.Models
 
             modelBuilder.Entity<FeedBack>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.OrderId);
 
                 entity.ToTable("FeedBack");
+
+                entity.Property(e => e.OrderId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("OrderID");
 
                 entity.Property(e => e.Age).HasMaxLength(20);
 
@@ -274,13 +278,11 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Frequency).HasMaxLength(20);
 
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
-
                 entity.Property(e => e.Suggestion).HasColumnType("text");
 
                 entity.HasOne(d => d.Order)
-                    .WithMany()
-                    .HasForeignKey(d => d.OrderId)
+                    .WithOne(p => p.FeedBack)
+                    .HasForeignKey<FeedBack>(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FeedBack_Orders");
             });
@@ -386,7 +388,7 @@ namespace EnjoyEat.Models
                 entity.HasOne(d => d.Table)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.TableId)
-                    .HasConstraintName("FK_Orders_Orders");
+                    .HasConstraintName("FK_Table_Orders");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
@@ -499,7 +501,7 @@ namespace EnjoyEat.Models
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.SubCategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Products_Categories");
+                    .HasConstraintName("FK_Products_SubCategories");
             });
 
             modelBuilder.Entity<Reservation>(entity =>
@@ -519,10 +521,6 @@ namespace EnjoyEat.Models
                     .HasMaxLength(10)
                     .IsFixedLength();
 
-                entity.Property(e => e.PhoneNumber)
-                    .HasMaxLength(10)
-                    .IsFixedLength();
-
                 entity.Property(e => e.ReservationDate).HasColumnType("date");
 
                 entity.Property(e => e.ReservationTime).HasMaxLength(10);
@@ -530,25 +528,29 @@ namespace EnjoyEat.Models
 
             modelBuilder.Entity<ReservationInformation>(entity =>
             {
-                entity.HasKey(e => e.PhoneNumber);
+                entity.HasKey(e => e.ReserveId)
+                    .HasName("PK_ReservationInformation_1");
 
                 entity.ToTable("ReservationInformation");
 
-                entity.Property(e => e.PhoneNumber)
-                    .HasMaxLength(10)
-                    .IsFixedLength();
+                entity.Property(e => e.ReserveId).ValueGeneratedNever();
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 
                 entity.Property(e => e.Note).HasColumnType("text");
+
+                entity.Property(e => e.PhoneNumber)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
 
                 entity.Property(e => e.ReservationName)
                     .HasMaxLength(10)
                     .IsFixedLength();
 
                 entity.HasOne(d => d.Reserve)
-                    .WithMany(p => p.ReservationInformations)
-                    .HasForeignKey(d => d.ReserveId)
+                    .WithOne(p => p.ReservationInformation)
+                    .HasForeignKey<ReservationInformation>(d => d.ReserveId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ReservationInformation_Reservation");
             });
 
