@@ -408,7 +408,7 @@
                         })
                 },
             },
-            mounted:{
+            mounted:
                 function () {
                     let _this = this;
                     axios.get("https://localhost:7071/api/member/GetMember")
@@ -416,7 +416,7 @@
                             _this.memberInfo = response.data;
                         })
                 }
-            }
+            
         });
 
     </script>
