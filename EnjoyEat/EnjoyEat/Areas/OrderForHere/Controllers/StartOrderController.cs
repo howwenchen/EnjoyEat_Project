@@ -1,5 +1,5 @@
 ﻿using EnjoyEat.Areas.OrderForHere.Models;
-
+using EnjoyEat.Areas.OrderForHere.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,12 +30,19 @@ namespace EnjoyEat.Areas.OrderForHere.Controllers
         {
             try
             {
-                var subCategories = await _context.SubCategories.ToListAsync();
+                var subCategories = await _context.SubCategories.AsNoTracking()
+                    .Select(i=>new StartOrderViewModel.SubCategories
+                {
+                            SubCategoryId = i.SubCategoryId,
+                            SubCategoriesName = i.SubCategoriesName,
+                            CategoryId = i.CategoryId
+                }
+                    ).ToListAsync();
                 return Ok(subCategories);
             }
             catch (Exception ex)
             {
-                // log the exception message to diagnose the problem
+                // 確認錯誤訊息
                 Console.WriteLine(ex.ToString());
                 return StatusCode(500, "Internal server error");
             }
@@ -46,8 +53,27 @@ namespace EnjoyEat.Areas.OrderForHere.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Products>>> Products()
         {
-            var products = await _context.Products.ToListAsync();
-            return Ok(products);
+            try
+            {
+                var products = await _context.Products.AsNoTracking()
+                    .Select(i=>new StartOrderViewModel.Products
+                    {
+                        ProductId = i.ProductId,
+                        ProductName = i.ProductName,
+                        SubCategoryId = i.SubCategoryId,
+                        UnitPrice = i.UnitPrice,
+                        MealImg = i.MealImg,
+                    })
+                    .ToListAsync();
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Internal server error");
+            }
+
         }
     }
 }

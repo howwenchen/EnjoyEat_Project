@@ -1,7 +1,7 @@
 ﻿@using EnjoyEat.Areas.OrderForHere
 @{
-    ViewData["Title"] = "ShoppingCart";
-    Layout = "_layout";
+    ViewData["Title"] = "Ordering&ShoppingCart";
+    Layout = "_Layout";
 }
 
 @section Styles{
@@ -11,6 +11,11 @@
             bottom: 50px;
             right: 50px;
             z-index: 99; 
+        }
+
+        .cart-button {
+      
+      
         }
 
         .shop__option__search{
@@ -39,32 +44,37 @@
             </div>
 
             <!-- Product list -->
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6" v-for="product in filteredProducts" :key="product.productId">
+            <div class="row align-items-center">
+                <div class="col-lg-3 col-md-6 col-sm-6 mb-3" v-for="product in filteredProducts" :key="product.productId">
                     <div class="product__item">
                         <div class="product__item__pic set-bg">
                             <img :src="product.mealImg" style="width:200px; border-radius:15px" />
                             <div class="product__label">
-                                <span>{{ getSubCategoryName(product.subCategoryId) }}</span>
+                                <span class="badge bg-secondary">{{ getSubCategoryName(product.subCategoryId) }}</span>
                             </div>
                         </div>
                         <div class="product__item__text">
                             <h6><a href="#">{{ product.productName }}</a></h6>
-                            <div class="product__item__price">${{ product.unitPrice }}</div>
-                            <div class="cart_add">
-                                <button @@click.prevent="removeFromCart(product)"><i class="fa fa-minus"></i></button>
-                                <span>{{ getQuantity(product) }}</span>
-                                <button @@click.prevent="addToCart(product)"><i class="fa fa-plus"></i></button>
-                               @* <a href="#" @@click.prevent="addToCart(product)">Add to cart</a>*@
+                            <div class="row">
+                                <div class="product__item__price col">${{ product.unitPrice }}</div>
+                                <div class="cart_add col  justify-content-end align-items-center">
+                                    <button class="btn btn-light btn-sm" @@click.prevent="removeFromCart(product)"><i class="fa fa-minus"></i></button>
+                                    <span>{{ getQuantity(product) }}</span>
+                                    <button class="btn btn-light btn-sm" @@click.prevent="addToCart(product)"><i class="fa fa-plus"></i></button>
+                                    <!-- <a href="#" @@click.prevent="addToCart(product)">Add to cart</a> -->
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
 
             <!-- Add a button to trigger the modal -->
-            <button type="button" class="btn btn-dark cart-button" data-toggle="modal" data-target="#cartModal">
+            <button type="button" class="btn btn-dark cart-button border border-light position-realative" data-toggle="modal" data-target="#cartModal">
                 <i class="fas fa-shopping-cart fa-lg" style="color:#cda45e"></i>
+                <span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle p-2">${{ total }}</span>
+                <span class="visually-hidden">unread messages</span>
             </button>
 
             <!-- Cart Modal -->
