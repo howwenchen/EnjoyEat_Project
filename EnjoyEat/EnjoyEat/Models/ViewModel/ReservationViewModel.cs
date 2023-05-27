@@ -7,6 +7,15 @@
         public string? NumberofAdultGuest { get; set; }
         public string? NumberofKidGuest { get; set; }
         public string? ReservationTime { get; set; }
+        
+    }
 
+    public class ReserveSuccess
+    {
+        public DateTime? ReservationDate { get; set; }
+        public string? NumberofAdultGuest { get; set; }
+        public string? NumberofKidGuest { get; set; }
+        public string? ReservationTime { get; set; }
+        public string? ReservationName { get; set; }
     }
 }
