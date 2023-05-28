@@ -262,11 +262,15 @@ namespace EnjoyEat.Models
 
             modelBuilder.Entity<FeedBack>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.OrderId);
 
                 entity.ToTable("FeedBack");
 
-                entity.Property(e => e.Age).HasMaxLength(20);
+                entity.Property(e => e.OrderId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("OrderID");
+
+                entity.Property(e => e.Age).HasMaxLength(10);
 
                 entity.Property(e => e.Email).HasMaxLength(20);
 
@@ -274,13 +278,15 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Frequency).HasMaxLength(20);
 
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+                entity.Property(e => e.Purpose).HasMaxLength(10);
 
-                entity.Property(e => e.Suggestion).HasColumnType("text");
+                entity.Property(e => e.Source).HasMaxLength(10);
+
+                entity.Property(e => e.Suggestion).HasMaxLength(300);
 
                 entity.HasOne(d => d.Order)
-                    .WithMany()
-                    .HasForeignKey(d => d.OrderId)
+                    .WithOne(p => p.FeedBack)
+                    .HasForeignKey<FeedBack>(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FeedBack_Orders");
             });
@@ -290,6 +296,8 @@ namespace EnjoyEat.Models
                 entity.HasKey(e => e.LevelName);
 
                 entity.Property(e => e.LevelName).HasMaxLength(10);
+
+                entity.Property(e => e.LevelId).ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<Member>(entity =>
@@ -499,7 +507,7 @@ namespace EnjoyEat.Models
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.SubCategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Products_Categories");
+                    .HasConstraintName("FK_Products_SubCategories");
             });
 
             modelBuilder.Entity<Reservation>(entity =>

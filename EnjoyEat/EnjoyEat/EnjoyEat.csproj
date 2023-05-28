@@ -131,7 +131,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\OrderForHere\Data\" />
-    <Folder Include="Areas\OrderForHere\Models\" />
   </ItemGroup>
 
   <ItemGroup>

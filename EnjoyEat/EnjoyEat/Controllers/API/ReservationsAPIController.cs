@@ -36,6 +36,12 @@ namespace EnjoyEat.Controllers.API
             return Ok(reservation);
         }
 
+
+        private bool ReservationExists(string id)
+        {
+            return (db.Reservations?.Any(e => e.PhoneNumber == id)).GetValueOrDefault();
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetReservationInformation([FromQuery] int reserveId)
         {
@@ -50,5 +56,6 @@ namespace EnjoyEat.Controllers.API
             }).ToList();
             return Ok(reservationInfo);
         }
+
     }
 }

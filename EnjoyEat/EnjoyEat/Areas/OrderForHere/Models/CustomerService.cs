@@ -8,12 +8,15 @@ namespace EnjoyEat.Areas.OrderForHere.Models
     public partial class CustomerService
     {
         public int QuestionId { get; set; }
-        public DateTime QuestionDatetime { get; set; }
+        public DateTime? QuestionDatetime { get; set; }
         public string QuestionKeynote { get; set; }
         public string QuestionContent { get; set; }
+        public string CustomerName { get; set; }
+        public string ServiceOption { get; set; }
+        public string Phone { get; set; }
         public string Email { get; set; }
-        public int EmployeeId { get; set; }
+        public int? EmployeeId { get; set; }
         public string AnswerContent { get; set; }
-        public DateTime AnswerDatetime { get; set; }
+        public DateTime? AnswerDatetime { get; set; }
     }
 }

@@ -39,7 +39,7 @@ namespace EnjoyEat.Controllers
         public IActionResult GetNews(int page = 1)
         {
 
-            var News = _context.News.Select(i => new NewsViewModel
+            var News = _context.News.AsNoTracking().Select(i => new NewsViewModel
             {
                 NewsId = i.NewsId,
                 Title = i.Title,

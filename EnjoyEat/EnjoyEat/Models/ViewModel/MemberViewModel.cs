@@ -16,10 +16,9 @@ namespace EnjoyEat.Models.ViewModel
         public string? Phone { get; set; } = null;
         public string? Email { get; set; } = null;
         public string? LevelName { get; set; } = null;
-
-        public List<MemberOrderViewModel>? Orders { get; set; }
-
+        public double? MemberPoint { get; set; }
         public double? LevelDiscount { get; set; }
+        public List<MemberOrderViewModel>? Orders { get; set; }
 
 
     }

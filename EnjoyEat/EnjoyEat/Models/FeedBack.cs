@@ -7,9 +7,11 @@ namespace EnjoyEat.Models
     {
         public int OrderId { get; set; }
         public string? FeedBackName { get; set; }
-        public string? Email { get; set; }
-        public string? Age { get; set; }
         public string? Frequency { get; set; }
+        public string? Age { get; set; }
+        public string? Email { get; set; }
+        public string? Source { get; set; }
+        public string? Purpose { get; set; }
         public int? Enviroment { get; set; }
         public int? Serve { get; set; }
         public int? Dish { get; set; }
