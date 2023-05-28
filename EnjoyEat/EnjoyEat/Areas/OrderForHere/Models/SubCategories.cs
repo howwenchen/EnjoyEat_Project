@@ -5,16 +5,12 @@ using System.Collections.Generic;
 
 namespace EnjoyEat.Areas.OrderForHere.Models
 {
-    public partial class Categories
+    public partial class SubCategories
     {
-        public Categories()
-        {
-            SubCategories = new HashSet<SubCategories>();
-        }
-
         public byte CategoryId { get; set; }
-        public string CategoryName { get; set; }
+        public byte SubCategoryId { get; set; }
+        public string SubCategoriesName { get; set; }
 
-        public virtual ICollection<SubCategories> SubCategories { get; set; }
+        public virtual Categories Category { get; set; }
     }
 }

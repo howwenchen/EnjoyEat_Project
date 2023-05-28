@@ -9,12 +9,12 @@ namespace EnjoyEat.Areas.OrderForHere.Models
     {
         public Levels()
         {
-            MemberLevel = new HashSet<MemberLevel>();
+            Members = new HashSet<Members>();
         }
 
         public string LevelName { get; set; }
-        public int DiscountRate { get; set; }
+        public double DiscountRate { get; set; }
 
-        public virtual ICollection<MemberLevel> MemberLevel { get; set; }
+        public virtual ICollection<Members> Members { get; set; }
     }
 }
