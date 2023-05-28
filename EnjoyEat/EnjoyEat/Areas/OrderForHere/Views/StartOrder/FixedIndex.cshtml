@@ -6,6 +6,10 @@
 
 @section Styles{
 	<style>
+		.tableInfo {
+			margin-left: 50px;
+		}
+
 		.cart-button {
 			position: fixed;
 			bottom: 50px;
@@ -35,6 +39,8 @@
 									<option disabled value="">商品種類</option>
 									<option v-for="item in subCategories" :value="item.subCategoryId">{{ item.subCategoriesName }}</option>
 								</select>
+								<span class="tableInfo" @*:v-value="tableId"*@>桌號: {{tableId}} </span>
+								<span class="tableInfo" @*:v-value="capacity"*@>人數: {{capacity}} </span>
 							</form>
 						</div>
 					</div>
@@ -127,7 +133,9 @@
 				cart: [],
 				total: 0,
 				selectedSubCategory: '',
-				subCategories: []
+				subCategories: [],
+				tableId: '',
+				capacity: ''
 			},
 			methods: {
 				addToCart(product) {
@@ -156,7 +164,15 @@
 				getSubCategoryName(subCategoryId) {
 					const subCategory = this.subCategories.find(i => i.subCategoryId === subCategoryId);
 					return subCategory ? subCategory.subCategoriesName : '';
-				}
+				},
+				//getTableInfo() {
+				//	let self = this;
+				//	axios.get("/api/OrderLoginApi/GetTableInfo")
+				//		.then(response => {
+				//			self.tableId = response.data.TableNumber;
+				//			self.capacity = response.data.PartySize;
+				//		})
+				//}
 			},
 			computed: {
 				filteredProducts() {

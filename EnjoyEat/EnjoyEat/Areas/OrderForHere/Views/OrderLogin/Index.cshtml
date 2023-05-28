@@ -14,23 +14,23 @@
 		<label for="party-size">用餐人數:</label>
 		<input type="text" id="party-size" name="party-size" required v-model="partySize" :placeholder="maxGuestsMessage">
 		<br><br>
-		<label for="member-phone">會員電話:</label>
-		<input type="tel" id="member-phone" name="member-phone" placeholder="可直接點餐或快速註冊" v-model="memberPhone">
+		@*<label for="member-phone">會員電話:</label>
+		<input type="tel" id="member-phone" name="member-phone" v-model="memberPhone" placeholder="可直接點餐或快速註冊">
 		<br><br>
 		<div class="register-button">
-			<button id="register-btn">快速註冊</button>
+		<button id="register-btn">快速註冊</button>
 		</div>
 		<div class="register-info">
-			<p>尚未成為會員？</p>
-		</div>
+		<p>尚未成為會員？</p>
+		</div>*@
 		<div class="start-order-button">
-			<button v-on:click="CheckMember" class="btn btn-outline-warning btn-lg">開始點餐</button>
+			<button v-on:click="StartToOrder" class="btn btn-outline-warning btn-lg">開始點餐</button>
 		</div>
 	</form>
 </div>
 <!-- End -->
 <!-- 快速註冊 -->
-<div class="dialog-overlay" id="dialog-overlay"></div>
+@*<div class="dialog-overlay" id="dialog-overlay"></div>
 <div class="dialog-container" id="dialog">
 	<h3>快速註冊</h3>
 	<form>
@@ -47,40 +47,39 @@
 			<button class="confirm-btn" v-on:click="Register" data-bs-toggle="modal" data-bs-target="#showModal">確認</button>
 			<button class="close-btn" id="close-btn">取消</button>
 		</div>
-	</form>
+	</form>*@
 
-	@*modal*@
-	<!-- Modal -->
-	<div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+@*modal*@
+<!-- Modal -->
+@*	<div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black; margin-left:90px;">{{show}}</h1>
-					@*<h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black; margin-left:90px;" v-if="showSuccess" >新增成功</h1>
-					<h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black; margin-left:90px;" v-if="showFail">新增失敗</h1>*@
+					<h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black; margin-left:90px;" v-if="showSuccess" >新增成功</h1>
+					<h1 class="modal-title fs-5" id="exampleModalLabel" style="color: black; margin-left:90px;" v-if="showFail">新增失敗</h1>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 			</div>
 		</div>
 	</div>
 
-</div>
+</div>*@
 
 @section Scripts
 	{
 	<script src="~/axios/axios.min.js"></script>
 	<script src="~/orderforhere/orderforherelogin.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
 	<script>
 		var app = new Vue({
 			el: '#Login',
 			data: {
-				memberPhone: '',
 				tableNumber: '',
 				partySize: '',
 				maxGuests: 0,
-				phone: '',
+				errorMessage: ''
 			},
 			computed: {
 				maxGuestsMessage: function () {
@@ -107,35 +106,75 @@
 							console.log(error);
 						});
 				},
-				CheckMember: function () {
+				StartToOrder: function (event) {
+					event.preventDefault();
 					let self = this;
 					request = {
-						memberid: 0,
-						phone: self.phone
-					};
-					axios.post('/api/OrderLoginApi/CheckMember', request)
+						tableNumber: self.tableNumber,
+						partySize: self.partySize,
+					}
+					console.log(request);
+					if (!self.tableNumber || !self.partySize) {
+						self.showSweetAlert();
+						return;
+					}
+					axios.post('/api/OrderLoginApi/StartOrder', request)
 						.then(response => {
-							if (responose.data == "開始點餐") {
-								setTimeout(() => {
-									window.location.href = 'https://localhost:7071/OrderForHere/StartOrder/Index';
-								}, 2000);
+							if (response.data === '開始點餐') {
+								window.location.href = "/OrderForHere/StartOrder/FixedIndex";
+							} else {
+								window.location.href = "/OrderForHere/OrderLogin/Index";
 							}
-							return "該號碼尚未成為會員!";
 						})
+						.catch(error => {
+							console.log('錯誤');
+						});
+				},
+				showSweetAlert() {
+					let self = this;
+					Swal.fire({
+						icon: 'warning',
+						color: '#FFF',
+						iconColor: '#D8CDB9',
+						background: '#2F4F4F',
+						text: '請輸入桌號或人數 !',
+						position: 'center',
+						confirmButtonText: '確定',
+						customClass: {
+							popup: 'custom-swal-popup'
+						},
+						showConfirmButton: true,
+						allowEscapeKey: false,
+						allowEnterKey: false,
+						allowOutsideClick: false,
+						closeOnClickOutside: false,
+						showClass: {
+							popup: 'animate__animated animate__fadeInDown'
+						},
+						hideClass: {
+							popup: 'animate__animated animate__fadeOutUp'
+						}
+					}).then((result) => {
+						if (result.isConfirmed) {
+							self.tableNumber = '';
+							self.partySize = '';
+						} else if (result.isDismissed) {
+							self.goBackToInputScreen();
+						}
+					});
+				},
+				goBackToInputScreen() {
+					this.$router.push('/input');
 				}
 			}
 		})
 
 	</script>
 
-	<script>
+	@*<script>
 		var app2 = new Vue({
 			el: '#dialog',
 			data: {
-				memberPhone: '',
-				tableNumber: '',
-				partySize: '',
-				maxGuests: 0,
 				lastname: '',
 				firstname: '',
 				account: '',
@@ -162,30 +201,30 @@
 							if (response.data == '新增會員成功') {
 								console.log('success', response);
 								//self.showSuccess = true;
-								self.show = '新增成功';
+								//self.show = '新增成功';
 								console.log(self.show);
-								self.showModal = true; // 註冊成功
+								//self.showModal = true; // 註冊成功
 								alert('新增成功');
 							} else {
 								console.log('failed', response);
 								//self.showFail = true;
-								self.show = '新增失敗';
+								//self.show = '新增失敗';
 								console.log(self.show);
-								self.showModal = true; // 註冊失敗
+								//self.showModal = true; // 註冊失敗
 								alert('新增失敗');
 							}
 						})
 						.catch(error => {
 							console.log('error', response);
 							console.error('error', error);
-							self.show = '新增無效';
+							//self.show = '新增無效';
 							console.log(self.show);
-							self.showModal = true; // 註冊失敗
+							//self.showModal = true; // 註冊失敗
 							alert('新增無效');
 						});
 				}
 			}
 		})
-	</script>
+	</script>*@
 }
 
