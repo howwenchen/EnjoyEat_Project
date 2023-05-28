@@ -1,5 +1,6 @@
 using EnjoyEat.Areas.OrderForHere.Models;
 using EnjoyEat.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 namespace EnjoyEat
@@ -17,8 +18,20 @@ namespace EnjoyEat
 			options.UseSqlServer(EnjoyEatConnectionString));
             builder.Services.AddDbContext<SQL8005site4nownetContext>(options =>
             options.UseSqlServer(EnjoyEatConnectionString));
-
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt => {
+
+            })
+				.AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+				//facebookOptions.Events.OnCreatingTicket = (x) =>
+				//{
+				//	return Task.CompletedTask;
+				//};
+            });
 
 
 			var app = builder.Build();
@@ -36,7 +49,8 @@ namespace EnjoyEat
 
 			app.UseRouting();
 
-			app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
 			app.MapControllerRoute(
 				name: "Area",

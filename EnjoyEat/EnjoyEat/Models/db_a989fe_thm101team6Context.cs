@@ -270,7 +270,7 @@ namespace EnjoyEat.Models
                     .ValueGeneratedNever()
                     .HasColumnName("OrderID");
 
-                entity.Property(e => e.Age).HasMaxLength(20);
+                entity.Property(e => e.Age).HasMaxLength(10);
 
                 entity.Property(e => e.Email).HasMaxLength(20);
 
@@ -278,7 +278,11 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Frequency).HasMaxLength(20);
 
-                entity.Property(e => e.Suggestion).HasColumnType("text");
+                entity.Property(e => e.Purpose).HasMaxLength(10);
+
+                entity.Property(e => e.Source).HasMaxLength(10);
+
+                entity.Property(e => e.Suggestion).HasMaxLength(300);
 
                 entity.HasOne(d => d.Order)
                     .WithOne(p => p.FeedBack)

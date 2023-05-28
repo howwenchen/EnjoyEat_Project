@@ -26,6 +26,8 @@ namespace EnjoyEat.Areas.OrderForHere.Controllers.API
                 Email = feedbackViewModel.Email,
                 Age = feedbackViewModel.Age,
                 Frequency = feedbackViewModel.Frequency,
+                Source= feedbackViewModel.Source,
+                Purpose= feedbackViewModel.Purpose,
                 Enviroment = feedbackViewModel.Enviroment,
                 Serve = feedbackViewModel.Serve,
                 Dish = feedbackViewModel.Dish,

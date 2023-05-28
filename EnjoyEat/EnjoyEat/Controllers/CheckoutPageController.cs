@@ -58,7 +58,7 @@ namespace EnjoyEat.Controllers
 				OrderDate = order.OrderDate,
 				IsTakeway = order.IsTakeway,
 				TableId = order.TableId,
-				//CustomerCount = order.CustomerCount,
+				CustomerCount = (int)order.CustomerCount,
 				TotalPrice = order.TotalPrice,
 				CampaignDiscount = order.CampaignDiscount,
 				LevelDiscount = order.LevelDiscount,

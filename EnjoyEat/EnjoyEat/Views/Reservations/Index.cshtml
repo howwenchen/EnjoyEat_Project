@@ -1,6 +1,7 @@
 ﻿@section Styles{
     <link href="~/css/reservations.css" rel="stylesheet" />
     <style>
+
         .modal-content {
             color: black;
         }
@@ -41,7 +42,7 @@
                 <form role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
                     <div class="row">
                         <label>用餐人數</label>
-                        <div class="col-lg-4 col-md-6 form-group d-flex">
+                        <div class="col-lg-6 form-group d-flex">
                             <select name="" id="adultPicker" class="book-a-table form-control form-select" v-model="adultNumber" required>
                                 <option value="" disabled selected>請選擇大人人數</option>
                                 <template>
@@ -58,17 +59,18 @@
                     </div>
                     <!-- datepicke -->
                     <label for="datepicker">用餐日期</label>
-                    <div id="d1" class="calendar">
-                        <!-- datepicker這邊要調整 -->
+                    <div id="d1" class="calendar ">
+                        <!-- datepicker -->
                         <date-picker v-model="ReserveDate"
                                      value-type="format"
                                      name="ReserveDate"
                                      id="datepicker"
-                                     class="datepicker p-0"
-                                     placeholder="請選擇用餐日期"></date-picker>
+                                     class="col-lg-6 form-selectss "
+                                     placeholder="請選擇用餐日期"
+                                     :disabled-date="disablerange"></date-picker>
                     </div>
                     <label>用餐時段</label>
-                    <div class="col-lg-2 col-md-6 form-group" id="mealTimePicker">
+                    <div class="col-lg-6 form-group" id="mealTimePicker">
                         <select name="time" id="mealTimePicker" class="book-a-table form-control" v-model="mealTime">
                             <option value="" disabled selected>請選擇用餐時段</option>
                             <template>
@@ -128,7 +130,7 @@
                         </template>
                     </span>
                 </div>
-
+              
                 <div class="text-center book-a-table php-email-form " id="reservationNext">
                     <button type="button" id="show" :disabled="disSet" :class="disClass" data-bs-toggle="modal" data-bs-target="#infoModal">
                         下一步，填寫聯絡資訊
@@ -179,7 +181,6 @@
 @section Scripts
     {
     <script src="~/axios/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
     <script>
 
@@ -237,6 +238,14 @@
                 handleModalClose: function () {
                     document.body.classList.add('modal-closed');
                 },
+                disablerange: function (date) {
+                    var today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    var mindate = new Date(today.getTime() + 1 * 24 * 3600 * 1000);
+                    var maxdate = new Date(today.getTime() + 30 * 24 * 3600 * 1000);
+
+                    return date < mindate || date > maxdate;
+                },
                 next: function () {
                     let _this = this;
                     var request = {
@@ -246,7 +255,7 @@
                         ReservationTime: _this.mealTime,
                     }
                     if (this.adultNumber != '' || this.kidNumber != '' || this.ReserveDate != null || this.mealTime != '') {
-                        axios.post("https://localhost:7071/api/reservation/PostReservation", request)
+                        axios.post("/api/reservation/PostReservation", request)
                             .then(
                                 response => {
                                     let id=response.data.reserveId;
