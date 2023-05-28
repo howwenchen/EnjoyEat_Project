@@ -41,6 +41,7 @@ namespace EnjoyEat.Controllers.API
                 Phone = user.Phone,
                 LevelName = user.LevelName,
                 LevelDiscount = user.LevelDiscount,
+                MemberPoint = user.MemberPoint,
                 Orders = user.Orders.Select(x => new MemberOrderViewModel
                 {
                     OrderDate = x.OrderDate,
