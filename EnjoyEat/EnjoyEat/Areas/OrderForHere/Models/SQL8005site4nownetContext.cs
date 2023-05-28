@@ -21,15 +21,14 @@ namespace EnjoyEat.Areas.OrderForHere.Models
         public virtual DbSet<Categories> Categories { get; set; }
         public virtual DbSet<CustomerService> CustomerService { get; set; }
         public virtual DbSet<Levels> Levels { get; set; }
-        public virtual DbSet<MemberLevel> MemberLevel { get; set; }
         public virtual DbSet<MemberLogin> MemberLogin { get; set; }
-        public virtual DbSet<MemberPoints> MemberPoints { get; set; }
         public virtual DbSet<Members> Members { get; set; }
         public virtual DbSet<OrderDetails> OrderDetails { get; set; }
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<Products> Products { get; set; }
         public virtual DbSet<Reservation> Reservation { get; set; }
         public virtual DbSet<ReservationInformation> ReservationInformation { get; set; }
+        public virtual DbSet<SubCategories> SubCategories { get; set; }
         public virtual DbSet<Table> Table { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,30 +37,25 @@ namespace EnjoyEat.Areas.OrderForHere.Models
             {
                 entity.HasKey(e => e.CategoryId);
 
-                entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
-
                 entity.Property(e => e.CategoryName)
                     .IsRequired()
                     .HasMaxLength(20);
-
-                entity.Property(e => e.Description).HasColumnType("text");
             });
 
             modelBuilder.Entity<CustomerService>(entity =>
             {
-                entity.HasKey(e => new { e.QuestionId, e.QuestionDatetime });
+                entity.HasKey(e => e.QuestionId)
+                    .HasName("PK_CustomerService_1");
 
-                entity.Property(e => e.QuestionId)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("QuestionID");
+                entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
 
-                entity.Property(e => e.QuestionDatetime).HasColumnType("datetime");
-
-                entity.Property(e => e.AnswerContent)
-                    .IsRequired()
-                    .HasColumnType("text");
+                entity.Property(e => e.AnswerContent).HasColumnType("text");
 
                 entity.Property(e => e.AnswerDatetime).HasColumnType("datetime");
+
+                entity.Property(e => e.CustomerName)
+                    .IsRequired()
+                    .HasMaxLength(10);
 
                 entity.Property(e => e.Email)
                     .IsRequired()
@@ -69,13 +63,23 @@ namespace EnjoyEat.Areas.OrderForHere.Models
 
                 entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
 
+                entity.Property(e => e.Phone)
+                    .IsRequired()
+                    .HasMaxLength(15);
+
                 entity.Property(e => e.QuestionContent)
                     .IsRequired()
                     .HasColumnType("text");
 
+                entity.Property(e => e.QuestionDatetime).HasColumnType("datetime");
+
                 entity.Property(e => e.QuestionKeynote)
                     .IsRequired()
                     .HasMaxLength(30);
+
+                entity.Property(e => e.ServiceOption)
+                    .IsRequired()
+                    .HasMaxLength(10);
             });
 
             modelBuilder.Entity<Levels>(entity =>
@@ -83,34 +87,6 @@ namespace EnjoyEat.Areas.OrderForHere.Models
                 entity.HasKey(e => e.LevelName);
 
                 entity.Property(e => e.LevelName).HasMaxLength(10);
-            });
-
-            modelBuilder.Entity<MemberLevel>(entity =>
-            {
-                entity.HasKey(e => e.MemberId)
-                    .HasName("PK_MemberLevel_1");
-
-                entity.Property(e => e.MemberId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MemberID");
-
-                entity.Property(e => e.LevelName)
-                    .IsRequired()
-                    .HasMaxLength(10);
-
-                entity.Property(e => e.PointsId).HasColumnName("PointsID");
-
-                entity.HasOne(d => d.LevelNameNavigation)
-                    .WithMany(p => p.MemberLevel)
-                    .HasForeignKey(d => d.LevelName)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Levels_MemberLevel");
-
-                entity.HasOne(d => d.Points)
-                    .WithMany(p => p.MemberLevel)
-                    .HasForeignKey(d => d.PointsId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_MemberLevel_MemberPoints");
             });
 
             modelBuilder.Entity<MemberLogin>(entity =>
@@ -123,11 +99,13 @@ namespace EnjoyEat.Areas.OrderForHere.Models
 
                 entity.Property(e => e.Account)
                     .IsRequired()
-                    .HasMaxLength(20);
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Password)
                     .IsRequired()
-                    .HasMaxLength(20);
+                    .HasMaxLength(64)
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Member)
                     .WithOne(p => p.MemberLogin)
@@ -136,82 +114,58 @@ namespace EnjoyEat.Areas.OrderForHere.Models
                     .HasConstraintName("FK_MemberLogin_Members");
             });
 
-            modelBuilder.Entity<MemberPoints>(entity =>
-            {
-                entity.HasKey(e => e.PointsId);
-
-                entity.Property(e => e.PointsId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("PointsID");
-
-                entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
-
-                entity.Property(e => e.GetDate).HasColumnType("datetime");
-
-                entity.Property(e => e.MemberId).HasColumnName("MemberID");
-
-                entity.HasOne(d => d.Member)
-                    .WithMany(p => p.MemberPoints)
-                    .HasForeignKey(d => d.MemberId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Member_MembersPoints");
-            });
-
             modelBuilder.Entity<Members>(entity =>
             {
                 entity.HasKey(e => e.MemberId)
                     .HasName("PK_Member");
 
-                entity.Property(e => e.MemberId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("MemberID");
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
-                entity.Property(e => e.Address)
-                    .IsRequired()
-                    .HasMaxLength(60);
+                entity.Property(e => e.Address).HasMaxLength(60);
 
-                entity.Property(e => e.Birthday).HasColumnType("datetime");
+                entity.Property(e => e.Birthday).HasColumnType("date");
 
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(30);
+                entity.Property(e => e.Email).HasMaxLength(30);
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(10);
 
-                entity.Property(e => e.Gender)
-                    .IsRequired()
-                    .HasColumnType("text");
+                entity.Property(e => e.Gender).HasMaxLength(2);
 
                 entity.Property(e => e.LastName)
                     .IsRequired()
                     .HasMaxLength(10);
 
-                entity.Property(e => e.LevelName)
-                    .IsRequired()
-                    .HasMaxLength(10);
+                entity.Property(e => e.LevelName).HasMaxLength(10);
 
                 entity.Property(e => e.Phone)
                     .IsRequired()
                     .HasMaxLength(15);
 
                 entity.Property(e => e.RegisterDay).HasColumnType("datetime");
+
+                entity.HasOne(d => d.LevelNameNavigation)
+                    .WithMany(p => p.Members)
+                    .HasForeignKey(d => d.LevelName)
+                    .HasConstraintName("FK_Members_Levels");
             });
 
             modelBuilder.Entity<OrderDetails>(entity =>
             {
-                entity.HasKey(e => e.OrderDetailId);
-
-                entity.HasIndex(e => e.OrderDetailId, "IX_OrderDetails");
-
-                entity.Property(e => e.OrderDetailId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("OrderDetailID");
+                entity.HasKey(e => new { e.OrderId, e.ProductId });
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.Property(e => e.OrderDetialId)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("OrderDetialID");
+
+                entity.Property(e => e.Quantity).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.UnitPrice).HasColumnType("money");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
@@ -232,6 +186,8 @@ namespace EnjoyEat.Areas.OrderForHere.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
+                entity.Property(e => e.FinalPrice).HasComputedColumnSql("(([TotalPrice]-[CampaignDiscount])*[LevelDiscount])", false);
+
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
@@ -246,68 +202,86 @@ namespace EnjoyEat.Areas.OrderForHere.Models
                 entity.HasOne(d => d.Table)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.TableId)
-                    .HasConstraintName("FK_Orders_Orders");
+                    .HasConstraintName("FK_Table_Orders");
             });
 
             modelBuilder.Entity<Products>(entity =>
             {
                 entity.HasKey(e => e.ProductId);
 
-                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+                entity.Property(e => e.ProductId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ProductID");
 
-                entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
+                entity.Property(e => e.Description).HasMaxLength(50);
+
+                entity.Property(e => e.MealImg).IsUnicode(false);
 
                 entity.Property(e => e.ProductName)
                     .IsRequired()
                     .HasMaxLength(30);
-
-                entity.HasOne(d => d.Category)
-                    .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Products_Categories");
             });
 
             modelBuilder.Entity<Reservation>(entity =>
             {
-                entity.HasKey(e => e.PhoneNumber);
-
-                entity.Property(e => e.PhoneNumber)
-                    .HasMaxLength(10)
-                    .IsFixedLength();
+                entity.HasKey(e => e.ReserveId)
+                    .HasName("PK_Reservation_1");
 
                 entity.Property(e => e.ConfirmationDate).HasColumnType("date");
 
-                entity.Property(e => e.NumberofGuest)
+                entity.Property(e => e.NumberofAdultGuest)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.NumberofKidGuest)
                     .HasMaxLength(10)
                     .IsFixedLength();
 
                 entity.Property(e => e.ReservationDate).HasColumnType("date");
 
-                entity.Property(e => e.ReservationTime).HasColumnType("date");
+                entity.Property(e => e.ReservationTime).HasMaxLength(10);
             });
 
             modelBuilder.Entity<ReservationInformation>(entity =>
             {
-                entity.HasKey(e => e.PhoneNumber);
+                entity.HasKey(e => e.ReserveId)
+                    .HasName("PK_ReservationInformation_1");
+
+                entity.Property(e => e.ReserveId).ValueGeneratedNever();
+
+                entity.Property(e => e.Email).HasMaxLength(50);
+
+                entity.Property(e => e.Note).HasColumnType("text");
 
                 entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(10)
-                    .IsFixedLength();
-
-                entity.Property(e => e.EMail)
-                    .HasMaxLength(10)
-                    .HasColumnName("E-mail")
                     .IsFixedLength();
 
                 entity.Property(e => e.ReservationName)
                     .HasMaxLength(10)
                     .IsFixedLength();
 
-                entity.HasOne(d => d.PhoneNumberNavigation)
+                entity.HasOne(d => d.Reserve)
                     .WithOne(p => p.ReservationInformation)
-                    .HasForeignKey<ReservationInformation>(d => d.PhoneNumber)
-                    .HasConstraintName("FK_ReservationInformation_ReservationInformation");
+                    .HasForeignKey<ReservationInformation>(d => d.ReserveId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReservationInformation_Reservation");
+            });
+
+            modelBuilder.Entity<SubCategories>(entity =>
+            {
+                entity.HasKey(e => e.SubCategoryId)
+                    .HasName("PK_SubCategories_1");
+
+                entity.Property(e => e.SubCategoriesName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.SubCategories)
+                    .HasForeignKey(d => d.CategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Categories _SubCategories");
             });
 
             modelBuilder.Entity<Table>(entity =>

@@ -292,6 +292,8 @@ namespace EnjoyEat.Models
                 entity.HasKey(e => e.LevelName);
 
                 entity.Property(e => e.LevelName).HasMaxLength(10);
+
+                entity.Property(e => e.LevelId).ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<Member>(entity =>

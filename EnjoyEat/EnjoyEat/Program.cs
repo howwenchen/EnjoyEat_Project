@@ -1,3 +1,4 @@
+using EnjoyEat.Areas.OrderForHere.Models;
 using EnjoyEat.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,8 +15,10 @@ namespace EnjoyEat
 			var EnjoyEatConnectionString = builder.Configuration.GetConnectionString("EnjoyEat");
 			builder.Services.AddDbContext<db_a989fe_thm101team6Context>(options =>
 			options.UseSqlServer(EnjoyEatConnectionString));
+            builder.Services.AddDbContext<SQL8005site4nownetContext>(options =>
+            options.UseSqlServer(EnjoyEatConnectionString));
 
-			builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews();
 
 
 			var app = builder.Build();
@@ -37,7 +40,7 @@ namespace EnjoyEat
 
 			app.MapControllerRoute(
 				name: "Area",
-				pattern: "{area:exists}/{controller}/{action}/{id?}",
+				pattern: "{area}/{controller}/{action}/{id?}",
 				defaults: new { controller = "Home", action = "Index" }
 			);
 
