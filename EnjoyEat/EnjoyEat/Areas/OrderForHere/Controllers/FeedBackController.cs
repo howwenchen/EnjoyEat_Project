@@ -11,5 +11,9 @@ namespace EnjoyEat.Areas.OrderForHere.Controllers
             ViewBag.order = OrderId;
             return View();
         }
+        public IActionResult Thanks()
+        { 
+            return View();
+        }
     }
 }

@@ -83,7 +83,7 @@
                         </div>*@
                     </div>
                     <button type="button" id="bookReturn" @@click="Return">返回上一頁</button>
-                    <button type="button" id="bookNow" @@click="BookNow">確認訂位</button>
+                    <button type="submit" id="bookNow" @@click="BookNow">確認訂位</button>
                 </form>
             </div>
         </div>
@@ -111,7 +111,8 @@
                     let _this = this;
                     let searchString = window.location.search.replace("?", "");
                     let value = searchString.split('=')[1];
-                    _this.reserveId = parseInt(value)
+                    let id = parseInt(value);
+                    _this.reserveId = id;
                     var request = {
                         PhoneNumber: _this.phone,
                         ReservationName: _this.name,
@@ -119,11 +120,10 @@
                         Note: _this.note,
                         ReserveId: _this.reserveId,
                     }
-                    if (this.name != '' && this.email != '' && this.phone != null && this.note != '') {
-                    axios.post("https://localhost:7071/api/reservation/booking/PostReservationInformation", request)
+                    if (this.name != '' && this.email != '' && this.phone != null) {
+                    axios.post("/api/reservation/booking/PostReservationInformation", request)
                         .then(
                             response => {
-                                //alert(JSON.stringify(response.data));
                                 Swal.fire({
                                     allowOutsideClick: false,
                                     icon: 'success',
@@ -138,7 +138,7 @@
                                     position: 'center'
                                 }).then(result => {
                                     if (result.dismiss === Swal.DismissReason.timer) {
-                                        window.location.assign("https://localhost:7071");
+                                        window.location.href = `/Reservations/success?id=${id}`
                                     };
                                 })
                             });

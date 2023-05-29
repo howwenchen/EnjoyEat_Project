@@ -36,9 +36,23 @@ namespace EnjoyEat.Controllers.API
             return Ok(reservation);
         }
 
-        private bool ReservationExists(string id)
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetReservationInformation([FromQuery] int reserveId)
         {
-            return (db.Reservations?.Any(e => e.PhoneNumber == id)).GetValueOrDefault();
+
+            var reservationInfo = db.Reservations.Where(x =>x.ReserveId==reserveId).Select(r => new ReserveSuccess()
+            {
+                ReservationName=r.ReservationInformation.ReservationName,
+                 ReservationDate=r.ReservationDate,
+                 ReservationTime=r.ReservationTime,
+                 NumberofAdultGuest=r.NumberofAdultGuest,
+                 NumberofKidGuest = r.NumberofKidGuest,
+            }).ToList();
+            return Ok(reservationInfo);
         }
+
     }
 }

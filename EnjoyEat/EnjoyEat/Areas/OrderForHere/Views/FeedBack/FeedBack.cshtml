@@ -1,21 +1,15 @@
 ﻿@section Styles{
+    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+
     <style>
         body {
             color: aliceblue;
             background-color: #222220;
         }
 
-        .datepicker {
-            width: 100%;
-            height: 38px;
-            border: 1px solid #ced4da;
-            border-radius: 0.375rem;
-            padding: 6px 12px 6px 12px;
-        }
-
         h2 {
             text-align: center;
-            padding: 50px 0px 30px 0px;
+            padding: 100px 0px 30px 0px;
             color: white;
         }
 
@@ -56,6 +50,10 @@
             height: 200px;
         }
 
+        .satisfaction {
+            font-size: 20px;
+        }
+
         label {
             padding: 5px 10px 5px 0;
         }
@@ -67,7 +65,11 @@
         .inpName, .inpEmail, .inpDetail {
             padding: 6px 12px 6px 12px;
             width: 100%;
-            color: white;
+            color: black;
+            border-radius: .25rem;
+            height: 70px;
+            resize: none; /*不讓使用者调整 <textarea> 元素的大小*/
+            overflow: auto; /*需要時顯示滾輪條*/
         }
 
         input[type=radio]:disabled {
@@ -126,170 +128,252 @@
             display: none;
         }
 
+        /*star位置*/
+        .align-left {
+            text-align: left;
+        }
     </style>
 }
 <main>
     <h2>顧客滿意度調查</h2>
     <p class="container">本問卷蒐集之資訊僅作為內部服務改善使用，<br>絕不外洩或另作其他用途，敬請放心填寫。</p>
     <div id="satisfaction">
-        <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
+        <form role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
             <div class="row">
                 <label class="col-lg-6 col-md-6">姓名</label>
+                <label class="col-lg-6 col-md-6">電子郵件</label>
+
+                <div class="col-lg-6 col-md-6 form-group d-flex">
+                    <input name="Name" id="formName" class="book-a-table form-control " v-model="Name" />
+                </div>
+                <div class="col-lg-6 col-md-6 form-group d-flex">
+                    <input name="Email" id="formEmail" class="book-a-table form-control " v-model="Email" />
+                </div>
+
+                <label class="col-lg-6 col-md-6">年齡</label>
                 <label class="col-lg-6 col-md-6">用餐次數</label>
 
                 <div class="col-lg-6 col-md-6 form-group d-flex">
-                    <input name="Name" id="formName" class="book-a-table form-control " />
-                </div>
-                <div class="col-lg-6 col-md-6 form-group d-flex">
-                    <select name="time" id="mealTime" class="book-a-table form-control">
-                        <option value="times" disabled>請選擇</option>
-                        <option value="times">第1次</option>
-                        <option value="times">第2~5次</option>
-                        <option value="times">第6~10次</option>
-                        <option value="times">10次以上</option>
+                    <select name="Age" id="formAge" class="book-a-table form-control" v-model="Age">
+                        <option value="" disabled selected>請選擇</option>
+                        <option :value="a.value" v-for="a in age">{{a.txt}}</option>
                     </select>
                 </div>
-                <label>電子郵件</label>
                 <div class="col-lg-6 col-md-6 form-group d-flex">
-                    <input name="Email" id="formEmail" class="book-a-table form-control " />
-                </div>
-            </div>
-
-            <br>
-            <label>用餐資訊來源</label>
-            <div class=" form-group d-flex">
-                    <select name="source" id="source" class="book-a-table form-control">
-                        <option value="" disabled>請選擇</option>
-                        <option value="">曾經來過</option>
-                        <option value="">媒體報導</option>
-                        <option value="">社群媒體</option>
-                        <option value="">剛好路過</option>
-                        <option value="">朋友推薦</option>
-                        <option value="">其他</option>
+                    <select name="time" id="mealTime" class="book-a-table form-control" v-model="Frequency">
+                        <option value="" disabled selected>請選擇</option>
+                        <option :value="f.value" v-for="f in freq">{{f.txt}}</option>
                     </select>
-            </div>
-
-            <br>
-            <label>今日用餐目的</label>
-            <div class="form-group">
-                <select name="" id="mealTime" class="book-a-table form-control">
-                    <option value="" disabled>請選擇</option>
-                    <option value="">朋友/家族聚餐</option>
-                    <option value="">慶生</option>
-                    <option value="">優惠活動</option>
-                    <option value="">慕名而來</option>
-                </select>
-            </div>
-            <br>
-
-            <label>用餐滿意度</label>
-            <div class="row">
-                <div class="satisfaction col-3 m-0">環境<span>*</span></div>
-                <div class="col-9 m-0 star-widget">
-                    <template v-for="item in env">
-                        <input type="radio" :id="item.id" :value="item.value"  equired>
-                        <label :for="item.id"><i class="fa-solid fa-star"></i></label>
-                    </template>
                 </div>
-            </div>
-            <div class="satisfaction col-3 m-0">服務<span>*</span></div>
-            <div class="col-9 m-0 star-widget">
-                <template v-for="item in serve">
-                    <input type="radio" :id="item.id" :value="item.value" v-model="feedbackInfo.Serve" required>
-                    <label :for="item.id"><i class="fa-regular fa-star"></i></i></label>
-                </template>
-            </div>
 
-            <div class="satisfaction col-3 m-0">餐點<span>*</span></div>
-            <div class="col-9 m-0 star-widget">
-                <template v-for="item in dish">
-                    <input type="radio" :id="item.id" :value="item.value" v-model="feedbackInfo.Dish" required>
-                    <label :for="item.id"><i class="fa-solid fa-star"></i></label>
-                </template>
+                <br>
+                <label>用餐資訊來源</label>
+                <div class=" form-group d-flex">
+                    <select name="source" id="source" class="book-a-table form-control" v-model="SourceInfo">
+                        <option value="" disabled selected>請選擇</option>
+                        <option :value="s.value" v-for="s in source">{{s.txt}}</option>
+                    </select>
+                </div>
+
+                <br>
+                <label>今日用餐目的</label>
+                <div class="form-group">
+                    <select name="purpose" id="mealTime" class="book-a-table form-control" v-model="MealPurpose">
+                        <option value="" disabled selected>請選擇</option>
+                        <option :value="p.value" v-for="p in purpose">{{p.txt}}</option>
+                    </select>
+                </div>
+                <br>
+
+                <label>用餐滿意度</label>
+                <div class="row">
+
+                    <div class="satisfaction col-3 m-0">環境<span>*</span></div>
+                    <div class="col-3 m-0 star-widget">
+                        <template v-for="item in env">
+                            <input type="radio" :id="item.id" :value="item.value" v-model="Env" required>
+                            <label :for="item.id"><i class="fa-solid fa-star"></i></label>
+                        </template>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="satisfaction col-3 m-0">服務<span>*</span></div>
+                    <div class="col-3 m-0 star-widget">
+                        <template v-for="item in serve">
+                            <input type="radio" :id="item.id" :value="item.value" v-model="Serve" required>
+                            <label :for="item.id" class="align-left"><i class="fa-solid fa-star"></i></label>
+                        </template>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="satisfaction col-3 m-0">餐點<span>*</span></div>
+                    <div class="col-3 m-0 star-widget">
+                        <template v-for="item in dish">
+                            <input type="radio" :id="item.id" :value="item.value" v-model="Dish" required>
+                            <label :for="item.id"><i class="fa-solid fa-star"></i></label>
+                        </template>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="satisfaction col-3 m-0">價位<span>*</span></div>
+                    <div class="col-3 m-0 star-widget">
+                        <template v-for="item in price">
+                            <input type="radio" :id="item.id" :value="item.value" v-model="Price" required>
+                            <label :for="item.id"><i class="fa-solid fa-star"></i></label>
+                        </template>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="satisfaction col-3 m-0">整體<span>*</span></div>
+                    <div class="col-3 m-0 star-widget">
+                        <template v-for="item in overall">
+                            <input type="radio" :id="item.id" :value="item.value" v-model="Overall" required>
+                            <label :for="item.id"><i class="fa-solid fa-star"></i></label>
+                        </template>
+                    </div>
+                </div>
+                <div>
+                    <h5 for="detail">其他建議: </h5>
+                    <textarea type="text" id="detail" class="inpDetail" v-model="Suggestion"></textarea>
+                </div>
+                <hr>
             </div>
-
-            <div class="satisfaction col-3 m-0">價位<span>*</span></div>
-            <div class="col-9 m-0 star-widget">
-                <template v-for="item in price">
-                    <input type="radio" :id="item.id" :value="item.value" v-model="feedbackInfo.Price" required>
-                    <label :for="item.id"><i class="fa-solid fa-star"></i></label>
-                </template>
-            </div>
-
-            <div class="satisfaction col-3 m-0">整體<span>*</span></div>
-            <div class="col-9 m-0 star-widget">
-                <template v-for="item in overall">
-                    <input type="radio" :id="item.id" :value="item.value" v-model="feedbackInfo.Overall" required>
-                    <label :for="item.id"><i class="fa-sharp fa-light fa-star"></i></label>
-                </template>
-            </div>
-
-
         </form>
+        <div class="input-btn">
+            <div class="row m-0">
+                <button class="col btn-submit" type="button" @@click="feedbackSumit">送出</button>
+            </div>
+        </div>
     </div>
 </main>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <script src="~/axios/axios.min.js"></script>
     <script>
         var app = new Vue({
             el: '#satisfaction',
             data: {
-                memberInfo: {},
+                OrderId:null,
+                Name: '',
+                Age: '',
+                Email: '',
+                Frequency: '',
+                SourceInfo: '',
+                MealPurpose: '',
+                Price: null,
+                Serve: null,
+                Env: null,
+                Dish: null,
+                Overall: null,
+                Suggestion: '',
                 freq: [
-                    { value: 1, txt: '第1次' },
-                    { value: 2, txt: '第2-3次' },
-                    { value: 4, txt: '第4-6次' },
-                    { value: 7, txt: '7次以上' },
+                    { value: '第1次', txt: '第1次' },
+                    { value: '第2-3次', txt: '第2-3次' },
+                    { value: '第4-6次', txt: '第4-6次' },
+                    { value: '7次以上', txt: '7次以上' },
+                ],
+                source: [
+                    { value: '曾經來過', txt: '曾經來過' },
+                    { value: '媒體報導', txt: '媒體報導' },
+                    { value: '社群媒體', txt: '社群媒體' },
+                    { value: '剛好路過', txt: '剛好路過' },
+                    { value: '朋友推薦', txt: '朋友推薦' },
+                    { value: '其他', txt: '其他' },
+                ],
+                purpose: [
+                    { value: '朋友/家族聚餐', txt: '朋友/家族聚餐' },
+                    { value: '慶生', txt: '慶生' },
+                    { value: '優惠活動', txt: '優惠活動' },
+                    { value: '慕名而來', txt: '慕名而來' },
+                ],
+                age: [
+                    { value: '15-19歲', txt: '15-19歲' },
+                    { value: '20-29歲', txt: '20-29歲' },
+                    { value: '30-39歲', txt: '30-39歲' },
+                    { value: '40-49歲', txt: '40-49歲' },
+                    { value: '50-59歲', txt: '50-59歲' },
+                    { value: '60歲以上', txt: '60歲以上' }
                 ],
                 env: [
                     { value: 5, id: 'env5' },
                     { value: 4, id: 'env4' },
                     { value: 3, id: 'env3' },
                     { value: 2, id: 'env2' },
-                    { value: 1, id: 'env1' }
+                    { value: 1, id: 'env1' },
                 ],
                 serve: [
                     { value: 5, id: 'serve5' },
                     { value: 4, id: 'serve4' },
                     { value: 3, id: 'serve3' },
                     { value: 2, id: 'serve2' },
-                    { value: 1, id: 'serve1' }
+                    { value: 1, id: 'serve1' },
                 ],
                 dish: [
                     { value: 5, id: 'dish5' },
                     { value: 4, id: 'dish4' },
                     { value: 3, id: 'dish3' },
                     { value: 2, id: 'dish2' },
-                    { value: 1, id: 'dish1' }
+                    { value: 1, id: 'dish1' },
                 ],
                 price: [
                     { value: 5, id: 'price5' },
                     { value: 4, id: 'price4' },
                     { value: 3, id: 'price3' },
                     { value: 2, id: 'price2' },
-                    { value: 1, id: 'price1' }
+                    { value: 1, id: 'price1' },
                 ],
                 overall: [
                     { value: 5, id: 'overall5' },
                     { value: 4, id: 'overall4' },
                     { value: 3, id: 'overall3' },
                     { value: 2, id: 'overall2' },
-                    { value: 1, id: 'overall1' }
+                    { value: 1, id: 'overall1' },
                 ],
-                feedbackInfo: {
-                    orderId: @ViewBag.order,
-                    Name: '',
-                    Email: '',
-                    Age: null,
-                    Freq: null,
-                    Environment: null,
-                    Serve: null,
-                    Dish: null,
-                    Price: null,
-                    Overall: null,
-                    Suggestion: '',
-                },
-            })
+            },
+            methods: {
+                feedbackSumit: function () {
+                    let _this = this;
+                    let searchString = window.location.search.replace("?", "");
+                    let value = searchString.split('=')[1];
+                    let id = parseInt(value);
+                    _this.OrderId=13;
+
+                    var request = {
+                        OrderId:_this.OrderId,
+                        FeedBackName: _this.Name,
+                        Email: _this.Email,
+                        Age: _this.Age,
+                        Frequency: _this.Frequency,
+                        Purpose: _this.MealPurpose,
+                        Source: _this.SourceInfo,
+                        Enviroment: _this.Env,
+                        Serve: _this.Serve,
+                        Dish: _this.Dish,
+                        Price: _this.Price,
+                        Overall: _this.Overall,
+                        Suggestion: _this.Suggestion,
+
+                    }
+                    axios.post("/api/OrderForHere/PostFeedBack", request)
+                        .then(response => {
+                            Swal.fire({
+                                allowOutsideClick: false,
+                                icon: 'success',
+                                color: '#333',
+                                iconColor: '#D8CDB9',
+                                background: '#FFF',
+                                title: '送出成功',
+                                //text: '',
+                                html: '<div class="custom-swal-container"><div class="custom-swal-message">謝謝您的光臨!</div></div>',
+                                showConfirmButton: false,
+                                position: 'center'
+                            })
+                        })
+                }
+             },
+        })
     </script>
-    
+
 }

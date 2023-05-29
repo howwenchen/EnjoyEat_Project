@@ -21,6 +21,7 @@ namespace EnjoyEat.Models
         public string? Email { get; set; }
         public string? LevelName { get; set; }
         public double? LevelDiscount { get; set; }
+        public double? MemberPoint { get; set; }
 
         public virtual Level? LevelNameNavigation { get; set; }
         public virtual MemberLogin? MemberLogin { get; set; }

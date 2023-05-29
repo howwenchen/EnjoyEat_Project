@@ -5,6 +5,9 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using EnjoyEat.Models.ViewModel;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Facebook;
 
 namespace EnjoyEat.Controllers
 {
@@ -36,7 +39,7 @@ namespace EnjoyEat.Controllers
         public IActionResult GetNews(int page = 1)
         {
 
-            var News = _context.News.Select(i => new NewsViewModel
+            var News = _context.News.AsNoTracking().Select(i => new NewsViewModel
             {
                 NewsId = i.NewsId,
                 Title = i.Title,
@@ -94,5 +97,29 @@ namespace EnjoyEat.Controllers
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
+        public IActionResult FaceBookLogin()
+        {
+            var prop = new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("FaceBookResponse")
+            };
+            return Challenge(prop,FacebookDefaults.AuthenticationScheme);
+
+        }
+        public async Task<IActionResult> FaceBookResponse()
+        {
+            var result= await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            if (result.Succeeded)
+            {
+                var claims=result.Principal.Claims.Select(x => new
+                {
+                    x.Type,
+                    x.Value,
+                });
+                return Json(claims);
+            }
+            return Ok();
+        }
+        
 	}
 }
