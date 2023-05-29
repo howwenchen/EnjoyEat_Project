@@ -1,0 +1,24 @@
+diff a/EnjoyEat/EnjoyEat/Views/Shared/_Layout.cshtml b/EnjoyEat/EnjoyEat/Views/Shared/_Layout.cshtml	(rejected hunks)
+@@ -26,18 +26,18 @@
+     <link href="~/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+ 
+     <!-- Template Main CSS File -->
+-    <link href="~/css/style.css" rel="stylesheet">
++    <link href="~/css/style.min.css" rel="stylesheet">
+ 
+     <!--預設檔案-->
+-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
++    @*<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />*@
+     @await RenderSectionAsync("Styles", required: false)
+ </head>
+ <body>
+     <!-- ======= Header ======= -->
+-    <header id="header" class="fixed-top d-flex align-items-center">
++    <header id="header" class="sticky-top d-flex align-items-center">
+         <div class="container-fluid container-xl d-flex align-items-center justify-content-lg-between">
+ 
+-            <h1 class="logo me-auto me-lg-0"><a href="index.html">享食 Enjoy Eat</a></h1>
++            <h1 class="logo me-auto me-lg-0"><a asp-controller="Home" asp-action="Index">享食 Enjoy Eat</a></h1>
+             <!-- Uncomment below if you prefer to use an image logo -->
+             <!-- <a href="index.html" class="logo me-auto me-lg-0"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+ 

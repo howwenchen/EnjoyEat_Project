@@ -15,7 +15,8 @@ namespace EnjoyEat.Models.ViewModel
         public string Gender { get; set; } = null!;
       
         public DateTime Birthday { get; set; }
-   
+        public DateTime RegisterDay { get; set; }
+
         public string Address { get; set; } = null!;
      
         public string Phone { get; set; } = null!;
@@ -23,15 +24,17 @@ namespace EnjoyEat.Models.ViewModel
   
         public string Email { get; set; } = null!;
        
-        public string Account { get; internal set; } = null!;
+        public byte[] Account { get; set; } = null!;
       
-        public string Password { get; internal set; } = null!;
+        public byte[] Password { get; set; } = null!;
 
         public string LevelName { get; set; } = null!;
 
         public int MemberId { get; set; }
 
+        public string Member { get; set; }
 
+      
     }
 
 
