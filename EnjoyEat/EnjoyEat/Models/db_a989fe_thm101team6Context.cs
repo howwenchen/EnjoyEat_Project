@@ -19,6 +19,7 @@ namespace EnjoyEat.Models
         public virtual DbSet<Attendance> Attendances { get; set; } = null!;
         public virtual DbSet<Authority> Authorities { get; set; } = null!;
         public virtual DbSet<AuthorityUse> AuthorityUses { get; set; } = null!;
+        public virtual DbSet<Cart> Carts { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<CustomerService> CustomerServices { get; set; } = null!;
         public virtual DbSet<Department> Departments { get; set; } = null!;
@@ -125,6 +126,13 @@ namespace EnjoyEat.Models
                     .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_AuthorityUse_Authority");
+            });
+
+            modelBuilder.Entity<Cart>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Cart");
             });
 
             modelBuilder.Entity<Category>(entity =>
