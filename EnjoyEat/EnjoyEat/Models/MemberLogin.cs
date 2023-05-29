@@ -9,6 +9,6 @@ namespace EnjoyEat.Models
         public string Account { get; set; } = null!;
         public string Password { get; set; } = null!;
 
-        public virtual Member Member { get; set; } = null!;
+       public virtual Member Member { get; set; } = null!;
     }
 }

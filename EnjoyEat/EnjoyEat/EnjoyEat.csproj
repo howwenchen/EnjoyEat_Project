@@ -118,10 +118,18 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.SassCompiler" Version="1.62.1" />
+<<<<<<< HEAD
 
 
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.16" />
+=======
+<<<<<<< HEAD
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.16" />
+=======
+>>>>>>> c9571974c37cd7c65830c554835d732dffc14c34
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.10" />
+>>>>>>> b4a54eb482f23f9858e755e48f6103a25b770451
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.16" />
