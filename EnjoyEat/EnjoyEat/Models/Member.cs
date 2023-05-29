@@ -25,9 +25,6 @@ namespace EnjoyEat.Models
         public virtual Level? LevelNameNavigation { get; set; }
         public virtual MemberLogin? MemberLogin { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
-<<<<<<< Updated upstream
-=======
-       
->>>>>>> Stashed changes
+
     }
 }
