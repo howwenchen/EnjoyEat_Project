@@ -9,7 +9,6 @@ namespace EnjoyEat.Areas.OrderForHere.Models
     {
         public Members()
         {
-            MemberPoints = new HashSet<MemberPoints>();
             Orders = new HashSet<Orders>();
         }
 
@@ -17,15 +16,17 @@ namespace EnjoyEat.Areas.OrderForHere.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Gender { get; set; }
-        public DateTime Birthday { get; set; }
-        public DateTime RegisterDay { get; set; }
+        public DateTime? Birthday { get; set; }
+        public DateTime? RegisterDay { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
         public string LevelName { get; set; }
+        public double? LevelDiscount { get; set; }
+        public double? MemberPoint { get; set; }
 
+        public virtual Levels LevelNameNavigation { get; set; }
         public virtual MemberLogin MemberLogin { get; set; }
-        public virtual ICollection<MemberPoints> MemberPoints { get; set; }
         public virtual ICollection<Orders> Orders { get; set; }
     }
 }

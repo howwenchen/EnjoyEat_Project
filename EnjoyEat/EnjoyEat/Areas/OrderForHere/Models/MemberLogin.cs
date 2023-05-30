@@ -8,8 +8,8 @@ namespace EnjoyEat.Areas.OrderForHere.Models
     public partial class MemberLogin
     {
         public int MemberId { get; set; }
-        public byte[] Account { get; set; }
-        public byte[] Password { get; set; }
+        public string Account { get; set; }
+        public string Password { get; set; }
 
         public virtual Members Member { get; set; }
     }

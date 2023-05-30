@@ -123,7 +123,7 @@
                         ReserveId: _this.reserveId,
                     }
                     if (this.name != '' && this.email != '' && this.phone != null) {
-                    axios.post("https://localhost:7071/api/reservation/booking/PostReservationInformation", request)
+                    axios.post("/api/reservation/booking/PostReservationInformation", request)
                         .then(
                             response => {
                                 Swal.fire({

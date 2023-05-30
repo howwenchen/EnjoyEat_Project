@@ -10,13 +10,13 @@
         </div>
     </div>
 </div>
-<form  role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
+<div  class="php-email-form" data-aos="fade-up" data-aos-delay="100">
     <main id="main">
         <div id="bookConfirmInformation">
             <div class="container" id="bookedConfirm">
                 <div>
                     <div class="flex-shrink-0" style="text-align:center">
-                        <h6>{{}}小姐/先生您好，以下為您的訂位資訊</h6>
+                        <h6>{{reserveInfo[0].reservationName}}小姐/先生您好，以下為您的訂位資訊</h6>
                     </div>
                 </div>
             </div>
@@ -24,19 +24,19 @@
                 <div id="bookedInfornations">
                     <div>
                         <label id="bookDate">訂位日期:</label>
-                        <span>2022/06/12</span>
+                        <span>{{reserveInfo[0].reservationDate}}</span>
                     </div>
                     <div>
                         <label id="bookPeriod">訂位時段:</label>
-                        <span>13:00</span>
+                        <span>{{reserveInfo[0].reservationTime}}</span>
                     </div>
                     <div>
                         <label id="bookNumber">用餐人數:</label>
-                        <span>3位大人, 0位小孩</span>
+                        <span>{{reserveInfo[0].numberofAdultGuest}}, {{reserveInfo[0].numberofKidGuest}}</span>
                     </div>
                 </div>
             </div>
-            <br/>
+            <br />
             <div class="d-grid gap-2 mx-auto">
                 <div id="ETInformation">
                     <div>
@@ -44,7 +44,7 @@
                     </div>
                     <div>
                         <span>
-                            <img src="~/img/location.png" id="locationIcon"  />
+                            <img src="~/img/location.png" id="locationIcon" />
                             <span>
                                 新北市 中和區 ,
                                 灝文家
@@ -59,16 +59,16 @@
             </div>
         </div>
     </main>
-</form>
+</div>
 <!-- End #main -->
-
 @section Scripts{
+    <script src="/axios/axios.min.js"></script>
     <script>
         let app = new Vue({
             el: '#bookConfirmInformation',
             data: {
-                reserveInfo:[],
-                reserveId:0,
+                reserveInfo: [],
+                reserveId: 0,
             },
             methods: {
 
@@ -79,11 +79,11 @@
                     let searchString = window.location.search.replace("?", "");
                     let value = searchString.split('=')[1];
                     _this.reserveId = parseInt(value);
-                    axios.get("https://localhost:7071/api/reservation/GetReservationInformation").then(response => {
+                    axios.get("/api/reservation/GetReservationInformation?reserveId="+value).then(response => {
                         _this.reserveInfo = response.data;
-                        _this.reserveId = value;
-                        _this.reserveInfo = _this.reserveInfo.filter(reserve => reserve.reserveId == _this.reserveId)
-                        return _this.reserveInfo
+                        //_this.reserveId = value;
+                        //_this.reserveInfo = _this.reserveInfo.filter(reserve => reserve.reserveId == _this.reserveId)
+                        //return _this.reserveInfo
                     });
                 },
         })

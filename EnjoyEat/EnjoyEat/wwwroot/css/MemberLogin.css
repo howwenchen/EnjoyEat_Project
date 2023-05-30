@@ -1,0 +1,22 @@
+﻿input {
+    font-size: 24px;
+}
+
+span{
+    margin-left:5px;
+}
+
+.rememberMe{
+    font-size:24px;
+}
+
+#checkRember {
+    vertical-align: text-bottom;
+    zoom: 200%;
+}
+
+
+#Logo {
+    text-align: center;
+    color: antiquewhite;
+}

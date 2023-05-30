@@ -36,11 +36,16 @@ namespace EnjoyEat.Controllers.API
             return Ok(reservation);
         }
 
+
+
+
         [HttpGet]
-        public async Task<IActionResult> GetReservationInformation()
+        public async Task<IActionResult> GetReservationInformation([FromQuery] int reserveId)
         {
-            var reservationInfo = db.Reservations.Select(r => new ReserveSuccess()
+
+            var reservationInfo = db.Reservations.Where(x =>x.ReserveId==reserveId).Select(r => new ReserveSuccess()
             {
+                ReservationName=r.ReservationInformation.ReservationName,
                  ReservationDate=r.ReservationDate,
                  ReservationTime=r.ReservationTime,
                  NumberofAdultGuest=r.NumberofAdultGuest,
@@ -48,5 +53,6 @@ namespace EnjoyEat.Controllers.API
             }).ToList();
             return Ok(reservationInfo);
         }
+
     }
 }

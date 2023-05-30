@@ -27,15 +27,7 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[MemberLevel]",
-         "ObjectType": 0
-      },
-      {
          "Name": "[dbo].[MemberLogin]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[dbo].[MemberPoints]",
          "ObjectType": 0
       },
       {
@@ -60,6 +52,10 @@
       },
       {
          "Name": "[dbo].[ReservationInformation]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[SubCategories]",
          "ObjectType": 0
       },
       {
