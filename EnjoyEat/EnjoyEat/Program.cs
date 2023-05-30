@@ -1,5 +1,6 @@
 using EnjoyEat.Areas.OrderForHere.Models;
 using EnjoyEat.Models;
+using EnjoyEat.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,12 @@ namespace EnjoyEat
 			});
 			builder.Services.AddHttpContextAccessor();
 			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt => {
+            builder.Services.AddTransient<HashService>();
+            builder.Services.AddTransient<EncryptService>();
+
+
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt => {
 
             })
                 .AddFacebook(facebookOptions =>
