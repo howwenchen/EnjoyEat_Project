@@ -1,0 +1,48 @@
+﻿<!-- d-flex align-items-center -->
+<form action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
+    <main id="main">
+        <section class="breadcrumbs">
+            <div class="container">
+                <h1 style="color:burlywood"> </h1>
+                <div>
+                    <div class="flex-shrink-0" style="text-align:center">
+                        <p>會員登入</p>
+                    </div>
+                    <img src="#" alt="" width="300">
+                </div>
+            </div>
+
+
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <input type="text" aria-label="Account" class="form-control" placeholder="請輸入會員帳號">
+                <input type="password" aria-label="Password" class="form-control" placeholder="請輸入會員密碼">
+
+                <label for="c1">
+                    <input type="checkbox" id="c1" name="cc" />
+                    記住我
+                </label>
+                <br>
+                <a class="nav-link scrollto" asp-controller="MemberRegister" asp-action="Register" button class="btn btn-primary" type="button">登入</a>
+                
+                   <a> 註冊會員</a>
+                    <button class="btn btn-danger" type="button">忘記密碼了?點我</button>
+            </div>
+            <br>
+            <div class="d-grid gap-5 col-6 mx-auto">
+                <button type="button" class="btn btn-outline-primary">
+                    <img src="facebook.png" alt="facebook-icon">
+                    Facebook登入
+                </button>
+            </div>
+            <div class="d-grid gap-5 col-6 mx-auto">
+                <button type="button" class="btn btn-outline-primary">
+                    <img src="google.png" alt="google-icon">
+                    Google 登入
+                </button>
+            </div>
+        </section>
+    </main>
+</form>
+
+
+

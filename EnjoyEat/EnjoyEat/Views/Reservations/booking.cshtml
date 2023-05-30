@@ -16,8 +16,6 @@
                     <h2>確認訂位與填寫聯絡資訊</h2>
                 </div>
                 <form role="form"
-                      action="Success"
-                      method="post"
                       class="php-email-form"
                       data-aos="fade-up"
                       data-aos-delay="100">
@@ -123,7 +121,7 @@
                         ReserveId: _this.reserveId,
                     }
                     if (this.name != '' && this.email != '' && this.phone != null) {
-                    axios.post("https://localhost:7071/api/reservation/booking/PostReservationInformation", request)
+                    axios.post("/api/reservation/booking/PostReservationInformation", request)
                         .then(
                             response => {
                                 Swal.fire({
