@@ -106,7 +106,6 @@ ol {
     padding: 0;
     margin: 0;
 }
-
 /*---------------------
   Helper CSS
 -----------------------*/
@@ -126,12 +125,18 @@ ol {
     }
 
     .section-title h2 {
-        font-size: 46px;
-        color: #111111;
-        line-height: 60px;
-        font-weight: 700;
-        font-style: italic;
-        font-family: "Playfair Display", serif;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 0;
+        line-height: 1px;
+        margin: 0 0 5px 0;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #aaa;
+        font-family: "Poppins",sans-serif;
+    }
+    .section-title p {
+        margin-top: 40px;
     }
 
 .set-bg {

@@ -10,7 +10,7 @@
     <link href="~/orderforhere/startordercss/slicknav.min.css" rel="stylesheet" />
     <link href="~/css/style.min.css" rel="stylesheet">
     <link href="~/css/orderstyle.css" rel="stylesheet" />
-   @* <style>
+    <style>
         #orderArea {
             display: flex;
             justify-content: space-evenly;
@@ -59,14 +59,14 @@
         .btn-secondary a {
             color: #fff;
         }
-    </style>*@
+    </style>
 }
 
 <div id="app">
     @* Order Area *@
     <div class="section-title">
-        <h2>Order</h2>
-        <p>Check Our Tasty Menu</p>
+        <h2>外帶點餐</h2>
+        <p>歡迎查看美味的菜單</p>
     </div>
     <section id="orderItem" class="menu">
         <div class="orderRow" data-aos="fade-up" data-aos-delay="100">
@@ -91,8 +91,8 @@
             </div>
         </div>
     </section>
-    <section id="orderArea" class="shop spad menu section-bg" data-aos="fade-up">
-        <div class="row" data-aos="fade-up" data-aos-delay="100">
+    <section class="shop spad menu section-bg" data-aos="fade-up">
+        <div id="orderArea" class="row" data-aos="fade-up" data-aos-delay="100">
             <div v-for="t in filteredItems" :key="t.productName" class="col-lg-3 col-md-6 col-sm-6 menu-item">
                 <div class="product__item">
                     <div class="product__item__pic set-bg">
@@ -258,10 +258,6 @@
                 selectCategory: function(category) {
                     let _this = this;
                     _this.selectedCategory = category;
-                },
-                openCartModal: function() {
-                    let _this = this;
-                    _this.isCartModalOpen = true;
                 },
             },
         });
