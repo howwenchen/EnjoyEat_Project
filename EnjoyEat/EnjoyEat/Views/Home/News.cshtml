@@ -100,7 +100,7 @@
                         console.log(`No news item found with newsId ${newsId}`);}
                 },
                 changePage: function (page) {
-                    axios.get("https://localhost:7071/Home/GetNews/" + page)
+                    axios.get("/Home/GetNews/" + page)
                         .then(response => {
                             this.currentPageNews = response.data;
                             this.currentPage = page;
@@ -110,7 +110,7 @@
                         });
                 },
                 getPageCount: function () {
-                    axios.get("https://localhost:7071/Home/GetPageCount")
+                    axios.get("/Home/GetPageCount")
                         .then(response => {
                             this.pageNumbers = Array.from({ length: response.data }, (_, index) => index + 1);
                         })

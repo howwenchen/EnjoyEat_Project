@@ -27,6 +27,7 @@ namespace EnjoyEat.Models
         public virtual DbSet<EmployeesLogin> EmployeesLogins { get; set; } = null!;
         public virtual DbSet<EmployeesSalary> EmployeesSalaries { get; set; } = null!;
         public virtual DbSet<FeedBack> FeedBacks { get; set; } = null!;
+        public virtual DbSet<ForHereTable> ForHereTables { get; set; } = null!;
         public virtual DbSet<Level> Levels { get; set; } = null!;
         public virtual DbSet<Member> Members { get; set; } = null!;
         public virtual DbSet<MemberLogin> MemberLogins { get; set; } = null!;
@@ -297,6 +298,23 @@ namespace EnjoyEat.Models
                     .HasForeignKey<FeedBack>(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_FeedBack_Orders");
+            });
+
+            modelBuilder.Entity<ForHereTable>(entity =>
+            {
+                entity.HasKey(e => e.TableId);
+
+                entity.ToTable("ForHereTable");
+
+                entity.Property(e => e.TableId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("TableID");
+
+                entity.HasOne(d => d.Table)
+                    .WithOne(p => p.ForHereTable)
+                    .HasForeignKey<ForHereTable>(d => d.TableId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ForHereTable_ForHereTable");
             });
 
             modelBuilder.Entity<Level>(entity =>

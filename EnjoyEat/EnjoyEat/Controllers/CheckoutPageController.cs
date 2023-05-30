@@ -58,7 +58,7 @@ namespace EnjoyEat.Controllers
                 OrderDate = order.OrderDate,
                 IsTakeway = order.IsTakeway,
                 TableId = order.TableId,
-                CustomerCount =(int) order.CustomerCount,
+                CustomerCount = (int)order.CustomerCount,
                 TotalPrice = order.TotalPrice,
                 CampaignDiscount = order.CampaignDiscount,
                 LevelDiscount = order.LevelDiscount,
@@ -88,6 +88,8 @@ namespace EnjoyEat.Controllers
 
             return Ok(latestOrder.OrderId);
         }
+
+      
 
         [ValidateAntiForgeryToken]
         public IActionResult SendToNewebPay(SendToNewebPayIn inModel)
