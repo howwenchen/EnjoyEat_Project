@@ -8,9 +8,9 @@
     <link href="~/orderforhere/startordercss/magnific-popup.css" rel="stylesheet" />
     <link href="~/orderforhere/startordercss/nice-select.css" rel="stylesheet" />
     <link href="~/orderforhere/startordercss/slicknav.min.css" rel="stylesheet" />
-    <link href="~/css/orderstyle.css" rel="stylesheet" />
     <link href="~/css/style.min.css" rel="stylesheet">
-    <style>
+    <link href="~/css/orderstyle.css" rel="stylesheet" />
+   @* <style>
         #orderArea {
             display: flex;
             justify-content: space-evenly;
@@ -28,7 +28,7 @@
         #orderItem {
             position: sticky;
             /*top: 116px;*/
-            z-index: 997;
+            z-index: 990;
             transition: top 0.5s ease;
             border: 2px solid #cda45e;
             border-radius: 5px;
@@ -46,37 +46,54 @@
         .Items > #menu-flters li {
             margin-bottom: 0;
         }
-    </style>
+
+        .modal-content {
+            background-color: #cda45e;
+        }
+
+        .btn-secondary {
+            color: #fff;
+            background-color: #0c0b09
+        }
+
+        .btn-secondary a {
+            color: #fff;
+        }
+    </style>*@
 }
 
 <div id="app">
+    @* Order Area *@
     <div class="section-title">
         <h2>Order</h2>
         <p>Check Our Tasty Menu</p>
     </div>
-
     <section id="orderItem" class="menu">
         <div class="orderRow" data-aos="fade-up" data-aos-delay="100">
             <div class="Items">
                 <ul id="menu-flters">
-                    <li data-filter="*" class="filter-active">全部</li>
-                    <li data-filter=".filter-appetizer">前菜</li>
-                    <li data-filter=".filter-soups">湯品</li>
-                    <li data-filter=".filter-mainMeal">主餐</li>
-                    <li data-filter=".filter-snacks">點心</li>
-                    <li data-filter=".filter-dessert">甜點</li>
-                    <li data-filter=".filter-beverage">飲料</li>
+                    <li @@click="selectCategory('*')" :class="{ 'filter-active': selectedCategory === '*' }">全部</li>
+                    <li @@click="selectCategory('filter-appetizer')" :class="{ 'filter-active': selectedCategory === 'filter-appetizer' }">前菜</li>
+                    <li @@click="selectCategory('filter-soups')" :class="{ 'filter-active': selectedCategory === 'filter-soups' }">湯品</li>
+                    <li @@click="selectCategory('filter-mainMeal')" :class="{ 'filter-active': selectedCategory === 'filter-mainMeal' }">主餐</li>
+                    <li @@click="selectCategory('filter-snacks')" :class="{ 'filter-active': selectedCategory === 'filter-snacks' }">點心</li>
+                    <li @@click="selectCategory('filter-dessert')" :class="{ 'filter-active': selectedCategory === 'filter-dessert' }">甜點</li>
+                    <li @@click="selectCategory('filter-beverage')" :class="{ 'filter-active': selectedCategory === 'filter-beverage' }">飲料</li>
                 </ul>
             </div>
-            <div class="cartIcon">
-                <i class="fa fa-cart-shopping"></i>
+            <div class="cartIcon" @@click="openCartModal()">
+                <button class="btn btn-link" type="button" data-bs-toggle="modal" data-bs-target="#CartModal" style="color:#FFFFFF">
+                    <i class="fa fa-cart-shopping"></i>
+                </button>
+                <button class="btn btn-link" type="button" data-bs-toggle="modal" data-bs-target="#RecepitModal" style="color:#FFFFFF">
+                    <i class="fa-solid fa-receipt"></i>
+                </button>
             </div>
         </div>
     </section>
-
     <section id="orderArea" class="shop spad menu section-bg" data-aos="fade-up">
         <div class="row" data-aos="fade-up" data-aos-delay="100">
-            <div v-for="t in temp" :class="{'col-lg-3':true,'col-md-6':true,'col-sm-6':true,'menu-item':true, [t.categoryName]:true}">
+            <div v-for="t in filteredItems" :key="t.productName" class="col-lg-3 col-md-6 col-sm-6 menu-item">
                 <div class="product__item">
                     <div class="product__item__pic set-bg">
                         <img :src="baseUrl + t.mealImg" style="width:200px; border-radius:15px" />
@@ -94,7 +111,95 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> 
+    @* Cart Modal *@
+    <div class="modal fade" id="CartModal" tabindex="-1" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>購物車</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @*購物車結構*@
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">繼續點餐</button>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#RecepitModal" data-bs-dismiss="modal">確認訂單</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*Receipt Modal*@
+    <div class="modal fade" id="RecepitModal" tabindex="-1" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                        <h2>訂單明細</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col text-start">訂單編號</div>
+                        <div class="col text-center">桌號</div>
+                        <div class="col text-center">人數</div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-start">xxx</div>
+                        <div class="col text-center">xxx</div>
+                        <div class="col text-center">xxx</div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col text-start">送出時間</div>
+                        <div class="col text-center">訂單狀態</div>
+                        <div class="col text-center">品項數</div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-start">XXX</div>
+                        <div class="col text-center">XXX</div>
+                        <div class="col text-center">XXX</div>
+                    </div>
+                    <div class="pt-2 border-bottom mb-3"></div>
+                    <!--內容區塊-->
+                    <div class="wrapper">
+                        <div class="table-responsive">
+                            <table class="table table-borderless ">
+                                <thead>
+                                    <tr class="text-uppercase text-muted">
+                                        <th scope="col">餐點清單</th>
+                                        <th scope="col" class="text-center">數量</th>
+                                        <th scope="col" class="text-center">小計</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <span>
+                                                <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                                                     alt="apple"
+                                                     class="rounded-circle"
+                                                     width="30"
+                                                     height="30" />
+                                            </span>Babyblends: 1meal/day
+                                        </th>
+                                        <td> <b>1</b></td>
+                                        <td> <b>$69.86</b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                    <button type="button" class="btn btn-secondary"><a asp-controller="OrderTogo" asp-action="Checkout">結帳</a></button>
+                </div>
+            </div>
+        </div>
+    </div>
+   
 </div>
 @section Scripts
     {
@@ -109,7 +214,8 @@
             const element = document.querySelector('#orderItem');
             const scrollPosition = window.scrollY;
             if (window.innerWidth > 990) {
-                element.style.top = scrollPosition < 530 ? '116px' : '0px';
+                element.style.top = scrollPosition < 530
+                ? '116px' : '0px';
             }
             if (window.innerWidth <= 990 && window.innerWidth > 274) {
                 element.style.top = scrollPosition < 450 ? '60px' : '0px';
@@ -118,11 +224,14 @@
                 element.style.top = scrollPosition < 450 ? '88px' : '0px';
             }
         });
+
         var app = new Vue({
             el: '#app',
             data: {
                 baseUrl: '',
                 temp: [],
+                selectedCategory: '*',
+                isCartModalOpen: false,
             },
             mounted: 
                 function () {
@@ -131,10 +240,30 @@
                     axios.get("https://localhost:7071/api/menu/GetMenu")
                         .then(response => {
                             _this.temp = response.data;
-                            console.log(JSON.stringify(response.data));
+                            //console.log(JSON.stringify(response.data));
                         });
                     window.scrollBy(0, 1);
-                }
+                },
+            computed: {
+                filteredItems: function () {
+                    let _this = this;
+                    if (this.selectedCategory === '*') {
+                        return _this.temp;
+                    } else {
+                        return _this.temp.filter(t => t.categoryName === _this.selectedCategory);
+                    }
+                },
+            },
+            methods: {
+                selectCategory: function(category) {
+                    let _this = this;
+                    _this.selectedCategory = category;
+                },
+                openCartModal: function() {
+                    let _this = this;
+                    _this.isCartModalOpen = true;
+                },
+            },
         });
     </script>
     }
