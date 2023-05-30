@@ -39,8 +39,8 @@
 									<option disabled value="">商品種類</option>
 									<option v-for="item in subCategories" :value="item.subCategoryId">{{ item.subCategoriesName }}</option>
 								</select>
-								<span class="tableInfo" @*:v-value="tableId"*@>桌號: {{tableId}} </span>
-								<span class="tableInfo" @*:v-value="capacity"*@>人數: {{capacity}} </span>
+								<span class="tableInfo">桌號: {{tableId}} </span>
+								<span class="tableInfo">人數: {{capacity}} </span>
 							</form>
 						</div>
 					</div>
@@ -165,14 +165,6 @@
 					const subCategory = this.subCategories.find(i => i.subCategoryId === subCategoryId);
 					return subCategory ? subCategory.subCategoriesName : '';
 				},
-				//getTableInfo() {
-				//	let self = this;
-				//	axios.get("/api/OrderLoginApi/GetTableInfo")
-				//		.then(response => {
-				//			self.tableId = response.data.TableNumber;
-				//			self.capacity = response.data.PartySize;
-				//		})
-				//}
 			},
 			computed: {
 				filteredProducts() {
@@ -202,6 +194,14 @@
 				axios.get('/OrderForHere/StartOrder/Products')
 					.then(response => this.products = response.data);
 			},
+			mounted: function () {
+				let self = this;
+				axios.get('/api/OrderLoginApi/GetTableInfo')
+					.then(response => {
+						self.tableId = response.data.tableNumber;
+						self.capacity = response.data.capacity;
+					})
+			}
 		});
 	</script>
 

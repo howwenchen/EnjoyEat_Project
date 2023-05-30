@@ -8,12 +8,20 @@
 }
 
 <div id="app" class="container">
+	<button class="btn btn-success" @@click="update(null)">修改</button>
+	<button class="btn btn-warning" @@click="cancel">取消</button>
+	<button class="btn btn-primary" @@click="edit(null)">編輯</button>
+	<button class="btn btn-danger" @@click="deleteEmployee(null)">刪除</button>
 	<div class="form-group">
 		@*新增按鍵*@
 		<!-- Modal trigger button -->
 		<button type="button" @@click="showInsertPage" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId" style="margin: 33px 0px">
 			新增員工
 		</button>
+	</div>
+	<div class="form-group">
+		@*篩選欄位*@
+
 	</div>
 	<div class="form-group">
 		@*新增紀錄畫面*@
@@ -89,7 +97,7 @@
 						@*進入編輯狀態*@
 						<td>
 							<button class="btn btn-success" @@click="update(item)">修改</button>
-							<button class="btn btn-warning" @@click="cancel()">取消</button>
+							<button class="btn btn-warning" @@click="cancel">取消</button>
 						</td>
 						<td>{{item.employeeId}}</td>
 						<td><input v-model="item.name" /></td>
@@ -97,8 +105,8 @@
 						<td><input v-model="item.birthday" /></td>
 						<td><input v-model="item.phone" /></td>
 						<td><input v-model="item.email" /></td>
-						<td><input v-model="詳細資料" /></td>
-						<td><input v-model="薪資" /></td>
+@*						<td><input v-model="詳細資料" /></td>
+						<td><input v-model="薪資" /></td>*@
 					</template>
 					<template v-else>
 						@*顯示範本*@
@@ -112,8 +120,8 @@
 						<td>{{item.birthday}}</td>
 						<td>{{item.phone}}</td>
 						<td>{{item.email}}</td>
-						<td>詳細資料</td>
-						<td>薪資</td>
+@*						<td>詳細資料</td>
+						<td>薪資</td>*@
 					</template>
 				</tr>
 			</tbody>
@@ -122,31 +130,35 @@
 </div>
 
 @section Scripts {
-	<script src="~/axios/axios.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-	<script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script>
-		var vueApp = {
-			data() {
-				return {
-					EmployeeManagementDTO: [],
-				};
+		new Vue ({
+			el:'#app',
+			data: {
+				EmployeeManagementDTO: [],
+				
 			},
 			methods: {
 				update: function (empDTO) {
+					let self = this;
 					alert("update");
 				},
-				edit: function () {
+				cancel:function(){
+					alert("cancel");
+				},
+				edit: function (emplyeeId) {
+					let self = this;
 					alert("edit");
 				},
 				deleteEmployee: function (employeeId) {
+					let self = this;
 					alert("delete");
 				}
-			}
-		};
-
-		var app = Vue.createApp(vueApp).mount('#app');
-
+			},
+		});
+		
+	
 
 	</script>
 	}

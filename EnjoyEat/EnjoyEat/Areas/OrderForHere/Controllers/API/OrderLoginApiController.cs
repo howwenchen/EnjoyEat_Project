@@ -120,32 +120,26 @@ namespace EnjoyEat.Areas.OrderForHere.API
 		}
 
 
-		private static int TableId;
-		private static int Capacity;
-
 		[HttpPost]
-		public string StartOrder([FromBody] SendOrder table)
+		public string StartOrder(Models.Table table)
 		{
+
 			if (table != null)
 			{
-				TableId = table.TableId;
-				Capacity = table.Capacity;
-
+				HttpContext.Session.SetString("tableNumber", table.TableId.ToString());
+				HttpContext.Session.SetString("capacity", table.Capacity.ToString());
 				return "開始點餐";
 			}
 			return "請輸入桌號及人數";
 		}
 
 		[HttpGet]
-		public object GetTableInfo([FromBody] SendOrder orderInfo)
+		public IActionResult GetTableInfo()
 		{
-			orderInfo = new SendOrder
-			{
-				TableId = (short)TableId,
-				Capacity = (short)Capacity
-			};
+			string tableNumber = HttpContext.Session.GetString("tableNumber");
+			string capacity = HttpContext.Session.GetString("capacity");
 
-			return orderInfo;
+			return Ok();
 		}
 	}
 }

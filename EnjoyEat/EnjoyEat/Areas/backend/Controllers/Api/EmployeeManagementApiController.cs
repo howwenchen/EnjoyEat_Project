@@ -1,19 +1,51 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EnjoyEat.Areas.OrderForHere.Models;
+using EnjoyEat.Areas.OrderForHere.Models.ViewModels;
+using EnjoyEat.Models;
+using EnjoyEat.Models.DTO;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EnjoyEat.Areas.backend.Controllers.API
 {
-	[Route("api/[controller]")]
+	[Area("backend")]
+	[Route("api/EmployeeManagementApi/[controller]")]
 	[ApiController]
 	public class EmployeeManagementApiController : ControllerBase
 	{
+		private readonly db_a989fe_thm101team6Context _context;
+		public EmployeeManagementApiController(db_a989fe_thm101team6Context context)
+		{
+			_context = context;
+		}
 		// GET: api/<EmployeeManagementApiController>
 		[HttpGet]
-		public IEnumerable<string> Get()
+		public async Task<ActionResult<IEnumerable<Employee>>> Employee()
 		{
-			return new string[] { "value1", "value2" };
+			try
+			{
+				var employee = await _context.Employees.AsNoTracking()
+					.Select(e => new EmployeeManagementDTO.Employee
+					{
+						EmployeeId = e.EmployeeId,
+						Name = e.Name,
+						Gender = e.Gender,
+						Birthday = e.Birthday,
+						Phone = e.Phone,
+						Email = e.Email,
+					}).ToListAsync();
+
+				return Ok(employee);
+			}
+			catch (Exception ex)
+			{
+				// 確認錯誤訊息
+				Console.WriteLine(ex.ToString());
+				return StatusCode(500, "Internal server error");
+			}
 		}
+
 
 		// GET api/<EmployeeManagementApiController>/5
 		[HttpGet("{id}")]

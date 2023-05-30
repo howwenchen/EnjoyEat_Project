@@ -15,6 +15,7 @@ namespace EnjoyEat.Models
         public short Capacity { get; set; }
         public string Status { get; set; } = null!;
 
+        public virtual ForHereTable? ForHereTable { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
     }
 }
