@@ -3,10 +3,11 @@ using EnjoyEat.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static EnjoyEat.Models.DTO.EmployeeManagementDTO;
 
 namespace EnjoyEat.Areas.backend.Controllers.Api
 {
-	[Route("api/EmployeeManagementApi/[controller]")]
+	[Route("api/EmployeeManagementApi/[action]")]
 	[ApiController]
 	public class EmployeeManagementApiController : ControllerBase
 	{
@@ -17,20 +18,20 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 		}
 
 		[HttpGet]
-		public object All()
+		public async Task<IEnumerable<EmployeeManagementDTO.Employee>> GetAll()
 		{
-			return _context.Employees.Select(emp => new
+			var emp = await _context.Employees.Select(emp =>
+			new EmployeeManagementDTO.Employee
 			{
-				emp = new
-				{
-					EmployeeId = emp.EmployeeId,
-					Name = emp.Name,
-					Gender = emp.Gender,
-					Birthday = emp.Birthday,
-					Phone = emp.Phone,
-					Email = emp.Email,
-				}
-			}).ToList();
+				EmployeeId = emp.EmployeeId,
+				Name = emp.Name,
+				Gender = emp.Gender,
+				Phone = emp.Phone,
+				Email = emp.Email,
+				Birthday = emp.Birthday,
+				Education = emp.Education,
+			}).ToListAsync();
+			return emp;
 		}
 
 		//篩選功能

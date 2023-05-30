@@ -7,36 +7,41 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EnjoyEat.Areas.OrderForHere.Controllers
 {
-    [Area("OrderForHere")]
-    public class StartOrderController : Controller
-    {
-        private readonly db_a989fe_thm101team6Context _context;
-        public StartOrderController(db_a989fe_thm101team6Context context)
-        {
-            _context = context;
-        }
+	[Area("OrderForHere")]
+	public class StartOrderController : Controller
+	{
+		private readonly db_a989fe_thm101team6Context _context;
+		public StartOrderController(db_a989fe_thm101team6Context context)
+		{
+			_context = context;
+		}
 
+		public IActionResult Index()
+		{
+			return View();
+		}
 
 		public IActionResult FixedIndex()
 		{
 			return View();
 		}
 
-		// GET: OrderForHere/StartOrder/SubCategories
-		[HttpGet("OrderForHere/StartOrder/SubCategories")]
-		public async Task<ActionResult<IEnumerable<SubCategories>>> SubCategories()
+		// GET: OrderForHere/StartOrder/CategoriesWithSubs
+		[HttpGet("OrderForHere/StartOrder/CategoriesWithSubs")]
+		public async Task<ActionResult<IEnumerable<Category>>> CategoriesWithSubs()
 		{
 			try
 			{
-				var subCategories = await _context.SubCategories.AsNoTracking()
-					.Select(i => new StartOrderViewModel.SubCategories
-					{
-						SubCategoryId = i.SubCategoryId,
-						SubCategoriesName = i.SubCategoriesName,
-						CategoryId = i.CategoryId
-					}
-					).ToListAsync();
-				return Ok(subCategories);
+				var categories = await _context.Categories.AsNoTracking().ToListAsync();
+				var subcategories = await _context.SubCategories.AsNoTracking().ToListAsync();
+
+				foreach (var category in categories)
+				{
+					category.SubCategories = subcategories
+						.Where(i => i.CategoryId == category.CategoryId)
+						.ToList();
+				}
+				return Ok(categories);
 			}
 			catch (Exception ex)
 			{
@@ -45,37 +50,6 @@ namespace EnjoyEat.Areas.OrderForHere.Controllers
 				return StatusCode(500, "Internal server error");
 			}
 		}
-
-        public IActionResult FixedIndex()
-        {
-            return View();
-        }
-
-        // GET: OrderForHere/StartOrder/CategoriesWithSubs
-        [HttpGet("OrderForHere/StartOrder/CategoriesWithSubs")]
-        public async Task<ActionResult<IEnumerable<Category>>> CategoriesWithSubs()
-        {
-            try
-            {
-                var categories = await _context.Categories.AsNoTracking().ToListAsync();
-                var subcategories = await _context.SubCategories.AsNoTracking().ToListAsync();
-
-                foreach( var category in categories)
-                {
-                    category.SubCategories = subcategories
-                        .Where(i => i.CategoryId == category.CategoryId)
-                        .ToList();    
-                }
-                return Ok(categories);
-            }
-            catch (Exception ex)
-            {
-                // 確認錯誤訊息
-                Console.WriteLine(ex.ToString());
-                return StatusCode(500, "Internal server error");
-            }
-        }
-
 
 
 		// GET: OrderForHere/StartOrder/Products
@@ -104,51 +78,47 @@ namespace EnjoyEat.Areas.OrderForHere.Controllers
 			}
 
 		}
+
+		//[HttpPost("/OrderForHere/StartOrder/CreateOrder")]
+		//public IActionResult CreateOrder([FromBody] CartViewModel cartViewModel)
+		//{
+		//    // 創建一個新的 Cart 實體並將 CartViewModel 的資訊映射過去
+		//    var cart = new Cart
+		//    {
+		//        // 假設 Cart 和 CartViewModel 有相同的屬性
+		//        Items = cartViewModel.Items.Select(item => new CartItem
+		//        {
+		//            ProductId = item.ProductId,
+		//            Quantity = item.Quantity
+		//        }).ToList()
+		//    };
+
+		//    // 創建一個新的Order
+		//    var order = new Order();
+		//    _context.Orders.Add(order);
+		//    _context.SaveChanges();
+
+		//    foreach (var item in cart.Items)
+		//    {
+		//        // 對於購物車中的每個項目，創建一個新的OrderDetail
+		//        var orderDetail = new OrderDetail
+		//        {
+		//            OrderId = order.OrderId,
+		//            ProductId = item.ProductId,
+		//            Quantity = item.Quantity
+		//        };
+
+		//        // 將OrderDetail添加到數據庫
+		//        _context.OrderDetails.Add(orderDetail);
+		//    }
+
+		//    // 保存更改
+		//    _context.SaveChanges();
+
+		//    return Ok(order.Id);
+		//}
+
 	}
-
-        }
-
-        //[HttpPost("/OrderForHere/StartOrder/CreateOrder")]
-        //public IActionResult CreateOrder([FromBody] CartViewModel cartViewModel)
-        //{
-        //    // 創建一個新的 Cart 實體並將 CartViewModel 的資訊映射過去
-        //    var cart = new Cart
-        //    {
-        //        // 假設 Cart 和 CartViewModel 有相同的屬性
-        //        Items = cartViewModel.Items.Select(item => new CartItem
-        //        {
-        //            ProductId = item.ProductId,
-        //            Quantity = item.Quantity
-        //        }).ToList()
-        //    };
-
-        //    // 創建一個新的Order
-        //    var order = new Order();
-        //    _context.Orders.Add(order);
-        //    _context.SaveChanges();
-
-        //    foreach (var item in cart.Items)
-        //    {
-        //        // 對於購物車中的每個項目，創建一個新的OrderDetail
-        //        var orderDetail = new OrderDetail
-        //        {
-        //            OrderId = order.OrderId,
-        //            ProductId = item.ProductId,
-        //            Quantity = item.Quantity
-        //        };
-
-        //        // 將OrderDetail添加到數據庫
-        //        _context.OrderDetails.Add(orderDetail);
-        //    }
-
-        //    // 保存更改
-        //    _context.SaveChanges();
-
-        //    return Ok(order.Id);
-        //}
-
-    }
 
 
 }
-

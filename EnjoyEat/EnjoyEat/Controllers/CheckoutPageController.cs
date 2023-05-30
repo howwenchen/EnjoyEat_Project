@@ -89,19 +89,11 @@ namespace EnjoyEat.Controllers
 			return Ok(latestOrder.OrderId);
 		}
 
-<<<<<<< HEAD
+
 		[ValidateAntiForgeryToken]
 		public IActionResult SendToNewebPay(SendToNewebPayIn inModel)
 		{
 			SendToNewebPayOut outModel = new SendToNewebPayOut();
-=======
-      
-
-        [ValidateAntiForgeryToken]
-        public IActionResult SendToNewebPay(SendToNewebPayIn inModel)
-        {
-            SendToNewebPayOut outModel = new SendToNewebPayOut();
->>>>>>> main
 
 			// 藍新金流線上付款
 
