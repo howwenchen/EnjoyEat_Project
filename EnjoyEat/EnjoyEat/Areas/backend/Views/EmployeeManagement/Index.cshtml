@@ -8,20 +8,21 @@
 }
 
 <div id="app" class="container">
-	<button class="btn btn-success" @@click="update(null)">修改</button>
-	<button class="btn btn-warning" @@click="cancel">取消</button>
-	<button class="btn btn-primary" @@click="edit(null)">編輯</button>
-	<button class="btn btn-danger" @@click="deleteEmployee(null)">刪除</button>
 	<div class="form-group">
 		@*新增按鍵*@
 		<!-- Modal trigger button -->
 		<button type="button" @@click="showInsertPage" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalId" style="margin: 33px 0px">
 			新增員工
 		</button>
-	</div>
-	<div class="form-group">
-		@*篩選欄位*@
 
+		<div class="col-md-9">
+			@*篩選欄位*@
+			<div class="row" style="width:40%; margin-right:auto; margin-left:0px;">
+				<label class="col-md-5">搜尋員工:</label>
+				<input class="form-contro col-md-5" style="width:150px; margin-left: -50px; margin-bottom:20px;" placeholder="輸入關鍵字"
+					   v-model="filter" @@keyup="filterEmployeeManagementDTO" />
+			</div>
+		</div>
 	</div>
 	<div class="form-group">
 		@*新增紀錄畫面*@
@@ -105,8 +106,8 @@
 						<td><input v-model="item.birthday" /></td>
 						<td><input v-model="item.phone" /></td>
 						<td><input v-model="item.email" /></td>
-@*						<td><input v-model="詳細資料" /></td>
-						<td><input v-model="薪資" /></td>*@
+						@*<td>"詳細資料"</td>
+						<td>"薪資"</td>*@
 					</template>
 					<template v-else>
 						@*顯示範本*@
@@ -120,7 +121,7 @@
 						<td>{{item.birthday}}</td>
 						<td>{{item.phone}}</td>
 						<td>{{item.email}}</td>
-@*						<td>詳細資料</td>
+						@*						<td>詳細資料</td>
 						<td>薪資</td>*@
 					</template>
 				</tr>
@@ -133,18 +134,41 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<script>
-		new Vue ({
-			el:'#app',
+		new Vue({
+			el: '#app',
 			data: {
 				EmployeeManagementDTO: [],
-				
+				filter: '',
+
+			},
+			mounted: function () {
+				let self = this;
+				self.filterEmployeeManagementDTO();
+				axios.get('/api/EmployeeManagementApi/All').then(response => self.EmployeeManagementDTO = response.data)
 			},
 			methods: {
+				filterEmployeeManagementDTO: function () {
+					let self = this;
+					var request = {};
+					request.EmployeeId = isNaN(Number(self.filter)) ? -1 : Number(self.filter);
+					request.Name = request.Phone = request.Email = self.filter;
+					axios.post("/api/EmployeeManagementApi/FilterEmployees", requset)
+						.then(response => {
+							self.EmployeeManagementDTO = response.data;
+							var EmployeeList = [];
+							for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
+								var item = self.EmployeeManagementDTO[i];
+								item.Edit = false;
+								EmployeeList.push(item);
+							}
+							self.EmployeeManagementDTO = EmployeeList;
+						});
+				},
 				update: function (empDTO) {
 					let self = this;
 					alert("update");
 				},
-				cancel:function(){
+				cancel: function () {
 					alert("cancel");
 				},
 				edit: function (emplyeeId) {
@@ -157,8 +181,8 @@
 				}
 			},
 		});
-		
-	
+
+
 
 	</script>
 	}

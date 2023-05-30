@@ -199,7 +199,7 @@
 				axios.get('/api/OrderLoginApi/GetTableInfo')
 					.then(response => {
 						self.tableId = response.data.tableNumber;
-						self.capacity = response.data.capacity;
+						self.capacity = response.data.partySize;
 					})
 			}
 		});

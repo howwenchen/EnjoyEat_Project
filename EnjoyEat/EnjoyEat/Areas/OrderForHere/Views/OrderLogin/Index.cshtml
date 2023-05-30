@@ -9,10 +9,10 @@
 	<h2>內用點餐</h2>
 	<form>
 		<label for="table-number">內用桌號:</label>
-		<input type="text" id="table-number" name="table-number" required v-model="tableNumber" @@input="checkMaxGuests">
+		<input type="text" id="table-number" name="table-number" required v-model="tableId" @@input="checkMaxGuests">
 		<br><br>
 		<label for="party-size">用餐人數:</label>
-		<input type="text" id="party-size" name="party-size" required v-model="partySize" :placeholder="maxGuestsMessage">
+		<input type="text" id="party-size" name="party-size" required v-model="customerCount" :placeholder="maxGuestsMessage">
 		<br><br>
 		@*<label for="member-phone">會員電話:</label>
 		<input type="tel" id="member-phone" name="member-phone" v-model="memberPhone" placeholder="可直接點餐或快速註冊">
@@ -76,8 +76,8 @@
 		var app = new Vue({
 			el: '#Login',
 			data: {
-				tableNumber: '',
-				partySize: '',
+				tableId: '',
+				customerCount: '',
 				maxGuests: 0,
 				errorMessage: ''
 			},
@@ -96,7 +96,7 @@
 					let self = this;
 					axios.get('/api/OrderLoginApi/GetMaxGuests', {
 						params: {
-							tableNumber: parseInt(self.tableNumber)
+							tableId: parseInt(self.tableId)
 						}
 					})
 						.then(response => {
@@ -109,25 +109,25 @@
 				StartToOrder: function (event) {
 					event.preventDefault();
 					let self = this;
-					request = {
-						tableNumber: self.tableNumber,
-						partySize: self.partySize,
-					}
-					console.log(request);
-					if (!self.tableNumber || !self.partySize) {
+					let request = {
+						TableId: self.tableId,
+						CustomerCount: self.customerCount,
+					};
+
+					if (!self.tableId || !self.customerCount) {
 						self.showSweetAlert();
 						return;
 					}
+
 					axios.post('/api/OrderLoginApi/StartOrder', request)
 						.then(response => {
-							if (response.data === '開始點餐') {
+							if (response.data) {
+
 								window.location.href = "/OrderForHere/StartOrder/FixedIndex";
-							} else {
-								window.location.href = "/OrderForHere/OrderLogin/Index";
 							}
 						})
 						.catch(error => {
-							console.log('錯誤');
+							console.log('錯誤', error);
 						});
 				},
 				showSweetAlert() {

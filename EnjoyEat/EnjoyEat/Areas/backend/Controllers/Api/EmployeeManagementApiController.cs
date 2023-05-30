@@ -1,15 +1,11 @@
-﻿using EnjoyEat.Areas.OrderForHere.Models;
-using EnjoyEat.Areas.OrderForHere.Models.ViewModels;
-using EnjoyEat.Models;
+﻿using EnjoyEat.Models;
 using EnjoyEat.Models.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace EnjoyEat.Areas.backend.Controllers.API
+namespace EnjoyEat.Areas.backend.Controllers.Api
 {
-	[Area("backend")]
 	[Route("api/EmployeeManagementApi/[controller]")]
 	[ApiController]
 	public class EmployeeManagementApiController : ControllerBase
@@ -19,57 +15,41 @@ namespace EnjoyEat.Areas.backend.Controllers.API
 		{
 			_context = context;
 		}
-		// GET: api/<EmployeeManagementApiController>
+
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<Employee>>> Employee()
+		public object All()
 		{
-			try
+			return _context.Employees.Select(emp => new
 			{
-				var employee = await _context.Employees.AsNoTracking()
-					.Select(e => new EmployeeManagementDTO.Employee
-					{
-						EmployeeId = e.EmployeeId,
-						Name = e.Name,
-						Gender = e.Gender,
-						Birthday = e.Birthday,
-						Phone = e.Phone,
-						Email = e.Email,
-					}).ToListAsync();
-
-				return Ok(employee);
-			}
-			catch (Exception ex)
-			{
-				// 確認錯誤訊息
-				Console.WriteLine(ex.ToString());
-				return StatusCode(500, "Internal server error");
-			}
+				emp = new
+				{
+					EmployeeId = emp.EmployeeId,
+					Name = emp.Name,
+					Gender = emp.Gender,
+					Birthday = emp.Birthday,
+					Phone = emp.Phone,
+					Email = emp.Email,
+				}
+			}).ToList();
 		}
 
-
-		// GET api/<EmployeeManagementApiController>/5
-		[HttpGet("{id}")]
-		public string Get(int id)
-		{
-			return "value";
-		}
-
-		// POST api/<EmployeeManagementApiController>
+		//篩選功能
 		[HttpPost]
-		public void Post([FromBody] string value)
+		public async Task<IEnumerable<EmployeeManagementDTO.Employee>> FilterEmployees(
+			[FromBody] EmployeeManagementDTO.Employee empDTO)
 		{
+			return _context.Employees.Where(emp =>
+					 emp.EmployeeId == empDTO.EmployeeId ||
+					 emp.Name.Contains(empDTO.Name) ||
+					 emp.Phone.Contains(empDTO.Phone) ||
+					 emp.Email.Contains(empDTO.Email)).Select(emp => new EmployeeManagementDTO.Employee
+					 {
+						 EmployeeId = emp.EmployeeId,
+						 Name = emp.Name,
+						 Phone = emp.Phone,
+						 Email = emp.Email,
+					 });
 		}
 
-		// PUT api/<EmployeeManagementApiController>/5
-		[HttpPut("{id}")]
-		public void Put(int id, [FromBody] string value)
-		{
-		}
-
-		// DELETE api/<EmployeeManagementApiController>/5
-		[HttpDelete("{id}")]
-		public void Delete(int id)
-		{
-		}
 	}
 }

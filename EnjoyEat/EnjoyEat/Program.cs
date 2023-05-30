@@ -26,7 +26,7 @@ namespace EnjoyEat
 				options.Cookie.Name = "Session"; 
 				options.IdleTimeout = TimeSpan.FromHours(2); // 設定 Session 閒置超時時間
 			});
-
+			builder.Services.AddHttpContextAccessor();
 			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt => {
 
             })

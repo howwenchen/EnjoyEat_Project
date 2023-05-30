@@ -7,7 +7,9 @@ namespace EnjoyEat.Models
 {
     public partial class db_a989fe_thm101team6Context : DbContext
     {
-        public db_a989fe_thm101team6Context()
+		internal readonly object EmployeeManagementDTO;
+
+		public db_a989fe_thm101team6Context()
         {
         }
 

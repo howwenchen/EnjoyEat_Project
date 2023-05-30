@@ -121,25 +121,28 @@ namespace EnjoyEat.Areas.OrderForHere.API
 
 
 		[HttpPost]
-		public string StartOrder(Models.Table table)
+		public IActionResult StartOrder([FromBody] SendOrder request)
 		{
-
-			if (table != null)
+			if (!string.IsNullOrEmpty(request.TableId) && !string.IsNullOrEmpty(request.CustomerCount))
 			{
-				HttpContext.Session.SetString("tableNumber", table.TableId.ToString());
-				HttpContext.Session.SetString("capacity", table.Capacity.ToString());
-				return "開始點餐";
+				HttpContext.Session.SetString("tableNumber", request.TableId);
+				HttpContext.Session.SetString("partySize", request.CustomerCount);
+				Console.WriteLine("tableNumber: " + HttpContext.Session.GetString("tableNumber"));
+				Console.WriteLine("partySize: " + HttpContext.Session.GetString("partySize"));
+
+				return Ok("開始點餐");
 			}
-			return "請輸入桌號及人數";
+			return BadRequest("請輸入桌號及人數");
 		}
 
+
 		[HttpGet]
-		public IActionResult GetTableInfo()
+		public UserOrder GetTableInfo()
 		{
 			string tableNumber = HttpContext.Session.GetString("tableNumber");
-			string capacity = HttpContext.Session.GetString("capacity");
+			string capacity = HttpContext.Session.GetString("partySize");
 
-			return Ok();
+			return new UserOrder{ tableNumber= tableNumber, partySize= capacity };
 		}
 	}
 }
