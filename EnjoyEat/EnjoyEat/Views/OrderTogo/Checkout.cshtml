@@ -1,0 +1,243 @@
+﻿@using System.Composition
+@{
+    Layout = "_Layout";
+}
+
+@section Styles{
+
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/checkoutpagestyle.css" rel="stylesheet" />
+    <link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
+}
+<content_body id="app">
+    <!--======= Container =======-->
+    <div class="iphone">
+        <header class="form_header ">
+            <h1>Checkout</h1>
+        </header>
+        <div class="container position-relative "
+             data-aos="zoom-in"
+             data-aos-delay="100">
+
+            <div name="content"
+                 oncontextmenu="return false"
+                 class="snippet-body">
+                <!--標題區塊-->
+                <!--分隔線-->
+                <div class="pt-2 border-bottom mb-3"></div>
+                <div class="d-flex flex-column justify-content-between text-dark"
+                     id="order-heading">
+                    <div class="text-uppercase text-center">
+                        <p class="text-dark border border-2">訂單明細</p>
+                    </div>
+                    <div class="row">
+                        <div class="col text-start">訂單編號</div>
+                        <div class="col text-center">桌號</div>
+                        <div class="col text-center">人數</div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-start">{{OrderItem.orderId}}</div>
+                        <div class="col text-center">{{OrderItem.tableId}}</div>
+                        <div class="col text-center">{{OrderItem.customerCount}}</div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col text-start">送出時間</div>
+                        <div class="col text-center">訂單狀態</div>
+                        <div class="col text-center">品項數</div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-start">{{dateformat(OrderItem.orderDate)}}</div>
+                        <div class="col text-center">{{OrderItem.IsSuccess}}</div>
+                        <div class="col text-center">{{OrderItem.totalItems}}</div>
+                    </div>
+                    <!--分隔線-->
+                    <div class="pt-2 border-bottom mb-3"></div>
+                    <!--內容區塊-->
+                    <div class="wrapper">
+                        <div class="table-responsive">
+                            <table class="table table-borderless ">
+                                <thead>
+                                    <tr class="text-uppercase text-muted">
+                                        <th scope="col">餐點清單</th>
+                                        <th scope="col" class="text-center">數量</th>
+                                        <th scope="col" class="text-center">小計</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th scope="row">
+                                            <span>
+                                                <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                                                     alt="apple"
+                                                     class="rounded-circle"
+                                                     width="30"
+                                                     height="30" />
+                                            </span>Babyblends: 1meal/day
+                                        </th>
+                                        <td> <b>1</b></td>
+                                        <td> <b>$69.86</b></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <span>
+                                                <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                                                     alt="apple"
+                                                     class="rounded-circle"
+                                                     width="30"
+                                                     height="30" />
+                                            </span>Babyblends: 1meal/day
+                                        </th>
+                                        <td><b>1</b></td>
+                                        <td><b>$69.86</b></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <span>
+                                                <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                                                     alt="apple"
+                                                     class="rounded-circle"
+                                                     width="30"
+                                                     height="30" />
+                                            </span>Babyblends: 1meal/day
+                                        </th>
+                                        <td><b>1</b></td>
+                                        <td><b>$69.86</b></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">
+                                            <span>
+                                                <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                                                     alt="apple"
+                                                     class="rounded-circle"
+                                                     width="30"
+                                                     height="30" />
+                                            </span>Babyblends: 1meal/day
+                                        </th>
+                                        <td><b>1</b></td>
+                                        <td><b>$69.86</b></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!--分隔線-->
+                        <div class="pt-2 border-bottom mb-3"></div>
+                        <!--付款選項-->
+                        <fieldset>
+                            <legend>請選擇付款方式</legend>
+                            <div class="row">
+                                <div class="form__radio col mx-2">
+                                    <label for="mastercard">
+                                        <i class="icon fa-regular fa-cash-register"></i>
+                                        內用結帳
+                                    </label>
+                                    <input id="mastercard" name="payment-method" type="radio" />
+                                </div>
+                                <div class="form__radio col mx-2">
+                                    <label for="mastercard">
+                                        <i class="icon fa-regular fa-cash-register"></i>
+                                        線上結帳
+                                    </label>
+                                    <input id="mastercard" name="payment-method" type="radio" />
+                                </div>
+                            </div>
+                        </fieldset>
+                        <!--折扣欄位-->
+                        <div class="text-black py-2" style="font-weight:600;font-size:calc(1.275rem + .3vw)">折扣計算</div>
+                    </div>
+                    <div class="align-items-center pl-3 py-2 mb-2 border-bottom">
+                        <div class="row">
+                            <div class="col">
+                                <div>會員等級折扣</div>
+                                <div>優惠碼折扣</div>
+                            </div>
+                            <div class="col">
+                                <div class="text-end">-{{currency(OrderItem.levelDiscountSum)}}</div>
+                                <div class="text-end">-{{currency(OrderItem.campaignDiscount)}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="align-items-center py-2 mb-2 border-bottom">
+                        <div class="row">
+                            <div class="col">
+                                <div>訂單總金額</div>
+                                <div>折扣金額</div>
+                                <div class="text-danger" style="font-size:larger">應付金額</div>
+                            </div>
+                            <div class="col">
+                                <div class="text-end">{{currency(OrderItem.totalPrice)}}</div>
+                                <div class="text-end">-{{currency(OrderItem.totalDiscount)}}</div>
+                                <div class="text-end text-danger" style="font-size:larger">{{currency(OrderItem.finalPrice)}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-danger" style="border-radius: 0.5em;">結帳</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- End Container -->
+
+</content_body>
+
+@section Scripts{
+    <script src="~/js/main.js"></script>
+    <script src="~/font-awesome/js/all.min.js"></script>
+
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                OrderItem: {},
+                MemberId: '20230006', //等購物車寫完要改掉，memberId要從購物車傳過來
+            },
+            created: function () {
+                this.getLatestOrderId();
+            },
+            methods: {
+                getLatestOrderId: function () {
+                    axios.get("/CheckoutPage/GetLatestOrder/" + this.MemberId)//等購物車寫完要拿掉this.
+                        .then(response => {
+                            this.getOrderItem(response.data);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                },
+                getOrderItem: function (orderId) {
+                    axios.get("/CheckoutPage/GetOrder/" + orderId)
+                        .then(response => {
+                            this.OrderItem = response.data;
+                            this.OrderItem.totalDiscount = this.OrderItem.totalPrice - this.OrderItem.finalPrice;
+                            this.OrderItem.levelDiscountSum = (this.OrderItem.totalPrice - this.OrderItem.campaignDiscount)
+                                * (1 - this.OrderItem.levelDiscount);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                },
+                currency: function (value) {
+                    if (typeof value !== "number") {
+                        return value;
+                    }
+                    var formatter = new Intl.NumberFormat('zh-TW', {
+                        style: 'currency',
+                        currency: 'TWD',
+                        minimumFractionDigits: 0
+                    });
+                    return formatter.format(value);
+                },
+                dateformat: function (date) {
+                    var formattedDateTime = date.replace('T', ' ');
+                    return formattedDateTime;
+                }
+
+            }
+        });
+    </script>
+
+
+
+}

@@ -1,1 +1,24 @@
-﻿
+﻿@section Styles {
+    <style>
+        .menu {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 73vh;
+        }
+
+        .nav-link {
+            font-size: xx-large;
+        }
+    </style>
+}
+<section id="menuItem" class="menu section-bg">
+    <div class="row" data-aos="fade-up" data-aos-delay="100">
+        <div class="col-lg-12 d-flex justify-content-center">
+            <ul id="menu-flters">
+                <li><a class="nav-link scrollto" asp-area="" asp-controller="MemberLogin" asp-action="Index">會員登入</a></li>
+                <li><a class="nav-link scrollto" asp-area="" asp-controller="OrderTogo" asp-action="Order">直接點餐</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
