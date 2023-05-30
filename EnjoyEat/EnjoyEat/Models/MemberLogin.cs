@@ -12,6 +12,6 @@ namespace EnjoyEat.Models
         public bool? IsActive { get; set; }
         public string? Salt { get; set; }
 
-        public virtual Member Member { get; set; } = null!;
+       public virtual Member Member { get; set; } = null!;
     }
 }

@@ -131,9 +131,11 @@ namespace EnjoyEat.Models
 
             modelBuilder.Entity<Cart>(entity =>
             {
+
                 entity.ToTable("Cart");
 
                 entity.Property(e => e.CartId).ValueGeneratedNever();
+
             });
 
             modelBuilder.Entity<Category>(entity =>
