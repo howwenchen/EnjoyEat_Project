@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace WebApplication4.Services
+namespace EnjoyEat.Services
 {
     public class EncryptService
     {
