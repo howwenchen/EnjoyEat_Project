@@ -10,19 +10,19 @@
     padding: 20px;
 }
 
-.menuTop {
-    padding: 12px;
-    padding-bottom: 45px;
-    border: 2px solid #ffffff;
-    width: 50%;
-    min-width: 350px;
+.section-title {
+    margin-top: 40px;
+}
+
+.toptenitem {
+    margin: auto;
 }
 
 .menuDetail {
     padding: 12px;
     padding-bottom: 45px;
     border: 2px solid #ffffff;
-    width: 50%;
+    width: 90%;
     min-width: 350px;
 }
 
@@ -39,6 +39,3 @@
     text-align: center;
     min-width: 110px;
 }
-
-
-/* ①②③④⑤⑥⑦⑧⑨⑩ */
