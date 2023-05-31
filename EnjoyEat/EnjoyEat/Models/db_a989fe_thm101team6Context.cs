@@ -131,9 +131,11 @@ namespace EnjoyEat.Models
 
             modelBuilder.Entity<Cart>(entity =>
             {
+
                 entity.ToTable("Cart");
 
                 entity.Property(e => e.CartId).ValueGeneratedNever();
+
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -342,6 +344,8 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.LastName).HasMaxLength(10);
 
+                entity.Property(e => e.LevelDiscount).HasDefaultValueSql("((0.95))");
+
                 entity.Property(e => e.LevelName).HasMaxLength(10);
 
                 entity.Property(e => e.Phone).HasMaxLength(15);
@@ -371,6 +375,10 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.Password)
                     .HasMaxLength(64)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Role).HasMaxLength(20);
+
+                entity.Property(e => e.Salt).HasMaxLength(100);
 
                 entity.HasOne(d => d.Member)
                     .WithOne(p => p.MemberLogin)

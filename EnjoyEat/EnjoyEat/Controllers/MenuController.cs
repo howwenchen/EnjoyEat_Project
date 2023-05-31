@@ -11,26 +11,26 @@ namespace EnjoyEat.Controllers
 {
     public class MenuController : Controller
     {
-        private readonly db_a989fe_thm101team6Context _context;
+        //private readonly db_a989fe_thm101team6Context _context;
 
-        public MenuController(db_a989fe_thm101team6Context context)
-        {
-            _context = context;
-        }
+        //public MenuController(db_a989fe_thm101team6Context context)
+        //{
+        //    _context = context;
+        //}
 
-        [HttpGet]
+        //[HttpGet]
         public IActionResult Index()
         {
-            var dbContext = _context.Products.Include(t => t.SubCategory);
-            var temp = dbContext.Select(pro => new MenuViewModel
-            {
-                ProductId = pro.ProductId,
-                MealImg = pro.MealImg,
-                ProductName = pro.ProductName,
-                UnitPrice = pro.UnitPrice,
-                Description = pro.Description,
-                CategoryName = pro.SubCategory.Category.CategoryName
-            });
+            //var dbContext = _context.Products.Include(t => t.SubCategory);
+            //var temp = dbContext.Select(pro => new MenuViewModel
+            //{
+            //    ProductId = pro.ProductId,
+            //    MealImg = pro.MealImg,
+            //    ProductName = pro.ProductName,
+            //    UnitPrice = pro.UnitPrice,
+            //    Description = pro.Description,
+            //    CategoryName = pro.SubCategory.Category.CategoryName
+            //});
             //var categories = _context.SubCategories.Include(x => x.Products)
             //    .Select(c => new SubCategoriesViewModel
             //    {
@@ -47,7 +47,7 @@ namespace EnjoyEat.Controllers
             //            Description = p.Description,
             //        })
             //    });
-            return View(temp);
+            return View();
         }
     }
 }

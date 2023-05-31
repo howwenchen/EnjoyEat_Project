@@ -16,13 +16,13 @@
                 <div class=" d-grid gap-2 col-6 mx-auto">
                     <h4>
                         <i class="fa-solid fa-lock"></i>
-                        <span>帳號:</span>
+                        <span>帳號</span>
                     </h4>
                     <input type="text" aria-label="Account" placeholder="請輸入會員帳號"
                            maxlength="12" minlength="8" required>
                     <h4>
                         <i class="fa-solid fa-key"></i>
-                        <span>密碼:</span>
+                        <span>密碼</span>
                     </h4>
                     <input type="password" aria-label="Password" class="" placeholder="請輸入會員密碼"
                            maxlength="12" minlength="8" required>
@@ -31,15 +31,14 @@
                         <input type="checkbox" id="checkRember" name="cc"  />
                         <span class="rememberMe">記住我</span>
                     </label>
-                    <br>
 
-                    <button class="btn btn-primary" type="button">登入</button>
-                    <a asp-controller="MemberRegister" asp-action="Index" class="btn btn-primary">註冊會員</a>
+                    <button class="login btn btn-primary" type="button">登入</button>
+                    <a asp-controller="MemberRegister" asp-action="Index" class=" register btn btn-primary">註冊會員</a>
                     <button class="btn btn-danger" type="button">忘記密碼</button>
                 </div>
                 <br>
                 <div class="d-grid gap-5 col-6 mx-auto">
-                    <button type="button" class="btn btn-outline-primary">
+                    <button class="btn btn-outline-primary" type="button">
                         <img src="facebook.png" alt="facebook-icon">
                         Facebook登入
                     </button>
