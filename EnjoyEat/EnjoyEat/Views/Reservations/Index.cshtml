@@ -59,15 +59,16 @@
                     </div>
                     <!-- datepicke -->
                     <label for="datepicker">用餐日期</label>
-                    <div id="d1" class="calendar ">
+                    <div id="d1" class="calendar">
                         <!-- datepicker -->
                         <date-picker v-model="ReserveDate"
                                      value-type="format"
                                      name="ReserveDate"
                                      id="datepicker"
-                                     class="col-lg-6 form-selectss "
+                                     class="col-lg-8 form-selectss "
                                      placeholder="請選擇用餐日期"
-                                     :disabled-date="disablerange"></date-picker>
+                                     :disabled-date="disablerange" style="width:248px">
+                        </date-picker>
                     </div>
                     <label>用餐時段</label>
                     <div class="col-lg-6 form-group" id="mealTimePicker">

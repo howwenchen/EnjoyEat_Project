@@ -135,6 +135,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\OrderForHere\Data\" />
+    <Folder Include="wwwroot\img\AboutUs\" />
   </ItemGroup>
 
   <ItemGroup>
