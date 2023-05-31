@@ -12,6 +12,9 @@ using System.Text.Json;
 using EnjoyEat.Services;
 using System.Reflection;
 using System.Security.Policy;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace EnjoyEat.Controllers.API
 {
@@ -105,10 +108,31 @@ namespace EnjoyEat.Controllers.API
             }
 
             return "註冊成功";
-        }       
+        }
 
 
         //會員登入
+        //public async Task<IActionResult> Login( model)
+        //{
+        //    var user = _db.Users.FirstOrDefault(x => x.Account == model.Account &&
+        //    x.Password == model.Password);
+        //    if (user == null)
+        //    {
+        //        ViewBag.Error = "帳號密碼錯誤";
+        //        return View("login");
+        //    }
+        //    //通行證 證件 身分證 護照 駕照 戶口名簿
+        //    //姓名:xxx 證號:A123456789 父:XXX
+        //    var claims = new List<Claim>() {
+        //         new Claim(ClaimTypes.Name, user.Name),
+        //         new Claim(ClaimTypes.Role, user.Role),
+        //    };
+        //    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        //    var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+        //    await HttpContext.SignInAsync(claimsPrincipal);
+        //    return RedirectToAction("Index", "home");
+        //}
+
 
         //抓取會員資料
         [HttpGet]
