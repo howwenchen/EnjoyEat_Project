@@ -16,6 +16,10 @@ namespace EnjoyEat.Areas.OrderForHere.Controllers
             _context = context;
         }
 
+        public partial class Cart
+        {
+            public object Items { get; internal set; }
+        }
         public IActionResult Index()
         {
             return View();
@@ -82,30 +86,31 @@ namespace EnjoyEat.Areas.OrderForHere.Controllers
         //[HttpPost("/OrderForHere/StartOrder/CreateOrder")]
         //public IActionResult CreateOrder([FromBody] CartViewModel cartViewModel)
         //{
-        //    // 創建一個新的 Cart 實體並將 CartViewModel 的資訊映射過去
-        //    var cart = new Cart
-        //    {
-        //        // 假設 Cart 和 CartViewModel 有相同的屬性
-        //        Items = cartViewModel.Items.Select(item => new CartItem
-        //        {
-        //            ProductId = item.ProductId,
-        //            Quantity = item.Quantity
-        //        }).ToList()
-        //    };
-
         //    // 創建一個新的Order
-        //    var order = new Order();
+        //    var order = new Order
+        //    {
+        //        OrderDate = DateTime.Now,
+        //        MemberId = cartViewModel.MemberId,
+
+        //        Total = cartViewModel.Total,
+        //        CustomerName = cartViewModel.CustomerName,
+        //        CustomerPhone = cartViewModel.CustomerPhone,
+        //        CustomerEmail = cartViewModel.CustomerEmail,
+        //        CustomerAddress = cartViewModel.CustomerAddress,
+        //        CustomerRemark = cartViewModel.CustomerRemark,
+        //        OrderStatus = "未處理"
+        //    };
         //    _context.Orders.Add(order);
         //    _context.SaveChanges();
 
-        //    foreach (var item in cart.Items)
+        //    foreach (var item in cartViewModel.Items)
         //    {
         //        // 對於購物車中的每個項目，創建一個新的OrderDetail
         //        var orderDetail = new OrderDetail
         //        {
         //            OrderId = order.OrderId,
         //            ProductId = item.ProductId,
-        //            Quantity = item.Quantity
+        //            Quantity = (short)item.Quantity
         //        };
 
         //        // 將OrderDetail添加到數據庫
@@ -115,11 +120,9 @@ namespace EnjoyEat.Areas.OrderForHere.Controllers
         //    // 保存更改
         //    _context.SaveChanges();
 
-        //    return Ok(order.Id);
+        //    return Ok(order.OrderId);
         //}
 
     }
-
-
 }
 
