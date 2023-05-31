@@ -10,7 +10,7 @@
         </div>
     </div>
 </div>
-<div  class="php-email-form" data-aos="fade-up" data-aos-delay="100">
+<div class="php-email-form" data-aos="fade-up" data-aos-delay="100">
     <main id="main">
         <div id="bookConfirmInformation">
             <div class="container" id="bookedConfirm">
@@ -79,7 +79,7 @@
                     let searchString = window.location.search.replace("?", "");
                     let value = searchString.split('=')[1];
                     _this.reserveId = parseInt(value);
-                    axios.get("/api/reservation/GetReservationInformation?reserveId="+value).then(response => {
+                    axios.get("/api/reservation/GetReservationInformation?reserveId=" + value).then(response => {
                         _this.reserveInfo = response.data;
                         //_this.reserveId = value;
                         //_this.reserveInfo = _this.reserveInfo.filter(reserve => reserve.reserveId == _this.reserveId)

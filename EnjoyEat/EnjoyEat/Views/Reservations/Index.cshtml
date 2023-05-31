@@ -68,7 +68,7 @@
                                      class="col-lg-8 form-selectss "
                                      placeholder="請選擇用餐日期"
                                      :disabled-date="disablerange" style="width:248px">
-                        </date-picker>
+                                 </date-picker>
                     </div>
                     <label>用餐時段</label>
                     <div class="col-lg-6 form-group" id="mealTimePicker">
@@ -131,7 +131,7 @@
                         </template>
                     </span>
                 </div>
-              
+
                 <div class="text-center book-a-table php-email-form " id="reservationNext">
                     <button type="button" id="show" :disabled="disSet" :class="disClass" data-bs-toggle="modal" data-bs-target="#infoModal">
                         下一步，填寫聯絡資訊
@@ -259,7 +259,7 @@
                         axios.post("/api/reservation/PostReservation", request)
                             .then(
                                 response => {
-                                    let id=response.data.reserveId;
+                                    let id = response.data.reserveId;
                                     window.location.href = `Reservations/booking?ReserveId=${id}`
                                 })
                     }
