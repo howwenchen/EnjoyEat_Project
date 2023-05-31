@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static EnjoyEat.Models.DTO.EmployeeManagementDTO;
+using Employee = EnjoyEat.Models.Employee;
 
 namespace EnjoyEat.Areas.backend.Controllers.Api
 {
@@ -52,5 +53,81 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 					 });
 		}
 
+		//編輯功能
+		[HttpPost]
+		public ApiResultDto Edit([FromBody] EmployeeManagementDTO.Employee empDTO)
+		{
+			try
+			{
+				var editEmp = _context.Employees.FirstOrDefault(e => e.EmployeeId == empDTO.EmployeeId);
+				if (editEmp == null) return new ApiResultDto() { Status = false, Message = "修改失敗" };
+
+				editEmp.Name = empDTO.Name;
+				editEmp.Gender = empDTO.Gender;
+				editEmp.Phone = empDTO.Phone;
+				editEmp.Email = empDTO.Email;
+
+				_context.SaveChanges();
+				return new ApiResultDto() { Status = true, Message = "修改成功" };
+			}
+			catch (Exception) 
+			{
+				return new ApiResultDto() { Status = true, Message = "修改失敗" };
+			}
+
+		}
+
+		[HttpPost]
+		public async Task<string> CreateEmp([FromBody] EmployeeManagementDTO.Employee empDTO)
+		{
+			try
+			{
+				Employee NewEmp = new Employee
+				{
+					Name = empDTO.Name,
+					Gender = empDTO.Gender,
+					Birthday = empDTO.Birthday,
+					Phone = empDTO.Phone,
+					Email = empDTO.Email
+				};
+				_context.Employees.Add(NewEmp);
+				await _context.SaveChangesAsync();
+				return "新增成功";
+			}
+			catch (Exception)
+			{
+				return "新增失敗";
+			}
+			
+		}
+		//[HttpPost]
+		//public ApiResultDto Create([FromBody] EmployeeManagementDTO.Employee empDTO)
+		//{
+		//	try
+		//	{
+		//		_context.Employees.Add(new Employee
+		//		{
+		//			EmployeeId = empDTO.EmployeeId,
+		//			Name = empDTO.Name,
+		//			Gender = empDTO.Gender,
+		//			Birthday = empDTO.Birthday,
+		//			Phone = empDTO.Phone,
+		//			Email = empDTO.Email,
+		//		});
+		//		_context.SaveChanges();
+
+		//		return new ApiResultDto() { Status = true, Message = "新增成功" };
+		//	}
+		//	catch (Exception)
+		//	{
+		//		return new ApiResultDto
+		//		{
+		//			Status = false,
+		//			Message = "新增失敗"
+		//		};
+		//	}
+		//}
+
+		
 	}
 }

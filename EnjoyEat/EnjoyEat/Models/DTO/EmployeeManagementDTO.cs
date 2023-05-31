@@ -1,4 +1,6 @@
-﻿namespace EnjoyEat.Models.DTO
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EnjoyEat.Models.DTO
 {
 	public class EmployeeManagementDTO
 	{
@@ -8,6 +10,8 @@
 			public string? Name { get; set; } = null!;
 			public string? Gender { get; set; }
 			public string? IdentityId { get; set; }
+
+			[DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
 			public DateTime? Birthday { get; set; }
 			public string? Phone { get; set; } = null!;
 			public string? Address { get; set; }
