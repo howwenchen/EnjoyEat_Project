@@ -12,7 +12,7 @@
 	<div class="form-group">
 		@*新增按鍵*@
 		<!-- Modal trigger button -->
-		<button class="btn btn-primary btn-lg" @@click="showInsert()"  data-toggle="modal" style="margin: 33px 0px">
+		<button class="btn btn-primary btn-lg" @@click="showInsert()" data-toggle="modal" style="margin: 33px 0px">
 			<span><i class="fa-solid fa-circle-plus"></i> 新增</span>
 		</button>
 		@*篩選欄位*@
@@ -139,6 +139,26 @@
 			</div>
 		</div>
 	</div>
+	<!-- DeleteModal -->
+	<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel" style="color:black;">刪除員工資訊</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" style="font-size: 18px; display: inline-block;">
+					你確定要刪除? <br />
+					員工編號: {{employeeId}}<br />
+					員工姓名: {{name}}
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" @@click="deleteComfirm()">確定</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 
@@ -193,7 +213,7 @@
 							self.birthday = ""
 							self.email = ""
 							self.phone = ""
-							$('#editModal').modal('hide');
+							$("#editModal").modal("hide");
 							if (response.data) {
 								self.showSweetAlert();
 								self.getEmp();
@@ -222,124 +242,153 @@
 						self.phone = editedEmp.phone;
 					}
 				},
-				deleteEmployee: function (employeeId) {
+				deleteEmp: function (employeeId) {
+					$("#deleteModal").modal("show");
 					let self = this;
-					alert("delete");
+					var empIndex = -1;
+					for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
+						var emp = self.EmployeeManagementDTO[i];
+						if (employeeId == emp.employeeId) {
+							empIndex = i;
+							break;
+						}
+					}
+					if (empIndex !== -1) {
+						var editedEmp = self.EmployeeManagementDTO[empIndex];
+						self.employeeId = editedEmp.employeeId;
+						self.name = editedEmp.name;
+						self.gender = editedEmp.gender;
+						self.birthday = editedEmp.birthday;
+						self.email = editedEmp.email;
+						self.phone = editedEmp.phone;
+					}
 				},
-				showInsert: function () {
-					$("#insertModal").modal("show");
-				},
-				createEmp: function () {
+				deleteComfirm: function () {
 					let self = this;
 					var request = {
-						name: self.name,
-						gender: self.gender,
-						birthday: self.birthday,
-						email: self.email,
-						phone: self.phone
-					};
+						employeeId: self.employeeId,
+					};					
 					console.log(request);
-					axios.post("/api/EmployeeManagementApi/CreateEmp", request)
-						.then(response => {
-							$('#insertModal').modal('hide');
-							if (response.data) {
-								self.getEmp();
-								self.showSweetAlert2();
-								return;
-							}
-							else{
-								self.showSweetAlert3();
-								return;
-							}
-						});
-				},
-				showSweetAlert() {
-					let self = this;
-					Swal.fire({
-						icon: 'success',
-						color: '#FFF',
-						iconColor: '#D8CDB9',
-						background: '#2F4F4F',
-						text: '修改成功 !',
-						position: 'center',
-						confirmButtonText: '確定',
-						customClass: {
-							popup: 'custom-swal-popup'
-						},
-						showConfirmButton: true,
-						allowEscapeKey: false,
-						allowEnterKey: false,
-						allowOutsideClick: false,
-						closeOnClickOutside: false,
-						showClass: {
-							popup: 'animate__animated animate__fadeInDown'
-						},
-						hideClass: {
-							popup: 'animate__animated animate__fadeOutUp'
+				axios.post("/api/EmployeeManagementApi/DeleteEmp", request)
+					.then(response => {
+						if (response.data) {
+							self.getEmp();
+							$("#deleteModal").modal("hide");
+							self.showSweetAlert3();
+							return;
 						}
 					})
-				},
-				showSweetAlert2() {
-					let self = this;
-					Swal.fire({
-						icon: 'success',
-						color: '#FFF',
-						iconColor: '#D8CDB9',
-						background: '#2F4F4F',
-						text: '新增成功 !',
-						position: 'center',
-						confirmButtonText: '確定',
-						customClass: {
-							popup: 'custom-swal-popup'
-						},
-						showConfirmButton: true,
-						allowEscapeKey: false,
-						allowEnterKey: false,
-						allowOutsideClick: false,
-						closeOnClickOutside: false,
-						showClass: {
-							popup: 'animate__animated animate__fadeInDown'
-						},
-						hideClass: {
-							popup: 'animate__animated animate__fadeOutUp'
+			},
+			showInsert: function () {
+				$("#insertModal").modal("show");
+			},
+			createEmp: function () {
+				let self = this;
+				var request = {
+					name: self.name,
+					gender: self.gender,
+					birthday: self.birthday,
+					email: self.email,
+					phone: self.phone
+				};
+				console.log(request);
+				axios.post("/api/EmployeeManagementApi/CreateEmp", request)
+					.then(response => {
+						$('#insertModal').modal('hide');
+						if (response.data) {
+							self.getEmp();
+							self.showSweetAlert2();
+							return;
 						}
-					})
-				},
-				showSweetAlert3() {
-					let self = this;
-					Swal.fire({
-						icon: 'error',
-						color: '#FFF',
-						iconColor: '#D8CDB9',
-						background: '#2F4F4F',
-						text: '請確實填寫員工資訊 !',
-						position: 'center',
-						confirmButtonText: '確定',
-						customClass: {
-							popup: 'custom-swal-popup'
-						},
-						showConfirmButton: true,
-						allowEscapeKey: false,
-						allowEnterKey: false,
-						allowOutsideClick: false,
-						closeOnClickOutside: false,
-						showClass: {
-							popup: 'animate__animated animate__fadeInDown'
-						},
-						hideClass: {
-							popup: 'animate__animated animate__fadeOutUp'
-						}
-					})
-				},
-				getFormattedDate(date) {
-					if (date) {
-						return moment(date).format('YYYY/MM/DD');
+					});
+			},
+			showSweetAlert() {
+				let self = this;
+				Swal.fire({
+					icon: 'success',
+					color: '#FFF',
+					iconColor: '#D8CDB9',
+					background: '#2F4F4F',
+					text: '修改成功 !',
+					position: 'center',
+					confirmButtonText: '確定',
+					customClass: {
+						popup: 'custom-swal-popup'
+					},
+					showConfirmButton: true,
+					allowEscapeKey: false,
+					allowEnterKey: false,
+					allowOutsideClick: false,
+					closeOnClickOutside: false,
+					showClass: {
+						popup: 'animate__animated animate__fadeInDown'
+					},
+					hideClass: {
+						popup: 'animate__animated animate__fadeOutUp'
 					}
-					return '';
-				},
+				})
+			},
+			showSweetAlert2() {
+				let self = this;
+				Swal.fire({
+					icon: 'success',
+					color: '#FFF',
+					iconColor: '#D8CDB9',
+					background: '#2F4F4F',
+					text: '新增成功 !',
+					position: 'center',
+					confirmButtonText: '確定',
+					customClass: {
+						popup: 'custom-swal-popup'
+					},
+					showConfirmButton: true,
+					allowEscapeKey: false,
+					allowEnterKey: false,
+					allowOutsideClick: false,
+					closeOnClickOutside: false,
+					showClass: {
+						popup: 'animate__animated animate__fadeInDown'
+					},
+					hideClass: {
+						popup: 'animate__animated animate__fadeOutUp'
+					}
+				})
+			},
+			showSweetAlert3() {
+				let self = this;
+				Swal.fire({
+					icon: 'success',
+					color: '#FFF',
+					iconColor: '#D8CDB9',
+					background: '#2F4F4F',
+					text: '刪除成功 !',
+					position: 'center',
+					confirmButtonText: '確定',
+					customClass: {
+						popup: 'custom-swal-popup'
+					},
+					showConfirmButton: true,
+					allowEscapeKey: false,
+					allowEnterKey: false,
+					allowOutsideClick: false,
+					closeOnClickOutside: false,
+					showClass: {
+						popup: 'animate__animated animate__fadeInDown'
+					},
+					hideClass: {
+						popup: 'animate__animated animate__fadeOutUp'
+					}
+				})
+			},
+			getFormattedDate(date) {
+				if (date) {
+					return moment(date).format('YYYY/MM/DD');
+				}
+				return '';
+			},
 
-			}
-		});
+		}
+				});
 
 	</script>
 }

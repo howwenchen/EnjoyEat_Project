@@ -11,17 +11,17 @@ namespace EnjoyEat.Models.DTO
 			public string? Gender { get; set; }
 			public string? IdentityId { get; set; }
 
-			[DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+			//[DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
 			public DateTime? Birthday { get; set; }
 			public string? Phone { get; set; } = null!;
 			public string? Address { get; set; }
 			public string? Email { get; set; } = null!;
 			public string? Education { get; set; }
 		}
-		
+
+		// 員工薪資
 		public class Salary
 		{
-			// 員工薪資
 			public decimal? BasicSalary { get; set; }
 			public decimal? Bonus { get; set; }
 			public decimal? OverTime { get; set; }
@@ -30,6 +30,16 @@ namespace EnjoyEat.Models.DTO
 			public double? Hours { get; set; }
 			public decimal TotalSalary { get; set; }
 			public DateTime PaymentDate { get; set; }
+		}
+
+		public class EmpLogin
+		{
+			public int EmployeesId { get; set; }
+			public string UserName { get; set; } = null!;
+			public string Password { get; set; } = null!;
+			public DateTime LoginTime { get; set; }
+
+			public virtual Employee Employees { get; set; } = null!;
 		}
 		
 

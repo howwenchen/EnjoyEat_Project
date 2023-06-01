@@ -77,6 +77,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 
 		}
 
+		//新增員工
 		[HttpPost]
 		public async Task<string> CreateEmp([FromBody] EmployeeManagementDTO.Employee empDTO)
 		{
@@ -100,33 +101,24 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 			}
 			
 		}
-		//[HttpPost]
-		//public ApiResultDto Create([FromBody] EmployeeManagementDTO.Employee empDTO)
-		//{
-		//	try
-		//	{
-		//		_context.Employees.Add(new Employee
-		//		{
-		//			EmployeeId = empDTO.EmployeeId,
-		//			Name = empDTO.Name,
-		//			Gender = empDTO.Gender,
-		//			Birthday = empDTO.Birthday,
-		//			Phone = empDTO.Phone,
-		//			Email = empDTO.Email,
-		//		});
-		//		_context.SaveChanges();
 
-		//		return new ApiResultDto() { Status = true, Message = "新增成功" };
-		//	}
-		//	catch (Exception)
-		//	{
-		//		return new ApiResultDto
-		//		{
-		//			Status = false,
-		//			Message = "新增失敗"
-		//		};
-		//	}
-		//}
+		//刪除員工
+		[HttpPost]
+		public bool DeleteEmp([FromBody] EmployeeManagementDTO.Employee empDTO)
+		{
+			try
+			{
+				var emp = _context.Employees.FirstOrDefault(e => e.EmployeeId == empDTO.EmployeeId);
+				if (emp == null) return false;
+				_context.Employees.Remove(emp);
+				_context.SaveChanges();
+				return true;
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+		}
 
 		
 	}
