@@ -18,5 +18,14 @@ span{
 
 #Logo {
     text-align: center;
-    color: antiquewhite;
+    color: burlywood;
+    margin-top: 30px;
+}
+
+.login {
+    margin-top: 10px;
+}
+
+.btn {
+    margin-bottom: 5px;
 }

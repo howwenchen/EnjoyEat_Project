@@ -15,13 +15,11 @@ namespace EnjoyEat.Areas.OrderForHere.Controllers
 		{
 			_context = context;
 		}
-
-		public IActionResult Index()
+		public partial class Cart
 		{
-			return View();
+			public object Items { get; internal set; }
 		}
-
-		public IActionResult FixedIndex()
+		public IActionResult Index()
 		{
 			return View();
 		}
@@ -77,6 +75,7 @@ namespace EnjoyEat.Areas.OrderForHere.Controllers
 				return StatusCode(500, "Internal server error");
 			}
 
+
 		}
 
 		//[HttpPost("/OrderForHere/StartOrder/CreateOrder")]
@@ -111,14 +110,7 @@ namespace EnjoyEat.Areas.OrderForHere.Controllers
 		//        // 將OrderDetail添加到數據庫
 		//        _context.OrderDetails.Add(orderDetail);
 		//    }
-
-		//    // 保存更改
-		//    _context.SaveChanges();
-
-		//    return Ok(order.Id);
+		//    return Ok(order.OrderId);
 		//}
-
 	}
-
-
 }

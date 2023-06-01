@@ -6,16 +6,13 @@ namespace EnjoyEat.Models.ViewModel
 {
     public class MemberLoginViewModel
     {
-        [EmailAddress]
-        [Display(Name ="會員編號")]
         public int MemberId { get; set; }
-        [Required]
-        [Display(Name="帳號")]
-        public string Account { get; internal set; } = null!;
-        [Required]
-        [DataType(DataType.Password)]
-        [Display(Name ="密碼")]
-        public byte[] Password { get; internal set; } = null!;
+
+        [Required, MinLength(8), MaxLength(12)]     
+        public string Account { get; set; } = null!;
+        
+        [Required, MinLength(8),MaxLength(12)]
+        public string Password { get; set; } = null!;
 
         public virtual Member Member { get; set; } = null!;
     }
