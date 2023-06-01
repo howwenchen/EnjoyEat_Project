@@ -4,12 +4,7 @@
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.css" />
 }
-@{
-    if (ViewBag.Error != "")
-    {
-        <h1>@ViewBag.Error</h1>
-    }
-}
+
 <!-- d-flex align-items-center -->
 <div id="regis" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
     <main id="main">
@@ -169,6 +164,8 @@
                     },
                     submitInfo: function () {
                         let _this = this;
+                        _this.accountDuplicate = false;
+                        _this.emailDuplicate = false;                      
                         infoRequest = {
                             FirstName: _this.firstName,
                             LastName: _this.lastName,
@@ -208,7 +205,7 @@
                                         title: '註冊成功',
                                         html: '<div class="custom-swal-container"><div class="custom-swal-message">將跳轉至登入頁面!</div></div>',
                                         showConfirmButton: false,
-                                        timer: 2500,
+                                        timer: 2000,
                                         position: 'center'
                                     }).then(result => {
                                         if (result.dismiss === Swal.DismissReason.timer) {

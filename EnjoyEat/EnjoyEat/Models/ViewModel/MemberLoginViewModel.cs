@@ -14,7 +14,6 @@ namespace EnjoyEat.Models.ViewModel
         [Required, MinLength(8),MaxLength(12)]
         public string Password { get; set; } = null!;
 
-        public virtual Member Member { get; set; } = null!;
     }
     // @Html.ValidationMessageFor根據LoginViewModel的 meta規則，來做防呆
     

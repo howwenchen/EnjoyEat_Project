@@ -35,6 +35,13 @@ namespace EnjoyEat.Models.ViewModel
 
 
     }
+    public class ForgetViewModel
+    {
+        [Required, MinLength(8), MaxLength(12)]
+        public string? Account { get; set; } = null!;
+        [Required, EmailAddress]
+        public string? Email { get; set; }
+    }
 
 }
 
