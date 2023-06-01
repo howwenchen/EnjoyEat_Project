@@ -7,6 +7,7 @@ namespace EnjoyEat.Models
     {
         public Product()
         {
+            CartItems = new HashSet<CartItem>();
             OrderDetails = new HashSet<OrderDetail>();
         }
 
@@ -21,6 +22,7 @@ namespace EnjoyEat.Models
         public byte SubCategoryId { get; set; }
 
         public virtual SubCategory SubCategory { get; set; } = null!;
+        public virtual ICollection<CartItem> CartItems { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

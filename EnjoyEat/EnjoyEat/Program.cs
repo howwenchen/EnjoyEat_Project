@@ -19,7 +19,7 @@ namespace EnjoyEat
             builder.Services.AddDbContext<SQL8005site4nownetContext>(options =>
                 options.UseSqlServer(EnjoyEatConnectionString));
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddLogging();
             builder.Services.AddSession(options =>
             {
                 options.Cookie.Name = "Session";
