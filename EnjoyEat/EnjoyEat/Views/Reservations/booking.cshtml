@@ -16,8 +16,6 @@
                     <h2>確認訂位與填寫聯絡資訊</h2>
                 </div>
                 <form role="form"
-                      action="Success"
-                      method="post"
                       class="php-email-form"
                       data-aos="fade-up"
                       data-aos-delay="100">
@@ -85,7 +83,7 @@
                         </div>*@
                     </div>
                     <button type="button" id="bookReturn" @@click="Return">返回上一頁</button>
-                    <button type="submit" id="bookNow" @@click="BookNow">確認訂位</button>
+                    <button type="button" id="bookNow" @@click="BookNow">確認訂位</button>
                 </form>
             </div>
         </div>
@@ -123,41 +121,41 @@
                         ReserveId: _this.reserveId,
                     }
                     if (this.name != '' && this.email != '' && this.phone != null) {
-                    axios.post("/api/reservation/booking/PostReservationInformation", request)
-                        .then(
-                            response => {
-                                Swal.fire({
-                                    allowOutsideClick: false,
-                                    icon: 'success',
-                                    color: '#333',
-                                    iconColor: '#D8CDB9',
-                                    background: '#FFF',
-                                    title: '訂位成功',
-                                    //text: '',
-                                    html: '<div class="custom-swal-container"><div class="custom-swal-message">將轉至訂位成功畫面!</div></div>',
-                                    showConfirmButton: false,
-                                    timer: 2500,
-                                    position: 'center'
-                                }).then(result => {
-                                    if (result.dismiss === Swal.DismissReason.timer) {
-                                        window.location.href = `/Reservations/success?id=${id}`
-                                    };
-                                })
-                            });
-                } else {
-                    Swal.fire({
-                        allowOutsideClick: false,
-                        icon: 'error',
-                        color: '#333',
-                        iconColor: '#D8CDB9',
-                        confirmButtonColor: '#721B29',
-                        background: '#FFF',
-                        html: '<div class="custom-swal-container"><div class="custom-swal-message">請填寫完整訊息，才能發送哦!</div></div>',
-                        // text: '有地方還沒填哦!',
-                    })
+                        axios.post("/api/reservation/booking/PostReservationInformation", request)
+                            .then(
+                                response => {
+                                    Swal.fire({
+                                        allowOutsideClick: false,
+                                        icon: 'success',
+                                        color: '#333',
+                                        iconColor: '#D8CDB9',
+                                        background: '#FFF',
+                                        title: '訂位成功',
+                                        //text: '',
+                                        html: '<div class="custom-swal-container"><div class="custom-swal-message">將轉至訂位成功畫面!</div></div>',
+                                        showConfirmButton: false,
+                                        timer: 2500,
+                                        position: 'center'
+                                    }).then(result => {
+                                        if (result.dismiss === Swal.DismissReason.timer) {
+                                            window.location.href = `/Reservations/success?id=${id}`
+                                        };
+                                    })
+                                });
+                    } else {
+                        Swal.fire({
+                            allowOutsideClick: false,
+                            icon: 'error',
+                            color: '#333',
+                            iconColor: '#D8CDB9',
+                            confirmButtonColor: '#721B29',
+                            background: '#FFF',
+                            html: '<div class="custom-swal-container"><div class="custom-swal-message">請填寫完整訊息，才能發送哦!</div></div>',
+                            // text: '有地方還沒填哦!',
+                        })
+                    }
                 }
-            }
-         },
-     });
+            },
+        });
     </script>
 }

@@ -12,6 +12,9 @@ using System.Text.Json;
 using EnjoyEat.Services;
 using System.Reflection;
 using System.Security.Policy;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace EnjoyEat.Controllers.API
 {
@@ -105,10 +108,90 @@ namespace EnjoyEat.Controllers.API
             }
 
             return "註冊成功";
-        }       
+        }
 
-
+        [HttpPost]
         //會員登入
+        public async Task<string> Login([FromBody] MemberLoginViewModel model)
+        {
+            var user = db.MemberLogins.FirstOrDefault(x => x.Account == model.Account);
+
+            if (user == null)
+            {
+                return "帳號密碼錯誤";
+            }
+            var hashedPassword = hash.GetHash(string.Concat(model.Password, user.Salt).ToString());
+            var userPassword = db.MemberLogins.FirstOrDefault(x => x.Password == hashedPassword);
+            if (userPassword == null)
+            {
+                return "帳號密碼錯誤";
+            }
+
+
+            var memberId = db.Members.FirstOrDefault(x=>x.MemberId==user.MemberId);
+            var fullname=memberId.LastName + memberId.FirstName;
+
+            //通行證
+            var claims = new List<Claim>() {
+                 new Claim(ClaimTypes.Name, fullname),
+                 new Claim(ClaimTypes.Role, user.Role),
+            };
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            await HttpContext.SignInAsync(claimsPrincipal);
+
+            HttpContext.Session.SetString("MemberId", user.MemberId.ToString());
+            HttpContext.Session.SetString("Email", memberId.Email);
+            return "登入成功";
+        }
+
+        //忘記密碼
+        [HttpPost]
+        public async Task<string> ForgetPassword([FromBody] ForgetViewModel model)
+        {
+
+            var member = db.Members.FirstOrDefault(x => x.Email == model.Email);
+            if (member == null)
+            {
+                return "信箱錯誤";
+            }
+            var account =db.MemberLogins.Where(y=>y.MemberId==member.MemberId).FirstOrDefault(x =>x.Account == model.Account);
+            if (account == null)
+            {
+                return "帳號錯誤";
+            }
+
+            //寄信
+            var obj = new AesValidationDto(model.Account, DateTime.Now.AddDays(3));
+            var jString = JsonSerializer.Serialize(obj);
+            var code = encrypt.AesEncryptToBase64(jString);
+
+            var mail = new MailMessage()
+            {
+                From = new MailAddress("thm101team66@gmail.com"),
+                Subject = "重新設定密碼",
+                Body = @$"請點這<a href=`https://localhost:7071/MemberRegister/Enable?code=${code}`>這裡</a>重新設定密碼",
+                IsBodyHtml = true,
+                BodyEncoding = Encoding.UTF8,
+            };
+
+            mail.To.Add(new MailAddress(model.Email));
+            try
+            {
+                using (var sm = new SmtpClient("smtp.gmail.com", 587)) //465 ssl
+                {
+                    sm.EnableSsl = true;
+                    sm.Credentials = new NetworkCredential("thm101team66@gmail.com", "lepbkbyfphbmjwtx");
+                    sm.Send(mail);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return "成功";
+        }
 
         //抓取會員資料
         [HttpGet]
