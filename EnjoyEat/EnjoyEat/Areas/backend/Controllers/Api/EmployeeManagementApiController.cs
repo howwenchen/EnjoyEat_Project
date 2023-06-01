@@ -26,6 +26,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 			{
 				EmployeeId = emp.EmployeeId,
 				Name = emp.Name,
+				Account = emp.Account,
 				Gender = emp.Gender,
 				Phone = emp.Phone,
 				Email = emp.Email,
@@ -33,24 +34,6 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 				Education = emp.Education,
 			}).ToListAsync();
 			return emp;
-		}
-
-		//篩選功能
-		[HttpPost]
-		public async Task<IEnumerable<EmployeeManagementDTO.Employee>> FilterEmployees(
-			[FromBody] EmployeeManagementDTO.Employee empDTO)
-		{
-			return _context.Employees.Where(emp =>
-					 emp.EmployeeId == empDTO.EmployeeId ||
-					 emp.Name.Contains(empDTO.Name) ||
-					 emp.Phone.Contains(empDTO.Phone) ||
-					 emp.Email.Contains(empDTO.Email)).Select(emp => new EmployeeManagementDTO.Employee
-					 {
-						 EmployeeId = emp.EmployeeId,
-						 Name = emp.Name,
-						 Phone = emp.Phone,
-						 Email = emp.Email,
-					 });
 		}
 
 		//編輯功能
@@ -63,6 +46,8 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 				if (editEmp == null) return new ApiResultDto() { Status = false, Message = "修改失敗" };
 
 				editEmp.Name = empDTO.Name;
+				editEmp.Account = empDTO.Account;
+				editEmp.Password = empDTO.Password;
 				editEmp.Gender = empDTO.Gender;
 				editEmp.Phone = empDTO.Phone;
 				editEmp.Email = empDTO.Email;
@@ -70,7 +55,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 				_context.SaveChanges();
 				return new ApiResultDto() { Status = true, Message = "修改成功" };
 			}
-			catch (Exception) 
+			catch (Exception)
 			{
 				return new ApiResultDto() { Status = true, Message = "修改失敗" };
 			}
@@ -86,6 +71,8 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 				Employee NewEmp = new Employee
 				{
 					Name = empDTO.Name,
+					Account = empDTO.Account,
+					Password = empDTO.Password,
 					Gender = empDTO.Gender,
 					Birthday = empDTO.Birthday,
 					Phone = empDTO.Phone,
@@ -99,7 +86,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 			{
 				return "新增失敗";
 			}
-			
+
 		}
 
 		//刪除員工
@@ -120,6 +107,6 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 			}
 		}
 
-		
+
 	}
 }
