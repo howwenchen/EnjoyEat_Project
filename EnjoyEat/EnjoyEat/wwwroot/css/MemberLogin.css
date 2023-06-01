@@ -1,7 +1,10 @@
 ﻿input {
     font-size: 24px;
 }
-
+div .nono {
+    color: red;
+    text-align:center;
+}
 span{
     margin-left:5px;
 }
