@@ -51,17 +51,18 @@
                     <li><a class="nav-link scrollto" asp-area="" asp-controller="Home" asp-action="News">最新消息</a></li>
                     <li><a class="nav-link scrollto" asp-area="" asp-controller="Reservations" asp-action="Index">訂位</a></li>
                     <li><a class="nav-link scrollto" asp-area="OrderForHere" asp-controller="OrderLogin" asp-action="Index">內用點餐</a></li>
-                    <li><a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index">後臺管理</a></li>
                     <li><a class="nav-link scrollto" asp-area="" asp-controller="OrderTogo" asp-action="Index">外帶點餐</a></li>
                     <li><a class="nav-link scrollto" asp-controller="ContactUs" asp-action="ContactUs">聯絡我們</a></li>
                     <li><a class="nav-link scrollto" asp-controller="MemberLogin" asp-action="Index">會員登入</a></li>
                     <li><a class="nav-link scrollto" asp-controller="MemberManagement" asp-action="Index">會員管理</a></li>
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
-            </nav><!-- .navbar -->
+            </nav>
+            <!-- .navbar -->
 
         </div>
-    </header><!-- End Header -->
+    </header>
+    <!-- End Header -->
 
     <div class="container">
         <main role="main" class="pb-3">
@@ -84,39 +85,28 @@
                                 <strong>Phone:</strong> 02 1234-6789<br>
                                 <strong>Email:</strong> enjoyeat@example.com<br>
                             </p>
-                            <!-- <div class="social-links mt-3">
-                              <span class="twitter"><i class="bx bxl-twitter"></i></span>
-                              <span class="facebook"><i class="bx bxl-facebook"></i></span>
-                              <span class="instagram"><i class="bx bxl-instagram"></span>
-
-                              <a href="" class="twitter"><i class="bx bxl-twitter"></i></a>
-                              <a href="" class="facebook"><i class="bx bxl-facebook"></i></a>
-                              <a href="" class="instagram"><i class="bx bxl-instagram"></i></a>
-                              <a href="" class="google-plus"><i class="bx bxl-skype"></i></a>
-                              <a href="" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-                            </div> -->
                         </div>
                     </div>
 
                     <div class="col-lg-3 col-md-6 footer-links">
                         <ul>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">關於我們</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">聯絡我們</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a asp-controller="AboutUs" asp-action="Index">關於我們</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a asp-controller="ContactUs" asp-action="ContactUs">聯絡我們</a></li>
                         </ul>
                     </div>
 
                     <div class="col-lg-3 col-md-6 footer-links">
                         <ul>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">最新消息</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a asp-controller="Home" asp-action="News">最新消息</a></li>
                             <li><i class="bx bx-chevron-right"></i> <a asp-controller="Menu" asp-action="Index">菜單</a></li>
                         </ul>
                     </div>
 
                     <div class="col-lg-3 col-md-6 footer-links">
                         <ul>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">訂位</a></li>
-                            <li><i class="bx bx-chevron-right"></i> <a href="#">外帶訂餐</a></li>
-
+                            <li><i class="bx bx-chevron-right"></i> <a asp-controller="Reservations" asp-action="Index">訂位</a></li>
+                            <li><i class="bx bx-chevron-right"></i> <a asp-controller="OrderTogo" asp-action="Index">外帶點餐</a></li>
+                            <li><a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index">後臺管理</a></li>
                         </ul>
 
                     </div>
