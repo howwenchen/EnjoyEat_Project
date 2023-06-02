@@ -21,8 +21,6 @@ namespace EnjoyEat.Models
         public string? Address { get; set; }
         public string Email { get; set; } = null!;
         public string? Education { get; set; }
-        public string? Account { get; set; }
-        public string? Password { get; set; }
 
         public virtual EmployeesLogin? EmployeesLogin { get; set; }
         public virtual EmployeesSalary? EmployeesSalary { get; set; }
