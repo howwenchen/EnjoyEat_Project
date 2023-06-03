@@ -11,7 +11,7 @@
 			font-size: 18px;
 		}
 
-		.tdContent td:hover {
+		.tdContent :hover {
 			color: wheat;
 		}
 
@@ -40,9 +40,9 @@
 			<thead>
 				<tr class="titleName">
 					<td>員工編號</td>
+					<td>職位</td>
 					<td>員工帳號</td>
 					<td>員工姓名</td>
-					<td>生日</td>
 					<td>聯絡方式</td>
 					<td>Email</td>
 					<td>詳細資料</td>
@@ -54,15 +54,15 @@
 			<tbody>
 				<tr v-for="item in EmployeeManagementDTO" class="tdContent">
 					<td>{{item.employeeId}}</td>
+					<td>{{item.role}}</td>
 					<td>{{item.account}}</td>
 					<td>{{item.name}}</td>
-					<td>{{getFormattedDate(item.birthday)}}</td>
 					<td>{{item.phone}}</td>
 					<td>{{item.email}}</td>
-					<td>詳細資料</td>
-					<td>薪資</td>
+					<td><a class="btn edit" @@click="empInfo(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="Edit"></i></a></td>
+					<td><a class="btn edit" @@click="edit(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="Edit"></i></a></td>
 					<td>
-						<a class="btn edit" @@click="edit(item.employeeId)"><i class="fa-solid fa-pen" style="color:yellow;" title="Edit"></i></a>
+						<a class="btn edit" @@click="edit(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="Edit"></i></a>
 						<a class="btn delete" @@click="deleteEmp(item.employeeId)"><i class="fa-solid fa-trash-can" title="Delete" style="color:red;"></i></a>
 					</td>
 				</tr>
@@ -81,6 +81,10 @@
 					<div class="modal-body" style="color:white; background-color: brown;">
 						@*頁面內容Body*@
 						<div class="form-group">
+							<label class="form-label">職位:</label>
+							<input class="form-control" v-model="role" />
+						</div>
+						<div class="form-group">
 							<label class="form-label">員工姓名:</label>
 							<input class="form-control" v-model="name" />
 						</div>
@@ -95,10 +99,6 @@
 						<div class="form-group">
 							<label class="form-label">性別:</label>
 							<input class="form-control" v-model="gender" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">生日:</label>
-							<input class="form-control" v-model="birthday" />
 						</div>
 						<div class="form-group">
 							<label class="form-label">聯絡方式:</label>
@@ -129,6 +129,10 @@
 					<div class="modal-body" style="color:white; background-color: brown;">
 						@*頁面內容Body*@
 						<div class="form-group">
+							<label class="form-label">職位:</label>
+							<input class="form-control" v-model="role" />
+						</div>
+						<div class="form-group">
 							<label class="form-label">員工姓名:</label>
 							<input class="form-control" v-model="name" />
 						</div>
@@ -143,10 +147,6 @@
 						<div class="form-group">
 							<label class="form-label">性別:</label>
 							<input class="form-control" v-model="gender" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">生日:</label>
-							<input class="form-control" v-model="birthday" />
 						</div>
 						<div class="form-group">
 							<label class="form-label">聯絡方式:</label>
@@ -176,6 +176,7 @@
 				<div class="modal-body" style="font-size: 18px; display: inline-block;">
 					你確定要刪除? <br />
 					員工編號: {{employeeId}}<br />
+					職位: {{role}}<br />
 					員工姓名: {{name}}<br />
 					員工帳號: {{account}}
 				</div>
@@ -201,11 +202,11 @@
 			data: {
 				EmployeeManagementDTO: [],
 				employeeId: '',
-				name: '',
+				role: '',
+				name: '尚未登入',
 				account: '',
-				password:'',
+				password: '',
 				gender: '',
-				birthday: '',
 				email: '',
 				phone: '',
 			},
@@ -228,35 +229,40 @@
 					let self = this;
 					var request = {
 						employeeId: self.employeeId,
+						role: self.role,
 						name: self.name,
 						account: self.account,
 						password: self.password,
 						gender: self.gender,
-						birthday: self.birthday,
 						email: self.email,
 						phone: self.phone
 					};
 					console.log(request);
 					axios.post("/api/EmployeeManagementApi/Edit", request)
 						.then(response => {
+							self.role = ""
 							self.name = ""
 							self.account = ""
 							self.password = ""
 							self.gender = ""
-							self.birthday = ""
 							self.email = ""
 							self.phone = ""
 							$("#editModal").modal("hide");
 							if (response.data) {
-								self.showSweetAlert();
+								self.sweatAlert("success", "編輯成功");
 								self.getEmp();
 								return;
 							}
 						})
 				},
 				edit: function (employeeId) {
-					$("#editModal").modal("show");
 					let self = this;
+					//判斷員工權限
+					if (self.role !== 'manager') {
+						self.sweatAlert('error', '您沒有權限進行編輯');
+						return;
+					}
+					$("#editModal").modal("show");
 					var empIndex = -1;
 					for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
 						var emp = self.EmployeeManagementDTO[i];
@@ -268,16 +274,17 @@
 					if (empIndex !== -1) {
 						var editedEmp = self.EmployeeManagementDTO[empIndex];
 						self.employeeId = editedEmp.employeeId;
+						self.role = editedEmp.role;
 						self.name = editedEmp.name;
 						self.password = editedEmp.password;
 						self.account = editedEmp.account;
 						self.gender = editedEmp.gender;
-						self.birthday = editedEmp.birthday;
 						self.email = editedEmp.email;
 						self.phone = editedEmp.phone;
 					}
 				},
 				deleteEmp: function (employeeId) {
+					//判斷員工權限
 					$("#deleteModal").modal("show");
 					let self = this;
 					var empIndex = -1;
@@ -291,11 +298,11 @@
 					if (empIndex !== -1) {
 						var editedEmp = self.EmployeeManagementDTO[empIndex];
 						self.employeeId = editedEmp.employeeId;
+						self.role = editedEmp.role;
 						self.name = editedEmp.name;
 						self.account = editedEmp.account;
 						self.password = editedEmp.password;
 						self.gender = editedEmp.gender;
-						self.birthday = editedEmp.birthday;
 						self.email = editedEmp.email;
 						self.phone = editedEmp.phone;
 					}
@@ -304,11 +311,11 @@
 					let self = this;
 					var request = {
 						employeeId: self.employeeId,
+						role: self.role,
 						name: self.name,
 						account: self.account,
 						password: self.password,
 						gender: self.gender,
-						birthday: self.birthday,
 						email: self.email,
 						phone: self.phone
 					};
@@ -318,18 +325,19 @@
 							if (response.data) {
 								self.getEmp();
 								$("#deleteModal").modal("hide");
-								self.showSweetAlert3();
+								self.sweatAlert("success", "刪除成功");
 								return;
 							}
 						})
 				},
 				showInsert: function () {
 					let self = this;
+					//判斷員工權限
+					self.role = ""
 					self.name = ""
 					self.account = ""
 					self.password = ""
 					self.gender = ""
-					self.birthday = ""
 					self.email = ""
 					self.phone = ""
 					$("#insertModal").modal("show");
@@ -337,110 +345,35 @@
 				createEmp: function () {
 					let self = this;
 					var request = {
-						name: "",
-						account: "",
-						password:"",
-						gender: "",
-						birthday: "",
-						email: "",
-						phone: ""
+						role: self.role,
+						name: self.name,
+						account: self.account,
+						password: self.password,
+						gender: self.gender,
+						email: self.email,
+						phone: self.phone
 					};
 					console.log(request);
 					axios.post("/api/EmployeeManagementApi/CreateEmp", request)
 						.then(response => {
+							console.log(response);
 							$('#insertModal').modal('hide');
 							if (response.data) {
 								self.getEmp();
-								self.showSweetAlert2();
+								self.sweatAlert("success", "新增成功");
 								return;
 							}
 						});
 				},
-				showSweetAlert() {
-					let self = this;
+				sweatAlert: function (icon, text) {
 					Swal.fire({
-						icon: 'success',
-						color: '#FFF',
-						iconColor: '#D8CDB9',
-						background: '#2F4F4F',
-						text: '修改成功 !',
 						position: 'center',
-						confirmButtonText: '確定',
-						customClass: {
-							popup: 'custom-swal-popup'
-						},
-						showConfirmButton: true,
-						allowEscapeKey: false,
-						allowEnterKey: false,
-						allowOutsideClick: false,
-						closeOnClickOutside: false,
-						showClass: {
-							popup: 'animate__animated animate__fadeInDown'
-						},
-						hideClass: {
-							popup: 'animate__animated animate__fadeOutUp'
-						}
+						icon: icon,
+						title: text,
+						showConfirmButton: false,
+						timer: 1500
 					})
 				},
-				showSweetAlert2() {
-					let self = this;
-					Swal.fire({
-						icon: 'success',
-						color: '#FFF',
-						iconColor: '#D8CDB9',
-						background: '#2F4F4F',
-						text: '新增成功 !',
-						position: 'center',
-						confirmButtonText: '確定',
-						customClass: {
-							popup: 'custom-swal-popup'
-						},
-						showConfirmButton: true,
-						allowEscapeKey: false,
-						allowEnterKey: false,
-						allowOutsideClick: false,
-						closeOnClickOutside: false,
-						showClass: {
-							popup: 'animate__animated animate__fadeInDown'
-						},
-						hideClass: {
-							popup: 'animate__animated animate__fadeOutUp'
-						}
-					})
-				},
-				showSweetAlert3() {
-					let self = this;
-					Swal.fire({
-						icon: 'success',
-						color: '#FFF',
-						iconColor: '#D8CDB9',
-						background: '#2F4F4F',
-						text: '刪除成功 !',
-						position: 'center',
-						confirmButtonText: '確定',
-						customClass: {
-							popup: 'custom-swal-popup'
-						},
-						showConfirmButton: true,
-						allowEscapeKey: false,
-						allowEnterKey: false,
-						allowOutsideClick: false,
-						closeOnClickOutside: false,
-						showClass: {
-							popup: 'animate__animated animate__fadeInDown'
-						},
-						hideClass: {
-							popup: 'animate__animated animate__fadeOutUp'
-						}
-					})
-				},
-				getFormattedDate(date) {
-					if (date) {
-						return moment(date).format('YYYY/MM/DD');
-					}
-					return '';
-				},
-
 			}
 		});
 

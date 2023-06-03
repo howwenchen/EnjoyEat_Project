@@ -9,7 +9,7 @@
 
 	<!-- Favicon -->
 	<link href="img/favicon.ico" rel="icon">
-
+	<link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
 	<!-- Google Web Fonts -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,11 +62,10 @@
 				<div class="navbar-nav w-100">
 					<a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
 					<div class="nav-item dropdown">
-						<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>Elements</a>
+						<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa-solid fa-people-arrows me-2"></i>會員相關</a>
 						<div class="dropdown-menu bg-transparent border-0">
-							<a href="button.html" class="dropdown-item">Buttons</a>
-							<a href="typography.html" class="dropdown-item">Typography</a>
-							<a href="element.html" class="dropdown-item">Other Elements</a>
+							<a href="typography.html" class="dropdown-item">會員管理</a>
+							<a href="element.html" class="dropdown-item">訂單管理</a>
 						</div>
 					</div>
 					<a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
@@ -74,11 +73,13 @@
 					<a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
 					<a asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>員工管理</a>
 					<div class="nav-item dropdown">
-						<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>登入</a>
+						<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>{{name}}</a>
 						<div class="dropdown-menu bg-transparent border-0">
 							<ul>
-								<li class="dropdown-item">@Html.ActionLink("登入","Index","EmployeeLogin")</li>
-								<li class="dropdown-item">@Html.ActionLink("登出","Index","EmployeeLogin")</li>
+								<li class="dropdown-item"><i class="fa-solid fa-right-to-bracket me-2"></i>@Html.ActionLink("登入","Index","EmployeeLogin")</li>
+								<li class="dropdown-item"><i class="fa-solid fa-right-from-bracket me-2"></i>@Html.ActionLink("登出","Index","EmployeeLogin")</li>
+@*								<li class="dropdown-item">@Html.ActionLink("登入","Index","EmployeeLogin")</li>
+								<li class="dropdown-item">@Html.ActionLink("登出","Index","EmployeeLogin")</li>*@
 							</ul>
 						</div>
 					</div>
@@ -142,4 +143,5 @@
 	<script src="~/backend/js/main.js"></script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>

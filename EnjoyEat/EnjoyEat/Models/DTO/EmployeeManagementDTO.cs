@@ -4,8 +4,6 @@ namespace EnjoyEat.Models.DTO
 {
 	public class EmployeeManagementDTO
 	{
-		public class Employee
-		{
 			public int EmployeeId { get; set; }
 			public string? Name { get; set; } = null!;
 			public string? Gender { get; set; }
@@ -27,7 +25,7 @@ namespace EnjoyEat.Models.DTO
 			public DateTime PaymentDate { get; set; }
 			public string Account { get; set; } 
 			public string? Password { get; set; }
-
-		}
+			public string? Role { get; set; }
+		
 	}
 }

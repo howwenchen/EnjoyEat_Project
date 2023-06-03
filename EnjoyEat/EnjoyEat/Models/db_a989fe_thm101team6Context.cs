@@ -206,7 +206,7 @@ namespace EnjoyEat.Models
             {
                 entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
 
-                entity.Property(e => e.Account).HasMaxLength(20);
+                entity.Property(e => e.Account).HasMaxLength(15);
 
                 entity.Property(e => e.Address).HasMaxLength(60);
 
@@ -216,12 +216,11 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Email).HasMaxLength(30);
 
-                entity.Property(e => e.Gender).HasColumnType("text");
+                entity.Property(e => e.Gender).HasMaxLength(15);
 
                 entity.Property(e => e.IdentityId)
-                    .HasMaxLength(10)
-                    .HasColumnName("IdentityID")
-                    .IsFixedLength();
+                    .HasMaxLength(30)
+                    .HasColumnName("IdentityID");
 
                 entity.Property(e => e.Name).HasMaxLength(6);
 
@@ -230,6 +229,8 @@ namespace EnjoyEat.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Phone).HasMaxLength(15);
+
+                entity.Property(e => e.Role).HasMaxLength(20);
             });
 
             modelBuilder.Entity<EmployeesLogin>(entity =>

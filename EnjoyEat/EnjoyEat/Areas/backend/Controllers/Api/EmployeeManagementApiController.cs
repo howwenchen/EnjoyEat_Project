@@ -1,5 +1,6 @@
 ﻿using EnjoyEat.Models;
 using EnjoyEat.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +20,13 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 		}
 
 		[HttpGet]
-		public async Task<IEnumerable<EmployeeManagementDTO.Employee>> GetAll()
+		public async Task<IEnumerable<EmployeeManagementDTO>> GetAll()
 		{
 			var emp = await _context.Employees.Select(emp =>
-			new EmployeeManagementDTO.Employee
+			new EmployeeManagementDTO
 			{
 				EmployeeId = emp.EmployeeId,
+				Role = emp.Role,
 				Name = emp.Name,
 				Account = emp.Account,
 				Gender = emp.Gender,
@@ -35,10 +37,36 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 			}).ToListAsync();
 			return emp;
 		}
+		//編輯頁面
+		[HttpPost]
+		public IActionResult EditShow([FromBody] EmployeeManagementDTO empDTO) 
+		{
+			var getRole = HttpContext.Session.GetString("Role");
+
+			if (getRole != "master") return Json(new returnObj(NoAuthorize));
+
+			return Json(new returnObj(OK));
+
+		}
+
+		private OkResult NoAuthorize()
+		{
+			throw new NotImplementedException();
+		}
+
+		private OkResult OK()
+		{
+			throw new NotImplementedException();
+		}
+
+		private IActionResult Json(returnObj returnObj)
+		{
+			throw new NotImplementedException();
+		}
 
 		//編輯功能
 		[HttpPost]
-		public ApiResultDto Edit([FromBody] EmployeeManagementDTO.Employee empDTO)
+		public ApiResultDto Edit([FromBody] EmployeeManagementDTO empDTO)
 		{
 			try
 			{
@@ -46,39 +74,42 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 				if (editEmp == null) return new ApiResultDto() { Status = false, Message = "修改失敗" };
 
 				editEmp.Name = empDTO.Name;
-				editEmp.Account = empDTO.Account;
-				editEmp.Password = empDTO.Password;
 				editEmp.Gender = empDTO.Gender;
 				editEmp.Phone = empDTO.Phone;
 				editEmp.Email = empDTO.Email;
+				editEmp.Account = empDTO.Account;
+				editEmp.Password = empDTO.Password;
+
 
 				_context.SaveChanges();
 				return new ApiResultDto() { Status = true, Message = "修改成功" };
 			}
 			catch (Exception)
 			{
-				return new ApiResultDto() { Status = true, Message = "修改失敗" };
+				return new ApiResultDto() { Status = false, Message = "修改失敗" };
 			}
 
 		}
 
 		//新增員工
+		//[Authorize(Roles = "manager")]
 		[HttpPost]
-		public async Task<string> CreateEmp([FromBody] EmployeeManagementDTO.Employee empDTO)
+		public async Task<string> CreateEmp([FromBody] EmployeeManagementDTO empDTO)
 		{
 			try
 			{
 				Employee NewEmp = new Employee
 				{
 					Name = empDTO.Name,
+					Gender = empDTO.Gender,
+					Phone = empDTO.Phone,
+					Email = empDTO.Email,
 					Account = empDTO.Account,
 					Password = empDTO.Password,
-					Gender = empDTO.Gender,
-					Birthday = empDTO.Birthday,
-					Phone = empDTO.Phone,
-					Email = empDTO.Email
+					Role = empDTO.Role,
 				};
 				_context.Employees.Add(NewEmp);
+
 				await _context.SaveChangesAsync();
 				return "新增成功";
 			}
@@ -90,8 +121,9 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 		}
 
 		//刪除員工
+		//[Authorize(Roles = "manager")]
 		[HttpPost]
-		public bool DeleteEmp([FromBody] EmployeeManagementDTO.Employee empDTO)
+		public bool DeleteEmp([FromBody] EmployeeManagementDTO empDTO)
 		{
 			try
 			{
