@@ -165,7 +165,7 @@
 			</div>
 		</div>
 	</div>
-	<!-- DeleteModal -->
+	<!-- 刪除用的互動視窗 -->
 	<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -258,11 +258,15 @@
 				edit: function (employeeId) {
 					let self = this;
 					//判斷員工權限
-					if (self.role !== 'manager') {
-						self.sweatAlert('error', '您沒有權限進行編輯');
-						return;
-					}
-					$("#editModal").modal("show");
+					axios.post('/api/EmployeeManagementApi/EditShow')
+					.then(res=>{
+							if (res.status == "400") {
+								self.sweatAlert('error', '您沒有權限進行編輯');
+								return;
+							}
+							$("#editModal").modal("show");
+					})
+					
 					var empIndex = -1;
 					for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
 						var emp = self.EmployeeManagementDTO[i];
