@@ -43,26 +43,16 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 		{
 			var getRole = HttpContext.Session.GetString("Role");
 
-			if (getRole != "master") return Json(new returnObj(NoAuthorize));
+			if (getRole != "master") return BadRequest(new { error = "權限錯誤" });
 
-			return Json(new returnObj(OK));
-
+			return Json(new { role = getRole });
 		}
 
-		private OkResult NoAuthorize()
+		private IActionResult Json(object value)
 		{
 			throw new NotImplementedException();
 		}
 
-		private OkResult OK()
-		{
-			throw new NotImplementedException();
-		}
-
-		private IActionResult Json(returnObj returnObj)
-		{
-			throw new NotImplementedException();
-		}
 
 		//編輯功能
 		[HttpPost]
