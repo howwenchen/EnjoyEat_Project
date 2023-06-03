@@ -15,6 +15,8 @@ using System.Security.Policy;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace EnjoyEat.Controllers.API
 {
@@ -282,6 +284,8 @@ namespace EnjoyEat.Controllers.API
         {
             return db.Members.Any(member => member.Email == Email);
         }
+
+       
 
     }
 }

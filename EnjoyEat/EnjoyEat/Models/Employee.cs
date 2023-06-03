@@ -25,6 +25,7 @@ namespace EnjoyEat.Models
         public string? Password { get; set; }
         public string? Role { get; set; }
 
+
         public virtual EmployeesLogin? EmployeesLogin { get; set; }
         public virtual EmployeesSalary? EmployeesSalary { get; set; }
         public virtual ICollection<Attendance> Attendances { get; set; }

@@ -206,6 +206,7 @@ namespace EnjoyEat.Models
             {
                 entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
 
+<<<<<<< HEAD
                 entity.Property(e => e.Account).HasMaxLength(15);
 
                 entity.Property(e => e.Address).HasMaxLength(60);
@@ -642,6 +643,437 @@ namespace EnjoyEat.Models
             OnModelCreatingPartial(modelBuilder);
         }
 
+=======
+                entity.Property(e => e.Address).HasMaxLength(60);
+
+                entity.Property(e => e.Birthday).HasColumnType("date");
+
+                entity.Property(e => e.Education).HasMaxLength(10);
+
+                entity.Property(e => e.Email).HasMaxLength(30);
+
+                entity.Property(e => e.Gender).HasColumnType("text");
+
+                entity.Property(e => e.IdentityId)
+                    .HasMaxLength(10)
+                    .HasColumnName("IdentityID")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Name).HasMaxLength(6);
+
+                entity.Property(e => e.Phone).HasMaxLength(15);
+            });
+
+            modelBuilder.Entity<EmployeesLogin>(entity =>
+            {
+                entity.HasKey(e => e.EmployeesId)
+                    .HasName("PK_Logins");
+
+                entity.ToTable("EmployeesLogin");
+
+                entity.Property(e => e.EmployeesId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("EmployeesID");
+
+                entity.Property(e => e.LoginTime).HasColumnType("datetime");
+
+                entity.Property(e => e.Password)
+                    .HasMaxLength(64)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Role).HasMaxLength(20);
+
+                entity.Property(e => e.UserName).HasMaxLength(15);
+
+                entity.HasOne(d => d.Employees)
+                    .WithOne(p => p.EmployeesLogin)
+                    .HasForeignKey<EmployeesLogin>(d => d.EmployeesId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmployeesLogin_Employees");
+            });
+
+            modelBuilder.Entity<EmployeesSalary>(entity =>
+            {
+                entity.HasKey(e => e.EmployeeId)
+                    .HasName("PK_Salary");
+
+                entity.ToTable("EmployeesSalary");
+
+                entity.Property(e => e.EmployeeId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("EmployeeID");
+
+                entity.Property(e => e.BasicSalary).HasColumnType("money");
+
+                entity.Property(e => e.Bonus).HasColumnType("money");
+
+                entity.Property(e => e.OverTime).HasColumnType("money");
+
+                entity.Property(e => e.PaymentDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Performance).HasColumnType("money");
+
+                entity.Property(e => e.TotalSalary).HasColumnType("money");
+
+                entity.Property(e => e.Wage).HasColumnType("money");
+
+                entity.HasOne(d => d.Employee)
+                    .WithOne(p => p.EmployeesSalary)
+                    .HasForeignKey<EmployeesSalary>(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmployeesSalary_Employees");
+            });
+
+            modelBuilder.Entity<FeedBack>(entity =>
+            {
+                entity.HasKey(e => e.OrderId);
+
+                entity.ToTable("FeedBack");
+
+                entity.Property(e => e.OrderId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("OrderID");
+
+                entity.Property(e => e.Age).HasMaxLength(10);
+
+                entity.Property(e => e.Email).HasMaxLength(20);
+
+                entity.Property(e => e.FeedBackName).HasMaxLength(20);
+
+                entity.Property(e => e.Frequency).HasMaxLength(20);
+
+                entity.Property(e => e.Purpose).HasMaxLength(10);
+
+                entity.Property(e => e.Source).HasMaxLength(10);
+
+                entity.Property(e => e.Suggestion).HasMaxLength(300);
+
+                entity.HasOne(d => d.Order)
+                    .WithOne(p => p.FeedBack)
+                    .HasForeignKey<FeedBack>(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_FeedBack_Orders");
+            });
+
+            modelBuilder.Entity<ForHereTable>(entity =>
+            {
+                entity.HasKey(e => e.TableId);
+
+                entity.ToTable("ForHereTable");
+
+                entity.Property(e => e.TableId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("TableID");
+
+                entity.HasOne(d => d.Table)
+                    .WithOne(p => p.ForHereTable)
+                    .HasForeignKey<ForHereTable>(d => d.TableId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ForHereTable_ForHereTable");
+            });
+
+            modelBuilder.Entity<Level>(entity =>
+            {
+                entity.HasKey(e => e.LevelName);
+
+                entity.Property(e => e.LevelName).HasMaxLength(10);
+
+                entity.Property(e => e.LevelId).ValueGeneratedOnAdd();
+            });
+
+            modelBuilder.Entity<Member>(entity =>
+            {
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.Address).HasMaxLength(60);
+
+                entity.Property(e => e.Birthday).HasColumnType("date");
+
+                entity.Property(e => e.Email).HasMaxLength(30);
+
+                entity.Property(e => e.FirstName).HasMaxLength(10);
+
+                entity.Property(e => e.Gender).HasMaxLength(2);
+
+                entity.Property(e => e.LastName).HasMaxLength(10);
+
+                entity.Property(e => e.LevelDiscount).HasDefaultValueSql("((0.95))");
+
+                entity.Property(e => e.LevelName).HasMaxLength(10);
+
+                entity.Property(e => e.Phone).HasMaxLength(15);
+
+                entity.Property(e => e.RegisterDay).HasColumnType("datetime");
+
+                entity.HasOne(d => d.LevelNameNavigation)
+                    .WithMany(p => p.Members)
+                    .HasForeignKey(d => d.LevelName)
+                    .HasConstraintName("FK_Members_Levels");
+            });
+
+            modelBuilder.Entity<MemberLogin>(entity =>
+            {
+                entity.HasKey(e => e.MemberId);
+
+                entity.ToTable("MemberLogin");
+
+                entity.Property(e => e.MemberId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("MemberID");
+
+                entity.Property(e => e.Account)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Password)
+                    .HasMaxLength(64)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Role).HasMaxLength(20);
+
+                entity.Property(e => e.Salt).HasMaxLength(100);
+
+                entity.HasOne(d => d.Member)
+                    .WithOne(p => p.MemberLogin)
+                    .HasForeignKey<MemberLogin>(d => d.MemberId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MemberLogin_Members");
+            });
+
+            modelBuilder.Entity<News>(entity =>
+            {
+                entity.Property(e => e.NewsId).HasColumnName("NewsID");
+
+                entity.Property(e => e.Category).HasMaxLength(16);
+
+                entity.Property(e => e.Content).HasColumnType("ntext");
+
+                entity.Property(e => e.ImageUrl).HasMaxLength(100);
+
+                entity.Property(e => e.LastModified)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.PublishDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Title).HasMaxLength(16);
+            });
+
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.Property(e => e.FinalPrice).HasComputedColumnSql("(([TotalPrice]-[CampaignDiscount])*[LevelDiscount])", false);
+
+                entity.Property(e => e.MemberId).HasColumnName("MemberID");
+
+                entity.Property(e => e.OrderDate).HasColumnType("datetime");
+
+                entity.Property(e => e.TableId).HasColumnName("TableID");
+
+                entity.HasOne(d => d.Member)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.MemberId)
+                    .HasConstraintName("FK_Orders_Members");
+
+                entity.HasOne(d => d.Table)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.TableId)
+                    .HasConstraintName("FK_Table_Orders");
+            });
+
+            modelBuilder.Entity<OrderDetail>(entity =>
+            {
+                entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.Property(e => e.Quantity).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.UnitPrice).HasColumnType("money");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderDetails_Orders");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.OrderDetails)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderDetails_Products");
+            });
+
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.ToTable("Payment");
+
+                entity.Property(e => e.PaymentId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("PaymentID");
+
+                entity.Property(e => e.CreateTime).HasColumnType("datetime");
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.Property(e => e.PaymentTypes).HasMaxLength(20);
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.Payments)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Payment_Orders");
+            });
+
+            modelBuilder.Entity<Permission>(entity =>
+            {
+                entity.HasKey(e => e.PermissonId)
+                    .HasName("PK_Permissons");
+
+                entity.Property(e => e.PermissonId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("PermissonID");
+
+                entity.Property(e => e.PermissionContent).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Personnel>(entity =>
+            {
+                entity.HasKey(e => new { e.EmployeeId, e.DepartmentId });
+
+                entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
+
+                entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
+
+                entity.Property(e => e.HireDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Posting).HasMaxLength(10);
+
+                entity.Property(e => e.ResignationDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Department)
+                    .WithMany(p => p.Personnel)
+                    .HasForeignKey(d => d.DepartmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Department_Personnel");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.Personnel)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Employees_Personnel");
+
+                entity.HasOne(d => d.ManagerNavigation)
+                    .WithMany(p => p.Personnel)
+                    .HasForeignKey(d => d.Manager)
+                    .HasConstraintName("FK_AuthorityUse_Personnel");
+            });
+
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.Property(e => e.ProductId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("ProductID");
+
+                entity.Property(e => e.Description).HasMaxLength(50);
+
+                entity.Property(e => e.MealImg).IsUnicode(false);
+
+                entity.Property(e => e.ProductName).HasMaxLength(30);
+
+                entity.HasOne(d => d.SubCategory)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.SubCategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Products_SubCategories");
+            });
+
+            modelBuilder.Entity<Reservation>(entity =>
+            {
+                entity.HasKey(e => e.ReserveId)
+                    .HasName("PK_Reservation_1");
+
+                entity.ToTable("Reservation");
+
+                entity.Property(e => e.ConfirmationDate).HasColumnType("date");
+
+                entity.Property(e => e.NumberofAdultGuest)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.NumberofKidGuest)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ReservationDate).HasColumnType("date");
+
+                entity.Property(e => e.ReservationTime).HasMaxLength(10);
+            });
+
+            modelBuilder.Entity<ReservationInformation>(entity =>
+            {
+                entity.HasKey(e => e.ReserveId)
+                    .HasName("PK_ReservationInformation_1");
+
+                entity.ToTable("ReservationInformation");
+
+                entity.Property(e => e.ReserveId).ValueGeneratedNever();
+
+                entity.Property(e => e.Email).HasMaxLength(50);
+
+                entity.Property(e => e.Note).HasColumnType("text");
+
+                entity.Property(e => e.PhoneNumber)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ReservationName)
+                    .HasMaxLength(10)
+                    .IsFixedLength();
+
+                entity.HasOne(d => d.Reserve)
+                    .WithOne(p => p.ReservationInformation)
+                    .HasForeignKey<ReservationInformation>(d => d.ReserveId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ReservationInformation_Reservation");
+            });
+
+            modelBuilder.Entity<SubCategory>(entity =>
+            {
+                entity.Property(e => e.SubCategoriesName).HasMaxLength(50);
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.SubCategories)
+                    .HasForeignKey(d => d.CategoryId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Categories _SubCategories");
+            });
+
+            modelBuilder.Entity<Table>(entity =>
+            {
+                entity.ToTable("Table");
+
+                entity.Property(e => e.TableId).HasColumnName("TableID");
+
+                entity.Property(e => e.Capacity).HasColumnName("capacity");
+
+                entity.Property(e => e.Location).HasMaxLength(10);
+
+                entity.Property(e => e.Status)
+                    .HasMaxLength(10)
+                    .HasColumnName("status")
+                    .HasDefaultValueSql("(N'空閒')");
+            });
+
+            OnModelCreatingPartial(modelBuilder);
+        }
+
+>>>>>>> main
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }
