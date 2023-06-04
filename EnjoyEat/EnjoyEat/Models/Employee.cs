@@ -23,6 +23,7 @@ namespace EnjoyEat.Models
         public string? Education { get; set; }
         public string? Account { get; set; }
         public string? Password { get; set; }
+        public string? Role { get; set; }
 
         public virtual EmployeesLogin? EmployeesLogin { get; set; }
         public virtual EmployeesSalary? EmployeesSalary { get; set; }
