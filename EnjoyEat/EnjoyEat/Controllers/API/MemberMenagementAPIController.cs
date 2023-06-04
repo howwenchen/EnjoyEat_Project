@@ -143,7 +143,6 @@ namespace EnjoyEat.Controllers.API
             await HttpContext.SignInAsync(claimsPrincipal);
 
             HttpContext.Session.SetString("MemberId", user.MemberId.ToString());
-            HttpContext.Session.SetString("Email", memberId.Email);
             return "登入成功";
         }
 
@@ -195,11 +194,13 @@ namespace EnjoyEat.Controllers.API
             return "成功";
         }
 
+        [Authorize(Roles = "User")]
         //抓取會員資料
         [HttpGet]
         public IActionResult GetMember()
         {
-            var userId = 20230006;
+            var memberId =HttpContext.Session.GetString("MemberId");
+            int userId=int.Parse(memberId);
             var user = db.Members.Include(x => x.Orders).Include(x => x.LevelNameNavigation).FirstOrDefault(x => x.MemberId == userId);
             if (user == null)
             {
@@ -235,7 +236,8 @@ namespace EnjoyEat.Controllers.API
         [HttpGet]
         public IActionResult GetOrder()
         {
-            var userId = 20230006;
+            var memberId = HttpContext.Session.GetString("MemberId"); ;
+            int userId = int.Parse(memberId);
             var orders = db.OrderDetails.Include(x =>x.Product).Where(o => o.Order.MemberId == userId).Select(od => new MemberOrderDetailViewModel
             {
                 OrderId = od.OrderId,
@@ -259,7 +261,8 @@ namespace EnjoyEat.Controllers.API
         [HttpPut]
         public async Task<IActionResult> EditMemberInfo([FromBody] MemberViewModel memberViewModel)
         {
-            var id = 20230006;
+            var memberId = HttpContext.Session.GetString("MemberId"); ;
+            int id = int.Parse(memberId);
             Member member = await db.Members.FindAsync(id);
             if (member == null)
             {
