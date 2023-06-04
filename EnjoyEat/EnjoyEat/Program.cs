@@ -20,6 +20,7 @@ namespace EnjoyEat
                 options.UseSqlServer(EnjoyEatConnectionString));
             builder.Services.AddControllersWithViews();
             builder.Services.AddLogging();
+            builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {
                 options.Cookie.Name = "Session";

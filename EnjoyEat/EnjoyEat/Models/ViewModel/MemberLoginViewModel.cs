@@ -8,6 +8,8 @@ namespace EnjoyEat.Models.ViewModel
     {
         public int MemberId { get; set; }
 
+        public bool isTakeaway { get; set; }
+
         [Required, MinLength(8), MaxLength(12)]     
         public string Account { get; set; } = null!;
         

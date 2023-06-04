@@ -20,7 +20,7 @@ namespace EnjoyEat.Controllers.API
 {
     [Route("api/member/[action]")]
     [ApiController]
-    public class MemberMenagementAPIController : ControllerBase
+    public class MemberMenagementAPIController : Controller
     {
         private readonly db_a989fe_thm101team6Context db;
         private readonly EncryptService encrypt;
@@ -112,37 +112,55 @@ namespace EnjoyEat.Controllers.API
 
         [HttpPost]
         //會員登入
-        public async Task<string> Login([FromBody] MemberLoginViewModel model)
+        public async Task<ActionResult> Login([FromBody] MemberLoginViewModel model)
         {
             var user = db.MemberLogins.FirstOrDefault(x => x.Account == model.Account);
 
             if (user == null)
             {
-                return "帳號密碼錯誤";
+                return Content("帳號密碼錯誤");
             }
-            var hashedPassword = hash.GetHash(string.Concat(model.Password, user.Salt).ToString());
-            var userPassword = db.MemberLogins.FirstOrDefault(x => x.Password == hashedPassword);
-            if (userPassword == null)
+            //var hashedPassword = hash.GetHash(string.Concat(model.Password, user.Salt).ToString());
+            //var userPassword = db.MemberLogins.FirstOrDefault(x => x.Password == hashedPassword);
+            //if (userPassword == null)
+            //{
+            //    return Content("帳號密碼錯誤");
+            //}
+
+
+            var member = db.Members.FirstOrDefault(x => x.MemberId == user.MemberId);
+            var fullname = member.LastName + member.FirstName;
+
+            ////通行證
+            //var claims = new List<Claim>() {
+            //     new Claim(ClaimTypes.Name, fullname),
+            //     new Claim(ClaimTypes.Role, user.Role),
+            //};
+            //var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            //var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            //await HttpContext.SignInAsync(claimsPrincipal);
+
+            HttpContext.Session.SetInt32("MemberId", user.MemberId);
+            //HttpContext.Session.SetString("Email", member.Email);
+
+            //拿取在Index儲存的外帶／內用資訊
+            var isTakeaway = HttpContext.Session.GetString("IsTakeaway");
+
+            //根據拿到的資訊導向不同路徑的點餐頁面
+            if (isTakeaway == "True")
             {
-                return "帳號密碼錯誤";
+                var redirectUrl = Url.Action("Order", "OrderTogo");
+                return Json(new { Redirect = redirectUrl });
             }
-
-
-            var memberId = db.Members.FirstOrDefault(x=>x.MemberId==user.MemberId);
-            var fullname=memberId.LastName + memberId.FirstName;
-
-            //通行證
-            var claims = new List<Claim>() {
-                 new Claim(ClaimTypes.Name, fullname),
-                 new Claim(ClaimTypes.Role, user.Role),
-            };
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-            await HttpContext.SignInAsync(claimsPrincipal);
-
-            HttpContext.Session.SetString("MemberId", user.MemberId.ToString());
-            HttpContext.Session.SetString("Email", memberId.Email);
-            return "登入成功";
+            else if (isTakeaway == "False")
+            {
+                var redirectUrl = Url.Action("Order", "OrderHere");
+                return Json(new { Redirect = redirectUrl });
+            }
+            else
+            {
+                return Content("登入成功");
+            }
         }
 
         //忘記密碼

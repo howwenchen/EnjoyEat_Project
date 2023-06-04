@@ -9,6 +9,8 @@ using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using AspNetCore;
 using System.Text;
+using EnjoyEat.Areas.OrderForHere.Models;
+using System.Net;
 
 namespace EnjoyEat.Controllers
 {
@@ -52,7 +54,7 @@ namespace EnjoyEat.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> LoginAsync(MemberLoginViewModel model)
+        public IActionResult Login(MemberLoginViewModel model)
         {
 
 
@@ -70,22 +72,21 @@ namespace EnjoyEat.Controllers
             //    return View();
             //}
 
-            if (HttpContext.Session.Keys.Contains("SessionKey"))
-            {
-                string? SessionValue = HttpContext.Session.GetString("SessionKey");
-            }
+            
 
+            //if (HttpContext.Session.Keys.Contains("SessionKey"))
+            //{
+            //    string? SessionValue = HttpContext.Session.GetString("SessionKey");
+            //}
 
-
-
-            //claim加密   
-            var claims = new List<Claim>() {
-                 new Claim(ClaimTypes.Name,null),
-                 new Claim(ClaimTypes.Role,null),
-            };
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-            await HttpContext.SignInAsync(claimsPrincipal);
+            ////claim加密   
+            //var claims = new List<Claim>() {
+            //     new Claim(ClaimTypes.Name,null),
+            //     new Claim(ClaimTypes.Role,null),
+            //};
+            //var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            //var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            //await HttpContext.SignInAsync(claimsPrincipal);
             return RedirectToAction("Index", "home");
         }
         public IActionResult AccessDenied()
