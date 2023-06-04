@@ -299,6 +299,24 @@ namespace EnjoyEat.Controllers.API
             return Ok();
         }
 
+
+        //修改密碼
+        [HttpPut]
+        public async Task<string> ChangePassword(ChangeViewModel model)
+        {
+            var memberId = HttpContext.Session.GetInt32("MemberId");
+            var user = db.MemberLogins.FirstOrDefault(x=> x.MemberId==memberId);
+            var hashedPassword = hash.GetHash(string.Concat(model.OriginalPassword, user.Salt).ToString());
+            var password = db.MemberLogins.FirstOrDefault(x => x.Password == hashedPassword);
+            if (password == null)
+            {
+                return "密碼錯誤";
+            }
+
+            password.Password = hash.GetHash(string.Concat(model.NewPassword, user.Salt).ToString());
+            await db.SaveChangesAsync();
+            return "成功";
+        }
         private bool EmailExists(string Email)
         {
             return db.Members.Any(member => member.Email == Email);
