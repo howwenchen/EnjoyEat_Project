@@ -120,25 +120,25 @@ namespace EnjoyEat.Controllers.API
             {
                 return Content("帳號密碼錯誤");
             }
-            //var hashedPassword = hash.GetHash(string.Concat(model.Password, user.Salt).ToString());
-            //var userPassword = db.MemberLogins.FirstOrDefault(x => x.Password == hashedPassword);
-            //if (userPassword == null)
-            //{
-            //    return Content("帳號密碼錯誤");
-            //}
+            var hashedPassword = hash.GetHash(string.Concat(model.Password, user.Salt).ToString());
+            var userPassword = db.MemberLogins.FirstOrDefault(x => x.Password == hashedPassword);
+            if (userPassword == null)
+            {
+                return Content("帳號密碼錯誤");
+            }
 
 
             var member = db.Members.FirstOrDefault(x => x.MemberId == user.MemberId);
             var fullname = member.LastName + member.FirstName;
 
-            ////通行證
-            //var claims = new List<Claim>() {
-            //     new Claim(ClaimTypes.Name, fullname),
-            //     new Claim(ClaimTypes.Role, user.Role),
-            //};
-            //var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            //var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-            //await HttpContext.SignInAsync(claimsPrincipal);
+            //通行證
+            var claims = new List<Claim>() {
+                 new Claim(ClaimTypes.Name, fullname),
+                 new Claim(ClaimTypes.Role, user.Role),
+            };
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            await HttpContext.SignInAsync(claimsPrincipal);
 
             HttpContext.Session.SetInt32("MemberId", user.MemberId);
             //HttpContext.Session.SetString("Email", member.Email);

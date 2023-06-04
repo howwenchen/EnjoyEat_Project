@@ -319,8 +319,6 @@ public class OrderAPIController : Controller
                     newCartItems.Add(cartItem);
                 }
 
-                _context.CartItems.RemoveRange(cart.CartItems);
-
                 foreach (var newItem in newCartItems)
                 {
                     cart.CartItems.Add(newItem);

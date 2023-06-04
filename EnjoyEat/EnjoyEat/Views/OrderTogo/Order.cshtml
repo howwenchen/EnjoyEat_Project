@@ -426,7 +426,7 @@
                     .then(response => {
                         this.cart = response.data.items;
                         this.cartId = response.data.cartId;
-                        this.updateCartTotal();
+                        //this.updateCartTotal();
                     })
                     .catch(error => {
                         console.error('獲取或創建購物車失敗:', error);
