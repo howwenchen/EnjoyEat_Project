@@ -332,7 +332,13 @@
                         }
                         this.total -= product.unitPrice;
                         this.updateCartTotal();
-                        axios.post('/api/Order/RemoveFromCart', { memberId: this.memberId, productId: product.productId, quantity: 1 })
+                        axios.post('/api/Order/RemoveFromCart', {
+                            MemberId: this.memberId,
+                            ProductId: product.productId,
+                            ProductName: product.productName,
+                            Quantity: 1,
+                            UnitPrice: product.unitPrice
+                        })
                             .catch(err => console.error(err));
                     }
                 },
@@ -426,7 +432,7 @@
                     .then(response => {
                         this.cart = response.data.items;
                         this.cartId = response.data.cartId;
-                        //this.updateCartTotal();
+                        this.updateCartTotal();
                     })
                     .catch(error => {
                         console.error('獲取或創建購物車失敗:', error);
