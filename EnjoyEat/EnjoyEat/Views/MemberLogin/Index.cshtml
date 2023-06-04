@@ -5,7 +5,7 @@
 
 <div class="php-email-form" data-aos="fade-up" data-aos-delay="100">
     <main id="main">
-        <div id="login">
+        <div id="loginQQ">
             <section class="breadcrumbs">
                 <div class="container">
                     <h1 id="Logo">
@@ -20,7 +20,7 @@
                     帳號或密碼長度為8至12個字，請重新確認
                 </div>
                 <br />
-                <div class="d-grid gap-2 col-6 mx-auto">
+                <form class="d-grid gap-2 col-6 mx-auto">
                     <h4>
                         <i class="fa-solid fa-lock"></i>
                         <span>帳號</span>
@@ -34,15 +34,10 @@
                     <input type="password" aria-label="Password" v-model="password" placeholder="請輸入會員密碼"
                            maxlength="12" minlength="8" required>
 
-                    <label for="c1">
-                        <input type="checkbox" id="checkRember" name="cc" />
-                        <span class="rememberMe">記住我</span>
-                    </label>
-
                     <button class="login btn btn-primary" type="button" @@click="login">登入</button>
                     <button class="login btn btn-primary" type="button" @@click="register">註冊</button>
                     <button class="login btn btn-danger" type="button" @@click="forget">忘記密碼</button>
-                </div>
+                </form>
 
             </section>
         </div>
@@ -51,9 +46,12 @@
 
 @section Scripts{
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <script src="https://unpkg.com/vue@2"></script>
+
     <script>
+        Vue.config.devtools = true;
         let app = new Vue({
-            el: "#login",
+            el: "#loginQQ",
             data: {
                 account: "",
                 password: "",
@@ -65,7 +63,7 @@
                     let _this = this;
                     _this.short = false;
                     _this.show = false;
-                    if(_this.account.length<8 || _this.password.length<8){
+                    if(_this.account.length < 8 || _this.password.length < 8){
                         return _this.short =true
                     }
                     request = {
@@ -76,7 +74,12 @@
                         .then(response => {
                             if (response.data == "帳號密碼錯誤") {
                                 _this.show = true;
-                            } else {
+                            }
+                            else if(response.data.redirect) {
+                                // 從點餐頁面來的會根據後端的重定向跳轉到相應頁面
+                                window.location.href = response.data.redirect;
+                            }
+                            else {
                                 Swal.fire({
                                     allowOutsideClick: false,
                                     icon: 'success',
@@ -89,10 +92,11 @@
                                     timer: 2000,
                                     position: 'center'
                                 }).then(result => {
-                                    if (result.dismiss === Swal.DismissReason.timer) {
+                                    if (result.dismiss === Swal.DismissReason.timer) 
+                                    {
                                         window.location.href = `/Home/Index`;
                                     }
-                                });
+                                })
                             }
                         });
                 },

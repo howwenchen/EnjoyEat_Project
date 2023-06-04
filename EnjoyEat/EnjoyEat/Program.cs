@@ -20,10 +20,13 @@ namespace EnjoyEat
                 options.UseSqlServer(EnjoyEatConnectionString));
             builder.Services.AddControllersWithViews();
             builder.Services.AddLogging();
+            builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {
                 options.Cookie.Name = "Session";
                 options.IdleTimeout = TimeSpan.FromHours(2); // 設定 Session 閒置超時時間
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
             });
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt =>

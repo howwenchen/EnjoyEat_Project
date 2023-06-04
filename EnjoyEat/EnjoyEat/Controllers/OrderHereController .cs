@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EnjoyEat.Controllers
 {
-    public class OrderTogoController : Controller
+    public class OrderHereController : Controller
     {
         public IActionResult Index()
         {
-            HttpContext.Session.SetString("IsTakeaway","True");
+            HttpContext.Session.SetString("IsTakeaway", "False");
             return View();
         }
         public IActionResult Order()

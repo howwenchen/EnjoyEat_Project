@@ -139,6 +139,8 @@ namespace EnjoyEat.Models
             {
                 entity.ToTable("CartItem");
 
+                entity.Property(e => e.ProductName).HasMaxLength(50);
+
                 entity.HasOne(d => d.Cart)
                     .WithMany(p => p.CartItems)
                     .HasForeignKey(d => d.CartId)
@@ -148,6 +150,7 @@ namespace EnjoyEat.Models
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.CartItems)
                     .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CartItem_Products");
             });
 
@@ -206,7 +209,7 @@ namespace EnjoyEat.Models
             {
                 entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
 
-                entity.Property(e => e.Account).HasMaxLength(20);
+                entity.Property(e => e.Account).HasMaxLength(15);
 
                 entity.Property(e => e.Address).HasMaxLength(60);
 
@@ -216,12 +219,11 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Email).HasMaxLength(30);
 
-                entity.Property(e => e.Gender).HasColumnType("text");
+                entity.Property(e => e.Gender).HasMaxLength(15);
 
                 entity.Property(e => e.IdentityId)
-                    .HasMaxLength(10)
-                    .HasColumnName("IdentityID")
-                    .IsFixedLength();
+                    .HasMaxLength(30)
+                    .HasColumnName("IdentityID");
 
                 entity.Property(e => e.Name).HasMaxLength(6);
 
@@ -230,6 +232,8 @@ namespace EnjoyEat.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Phone).HasMaxLength(15);
+
+                entity.Property(e => e.Role).HasMaxLength(20);
             });
 
             modelBuilder.Entity<EmployeesLogin>(entity =>
@@ -248,6 +252,8 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.Password)
                     .HasMaxLength(64)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Role).HasMaxLength(20);
 
                 entity.Property(e => e.UserName).HasMaxLength(15);
 
