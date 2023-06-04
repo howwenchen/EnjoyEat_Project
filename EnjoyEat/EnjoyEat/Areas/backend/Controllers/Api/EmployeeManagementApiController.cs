@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static EnjoyEat.Models.DTO.EmployeeManagementDTO;
+using Employee = EnjoyEat.Models.Employee;
 
 namespace EnjoyEat.Areas.backend.Controllers.Api
 {
@@ -25,6 +26,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 			{
 				EmployeeId = emp.EmployeeId,
 				Name = emp.Name,
+				Account = emp.Account,
 				Gender = emp.Gender,
 				Phone = emp.Phone,
 				Email = emp.Email,
@@ -34,23 +36,77 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 			return emp;
 		}
 
-		//篩選功能
+		//編輯功能
 		[HttpPost]
-		public async Task<IEnumerable<EmployeeManagementDTO.Employee>> FilterEmployees(
-			[FromBody] EmployeeManagementDTO.Employee empDTO)
+		public ApiResultDto Edit([FromBody] EmployeeManagementDTO.Employee empDTO)
 		{
-			return _context.Employees.Where(emp =>
-					 emp.EmployeeId == empDTO.EmployeeId ||
-					 emp.Name.Contains(empDTO.Name) ||
-					 emp.Phone.Contains(empDTO.Phone) ||
-					 emp.Email.Contains(empDTO.Email)).Select(emp => new EmployeeManagementDTO.Employee
-					 {
-						 EmployeeId = emp.EmployeeId,
-						 Name = emp.Name,
-						 Phone = emp.Phone,
-						 Email = emp.Email,
-					 });
+			try
+			{
+				var editEmp = _context.Employees.FirstOrDefault(e => e.EmployeeId == empDTO.EmployeeId);
+				if (editEmp == null) return new ApiResultDto() { Status = false, Message = "修改失敗" };
+
+				editEmp.Name = empDTO.Name;
+				editEmp.Account = empDTO.Account;
+				editEmp.Password = empDTO.Password;
+				editEmp.Gender = empDTO.Gender;
+				editEmp.Phone = empDTO.Phone;
+				editEmp.Email = empDTO.Email;
+
+				_context.SaveChanges();
+				return new ApiResultDto() { Status = true, Message = "修改成功" };
+			}
+			catch (Exception)
+			{
+				return new ApiResultDto() { Status = true, Message = "修改失敗" };
+			}
+
 		}
+
+		//新增員工
+		[HttpPost]
+		public async Task<string> CreateEmp([FromBody] EmployeeManagementDTO.Employee empDTO)
+		{
+			try
+			{
+				Employee NewEmp = new Employee
+				{
+					Name = empDTO.Name,
+					Account = empDTO.Account,
+					Password = empDTO.Password,
+					Gender = empDTO.Gender,
+					Birthday = empDTO.Birthday,
+					Phone = empDTO.Phone,
+					Email = empDTO.Email
+				};
+				_context.Employees.Add(NewEmp);
+				await _context.SaveChangesAsync();
+				return "新增成功";
+			}
+			catch (Exception)
+			{
+				return "新增失敗";
+			}
+
+		}
+
+		//刪除員工
+		[HttpPost]
+		public bool DeleteEmp([FromBody] EmployeeManagementDTO.Employee empDTO)
+		{
+			try
+			{
+				var emp = _context.Employees.FirstOrDefault(e => e.EmployeeId == empDTO.EmployeeId);
+				if (emp == null) return false;
+				_context.Employees.Remove(emp);
+				_context.SaveChanges();
+				return true;
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+		}
+
 
 	}
 }

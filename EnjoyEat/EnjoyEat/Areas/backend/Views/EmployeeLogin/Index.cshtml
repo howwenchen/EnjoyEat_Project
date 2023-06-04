@@ -1,0 +1,80 @@
+﻿@section Styles
+	{
+
+}
+
+<!-- Sign In Start -->
+<div id="app">
+	<div class="row h-100 align-items-center justify-content-center">
+		<div class="col-12 ">
+			<div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+				<div class="d-flex align-items-center justify-content-between mb-3">
+					<h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>後臺管理</h3>
+					<h3>登入</h3>
+				</div>
+				<div class="form-floating mb-3">
+					<input type="email" class="form-control" id="floatingInput" placeholder="帳號" v-model="account" required>
+					<label for="floatingInput">員工帳號</label>
+				</div>
+				<div class="form-floating mb-4">
+					<input type="password" class="form-control" id="floatingPassword" placeholder="密碼" v-model="password" required>
+					<label for="floatingPassword">員工密碼</label>
+				</div>
+				<button @@click="Login" class="btn btn-primary py-3 w-100 mb-4">登入</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+	<script>
+		new Vue({
+			el: "#app",
+			data: {
+				account: '',
+				password: '',
+			},
+			methods: {
+				Login: function () {
+					let self = this;
+					if (!self.account || !self.password) {
+						self.showSweetAlert();
+						return
+					}
+					axios.post('')
+				},
+				showSweetAlert() {
+					let self = this;
+					Swal.fire({
+						icon: 'error',
+						color: '#FFF',
+						iconColor: '#D8CDB9',
+						background: '#2F4F4F',
+						text: '登入失敗',
+						position: 'center',
+						confirmButtonText: '確定',
+						customClass: {
+							popup: 'custom-swal-popup'
+						},
+						showConfirmButton: true,
+						allowEscapeKey: false,
+						allowEnterKey: false,
+						allowOutsideClick: false,
+						closeOnClickOutside: false,
+						showClass: {
+							popup: 'animate__animated animate__fadeInDown'
+						},
+						hideClass: {
+							popup: 'animate__animated animate__fadeOutUp'
+						}
+					})
+				},
+			}
+
+		})
+
+	</script>
+}

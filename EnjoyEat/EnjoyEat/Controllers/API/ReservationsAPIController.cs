@@ -24,7 +24,6 @@ namespace EnjoyEat.Controllers.API
 
 			Reservation reservation = new Reservation
 			{
-				ReserveId = reservationViewModel.ReserveId,
 				ReservationDate = reservationViewModel.ReservationDate,
 				NumberofAdultGuest = reservationViewModel.NumberofAdultGuest,
 				NumberofKidGuest = reservationViewModel.NumberofKidGuest,

@@ -9,13 +9,6 @@
     <nav>
         <div id="memberNavbar" class="d-flex">
             <h5 id="userName">{{fullName}}您好</h5>
-            <button class="btn">
-                登出
-                <span class="first"></span>
-                <span class="second"></span>
-                <span class="third"></span>
-                <span class="fourth"></span>
-            </button>
         </div>
     </nav>
     <!-- End navbar -->
@@ -135,7 +128,7 @@
                         </div>
 
                         <div class="col-lg-4 mt-4 mt-lg-0">
-                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="200" v-model="memberInfo.birthday" :value="memberInfo.birthday" :disabled="dis" />
+                            <input :class="editClass" data-aos="zoom-in" data-aos-delay="200" v-model="memberInfo.birthday" :value="formatDate()" :disabled="dis" />
                         </div>
 
                         <div class="col-lg-2 mt-4 mt-lg-0">
@@ -323,22 +316,14 @@
                 },
             },
             methods: {
-                //sweet alert
                 handleModalClose:function() {
                     document.body.classList.add('modal-closed');
                 },
-                showSweetAlert:function() {
-                    Swal.fire({
-                        allowOutsideClick: false,
-                        icon: 'info',
-                        color: '#FFF',
-                        iconColor: '#D8CDB9',
-                        background: '#2F4F4F',
-                        text: '請先登入喔!',
-                        position:'center',
-                        showConfirmButton: false,
-                        
-                    })
+                //日期呈現
+                formatDate:function(){
+                    let date = new Date(this.memberInfo.birthday);
+                    this.memberInfo.birthday=date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0')
+                    return this.memberInfo.birthday;
                 },
                 //修改資料
                 submitInfo: function () {
