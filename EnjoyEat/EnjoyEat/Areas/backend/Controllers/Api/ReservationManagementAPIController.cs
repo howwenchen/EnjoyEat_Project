@@ -1,4 +1,5 @@
-﻿using EnjoyEat.Models;
+﻿using EnjoyEat.Controllers.API;
+using EnjoyEat.Models;
 using EnjoyEat.Models.DTO;
 using EnjoyEat.Models.ViewModel;
 using Microsoft.AspNetCore.Http;
@@ -19,8 +20,34 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
             this.db = db;
         }
 
-        [HttpGet]
+        [HttpPost]
+        public async Task<IActionResult> PostReservationManagement(ReservationManagemanetViewModel model) 
+        {
+            Reservation reservation = new Reservation
+            {
+                ReserveId = model.ReserveId,
+                ReservationDate = model.ReservationDate,
+                ReservationTime = model.ReservationTime,
+                NumberofAdultGuest = model.NumberofAdultGuest,
+                NumberofKidGuest = model.NumberofKidGuest,
+            };
+            db.Reservations.Add(reservation);
+            db.SaveChanges();
+ 
+            ReservationInformation reservationInfo = new ReservationInformation
+            {
+                ReserveId = reservation.ReserveId,
+                ReservationName = model.ReservationName,
+                PhoneNumber = model.PhoneNumber,
+                Note = model.Note,
 
+            };
+            db.ReservationInformations.Add(reservationInfo);
+            db.SaveChanges();
+            return Ok();
+        }
+
+        [HttpGet]
         public async Task<IActionResult> GetReservationManagement()
         {
             var reserve = db.Reservations.Include(x => x.ReservationInformation).Select(x => new ReservationManagemanetViewModel
@@ -33,8 +60,40 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
                 ReservationDate = x.ReservationDate,
                 ReservationTime = x.ReservationTime,
                 Note = x.ReservationInformation.Note,
-            }).ToList();
+            }).OrderBy(x => x.ReservationDate).ThenBy(x => x.ReservationTime).ToList();
             return Ok(reserve);
         }
+
+        //編輯訂位資訊
+        [HttpPut("{reserveId}")]
+        public async Task<IActionResult> EditReservationManagement(int reserveId, [FromBody] ReservationManagemanetViewModel model)
+        {
+
+            var source = db.Reservations.Include(x=>x.ReservationInformation).FirstOrDefault(x=>x.ReserveId == reserveId);
+
+            source.NumberofAdultGuest = model.NumberofAdultGuest;
+            source.NumberofKidGuest = model.NumberofKidGuest;
+            source.ReservationDate = model.ReservationDate;
+            source.ReservationTime = model.ReservationTime;
+            source.ReservationInformation.Note = model.Note;
+            source.ReservationInformation.ReservationName = model.ReservationName;
+            source.ReservationInformation.PhoneNumber = model.PhoneNumber;
+            db.SaveChanges();
+            return Ok("修改成功");
+        }
+
+        [HttpDelete("{reserveId}")]
+
+        public async Task<string> DeleteReservationManagement(int reserveId)
+        {
+            var reserveInfo = db.ReservationInformations.FirstOrDefault(x => x.ReserveId == reserveId);
+            db.Remove(reserveInfo);
+            db.SaveChanges();
+            var reserve = db.Reservations.FirstOrDefault(x => x.ReserveId == reserveId);
+            db.Remove(reserve);
+            db.SaveChanges();
+            return "刪除成功!";
+        }
+
     }
 }
