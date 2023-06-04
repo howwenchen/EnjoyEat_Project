@@ -218,9 +218,8 @@ namespace EnjoyEat.Controllers.API
         [HttpGet]
         public IActionResult GetMember()
         {
-            var memberId =HttpContext.Session.GetString("MemberId");
-            int userId=int.Parse(memberId);
-            var user = db.Members.Include(x => x.Orders).Include(x => x.LevelNameNavigation).FirstOrDefault(x => x.MemberId == userId);
+            var memberId =HttpContext.Session.GetInt32("MemberId");
+            var user = db.Members.Include(x => x.Orders).Include(x => x.LevelNameNavigation).FirstOrDefault(x => x.MemberId == memberId);
             if (user == null)
             {
                 return NotFound();
@@ -255,9 +254,8 @@ namespace EnjoyEat.Controllers.API
         [HttpGet]
         public IActionResult GetOrder()
         {
-            var memberId = HttpContext.Session.GetString("MemberId"); ;
-            int userId = int.Parse(memberId);
-            var orders = db.OrderDetails.Include(x =>x.Product).Where(o => o.Order.MemberId == userId).Select(od => new MemberOrderDetailViewModel
+            var memberId = HttpContext.Session.GetInt32("MemberId"); ;
+            var orders = db.OrderDetails.Include(x =>x.Product).Where(o => o.Order.MemberId == memberId).Select(od => new MemberOrderDetailViewModel
             {
                 OrderId = od.OrderId,
                 ProductId = od.ProductId,
@@ -280,9 +278,8 @@ namespace EnjoyEat.Controllers.API
         [HttpPut]
         public async Task<IActionResult> EditMemberInfo([FromBody] MemberViewModel memberViewModel)
         {
-            var memberId = HttpContext.Session.GetString("MemberId"); ;
-            int id = int.Parse(memberId);
-            Member member = await db.Members.FindAsync(id);
+            var memberId = HttpContext.Session.GetInt32("MemberId");
+            Member member = await db.Members.FindAsync(memberId);
             if (member == null)
             {
                 return NotFound();
