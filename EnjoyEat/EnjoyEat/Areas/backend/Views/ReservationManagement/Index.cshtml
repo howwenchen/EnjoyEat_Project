@@ -1,5 +1,15 @@
 ﻿@section Styles{
     <style>
+
+        /*搜尋input*/
+        #searchText {
+            position: absolute;
+            right: 60px;
+            text-align:center;
+            width:10%;
+        }
+
+        /*新增訂位訊息的modal*/
         .modal-content {
             background-color: #191C24
         }
@@ -33,8 +43,14 @@
             <h6 class="mb-4">訂位系統</h6>
             <div class="col-12">
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">新增</button>
-
-                <input type="text" v-model="searchText" />
+                <date-picker v-model="searchDate"
+                             value-type="format"
+                             name="ReserveDate"
+                             id="datepicker"
+                             class="col-lg-8 form-selectss "
+                             @@keyup=" filterDate">
+                </date-picker>
+                <input type="text" v-model="searchText" id="searchText" placeholder="搜尋" @@keyup="filterReserve" />
             </div>
             <div class="table-responsive">
                 <table class="table">
@@ -52,7 +68,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="rev in reserveInfo">
+                        <tr v-for="rev in filterInfo">
                             <template v-if="rev.editStatus==false">
                                 <td scope="row">{{rev.reserveId}}</td>
                                 <td>{{rev.reservationName}}</td>
@@ -142,7 +158,7 @@
                                       name="message"
                                       rows="5"
                                       v-model="create.note"
-                            style="background:gray;"></textarea>
+                                      style="background:gray;"></textarea>
                             <div class="validate"></div>
 
                         </div>
@@ -161,12 +177,16 @@
     <script src="~/vue/vue.min.js"></script>
     <script src="/axios/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
+
     <script>
         let app = new Vue({
             el: '#app',
             data: {
                 reserveInfo: [],
+                filterInfo: [],
+                bookInfo:[],
                 searchText: '',
+                searchDate:'',
                 original: {
                     reservationName: "",
                     phoneNumber: "",
@@ -208,6 +228,48 @@
             },
 
             methods: {
+                filterDate: function () {
+                    let _this = this;
+                    var list = [];
+                    for (var i = 0; i < _this.bookInfo.length; i++) {
+                        var item = _this.bookInfo[i];
+                        var reserveDate = item.reservationDate;
+                        var regex = new RegExp(_this.searchDate, 'i');
+                        if (regex.test(reserveDate)) {
+                            list.push(item);
+                        }
+                    }
+                    _this.filterInfo = list;
+                },
+                filterReserve: function () {
+                    let _this = this;
+                    var reservelist = [];
+                    for (var i = 0; i < _this.reserveInfo.length; i++) {
+                        var item = _this.reserveInfo[i];
+                        var reservationName = item.reservationName;
+                        var phoneNumber = item.phoneNumber;
+                        var numberofAdultGuest = item.numberofAdultGuest.toString();
+                        var numberofKidGuest = item.numberofKidGuest.toString();
+                        var reservationDate = item.reservationDate;
+                        var reservationTime = item.reservationTime;
+                        var note = item.note;
+                        var regex = new RegExp(this.searchText, 'i');
+
+                        if (
+                            regex.test(reservationName) ||
+                            regex.test(phoneNumber) ||
+                            regex.test(numberofAdultGuest) ||
+                            regex.test(numberofKidGuest) ||
+                            regex.test(reservationDate) ||
+                            regex.test(reservationTime) ||
+                            regex.test(note)) 
+                        {
+                            reservelist.push(item);
+                            _this.filterInfo = reservelist;
+                        }
+                    }
+                },
+                
                 disablerange: function (date) {
                     var today = new Date();
                     today.setHours(0, 0, 0, 0);
@@ -257,7 +319,6 @@
                     }
                     _this.reserveInfo = temp;
                 },
-
                 update: function (rev) {
                     let _this = this;
                     let request = {
@@ -278,7 +339,9 @@
                     let _this = this;
                     axios.get("/api/ReservationManagementApi/GetReservationManagement").then(
                         response => {
+                            _this.filterInfo = response.data;
                             _this.reserveInfo = response.data;
+                            _this.bookInfo=response.data;
                             var temp = [];
                             for (var i = 0; i < _this.reserveInfo.length; i++) {
                                 var item = _this.reserveInfo[i];
@@ -313,7 +376,7 @@
                         note: _this.create.note,
                     };
                     axios.post(`/api/ReservationManagementApi/PostReservationManagement`, request)
-                    .then(response=>{
+                        .then(response => {
                             _this.getreserve()
                             Swal.fire({
                                 allowOutsideClick: false,
@@ -326,8 +389,8 @@
                                 showConfirmButton: false,
                                 timer: 1000,
                                 position: 'center'
-                                })
-                    });
+                            })
+                        });
                 },
 
             },
