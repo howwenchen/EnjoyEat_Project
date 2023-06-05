@@ -14,7 +14,6 @@
 		.tdContent :hover {
 			color: wheat;
 		}
-
 	</style>
 }
 
@@ -23,16 +22,16 @@
 		@*新增按鍵*@
 		<!-- Modal trigger button -->
 		<button class="btn btn-primary btn-lg" @@click="showInsert()" data-toggle="modal" style="margin: 33px 0px">
-			<span><i class="fa-solid fa-circle-plus"></i> 新增</span>
+			<span><i class="fa-solid fa-circle-plus fa-beat"></i> 新增</span>
 		</button>
 		@*篩選欄位*@
-		@*<div class="col-md-9">
-		<div class="row" style="width:40%; margin-right:auto; margin-left:0px;">
-		<label class="col-md-5">搜尋員工:</label>
-		<input class="form-contro col-md-5" style="width:150px; margin-left: -50px; margin-bottom:20px;" placeholder="輸入關鍵字"
-		v-model="filter" @@keyup="filterEmployeeManagementDTO()" />
+		<div class="col-md-9">
+			<div class="row" style="width:40%; margin-right:auto; margin-left:0px;">
+				<label class="col-md-5">搜尋員工:</label>
+				<input class="form-contro col-md-5" style="width:150px; margin-left: -50px; margin-bottom:20px;" placeholder="輸入關鍵字"
+					   v-model="filter" @@keyup="filterEmployeeManagementDTO" />
+			</div>
 		</div>
-		</div>*@
 	</div>
 	@*表格標題*@
 	<div class="form-group">
@@ -45,7 +44,6 @@
 					<td>員工姓名</td>
 					<td>聯絡方式</td>
 					<td>Email</td>
-					<td>詳細資料</td>
 					<td>薪資</td>
 					<td>編輯</td>
 				</tr>
@@ -59,11 +57,10 @@
 					<td>{{item.name}}</td>
 					<td>{{item.phone}}</td>
 					<td>{{item.email}}</td>
-					<td><a class="btn edit" @@click="empInfo(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="Edit"></i></a></td>
 					<td><a class="btn edit" @@click="edit(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="Edit"></i></a></td>
 					<td>
 						<a class="btn edit" @@click="edit(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="Edit"></i></a>
-						<a class="btn delete" @@click="deleteEmp(item.employeeId)"><i class="fa-solid fa-trash-can" title="Delete" style="color:red;"></i></a>
+						<a class="btn delete" @@click="deleteEmp(item.employeeId)"><i class="fa-solid fa-trash-can fa-fade" title="Delete" style="color:red;"></i></a>
 					</td>
 				</tr>
 			<tbody>
@@ -81,10 +78,6 @@
 					<div class="modal-body" style="color:white; background-color: brown;">
 						@*頁面內容Body*@
 						<div class="form-group">
-							<label class="form-label">職位:</label>
-							<input class="form-control" v-model="role" />
-						</div>
-						<div class="form-group">
 							<label class="form-label">員工姓名:</label>
 							<input class="form-control" v-model="name" />
 						</div>
@@ -98,7 +91,9 @@
 						</div>
 						<div class="form-group">
 							<label class="form-label">性別:</label>
-							<input class="form-control" v-model="gender" />
+							<select class="form-control form-select" id="selectGender" v-model="gender" style="background-color: #000;">
+								<option :value="gd.value" v-for="gd in selectGender">{{gd.text}}</option>
+							</select>
 						</div>
 						<div class="form-group">
 							<label class="form-label">聯絡方式:</label>
@@ -107,6 +102,12 @@
 						<div class="form-group">
 							<label class="form-label">Email:</label>
 							<input class="form-control" v-model="email" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">職稱:</label>
+							<select class="form-control form-select" id="selectRole" v-model="role" style="background-color: #000;">
+								<option :value="rl.value" v-for="rl in selectRole">{{rl.text}}</option>
+							</select>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -129,10 +130,6 @@
 					<div class="modal-body" style="color:white; background-color: brown;">
 						@*頁面內容Body*@
 						<div class="form-group">
-							<label class="form-label">職位:</label>
-							<input class="form-control" v-model="role" />
-						</div>
-						<div class="form-group">
 							<label class="form-label">員工姓名:</label>
 							<input class="form-control" v-model="name" />
 						</div>
@@ -141,12 +138,10 @@
 							<input class="form-control" v-model="account" />
 						</div>
 						<div class="form-group">
-							<label class="form-label">員工密碼:</label>
-							<input class="form-control" v-model="password" />
-						</div>
-						<div class="form-group">
 							<label class="form-label">性別:</label>
-							<input class="form-control" v-model="gender" />
+							<select class="form-control form-select" id="selectGender" v-model="gender" style="background-color: #000;">
+								<option :value="gd.value" v-for="gd in selectGender">{{gd.text}}</option>
+							</select>
 						</div>
 						<div class="form-group">
 							<label class="form-label">聯絡方式:</label>
@@ -155,6 +150,12 @@
 						<div class="form-group">
 							<label class="form-label">Email:</label>
 							<input class="form-control" v-model="email" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">職稱:</label>
+							<select class="form-control form-select" id="selectRole" v-model="role" style="background-color: #000;">
+								<option :value="rl.value" v-for="rl in selectRole">{{rl.text}}</option>
+							</select>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -201,12 +202,15 @@
 			el: '#app',
 			data: {
 				EmployeeManagementDTO: [],
+				filter: '',
 				employeeId: '',
 				role: '',
-				name: '尚未登入',
+				selectRole: [{ value: 'manager', text: '主管' }, { value: 'staff', text: '員工' }],
+				name: '',
 				account: '',
 				password: '',
 				gender: '',
+				selectGender: [{ value: 'Male', text: 'Male' }, { value: 'Female', text: 'Female' }],
 				email: '',
 				phone: '',
 			},
@@ -225,6 +229,16 @@
 							console.error(error);
 						});
 				},
+				filterEmployeeManagementDTO: function () {
+					let self = this;
+					var request = {};
+					request.employeeId = isNaN(Number(self.filter)) ? -1 : Number(self.filter);
+					request.name = request.account = request.email = request.phone = request.role = self.filter;
+					axios.post('/api/EmployeeManagementApi/FilterEmployees', request)
+						.then(response => {
+							self.EmployeeManagementDTO = response.data;
+						})
+				},
 				update: function () {
 					let self = this;
 					var request = {
@@ -232,7 +246,6 @@
 						role: self.role,
 						name: self.name,
 						account: self.account,
-						password: self.password,
 						gender: self.gender,
 						email: self.email,
 						phone: self.phone
@@ -243,7 +256,6 @@
 							self.role = ""
 							self.name = ""
 							self.account = ""
-							self.password = ""
 							self.gender = ""
 							self.email = ""
 							self.phone = ""
@@ -258,15 +270,9 @@
 				edit: function (employeeId) {
 					let self = this;
 					//判斷員工權限
-					axios.post('/api/EmployeeManagementApi/EditShow')
-					.then(res=>{
-							if (res.status == "400") {
-								self.sweatAlert('error', '您沒有權限進行編輯');
-								return;
-							}
-							$("#editModal").modal("show");
-					})
-					
+					//self.role = VueCookies.get('role');
+					//if (self.role != 'manager') { self.sweatAlert("warning", "沒有權限!"); return }
+					$("#editModal").modal("show");
 					var empIndex = -1;
 					for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
 						var emp = self.EmployeeManagementDTO[i];
@@ -280,7 +286,6 @@
 						self.employeeId = editedEmp.employeeId;
 						self.role = editedEmp.role;
 						self.name = editedEmp.name;
-						self.password = editedEmp.password;
 						self.account = editedEmp.account;
 						self.gender = editedEmp.gender;
 						self.email = editedEmp.email;
@@ -337,6 +342,7 @@
 				showInsert: function () {
 					let self = this;
 					//判斷員工權限
+					//if (self.window.Cookies.Role != "manager") { self.sweatAlert("warning", "沒有權限"); return; }
 					self.role = ""
 					self.name = ""
 					self.account = ""

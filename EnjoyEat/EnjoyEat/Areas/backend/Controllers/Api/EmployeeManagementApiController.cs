@@ -19,6 +19,27 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 			_context = context;
 		}
 
+		//篩選
+		[HttpPost]
+		public async Task<IEnumerable<EmployeeManagementDTO>> FilterEmployees([FromBody] EmployeeManagementDTO empDTO)
+		{
+			return _context.Employees.Where(emp =>
+				emp.EmployeeId == empDTO.EmployeeId ||
+				emp.Name.Contains(empDTO.Name) ||
+				emp.Account.Contains(empDTO.Account) ||
+				emp.Email.Contains(empDTO.Email) ||
+				emp.Phone.Contains(empDTO.Phone) ||
+				emp.Role.Contains(empDTO.Role)).Select(emp => new EmployeeManagementDTO
+				{
+					EmployeeId = emp.EmployeeId,
+					Name = emp.Name,
+					Account = emp.Account,
+					Email = emp.Email,
+					Phone = emp.Phone,
+					Role = emp.Role,
+				});
+		}
+
 		[HttpGet]
 		public async Task<IEnumerable<EmployeeManagementDTO>> GetAll()
 		{
@@ -37,25 +58,10 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 			}).ToListAsync();
 			return emp;
 		}
-		//編輯頁面
-		[HttpPost]
-		public IActionResult EditShow([FromBody] EmployeeManagementDTO empDTO) 
-		{
-			var getRole = HttpContext.Session.GetString("Role");
-
-			if (getRole != "master") return BadRequest(new { error = "權限錯誤" });
-
-			return Json(new { role = getRole });
-		}
-
-		private IActionResult Json(object value)
-		{
-			throw new NotImplementedException();
-		}
-
 
 		//編輯功能
 		[HttpPost]
+		[Authorize(Roles = "manager")]
 		public ApiResultDto Edit([FromBody] EmployeeManagementDTO empDTO)
 		{
 			try
@@ -68,7 +74,6 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 				editEmp.Phone = empDTO.Phone;
 				editEmp.Email = empDTO.Email;
 				editEmp.Account = empDTO.Account;
-				editEmp.Password = empDTO.Password;
 
 
 				_context.SaveChanges();
@@ -82,7 +87,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 		}
 
 		//新增員工
-		//[Authorize(Roles = "manager")]
+		[Authorize(Roles = "manager")]
 		[HttpPost]
 		public async Task<string> CreateEmp([FromBody] EmployeeManagementDTO empDTO)
 		{
@@ -111,7 +116,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 		}
 
 		//刪除員工
-		//[Authorize(Roles = "manager")]
+		[Authorize(Roles = "manager")]
 		[HttpPost]
 		public bool DeleteEmp([FromBody] EmployeeManagementDTO empDTO)
 		{

@@ -56,7 +56,14 @@
 						</div>
 					</div>
 					<div class="ms-3">
-						<h6 class="mb-0">請先登入</h6>
+						@if (User.Identity.IsAuthenticated)
+						{
+							<a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index">@*@User.Claims.FirstOrDefault(e=> e.Type == ClaimTypes.Name)?.Value*@</a>
+						}
+						else
+						{
+							<h6 class="mb-0">請先登入</h6>
+						}
 					</div>
 				</div>
 				<div class="navbar-nav w-100">
@@ -64,8 +71,9 @@
 					<div class="nav-item dropdown">
 						<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa-solid fa-people-arrows me-2"></i>會員相關</a>
 						<div class="dropdown-menu bg-transparent border-0">
-							<a href="typography.html" class="dropdown-item">會員管理</a>
-							<a href="element.html" class="dropdown-item">訂單管理</a>
+							<a class="nav-link scrollto">會員管理</a>
+							<a href="element.html" class="nav-link scrollto">訂單管理</a>
+							<a asp-area="backend" asp-controller="ReservationManagement" asp-action="Index" class="nav-link scrollto">訂位管理</a>
 						</div>
 					</div>
 					<a href="widget.html" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Widgets</a>
@@ -73,13 +81,22 @@
 					<a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
 					<a asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>員工管理</a>
 					<div class="nav-item dropdown">
-						<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>{{name}}</a>
+						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Login</a>
 						<div class="dropdown-menu bg-transparent border-0">
 							<ul>
-								<li class="dropdown-item"><i class="fa-solid fa-right-to-bracket me-2"></i>@Html.ActionLink("登入","Index","EmployeeLogin")</li>
-								<li class="dropdown-item"><i class="fa-solid fa-right-from-bracket me-2"></i>@Html.ActionLink("登出","Index","EmployeeLogin")</li>
+								@*<li class="dropdown-item"><i class="fa-solid fa-right-to-bracket me-2"></i>@Html.ActionLink("登入","Index","EmployeeLogin")</li>
+								<li class="dropdown-item"><i class="fa-solid fa-right-from-bracket me-2"></i>@Html.ActionLink("登出","Index","EmployeeLogin")</li>*@
 @*								<li class="dropdown-item">@Html.ActionLink("登入","Index","EmployeeLogin")</li>
 								<li class="dropdown-item">@Html.ActionLink("登出","Index","EmployeeLogin")</li>*@
+								@if (User.Identity.IsAuthenticated)
+								{
+									<a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index">@*@User.Claims.FirstOrDefault(e=> e.Type == ClaimTypes.Name)?.Value*@</a>
+									<a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeLogin" asp-action="Logout">登出</a>
+								}
+								else
+								{
+									<a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeLogin" asp-action="Index">登入</a>
+								}
 							</ul>
 						</div>
 					</div>
@@ -97,9 +114,7 @@
 			</a>
 			<div class="navbar-nav align-items-center ms-auto">
 				<div class="nav-item dropdown">
-					<img class="rounded-circle me-lg-2" src="img/user未登入.png" alt=""
-						 style="width: 40px; height: 40px;">
-					<span class="d-none d-lg-inline-flex">未登入</span>
+					<span class="d-none d-lg-inline-flex">後臺管理</span>
 				</div>
 			</div>
 		</nav>

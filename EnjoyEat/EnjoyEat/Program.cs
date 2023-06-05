@@ -26,16 +26,13 @@ namespace EnjoyEat
                 options.IdleTimeout = TimeSpan.FromHours(2); // 設定 Session 閒置超時時間
             });
 
-			builder.Services.AddAuthorization(options =>
-			{
-				options.AddPolicy("Roles", roles => roles.RequireClaim("Role", "manager" , "staff"));
-			});
-
 			builder.Services.AddHttpContextAccessor();
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt =>
             {
-                // Add cookie authentication options here
-            })
+				opt.LoginPath = "/areas/backend/EmployeeLogin/Index";
+				opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+
+			})
             .AddFacebook(facebookOptions =>
             {
                 facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
