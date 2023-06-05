@@ -139,17 +139,20 @@ namespace EnjoyEat.Models
 			{
 				entity.ToTable("CartItem");
 
-				entity.HasOne(d => d.Cart)
-					.WithMany(p => p.CartItems)
-					.HasForeignKey(d => d.CartId)
-					.OnDelete(DeleteBehavior.ClientSetNull)
-					.HasConstraintName("FK_CartItem_Cart");
+                entity.Property(e => e.ProductName).HasMaxLength(50);
 
-				entity.HasOne(d => d.Product)
-					.WithMany(p => p.CartItems)
-					.HasForeignKey(d => d.ProductId)
-					.HasConstraintName("FK_CartItem_Products");
-			});
+                entity.HasOne(d => d.Cart)
+                    .WithMany(p => p.CartItems)
+                    .HasForeignKey(d => d.CartId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CartItem_Cart");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.CartItems)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CartItem_Products");
+            });
 
 			modelBuilder.Entity<Category>(entity =>
 			{

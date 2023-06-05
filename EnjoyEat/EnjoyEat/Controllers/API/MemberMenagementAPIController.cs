@@ -22,7 +22,7 @@ namespace EnjoyEat.Controllers.API
 {
     [Route("api/member/[action]")]
     [ApiController]
-    public class MemberMenagementAPIController : ControllerBase
+    public class MemberMenagementAPIController : Controller
     {
         private readonly db_a989fe_thm101team6Context db;
         private readonly EncryptService encrypt;
@@ -114,24 +114,24 @@ namespace EnjoyEat.Controllers.API
 
         [HttpPost]
         //會員登入
-        public async Task<string> Login([FromBody] MemberLoginViewModel model)
+        public async Task<ActionResult> Login([FromBody] MemberLoginViewModel model)
         {
             var user = db.MemberLogins.FirstOrDefault(x => x.Account == model.Account);
 
             if (user == null)
             {
-                return "帳號密碼錯誤";
+                return Content("帳號密碼錯誤");
             }
             var hashedPassword = hash.GetHash(string.Concat(model.Password, user.Salt).ToString());
             var userPassword = db.MemberLogins.FirstOrDefault(x => x.Password == hashedPassword);
             if (userPassword == null)
             {
-                return "帳號密碼錯誤";
+                return Content("帳號密碼錯誤");
             }
 
 
-            var memberId = db.Members.FirstOrDefault(x=>x.MemberId==user.MemberId);
-            var fullname=memberId.LastName + memberId.FirstName;
+            var member = db.Members.FirstOrDefault(x => x.MemberId == user.MemberId);
+            var fullname = member.LastName + member.FirstName;
 
             //通行證
             var claims = new List<Claim>() {
@@ -142,9 +142,27 @@ namespace EnjoyEat.Controllers.API
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
             await HttpContext.SignInAsync(claimsPrincipal);
 
-            HttpContext.Session.SetString("MemberId", user.MemberId.ToString());
-            HttpContext.Session.SetString("Email", memberId.Email);
-            return "登入成功";
+            HttpContext.Session.SetInt32("MemberId", user.MemberId);
+            //HttpContext.Session.SetString("Email", member.Email);
+
+            //拿取在Index儲存的外帶／內用資訊
+            var isTakeaway = HttpContext.Session.GetString("IsTakeaway");
+
+            //根據拿到的資訊導向不同路徑的點餐頁面
+            if (isTakeaway == "True")
+            {
+                var redirectUrl = Url.Action("Order", "OrderTogo");
+                return Json(new { Redirect = redirectUrl });
+            }
+            else if (isTakeaway == "False")
+            {
+                var redirectUrl = Url.Action("Order", "OrderHere");
+                return Json(new { Redirect = redirectUrl });
+            }
+            else
+            {
+                return Content("登入成功");
+            }
         }
 
         //忘記密碼
@@ -195,12 +213,13 @@ namespace EnjoyEat.Controllers.API
             return "成功";
         }
 
+        [Authorize(Roles = "User")]
         //抓取會員資料
         [HttpGet]
         public IActionResult GetMember()
         {
-            var userId = 20230006;
-            var user = db.Members.Include(x => x.Orders).Include(x => x.LevelNameNavigation).FirstOrDefault(x => x.MemberId == userId);
+            var memberId =HttpContext.Session.GetInt32("MemberId");
+            var user = db.Members.Include(x => x.Orders).Include(x => x.LevelNameNavigation).FirstOrDefault(x => x.MemberId == memberId);
             if (user == null)
             {
                 return NotFound();
@@ -235,8 +254,8 @@ namespace EnjoyEat.Controllers.API
         [HttpGet]
         public IActionResult GetOrder()
         {
-            var userId = 20230006;
-            var orders = db.OrderDetails.Include(x =>x.Product).Where(o => o.Order.MemberId == userId).Select(od => new MemberOrderDetailViewModel
+            var memberId = HttpContext.Session.GetInt32("MemberId"); ;
+            var orders = db.OrderDetails.Include(x =>x.Product).Where(o => o.Order.MemberId == memberId).Select(od => new MemberOrderDetailViewModel
             {
                 OrderId = od.OrderId,
                 ProductId = od.ProductId,
@@ -259,8 +278,8 @@ namespace EnjoyEat.Controllers.API
         [HttpPut]
         public async Task<IActionResult> EditMemberInfo([FromBody] MemberViewModel memberViewModel)
         {
-            var id = 20230006;
-            Member member = await db.Members.FindAsync(id);
+            var memberId = HttpContext.Session.GetInt32("MemberId");
+            Member member = await db.Members.FindAsync(memberId);
             if (member == null)
             {
                 return NotFound();
@@ -280,6 +299,24 @@ namespace EnjoyEat.Controllers.API
             return Ok();
         }
 
+
+        //修改密碼
+        [HttpPut]
+        public async Task<string> ChangePassword(ChangeViewModel model)
+        {
+            var memberId = HttpContext.Session.GetInt32("MemberId");
+            var user = db.MemberLogins.FirstOrDefault(x=> x.MemberId==memberId);
+            var hashedPassword = hash.GetHash(string.Concat(model.OriginalPassword, user.Salt).ToString());
+            var password = db.MemberLogins.FirstOrDefault(x => x.Password == hashedPassword);
+            if (password == null)
+            {
+                return "密碼錯誤";
+            }
+
+            password.Password = hash.GetHash(string.Concat(model.NewPassword, user.Salt).ToString());
+            await db.SaveChangesAsync();
+            return "成功";
+        }
         private bool EmailExists(string Email)
         {
             return db.Members.Any(member => member.Email == Email);

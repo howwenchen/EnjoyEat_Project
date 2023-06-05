@@ -39,7 +39,7 @@
 			<thead>
 				<tr class="titleName">
 					<td>員工編號</td>
-					<td>職位</td>
+					<td>職稱</td>
 					<td>員工帳號</td>
 					<td>員工姓名</td>
 					<td>聯絡方式</td>
@@ -177,7 +177,7 @@
 				<div class="modal-body" style="font-size: 18px; display: inline-block;">
 					你確定要刪除? <br />
 					員工編號: {{employeeId}}<br />
-					職位: {{role}}<br />
+					職稱: {{role}}<br />
 					員工姓名: {{name}}<br />
 					員工帳號: {{account}}
 				</div>
@@ -354,6 +354,10 @@
 				},
 				createEmp: function () {
 					let self = this;
+					if (!self.name || !self.account || !self.password || !self.gender || !self.phone || !self.email || !self.role) {
+						self.sweatAlert('warning', '請確實填寫員工資訊!');
+						return;
+					}
 					var request = {
 						role: self.role,
 						name: self.name,

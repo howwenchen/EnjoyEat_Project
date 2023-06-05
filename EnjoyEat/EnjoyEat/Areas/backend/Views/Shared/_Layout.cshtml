@@ -29,9 +29,15 @@
 
 	<!-- Template Stylesheet -->
 	<link href="~/backend/css/style.css" rel="stylesheet">
-
+	<style>
+		.p-1 {
+			padding: 0.25rem !important;
+			margin: -10px;
+		}
+	</style>
 	<!--預設檔案-->
 	@await RenderSectionAsync("Styles", required: false)
+	@using System.Security.Claims
 </head>
 <body>
 	<div class="container-fluid position-relative d-flex p-0">
@@ -51,19 +57,18 @@
 				</a>
 				<div class="d-flex align-items-center ms-4 mb-4">
 					<div class="position-relative">
-						<img class="rounded-circle" src="img/user未登入.png" alt="" style="width: 40px; height: 40px;">
-						<div class="bg-danger rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
+						<div class="ms-3">
+							@if (User.Identity.IsAuthenticated)
+							{
+								<div class="bg-success rounded-circle border border-2 border-white position-absolute p-1" style="margin: -10px"></div>
+								<h4 class="mb-0">@User.Claims.FirstOrDefault(e=> e.Type == ClaimTypes.Name)?.Value</h4>
+							}
+							else
+							{
+								<div class="bg-danger rounded-circle border border-2 border-white position-absolute p-1" style="margin: -10px"></div>
+								<h4 class="mb-0">請先登入</h4>
+							}
 						</div>
-					</div>
-					<div class="ms-3">
-						@if (User.Identity.IsAuthenticated)
-						{
-							<a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index">@*@User.Claims.FirstOrDefault(e=> e.Type == ClaimTypes.Name)?.Value*@</a>
-						}
-						else
-						{
-							<h6 class="mb-0">請先登入</h6>
-						}
 					</div>
 				</div>
 				<div class="navbar-nav w-100">
@@ -84,13 +89,9 @@
 						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Login</a>
 						<div class="dropdown-menu bg-transparent border-0">
 							<ul>
-								@*<li class="dropdown-item"><i class="fa-solid fa-right-to-bracket me-2"></i>@Html.ActionLink("登入","Index","EmployeeLogin")</li>
-								<li class="dropdown-item"><i class="fa-solid fa-right-from-bracket me-2"></i>@Html.ActionLink("登出","Index","EmployeeLogin")</li>*@
-@*								<li class="dropdown-item">@Html.ActionLink("登入","Index","EmployeeLogin")</li>
-								<li class="dropdown-item">@Html.ActionLink("登出","Index","EmployeeLogin")</li>*@
 								@if (User.Identity.IsAuthenticated)
 								{
-									<a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index">@*@User.Claims.FirstOrDefault(e=> e.Type == ClaimTypes.Name)?.Value*@</a>
+									<h6 style="margin-top: 5px;">使用者名稱: @User.Claims.FirstOrDefault(e=> e.Type == ClaimTypes.Name)?.Value</h6>
 									<a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeLogin" asp-action="Logout">登出</a>
 								}
 								else
