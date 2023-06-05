@@ -1,70 +1,403 @@
-﻿     <!-- Table Start -->
+﻿@section Styles{
+    <style>
+
+        /*搜尋input*/
+        #searchText {
+            position: absolute;
+            right: 60px;
+            text-align:center;
+            width:10%;
+        }
+
+        /*新增訂位訊息的modal*/
+        .modal-content {
+            background-color: #191C24
+        }
+
+        #create_container input, #create_container select {
+            background: rgb(133, 133, 133);
+            border-radius: 5px;
+        }
+
+        .modal-footer button {
+            background-color: #6c757d;
+            border-radius: 5px;
+        }
+
+        textarea {
+            resize: none; /*不讓使用者调整 <textarea> 元素的大小*/
+            overflow: auto; /*需要時顯示滾輪條  */
+            height: 20px;
+            background-color: rgb(133, 133, 133);
+        }
+
+    </style>
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+
+<!-- Table Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
         <div class="bg-secondary rounded h-100 p-4" id="app">
             <h6 class="mb-4">訂位系統</h6>
             <div class="col-12">
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">新增</button>
-                <input type="text" v-model="searchText" />
+                <date-picker v-model="searchDate"
+                             value-type="format"
+                             name="ReserveDate"
+                             id="datepicker"
+                             class="col-lg-8 form-selectss "
+                             @@keyup=" filterDate">
+                </date-picker>
+                <input type="text" v-model="searchText" id="searchText" placeholder="搜尋" @@keyup="filterReserve" />
             </div>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col" id="serial">編號</th>
-                            <th scope="col" id="First Name">訂位姓名</th>
+                            <th scope="col" id="serial">#</th>
+                            <th scope="col" id="Name">訂位姓名</th>
                             <th scope="col" id="Phone">電話</th>
                             <th scope="col" id="AdultNumber">大人人數</th>
                             <th scope="col" id="KidNumber">小孩人數</th>
                             <th scope="col" id="DateTime">用餐日期</th>
                             <th scope="col" id="MealTime">用餐時間</th>
+                            <th scope="col" id="Note">備註</th>
                             <th scope="col" id="Operation">操作</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">{{ReserveId}}</th>
-                            <td>{{ReservationName}}</td>
-                            <td>{{Phone}}</td>
-                            <td>{{NumberofAdultGuest}}</td>
-                            <td>{{NumberofKidGuest}</td>
-                            <td>{{ReservationDate}}</td>
-                            <td>{{ReservationTime}}</td>
-                            <td>{{Note}}</td>
-                            <td>
-                                <button id="editbtn">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <button id="deletebtn">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </td>
+                        <tr v-for="rev in filterInfo">
+                            <template v-if="rev.editStatus==false">
+                                <td scope="row">{{rev.reserveId}}</td>
+                                <td>{{rev.reservationName}}</td>
+                                <td>{{rev.phoneNumber}}</td>
+                                <td>{{rev.numberofAdultGuest}}</td>
+                                <td>{{rev.numberofKidGuest}}</td>
+                                <td>{{rev.reservationDate}}</td>
+                                <td>{{rev.reservationTime}}</td>
+                                <td>{{rev.note}}</td>
+                                <td>
+                                    <button id="deletebtn" type="button" class="btn btn-secondary btn-sm" @@click="edit(rev.reserveId)">編輯</button>
+                                    <button id="editbtn" type="button" class="btn btn-primary btn-sm" @@click="deleteReserve(rev)">刪除</button>
+                                </td>
+                            </template>
+                            <template v-else>
+                                <td scope="row">{{rev.reserveId}}</td>
+                                <td><input v-model="rev.reservationName" /></td>
+                                <td><input v-model="rev.phoneNumber" /></td>
+                                <td><input v-model="rev.numberofAdultGuest" /></td>
+                                <td><input v-model="rev.numberofKidGuest" /></td>
+                                <td><input v-model="rev.reservationDate" /></td>
+                                <td><input v-model="rev.reservationTime" /></td>
+                                <td><input v-model="rev.note" /></td>
+                                <td>
+                                    <button id="editbtn" type="button" class="btn btn-secondary btn-sm" @@click="update(rev)">儲存</button>
+                                    <button id="deletebtn" type="button" class="btn btn-primary btn-sm" @@click="cancel(rev.reserveId)">取消</button>
+                                </td>
+                            </template>
                         </tr>
                     </tbody>
                 </table>
             </div>
+            <!-- Table End -->
+            <!--Edit Modal-->
+            <div class="modal fade bookingdModal" id="createModal" data-bs-backdrop="static"
+                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="staticBackdropLabel">新增訂位</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body container" id="create_container">
+                            <label for="datepicker">用餐日期：</label>
+                            <div id="d1" class="calendar">
+                                <date-picker v-model="create.reserveDate"
+                                             value-type="format"
+                                             name="ReserveDate"
+                                             id="datepicker"
+                                             class="col-lg-8 form-selectss "
+                                             placeholder="請選擇用餐日期"
+                                             :disabled-date="disablerange">
+                                </date-picker>
+                            </div>
+                            <label for="create_reserveName">訂位姓名：</label>
+                            <input v-model="create.ReserveName" type="text" id="create_reserveName" class="w-100">
+                            <label for="create_phone">聯絡電話：</label>
+                            <input v-model="create.Phone" type="text" id="create_phone" class="w-100" maxlength="10" minlength="10">
+
+                            <label>用餐時段：</label>
+                            <select name="" id="ReserveTime" class="form-select w-100" v-model="create.ReserveTime">
+                                <option value="" disabled selected></option>
+                                <template>
+                                    <option :value="t.value" v-for="t in Time">{{t.txt}}</option>
+                                </template>
+                            </select>
+
+                            <label>大人人數：</label>
+                            <select name="" id="people" class="form-select w-100" v-model="create.Adult">
+                                <option value="" disabled selected></option>
+                                <template>
+                                    <option :value="peo.value" v-for="peo in people">{{peo.txt}}</option>
+                                </template>
+                            </select>
+
+                            <label>小孩人數：</label>
+                            <select name="" id="Kid" class="form-select w-100" v-model="create.Kid">
+                                <option value="" disabled selected></option>
+                                <template>
+                                    <option :value="k.value" v-for="k in kid">{{k.txt}}</option>
+                                </template>
+                            </select>
+                            <label>備註：</label>
+                            <textarea class="form-control"
+                                      name="message"
+                                      rows="5"
+                                      v-model="create.note"
+                                      style="background:gray;"></textarea>
+                            <div class="validate"></div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row m-0">
+                                <button v-on:click="createbook" class="col btneditproducts m-1" type="button" data-bs-dismiss="modal"><i class="fa-solid fa-square-check"></i> 儲存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<!-- Table End -->
-@section Scripts
-    {
+@section Scripts {
+    <script src="~/vue/vue.min.js"></script>
+    <script src="/axios/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
+
     <script>
         let app = new Vue({
             el: '#app',
             data: {
-                ReserveId: '',
-                ReservationName: '',
-                Phone: '',
-                NumberofAdultGuest: '',
-                NumberofKidGuest: '',
-                ReservationDate: '',
-                ReservationTime: '',
-                Note: '',
+                reserveInfo: [],
+                filterInfo: [],
+                bookInfo:[],
+                searchText: '',
+                searchDate:'',
+                original: {
+                    reservationName: "",
+                    phoneNumber: "",
+                    numberofAdultGuest: "",
+                    numberofKidGuest: "",
+                    reservationDate: null,
+                    reservationTime: null,
+                    note: "",
+                },
+                people: [
+                    { value: '1', txt: '1位成人' },
+                    { value: '2', txt: '2位成人' },
+                    { value: '3', txt: '3位成人' },
+                    { value: '4', txt: '4位成人' }
+                ],
+                Time: [
+                    { value: "11:00", txt: '11:00' },
+                    { value: "13:00", txt: '13:00' },
+                    { value: "15:00", txt: '15:00' },
+                    { value: "17:00", txt: '17:00' },
+                    { value: "19:00", txt: '19:00' }
+                ],
+                kid: [
+                    { value: '0位小孩', txt: '0位小孩' },
+                    { value: '1位小孩', txt: '1位小孩' },
+                    { value: '2位小孩', txt: '2位小孩' },
+                    { value: '3位小孩', txt: '3位小孩' },
+                    { value: '4位小孩', txt: '4位小孩' }],
+                create: {
+                    vueid: '',
+                    ReserveDate: null,
+                    ReserveTime: null,
+                    Adult: '',
+                    Kid: '',
+                    ReserveName: '',
+                    Phone: '',
+                    note: '',
+                }
             },
 
-        })
+            methods: {
+                filterDate: function () {
+                    let _this = this;
+                    var list = [];
+                    for (var i = 0; i < _this.bookInfo.length; i++) {
+                        var item = _this.bookInfo[i];
+                        var reserveDate = item.reservationDate;
+                        var regex = new RegExp(_this.searchDate, 'i');
+                        if (regex.test(reserveDate)) {
+                            list.push(item);
+                        }
+                    }
+                    _this.filterInfo = list;
+                },
+                filterReserve: function () {
+                    let _this = this;
+                    var reservelist = [];
+                    for (var i = 0; i < _this.reserveInfo.length; i++) {
+                        var item = _this.reserveInfo[i];
+                        var reservationName = item.reservationName;
+                        var phoneNumber = item.phoneNumber;
+                        var numberofAdultGuest = item.numberofAdultGuest.toString();
+                        var numberofKidGuest = item.numberofKidGuest.toString();
+                        var reservationDate = item.reservationDate;
+                        var reservationTime = item.reservationTime;
+                        var note = item.note;
+                        var regex = new RegExp(this.searchText, 'i');
+
+                        if (
+                            regex.test(reservationName) ||
+                            regex.test(phoneNumber) ||
+                            regex.test(numberofAdultGuest) ||
+                            regex.test(numberofKidGuest) ||
+                            regex.test(reservationDate) ||
+                            regex.test(reservationTime) ||
+                            regex.test(note)) 
+                        {
+                            reservelist.push(item);
+                            _this.filterInfo = reservelist;
+                        }
+                    }
+                },
+                
+                disablerange: function (date) {
+                    var today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    var mindate = new Date(today.getTime() + 1 * 24 * 3600 * 1000);
+                    var maxdate = new Date(today.getTime() + 30 * 24 * 3600 * 1000);
+
+                    return date < mindate || date > maxdate;
+                },
+                handleModalClose: function () {
+                    document.body.classList.add('modal-closed');
+                },
+                edit: function (reserveId) {
+                    let _this = this;
+                    var temp = [];
+                    for (let i = 0; i < _this.reserveInfo.length; i++) {
+                        let item = _this.reserveInfo[i];
+                        if (reserveId == item.reserveId) {
+                            item.editStatus = true;
+                            _this.original.reservationName = item.reservationName;
+                            _this.original.phoneNumber = item.phoneNumber;
+                            _this.original.numberofAdultGuest = item.numberofAdultGuest;
+                            _this.original.numberofKidGuest = item.numberofKidGuest;
+                            _this.original.reservationDate = item.reservationDate;
+                            _this.original.reservationTime = item.reservationTime;
+                            _this.original.note = item.note;
+                        }
+                        temp.push(item)
+                    }
+                    _this.reserveInfo = temp;
+                },
+                cancel: function (reserveId) {
+                    let _this = this;
+                    var temp = [];
+                    for (let i = 0; i < _this.reserveInfo.length; i++) {
+                        let item = _this.reserveInfo[i];
+                        if (reserveId == item.reserveId) {
+                            item.editStatus = false;
+                            item.reservationName = _this.original.reservationName;
+                            item.phoneNumber = _this.original.phoneNumber;
+                            item.numberofAdultGuest = _this.original.numberofAdultGuest;
+                            item.numberofKidGuest = _this.original.numberofKidGuest;
+                            item.reservationDate = _this.original.reservationDate;
+                            item.reservationTime = _this.original.reservationTime;
+                            item.note = _this.original.note;
+                        }
+                        temp.push(item)
+                    }
+                    _this.reserveInfo = temp;
+                },
+                update: function (rev) {
+                    let _this = this;
+                    let request = {
+                        ReservationName: rev.reservationName,
+                        PhoneNumber: rev.phoneNumber,
+                        NumberofAdultGuest: rev.numberofAdultGuest,
+                        NumberofKidGuest: rev.numberofKidGuest,
+                        ReservationDate: rev.reservationDate,
+                        ReservationTime: rev.reservationTime,
+                        Note: rev.note,
+                    };
+                    axios.put(`/api/ReservationManagementApi/EditReservationManagement/${rev.reserveId}`, request)
+                        .then(response => {
+                            _this.getreserve()
+                        });
+                },
+                getreserve: function () {
+                    let _this = this;
+                    axios.get("/api/ReservationManagementApi/GetReservationManagement").then(
+                        response => {
+                            _this.filterInfo = response.data;
+                            _this.reserveInfo = response.data;
+                            _this.bookInfo=response.data;
+                            var temp = [];
+                            for (var i = 0; i < _this.reserveInfo.length; i++) {
+                                var item = _this.reserveInfo[i];
+                                item.editStatus = false;
+                                temp.push(item);
+                            }
+                            _this.reserveInfo = temp;
+                        }
+                    );
+                },
+                deleteReserve: function (rev) {
+                    //alert("delete")
+                    let _this = this;
+                    var ret = confirm("確定要刪除嗎?")
+                    if (ret == true) {
+                        axios.delete(`/api/ReservationManagementApi/DeleteReservationManagement/${rev.reserveId}`)
+                            .then(response => {
+                                _this.reserveInfo = response.data;
+                                _this.getreserve();
+                            })
+                    }
+                },
+                createbook: function () {
+                    let _this = this;
+                    var request = {
+                        reservationDate: _this.create.ReserveDate,
+                        reservationTime: _this.create.ReserveTime,
+                        numberofAdultGuest: _this.create.Adult,
+                        numberofKidGuest: _this.create.Kid,
+                        phoneNumber: _this.create.Phone,
+                        reservationName: _this.create.ReserveName,
+                        note: _this.create.note,
+                    };
+                    axios.post(`/api/ReservationManagementApi/PostReservationManagement`, request)
+                        .then(response => {
+                            _this.getreserve()
+                            Swal.fire({
+                                allowOutsideClick: false,
+                                icon: 'success',
+                                color: '#333',
+                                iconColor: '#D8CDB9',
+                                background: '#FFF',
+                                text: '儲存成功',
+                                //text: '',
+                                showConfirmButton: false,
+                                timer: 1000,
+                                position: 'center'
+                            })
+                        });
+                },
+
+            },
+            mounted: function () {
+                let _this = this;
+                _this.getreserve();
+            }
+        });
     </script>
 }
