@@ -10,7 +10,7 @@
         </div>
     </div>
 </div>
-<div  class="php-email-form" data-aos="fade-up" data-aos-delay="100">
+<div class="php-email-form" data-aos="fade-up" data-aos-delay="100">
     <main id="main">
         <div id="bookConfirmInformation">
             <div class="container" id="bookedConfirm">
@@ -24,11 +24,11 @@
                 <div id="bookedInfornations">
                     <div>
                         <label id="bookDate">訂位日期:</label>
-                        <span>{{reserveInfo[0].reservationDate}}</span>
+                        <span>{{formatDate()}}</span>
                     </div>
                     <div>
                         <label id="bookPeriod">訂位時段:</label>
-                        <span>{{reserveInfo[0].reservationTime}}</span>
+                        <span>{{this.reserveInfo[0].reservationTime}}</span>
                     </div>
                     <div>
                         <label id="bookNumber">用餐人數:</label>
@@ -71,7 +71,12 @@
                 reserveId: 0,
             },
             methods: {
-
+                //日期呈現
+                formatDate: function () {
+                    let date = new Date(this.reserveInfo[0].reservationDate);
+                    this.reserveInfo[0].reservationDate = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0')
+                    return this.reserveInfo[0].reservationDate;
+                },
             },
             mounted:
                 function () {
@@ -79,7 +84,7 @@
                     let searchString = window.location.search.replace("?", "");
                     let value = searchString.split('=')[1];
                     _this.reserveId = parseInt(value);
-                    axios.get("/api/reservation/GetReservationInformation?reserveId="+value).then(response => {
+                    axios.get("/api/reservation/GetReservationInformation?reserveId=" + value).then(response => {
                         _this.reserveInfo = response.data;
                         //_this.reserveId = value;
                         //_this.reserveInfo = _this.reserveInfo.filter(reserve => reserve.reserveId == _this.reserveId)

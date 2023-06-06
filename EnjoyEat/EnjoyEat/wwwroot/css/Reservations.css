@@ -32,6 +32,9 @@
     display: flex;
     justify-content: center;
 }
+#mealTimePicker {
+    margin-left: 3px;
+}
 
 #finalReservation button {
     background: #cda45e;
@@ -93,7 +96,7 @@ textarea {
 }
 
 .calendar {
-    margin-left: -2px;
+    margin-left: -1px;
     left: 0px;
     padding: .375rem 2.25rem .375rem .75rem;
 }
@@ -143,7 +146,7 @@ option:disabled {
 }
 
     /*contactUs頁面*/
-    #enjoyEatLocation {
+#enjoyEatLocation {
     margin-bottom: 48px;
 }
 

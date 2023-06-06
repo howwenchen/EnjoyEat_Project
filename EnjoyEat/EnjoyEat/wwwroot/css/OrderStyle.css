@@ -110,8 +110,9 @@ ol {
   Helper CSS
 -----------------------*/
 .section-title {
-    margin-top: 40px;
-    margin-bottom: 35px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding:0;
 }
 
     .section-title span {
@@ -125,7 +126,7 @@ ol {
     }
 
     .section-title h2 {
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 500;
         padding: 0;
         line-height: 1px;
@@ -136,7 +137,8 @@ ol {
         font-family: "Poppins",sans-serif;
     }
     .section-title p {
-        margin-top: 40px;
+        margin-top: 20px;
+        margin-bottom: 10px;
     }
 
 .set-bg {
@@ -1537,11 +1539,11 @@ ol {
   Shop
 -----------------------*/
 .shop {
-    padding-top: 80px;
+    padding-top: 40px;
 }
 
 .shop__option {
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
 .shop__option__search form {

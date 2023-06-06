@@ -1,7 +1,7 @@
 ﻿@using EnjoyEat.Areas.OrderForHere
 @{
-    ViewData["Title"] = "Ordering&ShoppingCart";
-    Layout = "_Layout";
+	ViewData["Title"] = "Ordering&ShoppingCart";
+	Layout = "_Layout";
 }
 
 @section Styles{
@@ -55,7 +55,10 @@
                                 <select v-model="selectedCategoryId" v-if="categories">
                                     <option disabled value="">---請選擇餐點分類---</option>
                                     <option v-for="category in categories" :value="category.categoryId">
-                                        {{ category.categoryName }}</option>
+                                        {{ category.categoryName }}
+                                    </option>
+                                    <span class="tableInfo">桌號: {{tableId}} </span>
+                                    <span class="tableInfo">人數: {{capacity}} </span>
                                 </select>
                             </form>
                         </div>
@@ -105,9 +108,9 @@
                             </div>
                         </div>
 
-                    </div>
-                </div>
-            </div>
+					</div>
+				</div>
+			</div>
 
             <!-- 購物車觸發btn -->
             <button type="button" class="btn btn-dark cart-button border border-light position-realative" data-toggle="modal" data-target="#cartModal">
@@ -183,6 +186,8 @@
                 selectedCategoryId: '', // 選擇的大分類
                 selectedSubCategoryId: '', // 選擇的子分類
                 categories: [], // 主類別清單
+                tableId: '',
+                capacity: '',
             },
             methods: {
                 //添加到購物車
@@ -294,6 +299,15 @@
                     .then(response => this.products = response.data)
                     .catch(err => console.error(err));
             },
+            mounted: function () {
+                let self = this;
+                axios.get('/api/OrderLoginApi/GetTableInfo')
+                    .then(response => {
+                        self.tableId = response.data.tableNumber;
+                        self.capacity = response.data.partySize;
+                    })
+            }
         });
     </script>
+
 }

@@ -5,9 +5,14 @@ namespace EnjoyEat.Models
 {
     public partial class Cart
     {
-        public int? CartId { get; set; }
-        public int? ProductId { get; set; }
-        public int? CustomerId { get; set; }
-        public int? Count { get; set; }
+        public Cart()
+        {
+            CartItems = new HashSet<CartItem>();
+        }
+
+        public int CartId { get; set; }
+        public int? MemberId { get; set; }
+
+        public virtual ICollection<CartItem> CartItems { get; set; }
     }
 }

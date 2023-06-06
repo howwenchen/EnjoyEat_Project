@@ -1,7 +1,10 @@
 ﻿input {
     font-size: 24px;
 }
-
+div .nono {
+    color: red;
+    text-align:center;
+}
 span{
     margin-left:5px;
 }
@@ -18,5 +21,14 @@ span{
 
 #Logo {
     text-align: center;
-    color: antiquewhite;
+    color: burlywood;
+    margin-top: 30px;
+}
+
+.login {
+    margin-top: 10px;
+}
+
+.btn {
+    margin-bottom: 5px;
 }

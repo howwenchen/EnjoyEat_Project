@@ -9,6 +9,10 @@ using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using AspNetCore;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using EnjoyEat.Services;
+using System.Text.Json;
 
 namespace EnjoyEat.Controllers
 {
@@ -16,9 +20,12 @@ namespace EnjoyEat.Controllers
     public class MemberLoginController : Controller
     {
         private readonly db_a989fe_thm101team6Context _db;
-        public MemberLoginController(db_a989fe_thm101team6Context db)
+        private readonly EncryptService encrypt;
+
+        public MemberLoginController(db_a989fe_thm101team6Context db, EncryptService encrypt)
         {
             this._db = db;
+            this.encrypt = encrypt;
         }
 
         public IActionResult Index()
@@ -34,8 +41,38 @@ namespace EnjoyEat.Controllers
         {
             return View();
         }
-        public IActionResult ChangePDSC()
+        public async Task<IActionResult> Enable(string code)
         {
+            var str = encrypt.AesDecryptToString(code);
+            var obj = JsonSerializer.Deserialize<AesValidationDto>(str);
+            if (DateTime.Now > obj.ExpiredDate)
+            {
+                return BadRequest("連結已過期");
+            }
+            var user = _db.MemberLogins.FirstOrDefault(x => x.Account == obj.Account);
+            if (user != null)
+            {
+                user.IsActive = true;
+                _db.SaveChanges();
+            }
+
+            return Ok($@"code:{code}  str:{str}");
+        }
+        //發送郵件確認
+        public IActionResult ChangePDSC(string code)
+        {
+            var str = encrypt.AesDecryptToString(code);
+            var obj = JsonSerializer.Deserialize<AesValidationDto>(str);
+            if (DateTime.Now > obj.ExpiredDate)
+            {
+                return BadRequest("連結已過期");
+            }
+            var user = _db.MemberLogins.FirstOrDefault(x => x.Account == obj.Account);
+            if (user != null)
+            {
+                user.IsActive = true;
+                _db.SaveChanges();
+            }
             return View();
         }
         public IActionResult Login()
@@ -44,132 +81,13 @@ namespace EnjoyEat.Controllers
         }
 
 
-        public async Task<IActionResult> LogoutAsync()
-        {
-            await HttpContext.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> LoginAsync(MemberLoginViewModel model)
-        {
-
-
-            var user = _db.MemberLogins.FirstOrDefault(x => x.Account.Equals(model.Account) && x.Password.Equals(model.Password));
-
-            if (user == null)
-            {
-                ModelState.AddModelError(string.Empty, "使用者帳號或密碼錯誤");
-                return View();
-            }
-
-            //if (user.Password != model.Password)
-            //{
-            //    ModelState.AddModelError(string.Empty, "使用者密碼錯誤");
-            //    return View();
-            //}
-
-            if (HttpContext.Session.Keys.Contains("SessionKey"))
-            {
-                string? SessionValue = HttpContext.Session.GetString("SessionKey");
-            }
-
-
-
-
-            //claim加密   
-            var claims = new List<Claim>() {
-                 new Claim(ClaimTypes.Name,null),
-                 new Claim(ClaimTypes.Role,null),
-            };
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-            await HttpContext.SignInAsync(claimsPrincipal);
-            return RedirectToAction("Index", "home");
-        }
-        public IActionResult AccessDenied()
-        {
-            return View();
-        }
+        [Authorize(Roles = "User")]
         public IActionResult Logout()
         {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Clear();
-
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "home");
         }
-
-        //public IActionResult ValidGoogleLogin()
-        //{
-        //    string? formCredential = Request.Form["credential"];   //回傳憑證
-        //    string? formToken = Request.Form[""];//回傳令牌
-        //    string? cookieToken = Request.Cookies[""];//Cookie令牌
-
-        //    //驗證google token
-        //    GoogleJsonWebSignature.Payload?playload= VerifyGoogleToken(formCredential, formToken, cookieToken);
-        //    if (playload == null)
-        //    {
-        //        // 驗證失敗
-        //        ViewData["Msg"] = "驗證 Google 授權失敗";
-        //    }
-        //    else
-        //    {
-        //        //驗證成功，取使用者資訊內容
-        //        ViewData["Msg"] = "驗證 Google 授權成功" + "<br>";
-        //        ViewData["Msg"] += "Email:" + payload.Email + "<br>";
-        //        ViewData["Msg"] += "Name:" + payload.Name + "<br>";
-        //        ViewData["Msg"] += "Picture:" + payload.Picture;
-        //    }
-        //    return View();
-        //}
-        //public  async  Task<GoogleJsonWebSignature.Playload?> VerifyGoogleToken(string? formCredential, string? formToken, string? cookieToken)
-        //{
-        //    // 檢查空值
-        //    if (formCredential == null || formToken == null && cookiesToken == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    GoogleJsonWebSignature.Payload? payload;
-        //    try
-        //    {
-        //        // 驗證 token
-        //        if (formToken != cookiesToken)
-        //        {
-        //            return null;
-        //        }
-
-        //        // 驗證憑證
-        //        IConfiguration Config = new ConfigurationBuilder().AddJsonFile("appSettings.json").Build();
-        //        string GoogleApiClientId = Config.GetSection("GoogleApiClientId").Value;
-        //        var settings = new GoogleJsonWebSignature.ValidationSettings()
-        //        {
-        //            Audience = new List<string>() { GoogleApiClientId }
-        //        };
-        //        payload = await GoogleJsonWebSignature.ValidateAsync(formCredential, settings);
-        //        if (!payload.Issuer.Equals("accounts.google.com") && !payload.Issuer.Equals("https://accounts.google.com"))
-        //        {
-        //            return null;
-        //        }
-        //        if (payload.ExpirationTimeSeconds == null)
-        //        {
-        //            return null;
-        //        }
-        //        else
-        //        {
-        //            DateTime now = DateTime.Now.ToUniversalTime();
-        //            DateTime expiration = DateTimeOffset.FromUnixTimeSeconds((long)payload.ExpirationTimeSeconds).DateTime;
-        //            if (now > expiration)
-        //            {
-        //                return null;
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        return null;
-        //    }
-        //    return payload;
 
 
     }
