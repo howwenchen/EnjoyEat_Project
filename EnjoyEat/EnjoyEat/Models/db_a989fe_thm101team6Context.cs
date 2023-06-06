@@ -437,7 +437,7 @@ namespace EnjoyEat.Models
             {
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.FinalPrice).HasComputedColumnSql("(([TotalPrice]-[CampaignDiscount])*[LevelDiscount])", false);
+                entity.Property(e => e.FinalPrice).HasComputedColumnSql("(ceiling(([TotalPrice]-[CampaignDiscount])*[LevelDiscount]))", false);
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -598,7 +598,7 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 
-                entity.Property(e => e.Note).HasColumnType("text");
+                entity.Property(e => e.Note).HasMaxLength(300);
 
                 entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(10)

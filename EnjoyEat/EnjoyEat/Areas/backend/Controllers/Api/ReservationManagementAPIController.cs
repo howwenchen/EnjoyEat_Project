@@ -61,14 +61,14 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
             x.ReservationInformation.PhoneNumber.Contains(reservemodel.PhoneNumber) ||
             x.ReservationInformation.Note.Contains(reservemodel.Note)
             ).Select(x => new ReservationManagemanetViewModel {
-                ReserveId=reservemodel.ReserveId,
-                ReservationName=reservemodel.ReservationName,
-                ReservationTime=reservemodel.ReservationTime,
-                ReservationDate=reservemodel.ReservationDate,
-                NumberofAdultGuest=reservemodel.NumberofAdultGuest,
-                NumberofKidGuest=reservemodel.NumberofKidGuest,
-                PhoneNumber=reservemodel.PhoneNumber,
-                Note=reservemodel.Note,
+                ReserveId=x.ReserveId, 
+                ReservationName=x.ReservationInformation.ReservationName,
+                ReservationTime=x.ReservationTime,
+                ReservationDate=x.ReservationDate,
+                NumberofAdultGuest=x.NumberofAdultGuest,
+                NumberofKidGuest=x.NumberofKidGuest,
+                PhoneNumber=x.ReservationInformation.PhoneNumber,
+                Note=x.ReservationInformation.Note,
             });
         }
 
