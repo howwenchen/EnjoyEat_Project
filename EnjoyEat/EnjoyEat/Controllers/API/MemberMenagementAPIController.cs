@@ -81,7 +81,7 @@ namespace EnjoyEat.Controllers.API
             db.SaveChanges();
 
             //寄信
-            var obj = new AesValidationDto(model.Account, DateTime.Now.AddDays(3));
+            var obj = new AesValidationDto(model.Account,DateTime.Now.AddDays(3));
             var jString = JsonSerializer.Serialize(obj);
             var code = encrypt.AesEncryptToBase64(jString);
 
@@ -89,7 +89,7 @@ namespace EnjoyEat.Controllers.API
             {
                 From = new MailAddress("thm101team66@gmail.com"),
                 Subject = "啟用網站驗證",
-                Body = @$"請點這<a href=`https://localhost:7071/MemberRegister/Enable?code=${code}`>這裡</a>來啟用你的帳號",
+                Body = @$"請點這<a href=`https://localhost:7071/MemberLogin/ChangePDSC?code={code}`>這裡</a>來啟用你的帳號",
                 IsBodyHtml = true,
                 BodyEncoding = Encoding.UTF8,
             };
@@ -112,8 +112,8 @@ namespace EnjoyEat.Controllers.API
             return "註冊成功";
         }
 
-        [HttpPost]
         //會員登入
+        [HttpPost]
         public async Task<ActionResult> Login([FromBody] MemberLoginViewModel model)
         {
             var user = db.MemberLogins.FirstOrDefault(x => x.Account == model.Account);
@@ -190,7 +190,7 @@ namespace EnjoyEat.Controllers.API
             {
                 From = new MailAddress("thm101team66@gmail.com"),
                 Subject = "重新設定密碼",
-                Body = @$"請點這<a href=`https://localhost:7071/MemberRegister/Enable?code=${code}`>這裡</a>重新設定密碼",
+                Body = @$"請點這<a href=`https://localhost:7071/MemberLogin/Enable?code={code}`>這裡</a>重新設定密碼",
                 IsBodyHtml = true,
                 BodyEncoding = Encoding.UTF8,
             };
@@ -209,12 +209,25 @@ namespace EnjoyEat.Controllers.API
             {
                 throw;
             }
-
+            HttpContext.Session.SetInt32("MemberId", member.MemberId);
             return "成功";
         }
 
+
+        //輸入新密碼
+        [HttpPut]       
+        public async Task<string> NewPassword(SetViewModel model)
+        {
+            var memberId=HttpContext.Session.GetInt32("MemberId");
+            var user=db.MemberLogins.FirstOrDefault(x=>x.MemberId==memberId);
+            var hashedPassword = hash.GetHash(string.Concat(model.Password, user.Salt).ToString());
+            user.Password = hashedPassword;
+            await db.SaveChangesAsync();
+            return "成功";
+        }
+
+        //取得會員資料
         [Authorize(Roles = "User")]
-        //抓取會員資料
         [HttpGet]
         public IActionResult GetMember()
         {
@@ -317,6 +330,7 @@ namespace EnjoyEat.Controllers.API
             await db.SaveChangesAsync();
             return "成功";
         }
+
         private bool EmailExists(string Email)
         {
             return db.Members.Any(member => member.Email == Email);
