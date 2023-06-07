@@ -125,9 +125,12 @@ namespace EnjoyEat.Areas.backend.Controllers.API
                 //string imagePath = await UploadImage(meal.MealImg);
                 //meal.MealImg = imagePath;
 
-                // 取得資料庫最後一筆 ProductId，並加1作為新的 ProductId
-                int lastProductId = await _context.Products.MaxAsync(p => p.ProductId);
-                meal.ProductId = lastProductId + 1;
+                // 檢查是否存在相同的 ProductId
+                bool isExistingProductId = await _context.Products.AnyAsync(p => p.ProductId == meal.ProductId);
+                if (isExistingProductId)
+                {
+                    return new ApiResultDto() { Status = false, Message = "產品編號已存在，請重新輸入。" };
+                }
 
                 Product pro = new Product
                 {

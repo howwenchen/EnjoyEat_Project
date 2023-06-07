@@ -275,17 +275,9 @@ namespace EnjoyEat.Models
                     .ValueGeneratedNever()
                     .HasColumnName("EmployeeID");
 
-                entity.Property(e => e.BasicSalary).HasColumnType("money");
-
-                entity.Property(e => e.Bonus).HasColumnType("money");
-
-                entity.Property(e => e.OverTime).HasColumnType("money");
-
                 entity.Property(e => e.PaymentDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Performance).HasColumnType("money");
-
-                entity.Property(e => e.TotalSalary).HasColumnType("money");
+                entity.Property(e => e.Performance).HasMaxLength(8);
 
                 entity.Property(e => e.Wage).HasColumnType("money");
 
