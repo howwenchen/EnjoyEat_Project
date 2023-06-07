@@ -47,6 +47,31 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
             return Ok();
         }
 
+        [HttpPost]
+
+        public async Task<IEnumerable<ReservationManagemanetViewModel>> FilterReservation(ReservationManagemanetViewModel reservemodel) 
+        {
+
+            return db.Reservations.Where(x => x.ReserveId == reservemodel.ReserveId ||
+            x.ReservationDate.Equals(reservemodel.ReservationDate) ||
+            x.ReservationTime.Contains(reservemodel.ReservationTime) ||
+            x.NumberofAdultGuest.Contains(reservemodel.NumberofAdultGuest) ||
+            x.NumberofKidGuest.Contains(reservemodel.NumberofKidGuest) ||
+            x.ReservationInformation.ReservationName.Contains(reservemodel.ReservationName) ||
+            x.ReservationInformation.PhoneNumber.Contains(reservemodel.PhoneNumber) ||
+            x.ReservationInformation.Note.Contains(reservemodel.Note)
+            ).Select(x => new ReservationManagemanetViewModel {
+                ReserveId=x.ReserveId, 
+                ReservationName=x.ReservationInformation.ReservationName,
+                ReservationTime=x.ReservationTime,
+                ReservationDate=x.ReservationDate,
+                NumberofAdultGuest=x.NumberofAdultGuest,
+                NumberofKidGuest=x.NumberofKidGuest,
+                PhoneNumber=x.ReservationInformation.PhoneNumber,
+                Note=x.ReservationInformation.Note,
+            });
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetReservationManagement()
         {

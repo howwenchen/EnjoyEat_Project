@@ -1,22 +1,55 @@
 ﻿@section Styles{
     <style>
+        .col-12 {
+            flex: 0 0 auto;
+            width: 100%;
+        }
+        .datepicker {
+            border: 0px;
+        }
+
+        div .mx-datepicker{
+            width: 50%
+        }
+
+        .datepicker input {
+                height: 38px;
+            color: black;
+        }
 
         /*搜尋input*/
         #searchText {
-            position: absolute;
-            right: 60px;
+            margin-left:auto;
+            margin-right: 0px;
+            text-align: center;
+            width: 20%;
+            background-color: #6c757d;
+            color:lightgray;
+        }
+        td input{
+            background-color: #6c757d;
+            color: lightgray;
+            border-radius: 5px;
+            width: 100%;
+            border: 1px solid gray;
             text-align:center;
-            width:10%;
+            
         }
 
         /*新增訂位訊息的modal*/
         .modal-content {
             background-color: #191C24
         }
-
-        #create_container input, #create_container select {
-            background: rgb(133, 133, 133);
+        #create_container input{
+            background: #E8F0EF;
             border-radius: 5px;
+        }
+
+        #modal_container input, #modal_container select, #modal_container textarea {
+            background: #E8F0EF;
+            color:black;
+            border-radius: 5px;
+            width:50%;
         }
 
         .modal-footer button {
@@ -28,7 +61,7 @@
             resize: none; /*不讓使用者调整 <textarea> 元素的大小*/
             overflow: auto; /*需要時顯示滾輪條  */
             height: 20px;
-            background-color: rgb(133, 133, 133);
+            background-color: #E8F0EF;
         }
 
     </style>
@@ -41,17 +74,19 @@
     <div class="row g-4">
         <div class="bg-secondary rounded h-100 p-4" id="app">
             <h6 class="mb-4">訂位系統</h6>
-            <div class="col-12">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">新增</button>
-                <date-picker v-model="searchDate"
+          
+            <div class="col-12 row">
+                <button class="btn btn-primary col-md-1" data-bs-toggle="modal" data-bs-target="#createModal">新增</button>
+@*                <date-picker v-model="searchDate"
                              value-type="format"
                              name="ReserveDate"
                              id="datepicker"
-                             class="col-lg-8 form-selectss "
+                             class="col-lg-7 form-selectss "
                              @@keyup=" filterDate">
-                </date-picker>
-                <input type="text" v-model="searchText" id="searchText" placeholder="搜尋" @@keyup="filterReserve" />
-            </div>
+                </date-picker>*@
+                <input class="form-control col-md-4" type="text" v-model="searchText" id="searchText" placeholder="搜尋" @@keyup="filterReserve" />
+                </div>
+     
             <div class="table-responsive">
                 <table class="table">
                     <thead>
@@ -68,7 +103,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="rev in filterInfo">
+                        <tr v-for="rev in reserveInfo">
                             <template v-if="rev.editStatus==false">
                                 <td scope="row">{{rev.reserveId}}</td>
                                 <td>{{rev.reservationName}}</td>
@@ -112,26 +147,27 @@
                             <h3 class="modal-title" id="staticBackdropLabel">新增訂位</h3>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-
                         <div class="modal-body container" id="create_container">
-                            <label for="datepicker">用餐日期：</label>
-                            <div id="d1" class="calendar">
-                                <date-picker v-model="create.reserveDate"
+
+                            <div id=" col-12 col-xl-6 row">
+                            <label for="datepicker" class="col-12 col-form-label">用餐日期：</label>
+                            <date-picker v-model="create.reserveDate"
                                              value-type="format"
                                              name="ReserveDate"
                                              id="datepicker"
-                                             class="col-lg-8 form-selectss "
-                                             placeholder="請選擇用餐日期"
-                                             :disabled-date="disablerange">
-                                </date-picker>
+                                             class="datepicker p-0"
+                                             :disabled-date="disablerange"
+                                >
+                            </date-picker>
                             </div>
-                            <label for="create_reserveName">訂位姓名：</label>
-                            <input v-model="create.ReserveName" type="text" id="create_reserveName" class="w-100">
+                            <div id="modal_container">
+                            <label class="col-md-8 "for="create_reserveName">訂位姓名：</label>
+                            <input class="form-control col-md-4" v-model="create.ReserveName" type="text" id="create_reserveName">
                             <label for="create_phone">聯絡電話：</label>
-                            <input v-model="create.Phone" type="text" id="create_phone" class="w-100" maxlength="10" minlength="10">
+                            <input class="form-control col-2" v-model="create.Phone" type="text" id="create_phone"  maxlength="10" minlength="10">
 
                             <label>用餐時段：</label>
-                            <select name="" id="ReserveTime" class="form-select w-100" v-model="create.ReserveTime">
+                            <select class="form-control col-2" name="" id="ReserveTime" v-model="create.ReserveTime">
                                 <option value="" disabled selected></option>
                                 <template>
                                     <option :value="t.value" v-for="t in Time">{{t.txt}}</option>
@@ -139,7 +175,7 @@
                             </select>
 
                             <label>大人人數：</label>
-                            <select name="" id="people" class="form-select w-100" v-model="create.Adult">
+                            <select class="form-control col-2" name="" id="people" v-model="create.Adult">
                                 <option value="" disabled selected></option>
                                 <template>
                                     <option :value="peo.value" v-for="peo in people">{{peo.txt}}</option>
@@ -147,20 +183,20 @@
                             </select>
 
                             <label>小孩人數：</label>
-                            <select name="" id="Kid" class="form-select w-100" v-model="create.Kid">
+                            <select class="form-control col-2" name="" id="Kid" v-model="create.Kid">
                                 <option value="" disabled selected></option>
                                 <template>
                                     <option :value="k.value" v-for="k in kid">{{k.txt}}</option>
                                 </template>
                             </select>
                             <label>備註：</label>
-                            <textarea class="form-control"
+                            <textarea class="form-control col-2"
                                       name="message"
                                       rows="5"
                                       v-model="create.note"
-                                      style="background:gray;"></textarea>
+                                      ></textarea>
                             <div class="validate"></div>
-
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <div class="row m-0">
@@ -184,9 +220,9 @@
             data: {
                 reserveInfo: [],
                 filterInfo: [],
-                bookInfo:[],
+                bookInfo: [],
                 searchText: '',
-                searchDate:'',
+                //searchDate: '',
                 original: {
                     reservationName: "",
                     phoneNumber: "",
@@ -197,10 +233,10 @@
                     note: "",
                 },
                 people: [
-                    { value: '1', txt: '1位成人' },
-                    { value: '2', txt: '2位成人' },
-                    { value: '3', txt: '3位成人' },
-                    { value: '4', txt: '4位成人' }
+                    { value: '1位大人', txt: '1位大人' },
+                    { value: '2位大人', txt: '2位大人' },
+                    { value: '3位大人', txt: '3位大人' },
+                    { value: '4位大人', txt: '4位大人' }
                 ],
                 Time: [
                     { value: "11:00", txt: '11:00' },
@@ -228,48 +264,43 @@
             },
 
             methods: {
-                filterDate: function () {
-                    let _this = this;
-                    var list = [];
-                    for (var i = 0; i < _this.bookInfo.length; i++) {
-                        var item = _this.bookInfo[i];
-                        var reserveDate = item.reservationDate;
-                        var regex = new RegExp(_this.searchDate, 'i');
-                        if (regex.test(reserveDate)) {
-                            list.push(item);
-                        }
-                    }
-                    _this.filterInfo = list;
-                },
+                //filterDate: function () {
+                //    let _this = this;
+                //    var list = [];
+                //    for (var i = 0; i < _this.bookInfo.length; i++) {
+                //        var item = _this.bookInfo[i];
+                //        var reserveDate = item.reservationDate;
+                //        var regex = new RegExp(_this.searchDate, 'i');
+                //        if (regex.test(reserveDate)) {
+                //            list.push(item);
+                //        }
+                //    }
+                //    _this.filterInfo = list;
+                //},
                 filterReserve: function () {
                     let _this = this;
-                    var reservelist = [];
-                    for (var i = 0; i < _this.reserveInfo.length; i++) {
-                        var item = _this.reserveInfo[i];
-                        var reservationName = item.reservationName;
-                        var phoneNumber = item.phoneNumber;
-                        var numberofAdultGuest = item.numberofAdultGuest.toString();
-                        var numberofKidGuest = item.numberofKidGuest.toString();
-                        var reservationDate = item.reservationDate;
-                        var reservationTime = item.reservationTime;
-                        var note = item.note;
-                        var regex = new RegExp(this.searchText, 'i');
-
-                        if (
-                            regex.test(reservationName) ||
-                            regex.test(phoneNumber) ||
-                            regex.test(numberofAdultGuest) ||
-                            regex.test(numberofKidGuest) ||
-                            regex.test(reservationDate) ||
-                            regex.test(reservationTime) ||
-                            regex.test(note)) 
-                        {
-                            reservelist.push(item);
-                            _this.filterInfo = reservelist;
+                    var request = {};
+                    request.ReserveId = isNaN(parseInt(_this.searchText)) ? -1 : parseInt(_this.searchText);
+                    request.ReservationName = request.PhoneNumber = request.NumberofAdultGuest = request.NumberofKidGuest
+                        = request.Note = _this.searchText;
+                    axios.post(`/api/ReservationManagementApi/FilterReservation`, request).then(response => {
+                        _this.reserveInfo = response.data;
+                        var temp = []
+                        for (var i = 0; i < _this.reserveInfo.length; i++) {
+                            var item = _this.reserveInfo[i];
+                            item.editStatus = false;
+                            temp.push(item);
                         }
+                        _this.reserveInfo = temp;
+                    });
+                },
+                formatDate: function () {
+                    for (var i = 0; i < this.reserveInfo.length; i++) {
+                        let date = new Date(this.reserveInfo[i].reservationDate);
+                        this.reserveInfo[i].reservationDate = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0')
                     }
                 },
-                
+
                 disablerange: function (date) {
                     var today = new Date();
                     today.setHours(0, 0, 0, 0);
@@ -338,10 +369,9 @@
                 getreserve: function () {
                     let _this = this;
                     axios.get("/api/ReservationManagementApi/GetReservationManagement").then(
-                        response => {
-                            _this.filterInfo = response.data;
+                        response => {                    
                             _this.reserveInfo = response.data;
-                            _this.bookInfo=response.data;
+                            _this.formatDate();
                             var temp = [];
                             for (var i = 0; i < _this.reserveInfo.length; i++) {
                                 var item = _this.reserveInfo[i];
@@ -367,7 +397,7 @@
                 createbook: function () {
                     let _this = this;
                     var request = {
-                        reservationDate: _this.create.ReserveDate,
+                        ReservationDate: _this.create.reserveDate,
                         reservationTime: _this.create.ReserveTime,
                         numberofAdultGuest: _this.create.Adult,
                         numberofKidGuest: _this.create.Kid,
