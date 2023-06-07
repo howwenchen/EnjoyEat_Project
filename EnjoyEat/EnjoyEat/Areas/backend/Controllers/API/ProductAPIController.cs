@@ -1,5 +1,7 @@
-﻿using EnjoyEat.Areas.OrderForHere.Models;
+﻿using EnjoyEat.Areas.backend.Controllers.Api;
+using EnjoyEat.Areas.OrderForHere.Models;
 using EnjoyEat.Models;
+using EnjoyEat.Models.DTO;
 using EnjoyEat.Models.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,13 +20,14 @@ namespace EnjoyEat.Areas.backend.Controllers.API
             _context = context;
         }
 
+        // 取得餐點
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MenuViewModel>>> GetProduct()
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProduct()
         {
             try
             {
                 var dbContext = _context.Products.Include(t => t.SubCategory);
-                var product = await dbContext.AsNoTracking().Select(pro => new MenuViewModel
+                var product = await dbContext.AsNoTracking().Select(pro => new ProductDTO
                 {
                     ProductId = pro.ProductId,
                     MealImg = pro.MealImg,
@@ -34,6 +37,7 @@ namespace EnjoyEat.Areas.backend.Controllers.API
                     Stock = pro.Stock,
                     Description = pro.Description,
                     Recipe = pro.Recipe,
+                    SubCategoryId = pro.SubCategoryId,
                     CategoryName = pro.SubCategory.Category.CategoryName,
                     SubCategoriesName = pro.SubCategory.SubCategoriesName,
                 }).ToListAsync();
@@ -45,11 +49,11 @@ namespace EnjoyEat.Areas.backend.Controllers.API
                 return StatusCode(500, "Internal server error");
             }
         }
-        public async Task<ActionResult<IEnumerable<CategoryViewModel>>> GetCategory()
+        public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetCategory()
         {
             try
             {
-                var category = await _context.Categories.AsNoTracking().Select(cat => new CategoryViewModel
+                var category = await _context.Categories.AsNoTracking().Select(cat => new CategoryDTO
                 {
                     CategoryId = cat.CategoryId,
                     CategoryName = cat.CategoryName,
@@ -63,11 +67,11 @@ namespace EnjoyEat.Areas.backend.Controllers.API
                 return StatusCode(500, "Internal server error");
             }
         }
-        public async Task<ActionResult<IEnumerable<SubCategoryViewModel>>> GetSubCategory()
+        public async Task<ActionResult<IEnumerable<SubCategoryDTO>>> GetSubCategory()
         {
             try
             {
-                var subCategory = await _context.SubCategories.AsNoTracking().Select(cat => new SubCategoryViewModel
+                var subCategory = await _context.SubCategories.AsNoTracking().Select(cat => new SubCategoryDTO
                 {
                     CategoryId = cat.CategoryId,
                     SubCategoryId = cat.SubCategoryId,
@@ -83,11 +87,48 @@ namespace EnjoyEat.Areas.backend.Controllers.API
             }
         }
 
+        //// 新增圖片
+        //[HttpPost]
+        //public async Task<ActionResult> UploadImage(IFormFile image)
+        //{
+        //    try
+        //    {
+        //        //using (var stream = System.IO.File.Create($@"C:\Users\Tibame_T14\Desktop\EnjoyEat\EnjoyEat\EnjoyEat\wwwroot\img\Food\{image.FileName}"))
+        //        //{
+        //        //    await image.CopyToAsync(stream);
+        //        //}
+        //        //return Ok(true);
+        //        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+        //        var filePath = Path.Combine("wwwroot", "img", "Food", fileName);
+
+        //        using (var stream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            await image.CopyToAsync(stream);
+        //        }
+
+        //        return Ok(filePath);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.ToString());
+        //        return StatusCode(500, "Internal server error");
+        //    }
+        //}
+
+        // 新增餐點
         [HttpPost]
-        public async Task<string> CreateProduct([FromBody] MenuViewModel meal)
+        public async Task<ApiResultDto> CreateProduct([FromBody] ProductDTO meal)
         {
             try
             {
+                //// 新增餐點前先處理圖片
+                //string imagePath = await UploadImage(meal.MealImg);
+                //meal.MealImg = imagePath;
+
+                // 取得資料庫最後一筆 ProductId，並加1作為新的 ProductId
+                int lastProductId = await _context.Products.MaxAsync(p => p.ProductId);
+                meal.ProductId = lastProductId + 1;
+
                 Product pro = new Product
                 {
                     ProductId = meal.ProductId,
@@ -100,13 +141,58 @@ namespace EnjoyEat.Areas.backend.Controllers.API
                     Description = meal.Description,
                     Recipe = meal.Recipe,
                 };
+
                 _context.Products.Add(pro);
                 await _context.SaveChangesAsync();
-                return "新增成功";
+                return new ApiResultDto() { Status = true, Message = "新增成功" };
             }
             catch (Exception)
             {
-                return "新增失敗";
+                return new ApiResultDto() { Status = false, Message = "新增失敗，請檢查必填欄位" };
+            }
+        }
+
+        // 刪除餐點
+        [HttpPost]
+        public bool DeleteProduct([FromBody] ProductDTO meal)
+        {
+            try
+            {
+                var pro = _context.Products.FirstOrDefault(p => p.ProductId == meal.ProductId);
+                if (pro == null) return false;
+                _context.Products.Remove(pro);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        // 編輯餐點
+        [HttpPost]
+        public async Task<ApiResultDto> EditProduct([FromBody] ProductDTO meal)
+        {
+            try
+            {
+                var pro = _context.Products.FirstOrDefault(p => p.ProductId == meal.ProductId);
+                if (pro == null) return new ApiResultDto() { Status = false, Message = "修改失敗" };
+                pro.MealImg = meal.MealImg;
+                pro.ProductName = meal.ProductName;
+                pro.Costs = meal.Costs;
+                pro.UnitPrice = meal.UnitPrice;
+                pro.SubCategoryId = meal.SubCategoryId;
+                pro.Description = meal.Description;
+                pro.Recipe = meal.Recipe;
+                pro.Stock = meal.Stock;
+
+                await _context.SaveChangesAsync();
+                return new ApiResultDto() { Status = true, Message = "修改成功" };
+            }
+            catch (Exception)
+            {
+                return new ApiResultDto() { Status = false, Message = "修改失敗" };
             }
         }
     }
