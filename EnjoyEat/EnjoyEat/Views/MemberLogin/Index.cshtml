@@ -1,104 +1,112 @@
-<<<<<<< Updated upstream
-﻿    <!-- d-flex align-items-center -->
-    <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
-        <main id="main">
+@section Styles{
+    <link href="~/css/memberlogin.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+}
+
+<div class="php-email-form" data-aos="fade-up" data-aos-delay="100">
+    <main id="main">
+        <div id="loginQQ">
             <section class="breadcrumbs">
                 <div class="container">
-                <h1 style="color:burlywood"> </h1>
-                        <div>
-                            <div class="flex-shrink-0" style="text-align:center">
-                                <p>會員登入</p>
-                            </div>
-                            <img src="#" alt="" width="300">
-                        </div>
+                    <h1 id="Logo">
+                        會員登入
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                    </h1>
                 </div>
-                
-                
-                <div class="d-grid gap-2 col-6 mx-auto">
-                    <input type="text" aria-label="Account" class="form-control" placeholder="請輸入會員帳號">
-                    <input type="password" aria-label="Password" class="form-control" placeholder="請輸入會員密碼">
+                <div id="AccountHelpBlock" class="form-label nono" v-if="show">
+                    帳號或密碼輸入錯誤，請重新確認
+                </div>
+                <div id="AccountHelpBlock" class="form-label nono" v-if="short">
+                    帳號或密碼長度為8至12個字，請重新確認
+                </div>
+                <br />
+                <form class="d-grid gap-2 col-6 mx-auto">
+                    <h4>
+                        <i class="fa-solid fa-lock"></i>
+                        <span>帳號</span>
+                    </h4>
+                    <input type="text" aria-label="Account" v-model="account" placeholder="請輸入會員帳號"
+                           maxlength="12" minlength="8" required>
+                    <h4>
+                        <i class="fa-solid fa-key"></i>
+                        <span>密碼</span>
+                    </h4>
+                    <input type="password" aria-label="Password" v-model="password" placeholder="請輸入會員密碼"
+                           maxlength="12" minlength="8" required>
 
-                    <label for="c1">
-                        <input type="checkbox" id="c1" name="cc" />
-                        記住我
-                    </label>
-                    <br>
-                    <button class="btn btn-primary" >登入</button>
-                   <a-asp-controller="MemberRegister"asp-action="Index">註冊會員</a>
-                    <button class="btn btn-danger" type="button">忘記密碼了?點我</button>
-                </div>
-                <br>
-                <div class="d-grid gap-5 col-6 mx-auto">
-                    <button type="button" class="btn btn-outline-primary">
-                        <img src="facebook.png" alt="facebook-icon">
-                        Facebook登入
-                    </button>
-                </div>
-                <div class="d-grid gap-5 col-6 mx-auto" >
-                    <button type="button" class="btn btn-outline-primary">
-                        <img src="google.png" alt="google-icon">
-                        Google 登入
-                    </button>
-                </div>
+                    <button class="login btn btn-primary" type="button" @@click="login">登入</button>
+                    <button class="login btn btn-primary" type="button" @@click="register">註冊</button>
+                    <button class="login btn btn-danger" type="button" @@click="forget">忘記密碼</button>
+                </form>
+
             </section>
-            </main>
-    </form>
-    <!-- End #main -->
-   
-
-=======
-﻿<!-- d-flex align-items-center -->
-@*<form asp-controller="MemberLogin" asp-action="Login"></form>*@
-<form action="/MemberManagement/Index">
-<form  action="forms/book-a-table.php" method="post" role="form" class="php-email-form" data-aos="fade-up" data-aos-delay="100">
-    <main id="main">
-        <section class="breadcrumbs">
-            <div class="container">
-                <h1 style="color:burlywood">
-                    <div>
-                        <div class="flex-shrink-0" style="text-align:center">
-                            <p>會員登入</p>
-                        </div>
-                        <img src="#" alt="" width="300">
-                    </div>
-                </h1>
-            </div>
-       
-            <div class="d-grid gap-2 col-6 mx-auto">
-
-                      <input type="text" aria-label="Account" class="text-danger" placeholder="請輸入會員帳號"
-                       maxlength="20" minlength="8" required>
-                      <br>
-                      <br>
-                      <input type="password" aria-label="Password" class="text-danger" placeholder="請輸入會員密碼"
-                       maxlength="20" minlength="8" required>
-
-                <label for="c1">
-                    <input type="checkbox" id="c1" name="cc" />
-                    記住我
-                </label>
-                <br>
-     
-                <button class="btn btn-primary" type="submit">登入</button>
-                <a asp-controller="MemberRegister" asp-action="Index" class="btn btn-primary">註冊會員</a>
-                <button class="btn btn-danger" type="button">忘記密碼了?點我</button>
-            </div>
-            <br>
-            <div class="d-grid gap-5 col-6 mx-auto">
-                <button type="button" class="btn btn-outline-primary">
-                    <img src="facebook.png" alt="facebook-icon">
-                    Facebook登入
-                </button>
-            </div>
-            <div class="d-grid gap-5 col-6 mx-auto">
-                <button type="button" class="btn btn-outline-primary">
-                    <img src="google.png" alt="google-icon">
-                    Google 登入
-                </button>
-            </div>
-        </section>
+        </div>
     </main><!-- End #main -->
-</form>
-</form>
->>>>>>> Stashed changes
+</div>
 
+@section Scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <script src="https://unpkg.com/vue@2"></script>
+
+    <script>
+        Vue.config.devtools = true;
+        let app = new Vue({
+            el: "#loginQQ",
+            data: {
+                account: "",
+                password: "",
+                show: false,
+                short:false,
+            },
+            methods: {
+                login: function () {
+                    let _this = this;
+                    _this.short = false;
+                    _this.show = false;
+                    if(_this.account.length < 8 || _this.password.length < 8){
+                        return _this.short =true
+                    }
+                    request = {
+                        Account: _this.account,
+                        Password: _this.password
+                    };
+                    axios.post("/api/member/Login", request)
+                        .then(response => {
+                            if (response.data == "帳號密碼錯誤") {
+                                _this.show = true;
+                            }
+                            else if(response.data.redirect) {
+                                // 從點餐頁面來的會根據後端的重定向跳轉到相應頁面
+                                window.location.href = response.data.redirect;
+                            }
+                            else {
+                                Swal.fire({
+                                    allowOutsideClick: false,
+                                    icon: 'success',
+                                    color: '#333',
+                                    iconColor: '#D8CDB9',
+                                    background: '#FFF',
+                                    title: '登入成功',
+                                    html: '<div class="custom-swal-container"><div class="custom-swal-message">將自動跳轉至首頁!</div></div>',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    position: 'center'
+                                }).then(result => {
+                                    if (result.dismiss === Swal.DismissReason.timer) 
+                                    {
+                                        window.location.href = `/Home/Index`;
+                                    }
+                                })
+                            }
+                        });
+                },
+                forget: function () {
+                    window.location.href = `/MemberLogin/ForgetPassword`;
+                },
+                register: function () {
+                    window.location.href = `/MemberRegister/Index`;
+                },
+            }
+        });
+    </script>
+}

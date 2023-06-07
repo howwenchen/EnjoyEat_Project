@@ -6,50 +6,94 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing.Text;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
+using AspNetCore;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+using EnjoyEat.Services;
+using System.Text.Json;
 
 namespace EnjoyEat.Controllers
 {
+
     public class MemberLoginController : Controller
     {
+        private readonly db_a989fe_thm101team6Context _db;
+        private readonly EncryptService encrypt;
+
+        public MemberLoginController(db_a989fe_thm101team6Context db, EncryptService encrypt)
+        {
+            this._db = db;
+            this.encrypt = encrypt;
+        }
+
         public IActionResult Index()
         {
             return View();
         }
-        private readonly db_a989fe_thm101team6Context _db;
-        public MemberLoginController(db_a989fe_thm101team6Context context)
+
+        public IActionResult ForgetPassword()
         {
-            _db = context;
+            return View();
+        }
+        public IActionResult ChangePd()
+        {
+            return View();
+        }
+        public async Task<IActionResult> Enable(string code)
+        {
+            var str = encrypt.AesDecryptToString(code);
+            var obj = JsonSerializer.Deserialize<AesValidationDto>(str);
+            if (DateTime.Now > obj.ExpiredDate)
+            {
+                return BadRequest("連結已過期");
+            }
+            var user = _db.MemberLogins.FirstOrDefault(x => x.Account == obj.Account);
+            if (user != null)
+            {
+                user.IsActive = true;
+                _db.SaveChanges();
+            }
+
+            return Ok($@"code:{code}  str:{str}");
+        }
+        //發送郵件確認
+        public IActionResult ChangePDSC(string code)
+        {
+            var str = encrypt.AesDecryptToString(code);
+            var obj = JsonSerializer.Deserialize<AesValidationDto>(str);
+            if (DateTime.Now > obj.ExpiredDate)
+            {
+                return BadRequest("連結已過期");
+            }
+            var user = _db.MemberLogins.FirstOrDefault(x => x.Account == obj.Account);
+            if (user != null)
+            {
+                user.IsActive = true;
+                _db.SaveChanges();
+            }
+            return View();
         }
         public IActionResult Login()
         {
             return View();
         }
 
-        public async Task<IActionResult> LogoutAsync()
+
+        [Authorize(Roles = "User")]
+        public IActionResult Logout()
         {
-            await HttpContext.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "home");
         }
+
+
     }
 }
-/*
-[HttpPost]
-[ValidateAntiForgeryToken]
 
-public IActionResult Login(MemberLoginViewModel model)
-{
-   var user=_db.Members.FirstOrDefault(x=>x.Account==model.Account&&
-   x.Password==model.Password);
 
-    if(user!=null)
-    {
-        ViewBag.Error = "帳號密碼錯誤";
-        return View("Login");
-    }
 
-    return View();
-}
 
-}
-}
-*/
+

@@ -6,34 +6,42 @@ namespace EnjoyEat.Models.ViewModel
 {
     public class MemberRegisterViewModel
     {
-  
-      
-        public string FirstName { get; set; } = null!;
-   
-        public string LastName { get; set; } = null!;
-      
-        public string Gender { get; set; } = null!;
-      
-        public DateTime Birthday { get; set; }
-   
-        public string Address { get; set; } = null!;
-     
-        public string Phone { get; set; } = null!;
- 
-  
-        public string Email { get; set; } = null!;
-       
-        public string Account { get; internal set; } = null!;
-      
-        public string Password { get; internal set; } = null!;
-
-        public string LevelName { get; set; } = null!;
 
         public int MemberId { get; set; }
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+        public string? Gender { get; set; }
+        public DateTime? Birthday { get; set; }
+        public DateTime? RegisterDay { get; set; }
+        public string? Address { get; set; }
+
+        [Required, MinLength(10), MaxLength(10)]
+        public string Phone { get; set; } = null!;
+
+        [Required, EmailAddress]
+        public string? Email { get; set; }
+        public string? LevelName { get; set; } = null!;
+        public double? LevelDiscount { get; set; }
+
+        [Required, MinLength(8), MaxLength(12)]
+        public string? Account { get; set; } = null!;
+
+        [Required, MinLength(8), MaxLength(12)]
+        public string? Password { get; set; } = null!;
+        public string? Role { get; set; }
+        public bool? IsActive { get; set; }
+
+        
 
 
     }
-
+    public class ForgetViewModel
+    {
+        [Required, MinLength(8), MaxLength(12)]
+        public string? Account { get; set; } = null!;
+        [Required, EmailAddress]
+        public string? Email { get; set; }
+    }
 
 }
 

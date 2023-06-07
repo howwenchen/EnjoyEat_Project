@@ -19,6 +19,8 @@ namespace EnjoyEat.Models
         public virtual DbSet<Attendance> Attendances { get; set; } = null!;
         public virtual DbSet<Authority> Authorities { get; set; } = null!;
         public virtual DbSet<AuthorityUse> AuthorityUses { get; set; } = null!;
+        public virtual DbSet<Cart> Carts { get; set; } = null!;
+        public virtual DbSet<CartItem> CartItems { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<CustomerService> CustomerServices { get; set; } = null!;
         public virtual DbSet<Department> Departments { get; set; } = null!;
@@ -26,6 +28,7 @@ namespace EnjoyEat.Models
         public virtual DbSet<EmployeesLogin> EmployeesLogins { get; set; } = null!;
         public virtual DbSet<EmployeesSalary> EmployeesSalaries { get; set; } = null!;
         public virtual DbSet<FeedBack> FeedBacks { get; set; } = null!;
+        public virtual DbSet<ForHereTable> ForHereTables { get; set; } = null!;
         public virtual DbSet<Level> Levels { get; set; } = null!;
         public virtual DbSet<Member> Members { get; set; } = null!;
         public virtual DbSet<MemberLogin> MemberLogins { get; set; } = null!;
@@ -127,6 +130,30 @@ namespace EnjoyEat.Models
                     .HasConstraintName("FK_AuthorityUse_Authority");
             });
 
+            modelBuilder.Entity<Cart>(entity =>
+            {
+                entity.ToTable("Cart");
+            });
+
+            modelBuilder.Entity<CartItem>(entity =>
+            {
+                entity.ToTable("CartItem");
+
+                entity.Property(e => e.ProductName).HasMaxLength(50);
+
+                entity.HasOne(d => d.Cart)
+                    .WithMany(p => p.CartItems)
+                    .HasForeignKey(d => d.CartId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CartItem_Cart");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.CartItems)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CartItem_Products");
+            });
+
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.Property(e => e.CategoryName).HasMaxLength(20);
@@ -182,6 +209,8 @@ namespace EnjoyEat.Models
             {
                 entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
 
+                entity.Property(e => e.Account).HasMaxLength(15);
+
                 entity.Property(e => e.Address).HasMaxLength(60);
 
                 entity.Property(e => e.Birthday).HasColumnType("date");
@@ -190,16 +219,21 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Email).HasMaxLength(30);
 
-                entity.Property(e => e.Gender).HasColumnType("text");
+                entity.Property(e => e.Gender).HasMaxLength(15);
 
                 entity.Property(e => e.IdentityId)
-                    .HasMaxLength(10)
-                    .HasColumnName("IdentityID")
-                    .IsFixedLength();
+                    .HasMaxLength(30)
+                    .HasColumnName("IdentityID");
 
                 entity.Property(e => e.Name).HasMaxLength(6);
 
+                entity.Property(e => e.Password)
+                    .HasMaxLength(64)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Phone).HasMaxLength(15);
+
+                entity.Property(e => e.Role).HasMaxLength(20);
             });
 
             modelBuilder.Entity<EmployeesLogin>(entity =>
@@ -218,6 +252,8 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.Password)
                     .HasMaxLength(64)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Role).HasMaxLength(20);
 
                 entity.Property(e => e.UserName).HasMaxLength(15);
 
@@ -291,6 +327,23 @@ namespace EnjoyEat.Models
                     .HasConstraintName("FK_FeedBack_Orders");
             });
 
+            modelBuilder.Entity<ForHereTable>(entity =>
+            {
+                entity.HasKey(e => e.TableId);
+
+                entity.ToTable("ForHereTable");
+
+                entity.Property(e => e.TableId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("TableID");
+
+                entity.HasOne(d => d.Table)
+                    .WithOne(p => p.ForHereTable)
+                    .HasForeignKey<ForHereTable>(d => d.TableId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ForHereTable_ForHereTable");
+            });
+
             modelBuilder.Entity<Level>(entity =>
             {
                 entity.HasKey(e => e.LevelName);
@@ -315,6 +368,8 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.Gender).HasMaxLength(2);
 
                 entity.Property(e => e.LastName).HasMaxLength(10);
+
+                entity.Property(e => e.LevelDiscount).HasDefaultValueSql("((0.95))");
 
                 entity.Property(e => e.LevelName).HasMaxLength(10);
 
@@ -345,6 +400,10 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.Password)
                     .HasMaxLength(64)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Role).HasMaxLength(20);
+
+                entity.Property(e => e.Salt).HasMaxLength(100);
 
                 entity.HasOne(d => d.Member)
                     .WithOne(p => p.MemberLogin)
@@ -378,7 +437,7 @@ namespace EnjoyEat.Models
             {
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.FinalPrice).HasComputedColumnSql("(([TotalPrice]-[CampaignDiscount])*[LevelDiscount])", false);
+                entity.Property(e => e.FinalPrice).HasComputedColumnSql("(ceiling(([TotalPrice]-[CampaignDiscount])*[LevelDiscount]))", false);
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -399,15 +458,11 @@ namespace EnjoyEat.Models
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.HasKey(e => new { e.OrderId, e.ProductId });
+                entity.Property(e => e.OrderDetailId).HasColumnName("OrderDetailID");
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
-
-                entity.Property(e => e.OrderDetialId)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("OrderDetialID");
 
                 entity.Property(e => e.Quantity).HasDefaultValueSql("((1))");
 
@@ -543,7 +598,7 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 
-                entity.Property(e => e.Note).HasColumnType("text");
+                entity.Property(e => e.Note).HasMaxLength(300);
 
                 entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(10)

@@ -106,13 +106,13 @@ ol {
     padding: 0;
     margin: 0;
 }
-
 /*---------------------
   Helper CSS
 -----------------------*/
 .section-title {
-    margin-top: 40px;
-    margin-bottom: 35px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding:0;
 }
 
     .section-title span {
@@ -126,12 +126,19 @@ ol {
     }
 
     .section-title h2 {
-        font-size: 46px;
-        color: #111111;
-        line-height: 60px;
-        font-weight: 700;
-        font-style: italic;
-        font-family: "Playfair Display", serif;
+        font-size: 12px;
+        font-weight: 500;
+        padding: 0;
+        line-height: 1px;
+        margin: 0 0 5px 0;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #aaa;
+        font-family: "Poppins",sans-serif;
+    }
+    .section-title p {
+        margin-top: 20px;
+        margin-bottom: 10px;
     }
 
 .set-bg {
@@ -1532,11 +1539,11 @@ ol {
   Shop
 -----------------------*/
 .shop {
-    padding-top: 80px;
+    padding-top: 40px;
 }
 
 .shop__option {
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
 .shop__option__search form {
