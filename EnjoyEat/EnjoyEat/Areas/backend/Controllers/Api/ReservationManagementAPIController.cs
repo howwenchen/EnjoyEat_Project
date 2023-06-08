@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace EnjoyEat.Areas.backend.Controllers.Api
 {
@@ -30,6 +31,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
                 ReservationTime = model.ReservationTime,
                 NumberofAdultGuest = model.NumberofAdultGuest,
                 NumberofKidGuest = model.NumberofKidGuest,
+                
             };
             db.Reservations.Add(reservation);
             db.SaveChanges();
@@ -39,6 +41,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
                 ReserveId = reservation.ReserveId,
                 ReservationName = model.ReservationName,
                 PhoneNumber = model.PhoneNumber,
+                Email=model.Email,
                 Note = model.Note,
 
             };
@@ -46,6 +49,53 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
             db.SaveChanges();
             return Ok();
         }
+
+        [HttpPost]
+
+        public async Task<IEnumerable<ReservationManagemanetViewModel>> FilterReservation(ReservationManagemanetViewModel reservemodel)
+        {
+
+            return db.Reservations.Where(x => x.ReserveId == reservemodel.ReserveId ||
+            x.ReservationDate.ToString().Contains(reservemodel.ReservationDate.ToString()) ||
+            x.ReservationTime.ToString().Contains(reservemodel.ReservationTime.ToString()) ||
+            x.NumberofAdultGuest.Contains(reservemodel.NumberofAdultGuest) ||
+            x.NumberofKidGuest.Contains(reservemodel.NumberofKidGuest) ||
+            x.ReservationInformation.ReservationName.Contains(reservemodel.ReservationName) ||
+            x.ReservationInformation.PhoneNumber.Contains(reservemodel.PhoneNumber) ||
+            x.ReservationInformation.Note.Contains(reservemodel.Note)
+            ).Select(x => new ReservationManagemanetViewModel
+            {
+                ReserveId = x.ReserveId,
+                ReservationName = x.ReservationInformation.ReservationName,
+                ReservationTime = x.ReservationTime,
+                ReservationDate = x.ReservationDate,
+                NumberofAdultGuest = x.NumberofAdultGuest,
+                NumberofKidGuest = x.NumberofKidGuest,
+                PhoneNumber = x.ReservationInformation.PhoneNumber,
+                Note = x.ReservationInformation.Note,
+            });
+        }
+        //[HttpPost]
+
+        //public async Task<IEnumerable<ReservationManagemanetViewModel>> FilterReservation(ReservationManagemanet2ViewModel m)
+        //{
+        //    return db.Reservations.Include(x => x.ReservationInformation).ToList().Where(x =>
+        //        m.SearchText.Contains(x.ReserveId.ToString()) ||
+        //        m.SearchText.Contains(x.NumberofAdultGuest) ||
+        //        m.SearchText.Contains(x.NumberofKidGuest) ||
+
+        //        m.SearchText.Contains(x.ReservationDate?.ToString()) ||
+        //        m.SearchText.Contains(x.ReservationTime.ToString())).Select(x => new ReservationManagemanetViewModel
+        //        {
+        //            ReserveId = x.ReserveId,
+
+        //            ReservationTime = x.ReservationTime,
+        //            ReservationDate = x.ReservationDate,
+        //            NumberofAdultGuest = x.NumberofAdultGuest,
+        //            NumberofKidGuest = x.NumberofKidGuest,
+
+        //        });
+        //}
 
         [HttpGet]
         public async Task<IActionResult> GetReservationManagement()

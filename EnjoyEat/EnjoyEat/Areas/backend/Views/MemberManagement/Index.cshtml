@@ -1,0 +1,456 @@
+﻿@section Styles{
+    <style>
+        .new{
+            margin-left: 10px;
+        }
+        /*搜尋input*/
+        #searchText {
+            margin-left: auto;
+            margin-right: 0px;
+            text-align: center;
+            width: 15%;
+        }
+
+        /*新增訂位訊息的modal*/
+        .modal-content {
+            background-color: #191C24
+        }
+
+        #create_container input, #create_container select {
+            background: rgb(133, 133, 133);
+            border-radius: 5px;
+        }
+
+        .modal-footer button {
+            background-color: #6c757d;
+            border-radius: 5px;
+        }
+
+        .modal select, .modal input{
+            color:black;
+        }
+        textarea {
+            resize: none; /*不讓使用者调整 <textarea> 元素的大小*/
+            overflow: auto; /*需要時顯示滾輪條  */
+            height: 20px;
+            background-color: rgb(133, 133, 133);
+        }
+        .nono{
+            color:red;
+        }
+    </style>
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+
+<!-- Table Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="bg-secondary rounded h-100 p-4" id="app">
+            <h6 class="mb-4">會員管理系統</h6>
+            <div class="col-12 row">             
+                <button class="btn btn-primary col-md-1 new" data-bs-toggle="modal" data-bs-target="#createModal">新增</button>  
+                <input type="text" class="form-control col-md-4" v-model="searchText" id="searchText" placeholder="請輸入搜尋關鍵字" @@keyup="filterMember" />                
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr class="text-center">
+                            <th scope="col" >#</th>
+                            <th scope="col" >姓</th>
+                            <th scope="col" >名</th>
+                            <th scope="col" >電話</th>
+                            <th scope="col" >性別</th>
+                            <th scope="col" >生日</th>
+                            <th scope="col" >註冊時間</th>
+                            <th scope="col" >地址</th>
+                            <th scope="col" >郵件</th>
+                            <th scope="col" >等級</th>
+                            <th scope="col" >消費總額</th>
+                            <th scope="col">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="text-center" v-for="member in memberInfo">
+                            <template >
+                                <td  scope="row">{{member.memberId}}</td>
+                                <td >{{member.lastName}}</td>
+                                <td >{{member.firstName}}</td>
+                                <td >{{member.phone}}</td>
+                                <td >{{member.gender}}</td>
+                                <td>{{member.birthday}}</td>
+                                <td>{{member.registerDay}}</td>
+                                <td >{{member.address}}</td>
+                                <td>{{member.email}}</td>
+                                <td >{{member.levelName}}</td>
+                                <td >{{member.memberPoint}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" @@click="edit(member)">
+                                        編輯
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="send(member.memberId)">
+                                        刪除
+                                    </button>
+                                </td>
+
+                                <!--Edit Modal-->
+                                <div class="modal fade bookingdModal" id="editModal" data-bs-backdrop="static"
+                                     data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title" id="staticBackdropLabel">編輯會員</h3>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+
+                                            <div class="modal-body container" id="create_container">
+                                                <label>姓：</label>
+                                                <input v-model="editMember.lastName" type="text" id="create_lastName" class="w-100">
+                                                <label>名：</label>
+                                                <input v-model="editMember.firstName" type="text" id="create_firstName" class="w-100">
+                                                <label>電話：</label>
+                                                <input v-model="editMember.phone" type="text" id="create_phone" class="w-100" maxlength="10" minlength="10">
+                                                <label>性別：</label>
+                                                <select name="" id="Gender" class="form-select w-100" v-model="editMember.gender">
+                                                    <option value="" disabled selected></option>
+                                                    <option :value="g.value" v-for="g in Gender">{{g.txt}}</option>
+                                                </select>
+
+                                                <label>生日：</label>
+                                                <div id="d1" class="calendar">
+                                                    <date-picker v-model="editMember.birthday"
+                                                                 value-type="format"
+                                                                 name="Birthday"
+                                                                 id="datepicker"
+                                                                 class="col-lg-8 form-selectss "
+                                                                 :disabled-date="disablerange">
+                                                    </date-picker>
+                                                </div>
+
+                                                <label>郵件：</label>
+                                                <input v-model="editMember.email" type="text" id="create_email" class="w-100">
+
+                                                <label>地址：</label>
+                                                <input v-model="editMember.address" type="text" id="create_address" class="w-100">
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                    <button @@click="cancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                                                <button @@click="update" class="btn btn-primary" type="button" data-bs-dismiss="modal"><i class="fa-solid fa-square-check"></i> 儲存</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Delete Modal -->
+                                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">刪除確認</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                確定要刪除資料嗎?可能會對其他資料有所影響喔!
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @@click="deleteMember">確定</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </template>    
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Table End -->
+
+            <!--Create Modal-->
+            <div class="modal fade bookingdModal" id="createModal" data-bs-backdrop="static"
+                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="staticBackdropLabel">新增會員</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body container" id="create_container">
+                            <label>姓：</label>
+                            <input v-model="create.lastName" type="text" id="create_lastName" class="w-100">
+                            <label>名：</label>
+                            <input v-model="create.firstName" type="text" id="create_firstName" class="w-100">
+                            <label>電話：</label>
+                            <input v-model="create.phone" type="text" id="create_phone" class="w-100" maxlength="10" minlength="10">
+                            <label>性別：</label>
+                            <select name="" id="Gender" class="form-select w-100" v-model="create.gender">
+                                <option value="" disabled selected></option>
+                                <option :value="g.value" v-for="g in Gender">{{g.txt}}</option>
+                            </select>
+
+                            <label>生日：</label>
+                            <div id="d1" class="calendar">
+                                <date-picker v-model="create.birthday"
+                                             value-type="format"
+                                             name="Birthday"
+                                             id="datepicker"
+                                             class="col-lg-8 form-selectss "
+                                             :disabled-date="disablerange">
+                                </date-picker>
+                            </div>
+
+                            <label>郵件：</label>
+                            <input v-model="create.email" type="text" id="create_email" class="w-100">
+                            <div id="AccountHelpBlock" class="form-label nono" v-if="regis">
+                                郵件已註冊過
+                            </div>
+
+                            <label>地址：</label>
+                            <input v-model="create.address" type="text" id="create_address" class="w-100">
+
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row m-0">
+                                <button id="create" @@click="createMember" class="col btneditproducts m-1" type="button" data-bs-dismiss="modal"><i class="fa-solid fa-square-check"></i> 儲存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/vue/vue.min.js"></script>
+    <script src="/axios/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
+
+    <script>
+        let app = new Vue({
+            el: '#app',
+            data: {
+                memberInfo: [],
+                originalInfo:[],
+                searchText: '',
+                original: {
+                    lastName: '',
+                    firstName: '',
+                    phone: '',
+                    birthday: null,
+                    gender: '',
+                    email: "",
+                    address:""
+                },
+                create: {
+                    lastName: '',
+                    firstName: '',
+                    phone: '',
+                    birthday: null,    
+                    gender: '',
+                    email:"",
+                    address:"",
+                },
+                Gender: [
+                    { value: '男', txt: '男' },
+                    { value: '女', txt: '女' },
+                ],
+                regis:false,
+                sendMember:"",
+                editMember:[],
+            },
+
+            methods: {
+                //生日日期呈現
+                formatDate: function () {
+                    for (var i = 0; i < this.memberInfo.length; i++) {
+                        let date = new Date(this.memberInfo[i].birthday);
+                        this.memberInfo[i].birthday = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0');
+                    }
+                },
+                //註冊日期呈現
+                formatRegister: function () {
+                    for (var i = 0; i < this.memberInfo.length; i++) {
+                        let date = new Date(this.memberInfo[i].registerDay);
+                        this.memberInfo[i].registerDay = date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0');
+                    }
+                },
+                //篩選member
+                filterMember: function () {
+                    let _this = this;
+                    var memberlist = [];
+                    if (_this.searchText === "") {
+                        _this.getmember();
+                    } else {
+                        for (var i = 0; i < _this.originalInfo.length; i++) {
+                            var item = _this.originalInfo[i];
+                            var memberId = item.memberId;
+                            var lastName = item.lastName;
+                            var firstName = item.firstName;
+                            var phone = item.phone;
+                            var birthday = item.birthday.toString();
+                            var gender = item.gender;
+                            var email = item.email;
+                            var address = item.address;
+                            var registerDay = item.registerDay.toString();
+
+                            var regex = new RegExp(_this.searchText, 'i');
+
+                            if (
+                                regex.test(memberId) ||
+                                regex.test(lastName) ||
+                                regex.test(firstName) ||
+                                regex.test(phone) ||
+                                regex.test(birthday) ||
+                                regex.test(gender) ||
+                                regex.test(email) ||
+                                regex.test(address) ||
+                                regex.test(registerDay)
+                            ) {
+                                memberlist.push(item);
+                            }
+                        }
+                    }
+
+                    _this.memberInfo = memberlist;
+                },
+
+                //禁選日期
+                disablerange: function (date) {
+                    var today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    var minDateOfBirth = new Date(today.getFullYear() - 15, today.getMonth(), today.getDate());
+
+                    return date < minDateOfBirth;
+                },
+                handleModalClose: function () {
+                    document.body.classList.add('modal-closed');
+                },
+                //編輯會員資料
+                edit: function (member) {
+                    let _this = this;
+                    var temp = [];
+                    _this.editMember=member
+                    for (let i = 0; i < _this.memberInfo.length; i++) {
+                        let item = _this.memberInfo[i];
+                        if (member.memberId == item.memberId) {
+                            _this.original.lastName = item.lastName;
+                            _this.original.firstName = item.firstName;
+                            _this.original.phone = item.phone;
+                            _this.original.birthday = item.birthday;
+                            _this.original.gender = item.gender;
+                            _this.original.email = item.email;
+                            _this.original.address = item.address;
+                        }
+                    }
+                },
+                //編輯取消
+                cancel: function () {
+                    let _this = this;
+                    var temp = [];
+                    var memberId = _this.editMember.memberId;
+                    for (let i = 0; i < _this.memberInfo.length; i++) {
+                        let item = _this.memberInfo[i];
+                        if (memberId == item.memberId) {
+                            item.lastName = _this.original.lastName;
+                            item.firstName = _this.original.firstName;
+                            item.phone = _this.original.phone;
+                            item.birthday = _this.original.birthday;
+                            item.gender = _this.original.gender;
+                            item.email = _this.original.email;
+                            item.address = _this.original.address;
+                        }
+                    }
+                },
+                //編輯後更新會員資料
+                update: function () {
+                    let _this = this;
+                    let request = {
+                        MemberId: _this.editMember.memberId,
+                        LastName: _this.editMember.lastName,
+                        FirstName: _this.editMember.firstName,
+                        Phone: _this.editMember.phone,
+                        Birthday: _this.editMember.birthday,
+                        Gender: _this.editMember.gender,
+                        Email: _this.editMember.email,
+                        Address: _this.editMember.address,
+                    };
+                    axios.put(`/api/memberbackend/EditMember`, request)
+                        .then(() => {
+                            _this.getmember();
+                        });
+                },
+                //抓會員資料
+                getmember: function () {
+                    let _this = this;
+                    axios.get("/api/memberbackend/GetMember").then(
+                        response => {
+                            _this.memberInfo = response.data;
+                            _this.originalInfo=response.data;
+                            _this.formatDate();
+                            _this.formatRegister();                         
+                        }
+                    );
+                },
+                //傳遞會員資料到刪除
+                send: function (memberId) {
+                    this.sendMember = memberId;
+                },
+                //刪除會員
+                deleteMember: function () {
+                    let _this = this;
+                    let memberId = _this.sendMember;
+                    axios.delete(`/api/memberbackend/DeleteMember/${memberId}`)
+                        .then(response => {
+                            _this.getmember();
+                        });
+                },
+                //新增會員
+                createMember: function () {
+                    let _this = this;
+                    var request = {
+                        FirstName: _this.create.firstName,
+                        LastName: _this.create.lastName,
+                        Gender: _this.create.gender,
+                        Birthday: _this.create.birthday,
+                        Phone: _this.create.phone,
+                        Address: _this.create.address,
+                        Email: _this.create.email,
+                        LevelName: _this.create.levelName,
+                    };
+                    axios.post(`/api/memberbackend/CreateMember`, request)
+                        .then(response => {
+                            if (response.data == "郵件已註冊") {
+                                return (_this.regis = true);
+                            }
+                            _this.getmember();
+                            Swal.fire({
+                                allowOutsideClick: false,
+                                icon: 'success',
+                                color: '#333',
+                                iconColor: '#D8CDB9',
+                                background: '#FFF',
+                                text: '儲存成功',
+                                showConfirmButton: false,
+                                timer: 1000,
+                                position: 'center'
+                            }).then(() => {
+                            });
+                        });
+                }
+            },
+
+            mounted: function () {
+                let _this = this;
+                _this.getmember();
+            }
+        });
+    </script>
+}

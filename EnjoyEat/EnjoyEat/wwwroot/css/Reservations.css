@@ -4,10 +4,6 @@
     font-size: 14px;
 }
 
-#adultPicker, #kidPicker, #calendar {
-    margin: 10px;
-}
-
 
 #finalReservation {
     z-index: 10000;
@@ -33,7 +29,17 @@
     justify-content: center;
 }
 #mealTimePicker {
-    margin-left: 3px;
+    height: 44px;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+    width: 70%;
+    border-radius: 0;
+    box-shadow: none;
+    background: #0c0b09;
+    border-color: #625b4b;
+    color: #625b4b;
+    font-size: 14px;
 }
 
 #finalReservation button {
@@ -61,11 +67,6 @@
     height: 15px;
 }
 
-#NameCheck {
-    height: 100px;
-    color: #bab3a6;
-}
-
 
 #bookReturn {
     background: #cda45e;
@@ -90,32 +91,35 @@ textarea {
 }
 
 /*datepicker*/
-.datepicker {
+.col-12 {
+    flex: 0 0 auto;
     width: 100%;
+}
+
+.datepicker {
     border: 0px;
 }
 
-.calendar {
-    margin-left: -1px;
-    left: 0px;
-    padding: .375rem 2.25rem .375rem .75rem;
-}
-
-#datepicker input {
-    height: 38px;
-    width: 100%;
-    color: black;
-    background-color: #fff;
-    border-radius: .25rem;
+ .datepicker input {
+    height: 21px;
     font-weight: 400;
     line-height: 1.5;
     display: block;
-    padding: .375rem 2.25rem .375rem .75rem;
-
+   /* padding: .375rem 2.25rem .375rem .75rem;*/
+    border-radius: 0;
+    box-shadow: none;
+    background: #0c0b09;
+    border-color: #625b4b;
 }
 
-#datepicker input::placeholder {
-    color: black;   /* 在這裡更改顏色為你想要的顏色 */
+div #d1 {
+    margin-top:10px;
+    margin-left: 10px;
+}
+
+div #d1 .mx-datepicker {
+    width: 48%;
+   margin-bottom:10px;
 }
 
 .mx-calendar-content .cell.disabled {
@@ -123,16 +127,17 @@ textarea {
     font-weight: lighter;
 }
 
-
-
 .mx-datepicker-main {
     color: #333;
     font-weight: bold;
 }
 
 .mx-calendar-content .cell:hover {
-     background-color: #721B29;
+    background-color: #721B29;
     color: white;
+}
+#datepicker input::placeholder {
+    color: #625b4b; /* 在這裡更改顏色為你想要的顏色 */
 }
 
 option:disabled {
@@ -145,7 +150,43 @@ option:disabled {
     background-color: #aaa
 }
 
-    /*contactUs頁面*/
+
+/*reservation success頁面*/
+
+#bookConfirmInformation {
+    background-color: #696969;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 250px;
+    width: 50%;
+    margin: auto;
+    border-radius: 50px;
+    padding:20px;
+}
+
+#bookedInfornations {
+    margin: auto;
+}
+#ETInformation {
+    margin: auto;
+}
+#bookConfirmInformation label {
+    color: white;
+    font-family: "Poppins",sans-serif;
+    font-size: 14px;
+}
+#bookConfirmInformation span {
+    color: white;
+    font-family: "Poppins",sans-serif;
+    font-size: 14px;
+}
+#ETInformation span {
+    color: white;
+    font-family: "Poppins",sans-serif;
+    font-size: 14px;
+}
+
+/*contactUs頁面*/
 #enjoyEatLocation {
     margin-bottom: 48px;
 }
@@ -189,38 +230,4 @@ option:disabled {
     color: #fff;
     transition: .4s;
     border-radius: 50px;
-}
-/*reservation success頁面*/
-
-#bookConfirmInformation {
-    background-color: #696969;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    height: 250px;
-    width: 50%;
-    margin: auto;
-    border-radius: 50px;
-    padding:20px;
-}
-
-#bookedInfornations {
-    margin: auto;
-}
-#ETInformation {
-    margin: auto;
-}
-#bookConfirmInformation label {
-    color: white;
-    font-family: "Poppins",sans-serif;
-    font-size: 14px;
-}
-#bookConfirmInformation span {
-    color: white;
-    font-family: "Poppins",sans-serif;
-    font-size: 14px;
-}
-#ETInformation span {
-    color: white;
-    font-family: "Poppins",sans-serif;
-    font-size: 14px;
 }
