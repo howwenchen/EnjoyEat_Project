@@ -151,4 +151,8 @@
     <UpToDateCheckInput Remove="Views\NewFolder1\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Models\DTO\ProductsDTO.cs" />
+  </ItemGroup>
+
 </Project>

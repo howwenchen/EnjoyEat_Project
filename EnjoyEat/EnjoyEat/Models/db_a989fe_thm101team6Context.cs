@@ -275,17 +275,9 @@ namespace EnjoyEat.Models
                     .ValueGeneratedNever()
                     .HasColumnName("EmployeeID");
 
-                entity.Property(e => e.BasicSalary).HasColumnType("money");
-
-                entity.Property(e => e.Bonus).HasColumnType("money");
-
-                entity.Property(e => e.OverTime).HasColumnType("money");
-
                 entity.Property(e => e.PaymentDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Performance).HasColumnType("money");
-
-                entity.Property(e => e.TotalSalary).HasColumnType("money");
+                entity.Property(e => e.Performance).HasMaxLength(8);
 
                 entity.Property(e => e.Wage).HasColumnType("money");
 
@@ -437,7 +429,7 @@ namespace EnjoyEat.Models
             {
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
-                entity.Property(e => e.FinalPrice).HasComputedColumnSql("(([TotalPrice]-[CampaignDiscount])*[LevelDiscount])", false);
+                entity.Property(e => e.FinalPrice).HasComputedColumnSql("(ceiling(([TotalPrice]-[CampaignDiscount])*[LevelDiscount]))", false);
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -598,7 +590,7 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Email).HasMaxLength(50);
 
-                entity.Property(e => e.Note).HasColumnType("text");
+                entity.Property(e => e.Note).HasMaxLength(300);
 
                 entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(10)
