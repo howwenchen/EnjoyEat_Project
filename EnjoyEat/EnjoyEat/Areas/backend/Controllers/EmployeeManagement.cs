@@ -2,6 +2,8 @@
 using EnjoyEat.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Threading.Tasks;
 
 namespace EnjoyEat.Areas.backend.Controllers
 {
@@ -17,5 +19,9 @@ namespace EnjoyEat.Areas.backend.Controllers
         {
             return View();
         }
+		public IActionResult AccessDenied()
+		{
+			return View();
+		}
 	}
 }

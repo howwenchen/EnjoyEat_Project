@@ -57,7 +57,7 @@
 					<td>{{item.name}}</td>
 					<td>{{item.phone}}</td>
 					<td>{{item.email}}</td>
-					<td><a class="btn edit" @@click="edit(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="Edit"></i></a></td>
+					<td><a class="btn edit" @@click="salaryEdit(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="EditSalary"></i></a></td>
 					<td>
 						<a class="btn edit" @@click="edit(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="Edit"></i></a>
 						<a class="btn delete" @@click="deleteEmp(item.employeeId)"><i class="fa-solid fa-trash-can fa-fade" title="Delete" style="color:red;"></i></a>
@@ -67,7 +67,7 @@
 		</table>
 	</div>
 	@*新增用的互動視窗*@
-	<div class="form-group">
+	<div class="">
 		<div class="modal fade" id="insertModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
 				<div class="modal-content">
@@ -119,7 +119,7 @@
 		</div>
 	</div>
 	@*編輯用的互動視窗*@
-	<div class="form-group">
+	<div class="">
 		<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
 				<div class="modal-content">
@@ -161,6 +161,48 @@
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
 						<button type="button" @@click="update()" class="btn btn-primary">儲存</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	@*薪資用的互動視窗*@
+	<div class="">
+		<div class="modal fade" id="salaryModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalTitleId" style="color: black;">員工薪資資訊</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" style="color:white; background-color: brown;">
+						@*頁面內容Body*@
+						<div class="form-group">
+							<label class="form-label" :value="role">職稱:</label>
+							<span>{{ role }}</span>
+						</div>
+						<div class="form-group">
+							<label class="form-label">基本薪資:</label>
+							<input class="form-control" v-model="basicSalary" />
+						</div>
+						<div class="form-group">
+							<label class="form-label">表現評比:</label>
+							<select class="form-control form-select" id="selectPerformance" v-model="performance" style="background-color: #000;">
+								<option :value="pr.value" v-for="pr in selectPerformance">{{pr.text}}</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label class="form-label">額外獎金:</label>
+							<input class="form-control" :value="getBonusAmount" style="background-color: #000;" readonly />
+						</div>
+						<div class="form-group" style="margin-top:10px; font-size:25px">
+							<label class="form-label">總薪資:</label>
+							<span>{{ totalSalaryCount }}</span>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+						<button type="button" @@click="updateSalary()" class="btn btn-primary">儲存</button>
 					</div>
 				</div>
 			</div>
@@ -213,10 +255,40 @@
 				selectGender: [{ value: 'Male', text: 'Male' }, { value: 'Female', text: 'Female' }],
 				email: '',
 				phone: '',
+				basicSalary: 0,
+				bonus: '',
+				performance: '',
+				selectPerformance: [{ value: '甲', text: '甲' }, { value: '乙', text: '乙' }, { value: '丙', text: '丙' }],
+				totalSalary: '',
+				cookies: ''
 			},
 			mounted: function () {
 				let self = this;
 				self.getEmp();
+			},
+			computed: {
+				getBonusAmount() {
+					let self = this;
+					if (self.performance === "甲") {
+						return "3000";
+					}
+					if (self.performance === "乙") {
+						return "2000";
+					}
+					if (self.performance === "丙") {
+						return "1000";
+					}
+				},
+				totalSalaryCount() {
+					let self = this;
+					var basicSalary = parseInt(self.basicSalary);
+					var bonusAmount = parseInt(self.getBonusAmount);
+					if (isNaN(basicSalary) || isNaN(bonusAmount)) {
+						return 0;
+					}
+					var totalS = (basicSalary + bonusAmount).toString();
+					return totalS;
+				}
 			},
 			methods: {
 				getEmp: function () {
@@ -248,7 +320,7 @@
 						account: self.account,
 						gender: self.gender,
 						email: self.email,
-						phone: self.phone
+						phone: self.phone,
 					};
 					console.log(request);
 					axios.post("/api/EmployeeManagementApi/Edit", request)
@@ -270,51 +342,122 @@
 				edit: function (employeeId) {
 					let self = this;
 					//判斷員工權限
-					//self.role = VueCookies.get('role');
-					//if (self.role != 'manager') { self.sweatAlert("warning", "沒有權限!"); return }
-					$("#editModal").modal("show");
-					var empIndex = -1;
-					for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
-						var emp = self.EmployeeManagementDTO[i];
-						if (employeeId == emp.employeeId) {
-							empIndex = i;
-							break;
+					axios.get('/api/EmployeeManagementApi/GetRoleFromCookie')
+						.then(res => {
+							if (res.data.status === false) {
+								self.sweatAlert("warning", "無此權限，請洽主管單位!!");
+								return;
+							}
+							$("#editModal").modal("show");
+							var empIndex = -1;
+							for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
+								var emp = self.EmployeeManagementDTO[i];
+								if (employeeId == emp.employeeId) {
+									empIndex = i;
+									break;
+								}
+							}
+							if (empIndex !== -1) {
+								var editedEmp = self.EmployeeManagementDTO[empIndex];
+								self.employeeId = editedEmp.employeeId;
+								self.role = editedEmp.role;
+								self.name = editedEmp.name;
+								self.account = editedEmp.account;
+								self.gender = editedEmp.gender;
+								self.email = editedEmp.email;
+								self.phone = editedEmp.phone;
+							}
+						})
+				},
+				salaryEdit: function (employeeId) {
+					let self = this;
+					axios.get('/api/EmployeeManagementApi/GetRoleFromCookie')
+						.then(res => {
+							if (res.data.status === false) {
+								self.sweatAlert("warning", "無此權限，請洽主管單位!!");
+								return;
+							}
+
+							$("#salaryModal").modal("show");
+							var empIndex = -1;
+							for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
+								var emp = self.EmployeeManagementDTO[i];
+								if (employeeId == emp.employeeId) {
+									empIndex = i;
+									break;
+								}
+							}
+							if (empIndex !== -1) {
+								var editedSal = self.EmployeeManagementDTO[empIndex];
+								self.employeeId = editedSal.employeeId;
+								self.role = editedSal.role;
+								self.basicSalary = editedSal.basicSalary;
+								self.bonus = editedSal.bonus;
+								self.performance = editedSal.performance;
+								self.totalSalary = editedSal.totalSalary;
+							}
+						})
+				},
+				updateSalary: function () {
+					let self = this;
+					var bonusAmount = self.getBonusAmount;
+					var newtotalSalary = self.totalSalaryCount;
+					var request = {
+						employeeId: self.employeeId,
+						basicSalary: self.basicSalary,
+						bonus: bonusAmount,
+						totalSalary: newtotalSalary,
+						performance: self.performance
+					};
+					console.log(request);
+					axios.post("/api/EmployeeManagementApi/EditSalary", JSON.stringify(request), {
+						headers: {
+							'Content-Type': 'application/json'
 						}
-					}
-					if (empIndex !== -1) {
-						var editedEmp = self.EmployeeManagementDTO[empIndex];
-						self.employeeId = editedEmp.employeeId;
-						self.role = editedEmp.role;
-						self.name = editedEmp.name;
-						self.account = editedEmp.account;
-						self.gender = editedEmp.gender;
-						self.email = editedEmp.email;
-						self.phone = editedEmp.phone;
-					}
+					})
+						.then(response => {
+							self.basicSalary = ""
+							self.bonus = ""
+							self.performance = ""
+							self.totalSalary = ""
+							$("#salaryModal").modal("hide");
+							if (response.data) {
+								self.sweatAlert("success", "編輯成功");
+								self.getEmp();
+								return;
+							}
+						})
 				},
 				deleteEmp: function (employeeId) {
-					//判斷員工權限
-					$("#deleteModal").modal("show");
 					let self = this;
-					var empIndex = -1;
-					for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
-						var emp = self.EmployeeManagementDTO[i];
-						if (employeeId == emp.employeeId) {
-							empIndex = i;
-							break;
-						}
-					}
-					if (empIndex !== -1) {
-						var editedEmp = self.EmployeeManagementDTO[empIndex];
-						self.employeeId = editedEmp.employeeId;
-						self.role = editedEmp.role;
-						self.name = editedEmp.name;
-						self.account = editedEmp.account;
-						self.password = editedEmp.password;
-						self.gender = editedEmp.gender;
-						self.email = editedEmp.email;
-						self.phone = editedEmp.phone;
-					}
+					//判斷員工權限
+					axios.get('/api/EmployeeManagementApi/GetRoleFromCookie')
+						.then(res => {
+							if (res.data.status === false) {
+								self.sweatAlert("warning", "無此權限，請洽主管單位!!");
+								return;
+							}
+							$("#deleteModal").modal("show");
+							var empIndex = -1;
+							for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
+								var emp = self.EmployeeManagementDTO[i];
+								if (employeeId == emp.employeeId) {
+									empIndex = i;
+									break;
+								}
+							}
+							if (empIndex !== -1) {
+								var editedEmp = self.EmployeeManagementDTO[empIndex];
+								self.employeeId = editedEmp.employeeId;
+								self.role = editedEmp.role;
+								self.name = editedEmp.name;
+								self.account = editedEmp.account;
+								self.password = editedEmp.password;
+								self.gender = editedEmp.gender;
+								self.email = editedEmp.email;
+								self.phone = editedEmp.phone;
+							}
+						})
 				},
 				deleteComfirm: function () {
 					let self = this;
@@ -328,7 +471,6 @@
 						email: self.email,
 						phone: self.phone
 					};
-					console.log(request);
 					axios.post("/api/EmployeeManagementApi/DeleteEmp", request)
 						.then(response => {
 							if (response.data) {
@@ -342,15 +484,21 @@
 				showInsert: function () {
 					let self = this;
 					//判斷員工權限
-					//if (self.window.Cookies.Role != "manager") { self.sweatAlert("warning", "沒有權限"); return; }
-					self.role = ""
-					self.name = ""
-					self.account = ""
-					self.password = ""
-					self.gender = ""
-					self.email = ""
-					self.phone = ""
-					$("#insertModal").modal("show");
+					axios.get('/api/EmployeeManagementApi/GetRoleFromCookie')
+						.then(res => {
+							if (res.data.status === false) {
+								self.sweatAlert("warning", "無此權限，請洽主管單位!!");
+								return;
+							}
+							self.role = ""
+							self.name = ""
+							self.account = ""
+							self.password = ""
+							self.gender = ""
+							self.email = ""
+							self.phone = ""
+							$("#insertModal").modal("show");
+						})
 				},
 				createEmp: function () {
 					let self = this;
@@ -365,7 +513,7 @@
 						password: self.password,
 						gender: self.gender,
 						email: self.email,
-						phone: self.phone
+						phone: self.phone,
 					};
 					console.log(request);
 					axios.post("/api/EmployeeManagementApi/CreateEmp", request)

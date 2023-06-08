@@ -3,7 +3,10 @@ using EnjoyEat.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using System.Security.Claims;
 using static EnjoyEat.Models.DTO.EmployeeManagementDTO;
 using Employee = EnjoyEat.Models.Employee;
 
@@ -41,6 +44,17 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 		}
 
 		[HttpGet]
+		public ApiResultDto GetRoleFromCookie()
+		{
+			// 檢查是否有角色的 Claim
+			if (User.HasClaim(c => c.Type == ClaimTypes.Role && c.Value == "manager"))
+			{
+				return new ApiResultDto() { Status = true, Message = "成功" };
+			}
+			return new ApiResultDto() { Status = false, Message = "失敗" };
+		}
+
+		[HttpGet]
 		public async Task<IEnumerable<EmployeeManagementDTO>> GetAll()
 		{
 			var emp = await _context.Employees.Select(emp =>
@@ -53,8 +67,6 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 				Gender = emp.Gender,
 				Phone = emp.Phone,
 				Email = emp.Email,
-				Birthday = emp.Birthday,
-				Education = emp.Education,
 			}).ToListAsync();
 			return emp;
 		}
@@ -75,7 +87,6 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 				editEmp.Email = empDTO.Email;
 				editEmp.Account = empDTO.Account;
 
-
 				_context.SaveChanges();
 				return new ApiResultDto() { Status = true, Message = "修改成功" };
 			}
@@ -86,11 +97,58 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 
 		}
 
+		//編輯員工薪資
+		[Authorize(Roles = "manager")]
+		[HttpPost]
+		public ApiResultDto EditSalary([FromBody] EmployeeManagementDTO empDTO)
+		{
+			try
+			{
+				var emp = _context.Employees.Include(x => x.EmployeesSalary).FirstOrDefault(e => e.EmployeeId == empDTO.EmployeeId);
+				if (emp == null) return new ApiResultDto() { Status = false, Message = "修改失敗" };
+
+				if(emp.EmployeesSalary == null)
+				{
+					var empsla = new EmployeesSalary
+					{
+						EmployeeId = empDTO.EmployeeId,
+						BasicSalary = empDTO.BasicSalary,
+						Bonus = empDTO.Bonus,
+						TotalSalary = empDTO.TotalSalary,
+						Performance = empDTO.Performance
+					};
+
+					_context.EmployeesSalaries.Add(empsla);
+				}
+				else
+				{
+					emp.EmployeesSalary.BasicSalary = empDTO.BasicSalary;
+					emp.EmployeesSalary.Bonus = empDTO.Bonus;
+					emp.EmployeesSalary.TotalSalary = empDTO.TotalSalary;
+					emp.EmployeesSalary.Performance = empDTO.Performance;
+				}
+				
+				_context.SaveChanges();
+				return new ApiResultDto() { Status = true, Message = "修改成功" };
+			}
+
+			catch
+			{
+				return new ApiResultDto() { Status = false, Message = "修改失敗" };
+			}
+
+		}
+
 		//新增員工
 		[Authorize(Roles = "manager")]
 		[HttpPost]
-		public async Task<string> CreateEmp([FromBody] EmployeeManagementDTO empDTO)
+		public ApiResultDto CreateEmp([FromBody] EmployeeManagementDTO empDTO)
 		{
+			var emp = _context.Employees.FirstOrDefault(e => e.Account.Equals(empDTO.Account) && e.Password.Equals(empDTO.Password));
+			if (emp != null)
+			{
+				return new ApiResultDto() { Status = true, Message = "新增失敗" };
+			}
 			try
 			{
 				Employee NewEmp = new Employee
@@ -103,14 +161,15 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 					Password = empDTO.Password,
 					Role = empDTO.Role,
 				};
+
 				_context.Employees.Add(NewEmp);
 
-				await _context.SaveChangesAsync();
-				return "新增成功";
+				_context.SaveChanges();
+				return new ApiResultDto() { Status = true, Message = "新增成功" };
 			}
 			catch (Exception)
 			{
-				return "新增失敗";
+				return new ApiResultDto() { Status = true, Message = "新增失敗" };
 			}
 
 		}

@@ -33,6 +33,7 @@ namespace EnjoyEat
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt =>
             {
 				opt.LoginPath = "/areas/backend/EmployeeLogin/Index";
+				opt.AccessDeniedPath = "/areas/backend/EmployeeManagement/AccessDenied";
 				opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
 
 			})
