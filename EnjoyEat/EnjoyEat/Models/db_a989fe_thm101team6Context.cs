@@ -213,17 +213,9 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Address).HasMaxLength(60);
 
-                entity.Property(e => e.Birthday).HasColumnType("date");
-
-                entity.Property(e => e.Education).HasMaxLength(10);
-
                 entity.Property(e => e.Email).HasMaxLength(30);
 
                 entity.Property(e => e.Gender).HasMaxLength(15);
-
-                entity.Property(e => e.IdentityId)
-                    .HasMaxLength(30)
-                    .HasColumnName("IdentityID");
 
                 entity.Property(e => e.Name).HasMaxLength(6);
 
@@ -238,14 +230,11 @@ namespace EnjoyEat.Models
 
             modelBuilder.Entity<EmployeesLogin>(entity =>
             {
-                entity.HasKey(e => e.EmployeesId)
-                    .HasName("PK_Logins");
+                entity.HasNoKey();
 
                 entity.ToTable("EmployeesLogin");
 
-                entity.Property(e => e.EmployeesId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("EmployeesID");
+                entity.Property(e => e.EmployeesId).HasColumnName("EmployeesID");
 
                 entity.Property(e => e.LoginTime).HasColumnType("datetime");
 
@@ -258,8 +247,8 @@ namespace EnjoyEat.Models
                 entity.Property(e => e.UserName).HasMaxLength(15);
 
                 entity.HasOne(d => d.Employees)
-                    .WithOne(p => p.EmployeesLogin)
-                    .HasForeignKey<EmployeesLogin>(d => d.EmployeesId)
+                    .WithMany()
+                    .HasForeignKey(d => d.EmployeesId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EmployeesLogin_Employees");
             });
@@ -275,11 +264,7 @@ namespace EnjoyEat.Models
                     .ValueGeneratedNever()
                     .HasColumnName("EmployeeID");
 
-                entity.Property(e => e.PaymentDate).HasColumnType("datetime");
-
                 entity.Property(e => e.Performance).HasMaxLength(8);
-
-                entity.Property(e => e.Wage).HasColumnType("money");
 
                 entity.HasOne(d => d.Employee)
                     .WithOne(p => p.EmployeesSalary)
