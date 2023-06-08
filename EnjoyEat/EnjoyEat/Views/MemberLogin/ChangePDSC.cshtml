@@ -47,6 +47,7 @@
             data: {
                 newPassword: "",
                 newcheck: false,
+                account: "@ViewBag.Account",
             },
             methods: {
                 submitInfo: function () {
@@ -57,8 +58,9 @@
                     }
                     request = {
                         Password: _this.newPassword,
+                        Account:_this.account,
                     }
-                    axios.put("/api/member/ChangePassword", request).then(response => {
+                    axios.put("/api/member/SetPassword", request).then(response => {
                             Swal.fire({
                                 allowOutsideClick: false,
                                 icon: 'success',

@@ -30,6 +30,7 @@ namespace EnjoyEat.Models.ViewModel
     {
         [Required, MinLength(8), MaxLength(12)]
         public string Password { get; set; } = null!;
+        public string Account { get; set; }
     }
 
 }
