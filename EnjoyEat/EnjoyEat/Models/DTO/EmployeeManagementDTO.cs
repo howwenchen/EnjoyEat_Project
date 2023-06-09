@@ -9,11 +9,6 @@ namespace EnjoyEat.Models.DTO
 		public string? Gender { get; set; }
 		public string? Phone { get; set; } = null!;
 		public string? Email { get; set; } = null!;
-		// 員工薪資
-		public int? BasicSalary { get; set; }
-		public int? Bonus { get; set; }
-		public string? Performance { get; set; }
-		public int TotalSalary { get; set; }
 		public string? Account { get; set; }
 		public string? Password { get; set; }
 		public string? Role { get; set; }
