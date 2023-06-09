@@ -20,6 +20,23 @@ namespace EnjoyEat.Controllers.API
             _logger = logger;
         }
 
+        [HttpGet]
+        public IActionResult GetMenu()
+        {
+            var dbContext = _context.Products.Include(t => t.SubCategory);
+            var temp = dbContext.Select(pro => new MenuViewModel.Products
+            {
+                ProductId = pro.ProductId,
+                MealImg = pro.MealImg,
+                ProductName = pro.ProductName,
+                UnitPrice = pro.UnitPrice,
+                Description = pro.Description,
+                CategoryName = pro.SubCategory.Category.CategoryName,
+                SubCategoryId = pro.SubCategoryId,
+            });
+            return Ok(temp);
+        }
+
         [HttpGet("/api/Menu/CategoriesWithSubs")]
         public async Task<ActionResult<IEnumerable<Category>>> CategoriesWithSubs()
         {

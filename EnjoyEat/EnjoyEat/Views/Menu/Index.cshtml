@@ -14,7 +14,7 @@
         <h2>菜單精選</h2>
         <p>主廚推薦 TOP <span style="font-size:50px">10</span> !</p>
     </div>
-    <section id="top-ten" class="top-ten menu section-bg">
+    <section id="top-ten" class="top-ten section-bg">
             <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-indicators">
                     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
@@ -27,10 +27,10 @@
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <div class="row">
-                            <div class="toptenimg col-md-7">
-                                <img src="/img/specials-1.png" class=" d-block w-100" alt="Image 1">
+                            <div class="toptenimg col-md-8">
+                                <img src="/img/specials-1.png" class=" d-block" alt="Image 1">
                             </div>
-                        <div class="toptenitem col-md-5">
+                        <div class="toptenitem col-md-4">
                                 <h3>推薦餐點 TOP<span style="font-size:35px">  1</span></h3><br>
                                 <h4>薑絲嚕嚕咪</h4>
                                 <p>$400</p><br>
@@ -41,10 +41,10 @@
                     </div>
                     <div class="carousel-item">
                         <div class="row">
-                            <div class="toptenimg col-md-7">
-                                <img src="/img/specials-2.png" class="d-block w-100" alt="Image 2">
+                            <div class="toptenimg col-md-8">
+                                <img src="/img/specials-2.png" class="d-block" alt="Image 2">
                             </div>
-                        <div class="toptenitem col-md-5">
+                        <div class="toptenitem col-md-4">
                                 <h3>推薦餐點 TOP<span style="font-size:35px">  2</span></h3><br>
                                 <h4>雨傘節沙拉</h4>
                                 <p>$150</p>
@@ -55,10 +55,10 @@
                     </div>
                     <div class="carousel-item">
                         <div class="row">
-                            <div class="toptenimg col-md-7">
-                                <img src="/img/specials-3.png" class="d-block w-100" alt="Image 3">
+                            <div class="toptenimg col-md-8">
+                                <img src="/img/specials-3.png" class="d-block" alt="Image 3">
                             </div>
-                            <div class="toptenitem col-md-5">
+                            <div class="toptenitem col-md-4">
                                 <h3>推薦餐點 TOP<span style="font-size:35px">  3</span></h3><br>
                                 <h3>膽汁牛肉麵</h3>
                                 <p>$250</p>
@@ -84,35 +84,45 @@
         <h2>菜單</h2>
         <p>歡迎查看美味的菜單</p>
     </div>
+    <!--篩選區-->
     <section id="menuItem" class="menu section-bg">
+        <!--類別選擇列-->
         <div class="row" data-aos="fade-up" data-aos-delay="100">
             <div class="col-lg-12 d-flex justify-content-center">
                 <ul id="menu-flters">
-                    <li data-filter="*" class="filter-active">全部</li>
-                    <li data-filter=".filter-appetizer">前菜</li>
-                    <li data-filter=".filter-soups">湯品</li>
-                    <li data-filter=".filter-mainMeal">主餐</li>
-                    <li data-filter=".filter-snacks">點心</li>
-                    <li data-filter=".filter-dessert">甜點</li>
-                    <li data-filter=".filter-beverage">飲料</li>
+                    @*<li class="filter-active" v-on:click="selectedCategoryId = this.selectedCategoryId">全部</li>*@
+                    <li v-for="category in categories"
+                        :key="category.categoryId"
+                        v-if="categories"
+                        :value="category.categoryId"
+                        :class="{ 'filter-active': selectedCategoryId === category.categoryId }"
+                        v-on:click="selectedCategoryId = category.categoryId">
+                        {{category.categoryName}}
+                    </li>
                 </ul>
-                @*<ul id="menu-flters">
-                    <li @@click="selectCategory('*')" :class="{ 'filter-active': selectedCategory === '*' }">全部</li>
-                    <li @@click="selectCategory('filter-appetizer')" :class="{ 'filter-active': selectedCategory === 'filter-appetizer' }">前菜</li>
-                    <li @@click="selectCategory('filter-soups')" :class="{ 'filter-active': selectedCategory === 'filter-soups' }">湯品</li>
-                    <li @@click="selectCategory('filter-mainMeal')" :class="{ 'filter-active': selectedCategory === 'filter-mainMeal' }">主餐</li>
-                    <li @@click="selectCategory('filter-snacks')" :class="{ 'filter-active': selectedCategory === 'filter-snacks' }">點心</li>
-                    <li @@click="selectCategory('filter-dessert')" :class="{ 'filter-active': selectedCategory === 'filter-dessert' }">甜點</li>
-                    <li @@click="selectCategory('filter-beverage')" :class="{ 'filter-active': selectedCategory === 'filter-beverage' }">飲料</li>
-                </ul>*@
+            </div>
+        </div>
+        <!--子類別選擇列-->
+        <div class="row" data-aos="fade-up" data-aos-delay="100">
+            <div class="col-lg-12 d-flex justify-content-center">
+                <ul id="menu-flters">
+                    <li v-for="subCategory in filteredSubCategories"
+                        :key="subCategory.subCategoryId"
+                        :value="subCategory.subCategoryId"
+                        :class="{ 'sub-filter-active': selectedSubCategoryId === subCategory.subCategoryId }"
+                        v-on:click="selectedSubCategoryId = subCategory.subCategoryId">
+                        {{subCategory.subCategoriesName}}
+                    </li>
+                </ul>
             </div>
         </div>
     </section>
+    <!--菜單區-->
     <section id="menu" class="menu section-bg">
         <div class="menuDetail">
-            <div class="row menu-container" data-aos="fade-up" data-aos-delay="200">
-                <div v-for="t in temp" :class="{'col-lg-4': true, 'menu-item': true, [t.categoryName]: true}">
-                    @*<div v-for="t in filteredItems" :key="t.productName" class="col-lg-4 menu-item">*@
+            <div class="row" data-aos="fade-up" data-aos-delay="100">
+                @*<div v-for="t in temp" :class="{'col-lg-4': true, 'menu-item': true, [t.categoryName]: true}">*@
+                <div v-for="t in filteredProducts" :key="t.productId" class="col-lg-4 menu-item">
                     <img :src="baseUrl + t.mealImg" class="menu-img" alt="">
                     <div class="menu-content">
                         <a href="#">{{t.productName}}</a><span>${{t.unitPrice}}</span>
@@ -137,35 +147,61 @@
             data: {
                 baseUrl: '',
                 temp: [],
-                selectedCategory: '*',
+                selectedCategoryId: '',
+                selectedSubCategoryId: '',
+                categories: [],
             },
             mounted:
                 function () {
                     let _this = this;
                     _this.baseUrl = window.location.origin + '/';
-                    axios.get("https://localhost:7071/api/menu/GetMenu")
+                    //取得餐點
+                    //axios.get("https://localhost:7071/api/menu/GetMenu")
+                    axios.get('/api/menu/GetMenu')
                         .then(response => {
                             _this.temp = response.data; 
                             //console.log(JSON.stringify(response.data));
                         });
+                    // 取得類別
+                    axios.get('/api/Order/CategoriesWithSubs')
+                        .then(response => this.categories = response.data)
+                        .catch(err => {
+                            console.error(err);
+                            alert('無法獲取菜單類別，請稍後再試。');
+                        });
                 },
             computed: {
-                filteredItems: function () {
+                // 利用flatmap+filter方法將符合目前所選擇大分類的對應子分類取出
+                filteredSubCategories(){
                     let _this = this;
-                    if (this.selectedCategory === '*') {
-                        return _this.temp; // 若選擇全部，返回原始菜單資訊
-                    } else {
-                        return _this.temp.filter(t => t.categoryName === _this.selectedCategory);
+                    if (_this.selectedCategoryId) {
+                        return _this.categories.flatMap(category => category.subCategories).filter(subCategory => subCategory.categoryId === _this.selectedCategoryId);
                     }
+                    return [];
                 },
-            },
-            methods: {
-                selectCategory: function (category) {
+                // 篩選所選分類餐點
+                filteredProducts() {
                     let _this = this;
-                    _this.selectedCategory = category;
+                    let filterArr = _this.temp;
+                    // 篩選子分類
+                    if (_this.selectedSubCategoryId) {
+                        filterArr = _this.temp.filter(s => s.subCategoryId === _this.selectedSubCategoryId);
+                    }
+                    return filterArr;
+                }
+            },
+            watch: {
+                //監聽大分類的變化，如果大分類被賦予新值，則預設顯示對應的第一個子分類
+                selectedCategoryId: function (newValue) {
+                    let _this = this;
+                    if (newValue) {
+                        let category = _this.categories.find(category => category.categoryId === newValue);
+                        if (category && category.subCategories && category.subCategories.length > 0) {
+                            _this.selectedSubCategoryId = category.subCategories[0].subCategoryId;
+                        }
+                    }
                 },
             },
         });
     </script>
-
 }

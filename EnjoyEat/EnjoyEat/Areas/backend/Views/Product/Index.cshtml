@@ -41,7 +41,7 @@
         }
 
         #tableArea::-webkit-scrollbar-thumb {
-                background: #EB1616;
+                background: #111111;
                 border-radius: 2px;
         }
 
@@ -127,7 +127,7 @@
                                 <td>{{p.categoryName}}</td>
                                 <td>{{p.subCategoriesName}}</td>
                                 <td>{{p.description}}</td>
-                                <td><i class="fa regular fa-receipt"></i></td>
+                                <td><i class="fa regular fa-receipt" data-bs-target="#ReciptModal" data-bs-toggle="modal" @@click="ShowRecipt(p.productId)"></i></td>
                             </tr>
                         </tbody>
                     </table>
@@ -224,6 +224,29 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">取消</button>
                     <button type="button" class="btn btn-outline-success" @@click="DeleteProduct()">確定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*食譜Modal*@
+    <div class="modal" tabindex="-1" id="ReciptModal" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content bg-secondary">
+                <div class="modal-header">
+                    <h5 class="modal-title">餐點食譜</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                   <p>餐點編號: {{newProduct.productId}}</p>
+                   <p>餐點名稱: {{newProduct.productName}}</p>
+                   <div>
+                        <p>餐點圖片:</p>
+                        <img :src="baseUrl + newProduct.mealImg" style="width:80px; border-radius:2px" />
+                   </div>
+                    <p>餐點食譜: {{newProduct.recipt}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">關閉</button>
                 </div>
             </div>
         </div>
@@ -484,6 +507,22 @@
                         timer: 2000,
                         position: 'center'
                     });
+                },
+                // 顯示食譜
+                ShowRecipt: function (productId) {
+                    let _this = this;
+                    var proIndex = -1;
+                    for (var i = 0; i < _this.product.length; i++) {
+                        var pro = _this.product[i];
+                        if (productId == pro.productId) {
+                            proIndex = i;
+                            break;
+                        }
+                    };
+                    if (proIndex !== -1) {
+                        var editedpro = _this.product[proIndex];
+                        _this.newProduct.recipt = editedpro.recipt;
+                    };
                 },
             }
         });
