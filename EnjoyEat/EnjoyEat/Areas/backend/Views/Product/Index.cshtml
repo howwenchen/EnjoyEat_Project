@@ -48,8 +48,6 @@
         .pb-3 {
              padding-bottom: 0 !important; 
         }
-
-        
     </style>
 }
 
@@ -160,7 +158,7 @@
                         </select>
                     </form>
                     <label>餐點說明: </label><input type="text" class="form-control" v-model="newProduct.description" placeholder="EX:番茄、牛喃、鴻喜菇">
-                    <label>餐點食譜: </label><textarea class="form-control" v-model="newProduct.recipt" placeholder=""></textarea>
+                    <label>餐點食譜: </label><textarea class="form-control" v-model="newProduct.recipe" placeholder=""></textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">取消</button>
@@ -194,7 +192,7 @@
                         </select>
                     </form>
                     <label>餐點說明: </label><input type="text" class="form-control" v-model="newProduct.description">
-                    <label>餐點食譜: </label><textarea class="form-control" v-model="newProduct.recipt" placeholder=""></textarea>
+                    <label>餐點食譜: </label><textarea class="form-control" v-model="newProduct.recipe" placeholder=""></textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" id="deletebtn" data-bs-target="#DeleteModal" data-bs-toggle="modal"><i class="fa solid fa-trash"></i> 刪除餐點</button>
@@ -241,9 +239,10 @@
                    <p>餐點名稱: {{newProduct.productName}}</p>
                    <div>
                         <p>餐點圖片:</p>
-                        <img :src="baseUrl + newProduct.mealImg" style="width:80px; border-radius:2px" />
+                        <img :src="baseUrl + newProduct.mealImg" style="width:80px; border-radius:2px; margin-bottom:20px" />
                    </div>
-                    <p>餐點食譜: {{newProduct.recipt}}</p>
+                    <p>餐點食譜:</p>
+                    <textarea class="form-control" disabled>{{newProduct.recipe}}</textarea>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">關閉</button>
@@ -279,7 +278,7 @@
                     stock: '',
                     subCategoryId: '',
                     description: '',
-                    reciipt: '',
+                    recipe: '',
                 },
             },
             mounted:
@@ -368,7 +367,7 @@
                         Stock: _this.newProduct.stock,
                         SubCategoryId: _this.newProduct.subCategoryId,
                         Description: _this.newProduct.description,
-                        Recipt: _this.newProduct.recipt,
+                        Recipt: _this.newProduct.recipe,
                     };
                     //var d = new FormData();
                     //d.append('image', _this.newProduct.mealImg);
@@ -406,7 +405,7 @@
                         _this.newProduct.stock = editedpro.stock;
                         _this.newProduct.subCategoryId = editedpro.subCategoryId;
                         _this.newProduct.description = editedpro.description
-                        _this.newProduct.recipt = editedpro.recipt;
+                        _this.newProduct.recipe = editedpro.recipe;
                     };
                 },
                 // 更新餐點
@@ -421,7 +420,7 @@
                         Stock: _this.newProduct.stock,
                         SubCategoryId: _this.newProduct.subCategoryId,
                         Description: _this.newProduct.description,
-                        Recipt: _this.newProduct.recipt,
+                        Recipe: _this.newProduct.recipe,
                     };
                     console.log(request);
                     axios.post(`${baseAddress}/api/ProductAPI/EditProduct`, request)
@@ -433,7 +432,7 @@
                             _this.newProduct.stock = '',
                             _this.newProduct.subCategoryId = '',
                             _this.newProduct.description = '',
-                            _this.newProduct.recipt = '',
+                            _this.newProduct.recipe = '',
                             $("#EditModal").modal("hide"); // 隱藏EditModal
                             if (response.data.status == true) {
                                 _this.getProduct(); // 畫面刷新
@@ -456,7 +455,7 @@
                         Stock: _this.newProduct.stock,
                         SubCategoryId: _this.newProduct.subCategoryId,
                         Description: _this.newProduct.description,
-                        Recipt: _this.newProduct.recipt,
+                        Recipt: _this.newProduct.recipe,
                     };
                     axios.post(`${baseAddress}/api/ProductAPI/DeleteProduct`, request)
                         .then(response => {
@@ -521,7 +520,10 @@
                     };
                     if (proIndex !== -1) {
                         var editedpro = _this.product[proIndex];
-                        _this.newProduct.recipt = editedpro.recipt;
+                        _this.newProduct.productId = editedpro.productId;
+                        _this.newProduct.mealImg = editedpro.mealImg;
+                        _this.newProduct.productName = editedpro.productName;
+                        _this.newProduct.recipe = editedpro.recipe;
                     };
                 },
             }

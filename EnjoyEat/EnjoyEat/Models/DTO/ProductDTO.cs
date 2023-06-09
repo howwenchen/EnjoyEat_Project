@@ -7,6 +7,8 @@ namespace EnjoyEat.Models.DTO
         public ProductDTO()
         {
             MealImg = "/img/food/noPic.jpg";
+            Recipe = "待補";
+            Description = "待補";
         }
         public int ProductId { get; set; }
         public string? MealImg { get; set; }
