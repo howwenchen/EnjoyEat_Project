@@ -2,7 +2,6 @@
 	{
 	<link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
 	<style>
-
 		.titleName td {
 			font-size: 20px;
 		}
@@ -14,218 +13,233 @@
 		.tdContent :hover {
 			color: wheat;
 		}
+
+		#searchText {
+			margin-left: auto;
+			margin-right: 0px;
+			text-align: center;
+			width: 20%;
+		}
+
+			#searchText input {
+				background-color: #6c757d;
+				color: lightgray;
+				border-radius: 5px;
+				width: 100%;
+				border: 1px solid gray;
+				text-align: center;
+			}
+
 	</style>
 }
 
-<div id="app" class="container">
-	<div class="form-group">
-		@*新增按鍵*@
-		<!-- Modal trigger button -->
-		<button class="btn btn-primary btn-lg" @@click="showInsert()" data-toggle="modal" style="margin: 33px 0px">
-			<span><i class="fa-solid fa-circle-plus fa-beat"></i> 新增</span>
-		</button>
-		@*篩選欄位*@
-		<div class="col-md-9">
-			<div class="row" style="width:40%; margin-right:auto; margin-left:0px;">
-				<label class="col-md-5">搜尋員工:</label>
-				<input class="form-contro col-md-5" style="width:150px; margin-left: -50px; margin-bottom:20px;" placeholder="輸入關鍵字"
-					   v-model="filter" @@keyup="filterEmployeeManagementDTO" />
+<div class="container-fluid pt-4 px-4">
+	<div id="app" class="bg-secondary rounded h-100 p-4">
+		<h6 class="mb-4" style="margin-top:25px;">員工管理</h6>
+		<div class="col-12 row">
+			@*新增按鍵*@
+			<!-- Modal trigger button -->
+			<button class="btn btn-primary col-md-1" @@click="showInsert()" data-toggle="modal" @*style="margin: 33px 0px"*@>
+				<span><i class="fa-solid fa-circle-plus fa-beat"></i> 新增</span>
+			</button>
+			@*篩選欄位*@
+			<input class="form-control col-md-4" id="searchText" @* style="width:150px; margin-left: -50px; margin-bottom:20px;"*@ placeholder="搜尋"
+				   v-model="filter" @@keyup="filterEmployeeManagementDTO" />
+		</div>
+		@*表格標題*@
+		<div class="form-group">
+			<table class="table table-striped">
+				<thead>
+					<tr class="titleName">
+						<td>員工編號</td>
+						<td>職稱</td>
+						<td>員工帳號</td>
+						<td>員工姓名</td>
+						<td>聯絡方式</td>
+						<td>Email</td>
+						<td>薪資</td>
+						<td>編輯</td>
+					</tr>
+				</thead>
+				@*表格內容*@
+				<tbody>
+					<tr v-for="item in EmployeeManagementDTO" class="tdContent">
+						<td>{{item.employeeId}}</td>
+						<td>{{item.role}}</td>
+						<td>{{item.account}}</td>
+						<td>{{item.name}}</td>
+						<td>{{item.phone}}</td>
+						<td>{{item.email}}</td>
+						<td><a class="btn edit" @@click="salaryEdit(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="EditSalary"></i></a></td>
+						<td>
+							<a class="btn edit" @@click="edit(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="Edit"></i></a>
+							<a class="btn delete" @@click="deleteEmp(item.employeeId)"><i class="fa-solid fa-trash-can fa-fade" title="Delete" style="color:red;"></i></a>
+						</td>
+					</tr>
+				<tbody>
+			</table>
+		</div>
+		@*新增用的互動視窗*@
+		<div class="">
+			<div class="modal fade" id="insertModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalTitleId" style="color: black;">新增員工資訊</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body" style="color:white; background-color: brown;">
+							@*頁面內容Body*@
+							<div class="form-group">
+								<label class="form-label">員工姓名:</label>
+								<input class="form-control" v-model="name" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">員工帳號:</label>
+								<input class="form-control" v-model="account" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">員工密碼:</label>
+								<input class="form-control" v-model="password" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">性別:</label>
+								<select class="form-control form-select" id="selectGender" v-model="gender" style="background-color: #000;">
+									<option :value="gd.value" v-for="gd in selectGender">{{gd.text}}</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label class="form-label">聯絡方式:</label>
+								<input class="form-control" v-model="phone" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">Email:</label>
+								<input class="form-control" v-model="email" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">職稱:</label>
+								<select class="form-control form-select" id="selectRole" v-model="role" style="background-color: #000;">
+									<option :value="rl.value" v-for="rl in selectRole">{{rl.text}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+							<button type="button" @@click="createEmp" class="btn btn-primary">新增</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-	@*表格標題*@
-	<div class="form-group">
-		<table class="table table-striped">
-			<thead>
-				<tr class="titleName">
-					<td>員工編號</td>
-					<td>職稱</td>
-					<td>員工帳號</td>
-					<td>員工姓名</td>
-					<td>聯絡方式</td>
-					<td>Email</td>
-					<td>薪資</td>
-					<td>編輯</td>
-				</tr>
-			</thead>
-			@*表格內容*@
-			<tbody>
-				<tr v-for="item in EmployeeManagementDTO" class="tdContent">
-					<td>{{item.employeeId}}</td>
-					<td>{{item.role}}</td>
-					<td>{{item.account}}</td>
-					<td>{{item.name}}</td>
-					<td>{{item.phone}}</td>
-					<td>{{item.email}}</td>
-					<td><a class="btn edit" @@click="salaryEdit(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="EditSalary"></i></a></td>
-					<td>
-						<a class="btn edit" @@click="edit(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="Edit"></i></a>
-						<a class="btn delete" @@click="deleteEmp(item.employeeId)"><i class="fa-solid fa-trash-can fa-fade" title="Delete" style="color:red;"></i></a>
-					</td>
-				</tr>
-			<tbody>
-		</table>
-	</div>
-	@*新增用的互動視窗*@
-	<div class="">
-		<div class="modal fade" id="insertModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+		@*編輯用的互動視窗*@
+		<div class="">
+			<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalTitleId" style="color: black;">編輯員工資訊</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body" style="color:white; background-color: brown;">
+							@*頁面內容Body*@
+							<div class="form-group">
+								<label class="form-label">員工姓名:</label>
+								<input class="form-control" v-model="name" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">員工帳號:</label>
+								<input class="form-control" v-model="account" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">性別:</label>
+								<select class="form-control form-select" id="selectGender" v-model="gender" style="background-color: #000;">
+									<option :value="gd.value" v-for="gd in selectGender">{{gd.text}}</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label class="form-label">聯絡方式:</label>
+								<input class="form-control" v-model="phone" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">Email:</label>
+								<input class="form-control" v-model="email" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">職稱:</label>
+								<select class="form-control form-select" id="selectRole" v-model="role" style="background-color: #000;">
+									<option :value="rl.value" v-for="rl in selectRole">{{rl.text}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+							<button type="button" @@click="update()" class="btn btn-primary">儲存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		@*薪資用的互動視窗*@
+		<div class="">
+			<div class="modal fade" id="salaryModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalTitleId" style="color: black;">員工薪資資訊</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body" style="color:white; background-color: brown;">
+							@*頁面內容Body*@
+							<div class="form-group">
+								<label class="form-label" :value="role">職稱:</label>
+								<span>{{ role }}</span>
+							</div>
+							<div class="form-group">
+								<label class="form-label">基本薪資:</label>
+								<input class="form-control" v-model="basicSalary" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">表現評比:</label>
+								<select class="form-control form-select" id="selectPerformance" v-model="performance" style="background-color: #000;">
+									<option :value="pr.value" v-for="pr in selectPerformance">{{pr.text}}</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label class="form-label">額外獎金:</label>
+								<input class="form-control" :value="getBonusAmount" style="background-color: #000;" readonly />
+							</div>
+							<div class="form-group" style="margin-top:10px; font-size:25px">
+								<label class="form-label">總薪資:</label>
+								<span>{{ totalSalaryCount }}</span>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+							<button type="button" @@click="updateSalary()" class="btn btn-primary">儲存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 刪除用的互動視窗 -->
+		<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="modalTitleId" style="color: black;">新增員工資訊</h5>
+						<h1 class="modal-title fs-5" id="exampleModalLabel" style="color:black;">刪除員工資訊</h1>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
-					<div class="modal-body" style="color:white; background-color: brown;">
-						@*頁面內容Body*@
-						<div class="form-group">
-							<label class="form-label">員工姓名:</label>
-							<input class="form-control" v-model="name" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">員工帳號:</label>
-							<input class="form-control" v-model="account" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">員工密碼:</label>
-							<input class="form-control" v-model="password" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">性別:</label>
-							<select class="form-control form-select" id="selectGender" v-model="gender" style="background-color: #000;">
-								<option :value="gd.value" v-for="gd in selectGender">{{gd.text}}</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<label class="form-label">聯絡方式:</label>
-							<input class="form-control" v-model="phone" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">Email:</label>
-							<input class="form-control" v-model="email" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">職稱:</label>
-							<select class="form-control form-select" id="selectRole" v-model="role" style="background-color: #000;">
-								<option :value="rl.value" v-for="rl in selectRole">{{rl.text}}</option>
-							</select>
-						</div>
+					<div class="modal-body" style="font-size: 18px; display: inline-block;">
+						你確定要刪除? <br />
+						員工編號: {{employeeId}}<br />
+						職稱: {{role}}<br />
+						員工姓名: {{name}}<br />
+						員工帳號: {{account}}
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-						<button type="button" @@click="createEmp" class="btn btn-primary">新增</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary" @@click="deleteComfirm()">確定</button>
 					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	@*編輯用的互動視窗*@
-	<div class="">
-		<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="modalTitleId" style="color: black;">編輯員工資訊</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body" style="color:white; background-color: brown;">
-						@*頁面內容Body*@
-						<div class="form-group">
-							<label class="form-label">員工姓名:</label>
-							<input class="form-control" v-model="name" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">員工帳號:</label>
-							<input class="form-control" v-model="account" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">性別:</label>
-							<select class="form-control form-select" id="selectGender" v-model="gender" style="background-color: #000;">
-								<option :value="gd.value" v-for="gd in selectGender">{{gd.text}}</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<label class="form-label">聯絡方式:</label>
-							<input class="form-control" v-model="phone" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">Email:</label>
-							<input class="form-control" v-model="email" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">職稱:</label>
-							<select class="form-control form-select" id="selectRole" v-model="role" style="background-color: #000;">
-								<option :value="rl.value" v-for="rl in selectRole">{{rl.text}}</option>
-							</select>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-						<button type="button" @@click="update()" class="btn btn-primary">儲存</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	@*薪資用的互動視窗*@
-	<div class="">
-		<div class="modal fade" id="salaryModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="modalTitleId" style="color: black;">員工薪資資訊</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body" style="color:white; background-color: brown;">
-						@*頁面內容Body*@
-						<div class="form-group">
-							<label class="form-label" :value="role">職稱:</label>
-							<span>{{ role }}</span>
-						</div>
-						<div class="form-group">
-							<label class="form-label">基本薪資:</label>
-							<input class="form-control" v-model="basicSalary" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">表現評比:</label>
-							<select class="form-control form-select" id="selectPerformance" v-model="performance" style="background-color: #000;">
-								<option :value="pr.value" v-for="pr in selectPerformance">{{pr.text}}</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<label class="form-label">額外獎金:</label>
-							<input class="form-control" :value="getBonusAmount" style="background-color: #000;" readonly />
-						</div>
-						<div class="form-group" style="margin-top:10px; font-size:25px">
-							<label class="form-label">總薪資:</label>
-							<span>{{ totalSalaryCount }}</span>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-						<button type="button" @@click="updateSalary()" class="btn btn-primary">儲存</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- 刪除用的互動視窗 -->
-	<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel" style="color:black;">刪除員工資訊</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body" style="font-size: 18px; display: inline-block;">
-					你確定要刪除? <br />
-					員工編號: {{employeeId}}<br />
-					職稱: {{role}}<br />
-					員工姓名: {{name}}<br />
-					員工帳號: {{account}}
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" @@click="deleteComfirm()">確定</button>
 				</div>
 			</div>
 		</div>
