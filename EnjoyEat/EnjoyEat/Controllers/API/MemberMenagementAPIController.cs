@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using System.Web;
 
 namespace EnjoyEat.Controllers.API
 {
@@ -84,12 +85,13 @@ namespace EnjoyEat.Controllers.API
             var obj = new AesValidationDto(model.Account,DateTime.Now.AddDays(3));
             var jString = JsonSerializer.Serialize(obj);
             var code = encrypt.AesEncryptToBase64(jString);
+            var encode = HttpUtility.UrlEncode(code);
 
             var mail = new MailMessage()
             {
                 From = new MailAddress("thm101team66@gmail.com"),
                 Subject = "啟用網站驗證",
-                Body = @$"請點這<a href=`https://localhost:7071/MemberLogin/ChangePDSC?code={code}`>這裡</a>來啟用你的帳號",
+                Body = @$"請點這<a href=`https://localhost:7071/MemberLogin/Success?code={encode}`>此處</a>來啟用你的帳號",
                 IsBodyHtml = true,
                 BodyEncoding = Encoding.UTF8,
             };
@@ -128,7 +130,10 @@ namespace EnjoyEat.Controllers.API
             {
                 return Content("帳號密碼錯誤");
             }
-
+            if (user.IsActive == false)
+            {
+                return Content("此帳號尚未驗證，請至信箱驗證");
+            }
 
             var member = db.Members.FirstOrDefault(x => x.MemberId == user.MemberId);
             var fullname = member.LastName + member.FirstName;
@@ -185,12 +190,13 @@ namespace EnjoyEat.Controllers.API
             var obj = new AesValidationDto(model.Account, DateTime.Now.AddDays(3));
             var jString = JsonSerializer.Serialize(obj);
             var code = encrypt.AesEncryptToBase64(jString);
+            var encode=HttpUtility.UrlEncode(code);
 
             var mail = new MailMessage()
             {
                 From = new MailAddress("thm101team66@gmail.com"),
                 Subject = "重新設定密碼",
-                Body = @$"請點這<a href=`https://localhost:7071/MemberLogin/Enable?code={code}`>這裡</a>重新設定密碼",
+                Body = @$"請點這<a href=`https://localhost:7071/MemberLogin/ChangePDSC?code={encode}`>這裡</a>重新設定密碼",
                 IsBodyHtml = true,
                 BodyEncoding = Encoding.UTF8,
             };
@@ -213,6 +219,20 @@ namespace EnjoyEat.Controllers.API
             return "成功";
         }
 
+        //重設密碼
+        [HttpPut]
+        public async Task<string> SetPassword(SetViewModel model)
+        {
+            var user = db.MemberLogins.FirstOrDefault(x=>x.Account==model.Account);
+            if (user == null)
+            {
+                return "無此帳號";
+            }
+            user.Password= hash.GetHash(string.Concat(model.Password, user.Salt).ToString());
+            await db.SaveChangesAsync();
+            return "成功";
+
+        }
 
         //輸入新密碼
         [HttpPut]       

@@ -28,11 +28,15 @@ namespace EnjoyEat
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-            builder.Services.AddHttpContextAccessor();
+
+			builder.Services.AddHttpContextAccessor();
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt =>
             {
-                // Add cookie authentication options here
-            })
+				opt.LoginPath = "/areas/backend/EmployeeLogin/Index";
+				opt.AccessDeniedPath = "/areas/backend/EmployeeManagement/AccessDenied";
+				opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+
+			})
             .AddFacebook(facebookOptions =>
             {
                 facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
