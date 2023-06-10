@@ -86,7 +86,7 @@
                                 <td>{{order.levelDiscount}}</td>
                                 <td>{{order.finalPrice}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-light btn-sm" v-if="order.isSuccess==false" @@click="check">
+                                    <button type="button" class="btn btn-success btn-sm" v-if="order.isSuccess==false" @@click="check">
                                         結帳
                                     </button>
                                     <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" @@click="getOrderDetail(order.orderId)">
@@ -111,25 +111,43 @@
                         </div>
                         <div class="modal-body">
                             <div class="bookinginfo">
-                                <table class="table">
+                                <table class="table">                                    
                                     <thead>
-                                        <tr>
+                                        <tr class="text-center">
                                             <th scope="col">訂單明細編號</th>
                                             <th scope="col">產品名稱</th>
                                             <th scope="col">數量</th>
                                             <th scope="col">單價</th>
                                             <th scope="col">會員折扣</th>
                                             <th scope="col">小計金額</th>
+                                            <th scope="col">修改</th>
+                                            <th scope="col">刪除</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="order in orderDetailInfo">
+                                        <tr class="text-center" v-for="order in orderDetailInfo" v-if="order.editStatus==false">
+                                            <template >
                                             <td>{{order.orderDetailId}}</td>
                                             <td>{{order.productName}}</td>
                                             <td>{{order.quantity}}</td>
                                             <td>{{order.unitPrice}}</td>
                                             <td>{{order.discount}}</td>
                                             <td>{{order.subtotalPrice}}</td>
+                                            <td><button class="col btneditproducts btn-sm btn-light btnCheckinModal" type="button" @@click="edit(order)">修改明細</button></td>
+                                             <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="deleteDetail(order)">刪除</button></td>
+                                            </template>
+                                        </tr>
+                                        <tr v-else>
+                                            <template >
+                                            <td>{{order.orderDetailId}}</td>
+                                            <td>{{order.productName}}</td>
+                                            <td><input class="form-label" v-model="order.quantity" /></td>
+                                            <td>{{order.unitPrice}}</td>
+                                            <td><input class="form-label" v-model="order.discount" /></td>
+                                            <td>{{count}}</td>
+                                            <td><button class=" btneditproducts btn-light btn-sm btnCheckinModal" type="button" @@click="update(order)">儲存明細</button></td>
+                                            <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="deleteDetail(order)">刪除</button></td>
+                                            </template>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -139,7 +157,7 @@
                             <p class="checkMessage"></p>
                             <div class="modal-footer">
                                 <div class="row m-0">
-                                    <button class="col btneditproducts m-1 btnCheckinModal" type="button" data-bs-dismiss="modal"><i class="fa-solid fa-square-check"></i> 關閉</button>
+                                    <button class="col btneditproducts  btnCheckinModal" type="button" data-bs-dismiss="modal"><i class="fa-solid fa-xmark"></i>關閉</button>                            
                                 </div>
                             </div>
                         </form>
@@ -172,9 +190,18 @@
                     levelDiscount: "",
                     finalPrice:"",
                 },
+                editInfo:{
+                    unitPrice:"",
+                    quantity:"",
+                    discount:"",
+                },
                 regis: false,
             },
-
+            computed:{
+                count:function(){
+                    return this.editInfo.unitPrice * this.editInfo.quantity * this.editInfo.discount
+                },
+            },
             methods: {
                 //篩選order
                 filterOrder: function () {
@@ -222,7 +249,54 @@
                     let _this = this;
                     axios.get(`/api/OrderBackend/GetOrderDetail/${orderId}`).then(response => {
                         _this.orderDetailInfo=response.data
+                        var temp = [];
+                        for (var i = 0; i < _this.orderDetailInfo.length; i++) {
+                            var item = _this.orderDetailInfo[i];
+                            item.editStatus = false;
+                            temp.push(item);
+                        }
+                        _this.orderDetailInfo = temp;
                     })
+                },
+                //修改按鈕
+                edit:function(order){
+                    let _this=this;
+                    var temp = [];
+                    _this.editInfo.unitPrice=order.unitPrice
+                    _this.editInfo.quantity = order.quantity
+                    _this.editInfo.discount = order.discount
+                    for (let i = 0; i < _this.orderDetailInfo.length; i++) {
+                        let item = _this.orderDetailInfo[i];
+                        if (order.orderDetailId == item.orderDetailId) {
+                            item.editStatus = true;
+                        }
+                        temp.push(item)
+                    }
+                    _this.orderDetailInfo = temp;
+                },
+                //提交修改
+                update:function(order){
+                    let _this = this;
+                    order.subtotalPrice = order.unitPrice * order.quantity * order.discount
+                    let request = {
+                        OrderDetailId: order.orderDetailId,
+                        Quantity: order.quantity,
+                        Discount: order.discount,
+                        SubtotalPrice: order.subtotalPrice,
+                    };
+                    axios.put(`/api/OrderBackend/EditOrderDetail`, request)
+                        .then(response => {
+                            var temp = [];
+                            for (let i = 0; i < _this.orderDetailInfo.length; i++) {
+                                let item = _this.orderDetailInfo[i];
+                                if (order.orderDetailId == item.orderDetailId) {
+                                    item.editStatus = false;
+                                }
+                                temp.push(item)
+                            }
+                            _this.orderDetailInfo = temp;
+                            _this.getOrderDetail(order)
+                        });
                 },
                 //抓訂單資料
                 getOrder: function () {
@@ -233,7 +307,18 @@
                             _this.originalInfo = response.data;
                         }
                     );
-                },              
+                },
+                //刪除訂單明細
+                deleteDetail:function(order){
+                    let _this = this;
+                    var ret = confirm("確定要刪除嗎?")
+                    if (ret == true) {
+                        axios.delete(`/api/OrderBackend/DeleteOrderDetail/${order.orderDetailId}`)
+                            .then(response => {
+                                alert("已成功刪除")
+                            })
+                    }
+                },
             },
             mounted: function () {
                 let _this = this;
