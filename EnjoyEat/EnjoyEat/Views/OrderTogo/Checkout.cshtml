@@ -30,7 +30,7 @@
                     <div class="text-uppercase text-center">
                         <p class="text-dark border border-2">訂單明細</p>
                     </div>
-                    <div class="row">
+                    <div class="row text-muted">
                         <div class="col text-start">訂單編號</div>
                         <div class="col text-center">桌號</div>
                         <div class="col text-center">人數</div>
@@ -41,14 +41,14 @@
                         <div class="col text-center">{{OrderItem.customerCount}}</div>
                     </div>
                     <br />
-                    <div class="row">
+                    <div class="row text-muted">
                         <div class="col text-start">送出時間</div>
                         <div class="col text-center">訂單狀態</div>
                         <div class="col text-center">品項數</div>
                     </div>
                     <div class="row">
                         <div class="col text-start">{{formattedOrderDate}}</div>
-                        <div class="col text-center">{{OrderItem.IsSuccess}}</div>
+                        <div class="col text-center">{{ OrderItem.IsSuccess ? '已付款' : '處理中' }}</div>
                         <div class="col text-center">{{OrderItem.totalItems}}</div>
                     </div>
                     <!--分隔線-->
@@ -228,15 +228,45 @@
                             .catch(error => {
                                 console.log(error);
                             });
-                    } else {
-                        // 導向實體結帳頁面
+                    } else if (this.paymentMethod === '內用結帳') {
+                        swal({
+                            title: "訂單編號:"+this.OrderId+"已提交",
+                            text: "請至櫃台出示畫面付款",
+                            icon: "info",
+                            showCancelButton:false,
+                            showConfirmButton:false,
+                            buttons: false,
+                            timer: 3000000,    
+                        }).then(() => {
+                            //追蹤訂單結帳狀態
+                            this.trackPaymentStatus(this.OrderId);
+                        });
                     }
-                }
+                },
+                trackPaymentStatus: function (orderId) {
+                    let connection = new signalR.HubConnectionBuilder()
+                        .withUrl("/paymentHub")
+                        .configureLogging(signalR.LogLevel.Information)
+                        .build();
 
+                    connection.start().then(() => {
+                        connection.invoke("TrackPaymentStatus", orderId);
+                    }).catch(err => console.error(err.toString()));
+
+                    connection.on("PaymentStatusChanged", (isSuccess) => {
+                        if (isSuccess) {
+                            swal({
+                                title: "付款成功",
+                                text: "感謝您的購買！",
+                                icon: "success",
+                                button: "返回首頁",
+                            }).then(() => {
+                                window.location.href = '/';  
+                            });
+                        }
+                    });
+                }
             }
         });
-    </script>
-
-
-
+</script>
 }

@@ -1,4 +1,5 @@
 using EnjoyEat.Areas.OrderForHere.Models;
+using EnjoyEat.Hubs;
 using EnjoyEat.Models;
 using EnjoyEat.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -28,8 +29,8 @@ namespace EnjoyEat
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-
-			builder.Services.AddHttpContextAccessor();
+            builder.Services.AddSignalR();
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt =>
             {
 				opt.LoginPath = "/areas/backend/EmployeeLogin/Index";
@@ -65,6 +66,10 @@ namespace EnjoyEat
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<PaymentHub>("/paymentHub");
+            });
 
             app.MapControllerRoute(
                 name: "Area",
