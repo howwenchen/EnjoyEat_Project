@@ -287,7 +287,7 @@
                 //利用filter方法將符合目前所選擇子分類的對應產品取出
                 filteredProducts() {
                     let _this = this;
-                    let filterArr = _this.product;
+                    let filterArr = _this.products;
                     if (this.selectedSubCategoryId) {
                         //return this.products.filter(product => product.subCategoryId === this.selectedSubCategoryId);
                         filterArr = _this.products.filter(product => product.subCategoryId === this.selectedSubCategoryId);
