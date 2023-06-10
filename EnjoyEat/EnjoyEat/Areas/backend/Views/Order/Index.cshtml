@@ -87,10 +87,10 @@
                                 <td>{{order.levelDiscount}}</td>
                                 <td>{{order.countPrice}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-success btn-sm" v-if="order.isSuccess==false" @@click="check">
+                                    <button type="button" class="btn btn-success btn-sm" v-if="order.isSuccess==false" @@click="check(order.orderId)">
                                         結帳
                                     </button>
-                                    <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" @@click="getOrderDetail(order.orderId)">
+                                    <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" @@click="getOrderDetail(order)">
                                         展開明細
                                     </button>
                                 </td>
@@ -121,8 +121,8 @@
                                             <th scope="col">單價</th>
                                             <th scope="col">會員折扣</th>
                                             <th scope="col">小計金額</th>
-                                            <th scope="col">修改</th>
                                             <th scope="col">刪除</th>
+                                            <th scope="col" v-if="success==false">修改</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -133,8 +133,9 @@
                                             <td>{{order.quantity}}</td>
                                             <td>{{order.unitPrice}}</td>
                                             <td>{{order.discount}}</td>
-                                            <td><button class="col btneditproducts btn-sm btn-light btnCheckinModal" type="button" @@click="edit(order)">修改明細</button></td>
-                                             <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="deleteDetail(order)">刪除</button></td>
+                                            <td>{{order.subtotalPrice}}</td>
+                                                <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="deleteDetail(order)">刪除</button></td>
+                                            <td><button v-if="success==false" class="col btneditproducts btn-sm btn-light btnCheckinModal" type="button" @@click="edit(order)">修改明細</button></td>
                                             </template>
                                         </tr>
                                         <tr v-else>
@@ -170,6 +171,7 @@
 @section Scripts {
     <script src="~/vue/vue.min.js"></script>
     <script src="/axios/axios.min.js"></script>
+    <script src="~/microsoft/signalr/dist/browser/signalr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
 
     <script>
@@ -195,6 +197,8 @@
                     discount:"",
                 },
                 regis: false,
+                signalr:{},
+                success:false,
             },
             computed:{
                 count:function(){
@@ -238,13 +242,17 @@
                     _this.orderInfo = orderlist;
                 },
                 //結帳
-                check:function(){
-
+                check: function (orderId){
+                    //this.signalr.invoke("TrackPaymentStatus",orderId)
+                    axios.put(`/api/OrderBackend/EditPayStatus/${orderId}`).then(response => {
+                        this.getOrder();
+                    })
                 },
                 //取得訂單明細
-                getOrderDetail:function(orderId){
+                getOrderDetail:function(order){
                     let _this = this;
-                    axios.get(`/api/OrderBackend/GetOrderDetail/${orderId}`).then(response => {
+                    _this.success=order.isSuccess
+                    axios.get(`/api/OrderBackend/GetOrderDetail/${order.orderId}`).then(response => {
                         _this.orderDetailInfo=response.data
                         var temp = [];
                         for (var i = 0; i < _this.orderDetailInfo.length; i++) {
@@ -321,6 +329,14 @@
             mounted: function () {
                 let _this = this;
                 _this.getOrder();
+                _this.signalr = new signalR.HubConnectionBuilder().withUrl("/PaymentHub").build();
+                _this.signalr.start()
+                    .then(() => {
+                        console.log("connection");
+                    })
+                    .catch((err) => {
+                        console.log(err.toString());
+                    });
             }
         });
     </script>

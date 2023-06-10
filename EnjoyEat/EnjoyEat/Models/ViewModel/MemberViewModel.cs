@@ -54,4 +54,9 @@ namespace EnjoyEat.Models.ViewModel
         public float Discount { get; set; }
         public int SubtotalPrice { get; set; }
     }
+    public class OrderStatusViewModel
+    {
+        public int OrderId { get; set; }
+        public bool IsSuccess { get; set; }
+    }
 }
