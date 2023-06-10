@@ -21,6 +21,13 @@
         background-color:rgba(0,0,0,0.7);
         color:white;
     }
+
+    h6.card-title {
+        background-color:darkgray;
+        border-radius:0.7em;
+        padding:5px ;
+        display:inline-block;
+    }
     
     </style>
 }
@@ -31,8 +38,8 @@
             <div class="card" v-on:click="showModal(news.newsId)">
                 <img v-bind:src="news.imageUrl" class="card-img-top" alt="圖片加載中">
                 <div class="card-body">
-                    <h5 class="card-title text-body">{{ news.category }}</h5>
-                    <p class="card-text text-body">{{ news.title }}</p>
+                    <h6 class="card-title text-body">{{ news.category }}</h6>
+                    <h5 class="card-text text-body">{{ news.title }}</h5>
                 </div>
             </div>
 
@@ -46,7 +53,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body text-body">
-                            <span class="badge badge-secondary">{{ modalNews.category }}</span>
+                            <h5>{{ modalNews.category }}</h5>
                             <p>{{ modalNews.content }}</p>
                         </div>
                         <div class="modal-footer text-body">
