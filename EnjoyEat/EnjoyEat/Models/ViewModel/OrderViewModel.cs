@@ -13,5 +13,6 @@
         public double? CampaignDiscount { get; set; }
         public double? LevelDiscount { get; set; }
         public double? FinalPrice { get; set; }
+        public double? CountPrice { get; set; }
     }
 }

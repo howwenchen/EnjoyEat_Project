@@ -43,24 +43,13 @@
             height: 44px;
         }
 
-        #location {
-            margin-bottom: 15px;
-        }
-
-        #map {
-            height: 100%;
-        }
-
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
     </style>
 }
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.css">
-
+@*<script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAK7PxnOc-lyX0bcs8yM5hjx8hdrm0tF9M">
+</script>*@
 <main id="main">
     <div id="d1">
         <!-- ======= Book A Table Section ======= -->
@@ -121,19 +110,8 @@
                     <br />
                     <label id="location">餐廳位置</label>
                     <br />
-                    <div data-aos="fade-up">
-                    <iframe style="border: 0; width: 50%; height: 250px"
-                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
-                    frameborder="0" allowfullscreen>
-
-                    </iframe>
+                    <div id="map" style="border: 0; width: 50%; height: 250px" frameborder="0" allowfullscreen>
                     </div>
-               @*
-
-                        <div id="map">
-
-                        </div>
-*@
                 </form>
             </div>
         </section>
@@ -229,6 +207,7 @@
 <!-- End Book A Table Section -->
 @section Scripts
     {
+
     <script src="~/axios/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
     <script>
@@ -242,6 +221,7 @@
                 ReserveDate: null,
                 adultNumber: '',
                 kidNumber: '',
+                map: {},
                 mealTime: '',
                 dis: null,
                 disColor: "",
@@ -263,6 +243,10 @@
                     { value: "15:00", txt: '15:00' },
                     { value: "17:00", txt: '17:00' },
                     { value: "19:00", txt: '19:00' }],
+            },
+            mounted: function () {
+                let _this = this;
+                _this.initMap();
             },
             computed: {
                 disSet: function () {
@@ -312,26 +296,26 @@
                                 })
                     }
                 },
-            },
-        });
+                initMap: function () {
+                    let _this = this;
+                    let location = {
+                        lat: 25.043056733101256, // 經度
+                        lng: 121.52486142576117 // 緯度
+                    };
+                    _this.map = new google.maps.Map(document.getElementById("map"), {
+                        zoom: 16,
+                        center: location,
+                        mapTypeId: 'terrain'
+                    });
+                    var marker = new google.maps.Marker({
+                        position: location, // 使用正確的位置對象
 
-
-        //let map;
-        //function initMap() {
-        //   var map = new google.maps.Map(document.getElementById("map"), {
-        //        center: {
-        //            lat: 25.042184986669056,
-        //            lng: 121.52549955055301,
-        //        },
-        //        zoom: 8
-        //    });
-        //}
-        //initMap();
-       
-
+                        
+                        animation: google.maps.Animation.BOUNCE
+                    });
+                    marker.setMap(_this.map);
+                }
+                }
+            });
     </script>
-@*
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAK7PxnOc-lyX0bcs8yM5hjx8hdrm0tF9M&callback=initMap">
-    </script>*@
     }

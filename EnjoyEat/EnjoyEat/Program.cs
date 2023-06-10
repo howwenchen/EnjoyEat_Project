@@ -35,7 +35,7 @@ namespace EnjoyEat
             {
 				opt.LoginPath = "/areas/backend/EmployeeLogin/Index";
 				opt.AccessDeniedPath = "/areas/backend/EmployeeManagement/AccessDenied";
-				opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+				opt.ExpireTimeSpan = TimeSpan.FromMinutes(10);
 
 			})
             .AddFacebook(facebookOptions =>
