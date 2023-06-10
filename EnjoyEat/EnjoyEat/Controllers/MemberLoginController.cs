@@ -11,6 +11,8 @@ using AspNetCore;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using EnjoyEat.Services;
+using System.Text.Json;
 
 namespace EnjoyEat.Controllers
 {
@@ -18,9 +20,12 @@ namespace EnjoyEat.Controllers
     public class MemberLoginController : Controller
     {
         private readonly db_a989fe_thm101team6Context _db;
-        public MemberLoginController(db_a989fe_thm101team6Context db)
+        private readonly EncryptService encrypt;
+
+        public MemberLoginController(db_a989fe_thm101team6Context db, EncryptService encrypt)
         {
             this._db = db;
+            this.encrypt = encrypt;
         }
 
         public IActionResult Index()
@@ -36,8 +41,33 @@ namespace EnjoyEat.Controllers
         {
             return View();
         }
-        public IActionResult ChangePDSC()
+        public IActionResult Success(string code) {
+            var str = encrypt.AesDecryptToString(code);
+            var obj = JsonSerializer.Deserialize<AesValidationDto>(str);
+            if (DateTime.Now > obj.ExpiredDate)
+            {
+                return BadRequest("連結已過期");
+            }
+            var user = _db.MemberLogins.FirstOrDefault(x => x.Account == obj.Account);
+            if (user != null)
+            {
+                user.IsActive = true;
+                _db.SaveChanges();
+            }
+            return View();
+        }
+        //發送郵件確認
+        public IActionResult ChangePDSC(string code)
         {
+            var str = encrypt.AesDecryptToString(code);
+            var obj = JsonSerializer.Deserialize<AesValidationDto>(str);
+            if (DateTime.Now > obj.ExpiredDate)
+            {
+                return BadRequest("連結已過期");
+            }
+            var user = _db.MemberLogins.FirstOrDefault(x => x.Account == obj.Account);
+            var account = user.Account;
+            ViewBag.Account = account;
             return View();
         }
         public IActionResult Login()

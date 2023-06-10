@@ -1,0 +1,491 @@
+﻿@section Styles {
+    <style>
+        .row > * {
+            padding: 0;
+        }
+
+        .searchNav {
+            margin-bottom: 10px;
+        }
+
+        .text-primary {
+            margin-top: 8px;
+        }
+
+        .titleBar {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px;
+        }
+
+        .trProduct:hover {
+            color: wheat;
+        }
+
+        .modal-footer > #deletebtn {
+            margin-right: auto;
+        }
+
+        #tableArea {
+            height: 60vh;
+            overflow: auto;
+        }
+
+        #tableArea::-webkit-scrollbar {
+            width: 15px;
+            border-radius: 2px;
+        }
+
+        #tableArea::-webkit-scrollbar-track {
+                background: #6C7293;
+        }
+
+        #tableArea::-webkit-scrollbar-thumb {
+                background: #EB1616;
+                border-radius: 2px;
+        }
+
+        .pb-3 {
+             padding-bottom: 0 !important; 
+        }
+
+        
+    </style>
+}
+
+<div id="app" class="container-fluid px-4">
+    @*標題欄*@
+    <div class="titleBar">
+        <h3 class="text-primary">餐點管理</h3>
+        <button type="button" class="btn btn-outline-primary" data-bs-target="#AddModal" data-bs-toggle="modal" @@click="showAddModal()"><i class="fas fa-plus-square"></i> 新增餐點</button>
+    </div>
+    @*篩選區*@
+    <div class="row g-4 searchNav rounded mb-4">
+        @*文字篩選*@
+        <div class="col">
+            <div class="bg-secondary p-3">
+                <input type="text" class="form-control" id="floatingInput" placeholder="🔍 請輸入餐點名稱" v-model="keyword">
+            </div>
+        </div>
+        @*分類篩選*@
+        <div class="col">
+            <div class="bg-secondary p-3">
+                <form action="#">
+                    <select class="form-select" aria-label="Default select" v-model="categoryName" v-if="category">
+                        <option disabled selected value="">請選擇餐點分類</option>
+                        <option>全部</option>
+                        <option v-for="c in category" :value="c.categoryName" :key="c.categoryId">
+                            {{ c.categoryName }}
+                        </option>
+                    </select>
+                </form>
+            </div>
+        </div>
+        @*子分類篩選*@
+        <div class="col">
+            <div class="bg-secondary p-3">
+                <form action="#">
+                    <select class="form-select" aria-label="Default select" v-model="subCategoryName" v-if="subCategory">
+                        <option disabled selected value="">請選擇餐點子分類</option>
+                        <option>全部</option>
+                        <option v-for="s in subCategory" :value="s.subCategoriesName" :key="s.subcategoryId">
+                            {{ s.subCategoriesName }}
+                        </option>
+                    </select>
+                </form>
+            </div>
+        </div>
+    </div>
+    @*餐點表格區*@
+    <div class="row g-4">
+        <div class="col-12">
+            <div id="tableArea" class="bg-secondary rounded p-4">
+                <div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">編號</th>
+                                <th scope="col">圖片</th>
+                                <th scope="col">名稱</th>
+                                <th scope="col">成本</th>
+                                <th scope="col">售價</th>
+                                <th scope="col">庫存</th>
+                                <th scope="col">分類</th>
+                                <th scope="col">子分類</th>
+                                <th scope="col">說明</th>
+                                <th scope="col">食譜</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="p in filterproducts" :key="p.productId" class="trProduct">
+                                <td scope="row"><i class="fa sharp fa-solid fa-pen" data-bs-target="#EditModal" data-bs-toggle="modal" @@click="EditProduct(p.productId)"></i>&emsp;{{p.productId}}</td>
+                                <td><img :src="baseUrl + p.mealImg" style="width:50px; border-radius:2px" /></td>
+                                <td>{{p.productName}}</td>
+                                <td>{{p.costs}}</td>
+                                <td>{{p.unitPrice}}</td>
+                                <td>{{p.stock}}</td>
+                                <td>{{p.categoryName}}</td>
+                                <td>{{p.subCategoriesName}}</td>
+                                <td>{{p.description}}</td>
+                                <td><i class="fa regular fa-receipt"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*新增餐點Modal*@
+    <div class="modal" tabindex="-1" id="AddModal" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content bg-secondary">
+                <div class="modal-header">
+                    <h5 class="modal-title">新增餐點</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label>餐點編號(必填): </label><input type="text" class="form-control" v-model="newProduct.productId" placeholder="EX:70" required>
+                    <label>餐點圖片: </label><input type="file" class="form-control form-control-sm bg-dark">@* @@change="selectImage()"*@
+                    <label>餐點名稱(必填): </label><input type="text" class="form-control" v-model="newProduct.productName" placeholder="EX:番茄牛喃燉飯" required>
+                    <label>餐點成本(必填): </label><input type="text" class="form-control" v-model="newProduct.costs" placeholder="EX:200" required>
+                    <label>餐點售價(必填): </label><input type="text" class="form-control" v-model="newProduct.unitPrice" placeholder="EX:400" required>
+                    <label>餐點庫存: </label><input type="text" class="form-control" v-model="newProduct.stock" placeholder="EX:100">
+                    <label>餐點子分類編號(必填): </label>
+                    <form action="#">
+                        <select class="form-select" aria-label="Default select" v-model="newProduct.subCategoryId" required>
+                            <option disabled selected value="">請選擇餐點子分類編號</option>
+                            <option v-for="s in subCategoryAll" :key="s.subcategoryId">
+                                {{ s.subCategoryId }}
+                            </option>
+                        </select>
+                    </form>
+                    <label>餐點說明: </label><input type="text" class="form-control" v-model="newProduct.description" placeholder="EX:番茄、牛喃、鴻喜菇">
+                    <label>餐點食譜: </label><textarea class="form-control" v-model="newProduct.recipt" placeholder=""></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-success" @@click="AddProduct()">新增</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*編輯餐點Modal*@
+    <div class="modal" tabindex="-1" id="EditModal" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content bg-secondary">
+                <div class="modal-header">
+                    <h5 class="modal-title">編輯餐點</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label>餐點編號: </label><input type="text" class="form-control" v-model="newProduct.productId" disabled>
+                    <label>餐點圖片: </label><input type="file" class="form-control form-control-sm bg-dark">@*@@change="selectImage()"*@
+                    <label>餐點名稱: </label><input type="text" class="form-control" v-model="newProduct.productName" required>
+                    <label>餐點成本: </label><input type="text" class="form-control" v-model="newProduct.costs" required>
+                    <label>餐點售價: </label><input type="text" class="form-control" v-model="newProduct.unitPrice" required>
+                    <label>餐點庫存: </label><input type="text" class="form-control" v-model="newProduct.stock">
+                    <label>餐點子分類編號: </label>
+                    <form action="#">
+                        <select class="form-select" aria-label="Default select" v-model="newProduct.subCategoryId" required>
+                            <option disabled selected value="">請選擇餐點子分類編號</option>
+                            <option v-for="s in subCategoryAll" :key="s.subcategoryId">
+                                {{ s.subCategoryId }}
+                            </option>
+                        </select>
+                    </form>
+                    <label>餐點說明: </label><input type="text" class="form-control" v-model="newProduct.description">
+                    <label>餐點食譜: </label><textarea class="form-control" v-model="newProduct.recipt" placeholder=""></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" id="deletebtn" data-bs-target="#DeleteModal" data-bs-toggle="modal"><i class="fa solid fa-trash"></i> 刪除餐點</button>
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-success" @@click="UpdateProduct()">編輯完成</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*刪除餐點Modal*@
+    <div class="modal" tabindex="-1" id="DeleteModal" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog">
+            <div class="modal-content bg-secondary">
+                <div class="modal-header">
+                    <h5 class="modal-title">刪除餐點</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                   <h6>確定刪除以下餐點嗎?</h6>
+                   <p>餐點編號: {{newProduct.productId}}</p>
+                   <p>餐點名稱: {{newProduct.productName}}</p>
+                   <div>
+                        <p>餐點圖片:</p>
+                        <img :src="baseUrl + newProduct.mealImg" style="width:80px; border-radius:2px" />
+                   </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-outline-success" @@click="DeleteProduct()">確定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
+    <script>
+        let baseAddress = 'https://localhost:7071';
+        var app = new Vue({
+            el: '#app',
+            data: {
+                product: [],
+                category: [],
+                subCategory: [],
+                subCategoryAll: [],
+                baseUrl: '',
+                keyword: '',
+                categoryName: '',
+                subCategoryName: '',
+                newProduct: {
+                    productId: '',
+                    mealtImg: '',
+                    productName: '',
+                    costs: '',
+                    unitPrice: '',
+                    stock: '',
+                    subCategoryId: '',
+                    description: '',
+                    reciipt: '',
+                },
+            },
+            mounted:
+                function () {
+                    let _this = this;
+                    _this.getProduct();
+                    _this.getCategory();
+                    _this.getSubCategory();
+                },
+            computed: {
+                filterproducts() {
+                    // 關鍵字篩選
+                    let _this = this;
+                    let filterArr = _this.product.filter(p => {
+                        return p.productName.indexOf(_this.keyword) !== -1;
+                    });
+                    // 種類篩選
+                    if (_this.categoryName && _this.categoryName !== "全部") {
+                        filterArr = filterArr.filter(c => c.categoryName === _this.categoryName);
+                        // 更新子類別選項
+                        _this.subCategory = _this.subCategoryAll.filter(s => {
+                            return s.categoryId === _this.category.find(c => c.categoryName === _this.categoryName).categoryId;
+                        });
+                        // 變更類別篩選時重置子類別為全部
+                        let defaultsubCategory = _this.subCategory.some(s => s.subCategoriesName === _this.subCategoryName);
+                        if (!defaultsubCategory) {
+                            _this.subCategoryName = "全部";
+                        }
+                    }
+                    // 子種類篩選
+                    if (_this.subCategoryName && _this.subCategoryName !== "全部") {
+                        filterArr = filterArr.filter(s => s.subCategoriesName === _this.subCategoryName);
+                    }
+                    return filterArr;
+                },
+            },
+            methods: {
+                // 讀取餐點
+                getProduct: function () {
+                    let _this = this;
+                    _this.baseUrl = window.location.origin;
+                    axios.get("/api/ProductAPI/GetProduct")
+                        .then(response => {
+                            _this.product = response.data;
+                            //console.log(JSON.stringify(response.data));
+                        }).catch(err => console.error(err));
+                },
+                // 讀取分類
+                getCategory: function () {
+                    let _this = this;
+                    axios.get("/api/ProductAPI/GetCategory")
+                        .then(response => {
+                            _this.category = response.data;
+                        }).catch(err => console.error(err));
+                },
+                // 讀取子分類
+                getSubCategory: function () {
+                    let _this = this;
+                    axios.get("/api/ProductAPI/GetSubCategory")
+                        .then(response => {
+                            _this.subCategoryAll = response.data;
+                            _this.isSubCategorySelected = true;
+                        }).catch(err => console.error(err));
+                },
+                // 清空新增的餐點
+                showAddModal: function () {
+                    let _this = this;
+                    _this.newProduct = {};
+                },
+                // 新增圖片
+                selectImage: function (event) {
+                    let _this = this;
+                    let file = event.target.files[0];
+                    _this.newProduct.mealImg = file;
+                    console.log(_this.newProduct.mealImg);
+                },
+                // 新增餐點
+                AddProduct: function () {
+                    let _this = this;
+                    var request = {
+                        ProductId: _this.newProduct.productId,
+                        MealImg: _this.newProduct.mealImg,
+                        ProductName: _this.newProduct.productName,
+                        Costs: _this.newProduct.costs,
+                        UnitPrice: _this.newProduct.unitPrice,
+                        Stock: _this.newProduct.stock,
+                        SubCategoryId: _this.newProduct.subCategoryId,
+                        Description: _this.newProduct.description,
+                        Recipt: _this.newProduct.recipt,
+                    };
+                    //var d = new FormData();
+                    //d.append('image', _this.newProduct.mealImg);
+                    //axios.post(`${baseAddress}/api/ProductAPI/UploadImage`, d)
+
+                    axios.post(`${baseAddress}/api/ProductAPI/CreateProduct`, request)
+                        .then(response => {
+                            $("#AddModal").modal("hide"); // 隱藏AddModal)
+                            if (response.data.status == true) {
+                                _this.getProduct(); // 畫面刷新
+                                _this.successAlert(response);
+                            } else {
+                                _this.errorAlert(response);
+                            }
+                        });
+                },
+                // 編輯餐點
+                EditProduct: function(productId){
+                    let _this = this;
+                    var proIndex = -1;
+                    for (var i = 0; i < _this.product.length; i++) {
+                        var pro = _this.product[i];
+                        if (productId == pro.productId) {
+                            proIndex = i;
+                            break;
+                        }
+                    };
+                    if (proIndex !== -1) {
+                        var editedpro = _this.product[proIndex];
+                        _this.newProduct.productId = editedpro.productId;
+                        _this.newProduct.mealImg  = editedpro.mealImg;
+                        _this.newProduct.productName = editedpro.productName;
+                        _this.newProduct.costs = editedpro.costs;
+                        _this.newProduct.unitPrice = editedpro.unitPrice;
+                        _this.newProduct.stock = editedpro.stock;
+                        _this.newProduct.subCategoryId = editedpro.subCategoryId;
+                        _this.newProduct.description = editedpro.description
+                        _this.newProduct.recipt = editedpro.recipt;
+                    };
+                },
+                // 更新餐點
+                UpdateProduct: function(){
+                    let _this = this;
+                    var request = {
+                        ProductId: _this.newProduct.productId,
+                        MealImg: _this.newProduct.mealImg,
+                        ProductName: _this.newProduct.productName,
+                        Costs: _this.newProduct.costs,
+                        UnitPrice: _this.newProduct.unitPrice,
+                        Stock: _this.newProduct.stock,
+                        SubCategoryId: _this.newProduct.subCategoryId,
+                        Description: _this.newProduct.description,
+                        Recipt: _this.newProduct.recipt,
+                    };
+                    console.log(request);
+                    axios.post(`${baseAddress}/api/ProductAPI/EditProduct`, request)
+                        .then(response => {
+                            _this.newProduct.mealImg = '',
+                            _this.newProduct.productName = '',
+                            _this.newProduct.costs = '',
+                            _this.newProduct.unitPrice = '',
+                            _this.newProduct.stock = '',
+                            _this.newProduct.subCategoryId = '',
+                            _this.newProduct.description = '',
+                            _this.newProduct.recipt = '',
+                            $("#EditModal").modal("hide"); // 隱藏EditModal
+                            if (response.data.status == true) {
+                                _this.getProduct(); // 畫面刷新
+                                _this.successAlert(response);
+                            } else {
+                                _this.errorAlert(response);
+                            };
+                            
+                        });
+                },
+                // 刪除餐點
+                DeleteProduct: function(){
+                    let _this = this;
+                    var request = {
+                        ProductId: _this.newProduct.productId,
+                        MealImg: _this.newProduct.mealImg,
+                        ProductName: _this.newProduct.productName,
+                        Costs: _this.newProduct.costs,
+                        UnitPrice: _this.newProduct.unitPrice,
+                        Stock: _this.newProduct.stock,
+                        SubCategoryId: _this.newProduct.subCategoryId,
+                        Description: _this.newProduct.description,
+                        Recipt: _this.newProduct.recipt,
+                    };
+                    axios.post(`${baseAddress}/api/ProductAPI/DeleteProduct`, request)
+                        .then(response => {
+                            $("#DeleteModal").modal("hide"); // 隱藏DeleteModal
+                            $("#EditModal").modal("hide"); // 隱藏EditModal
+                            if (response.data) {
+                                _this.getProduct(); // 畫面刷新
+                                Swal.fire({
+                                    allowOutsideClick: false,
+                                    icon: 'success',
+                                    color: '#333',
+                                    iconColor: '#D8CDB9',
+                                    background: '#FFF',
+                                    title: '刪除成功',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    position: 'center'
+                                });
+                            }
+                        });
+                },
+                // 成功提示
+                successAlert(response) {
+                    let _this = this;
+                    Swal.fire({
+                        allowOutsideClick: false,
+                        icon: 'success',
+                        color: '#333',
+                        iconColor: '#D8CDB9',
+                        background: '#FFF',
+                        title: response.data.message,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        position: 'center'
+                    });
+                },
+                // 失敗提示
+                errorAlert(response) {
+                    let _this = this;
+                    Swal.fire({
+                        allowOutsideClick: false,
+                        icon: 'error',
+                        color: '#333',
+                        iconColor: '#D8CDB9',
+                        background: '#FFF',
+                        title: response.data.message,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        position: 'center'
+                    });
+                },
+            }
+        });
+    </script>
+}

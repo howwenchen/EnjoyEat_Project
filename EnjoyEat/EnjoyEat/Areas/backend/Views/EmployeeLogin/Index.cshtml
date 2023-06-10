@@ -10,10 +10,10 @@
 			<div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
 				<div class="d-flex align-items-center justify-content-between mb-3">
 					<h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>後臺管理</h3>
-					<h3>登入</h3>
+					<span class="ms-4" id="empName"><i class="fa-solid fa-image-portrait mx-1"></i>{{name}}</span>
 				</div>
 				<div class="form-floating mb-3">
-					<input type="email" class="form-control" id="floatingInput" placeholder="帳號" v-model="account" required>
+					<input type="text" class="form-control" id="floatingInput" placeholder="帳號" v-model="account" required>
 					<label for="floatingInput">員工帳號</label>
 				</div>
 				<div class="form-floating mb-4">
@@ -36,41 +36,42 @@
 			data: {
 				account: '',
 				password: '',
+				name: '尚未登入',
 			},
 			methods: {
 				Login: function () {
 					let self = this;
+					let request = {
+						account: self.account,
+						password: self.password
+					};
 					if (!self.account || !self.password) {
-						self.showSweetAlert();
+						self.swal('error', '帳號密碼錯誤');
 						return
 					}
-					axios.post('')
+					axios.post('EmployeeLogin/Login', request)
+						.then(response => {
+							if (response.status === 200) {
+								self.swal('success', '登入成功');
+								setTimeout(function () {
+									window.location.href = "/backend/EmployeeManagement/Index";
+								}, 1000);
+							} else {
+								self.swal('error', '帳號密碼錯誤');
+							}
+						})
+						.catch(error => {
+							self.swal('error', '帳號密碼錯誤');
+						});
 				},
-				showSweetAlert() {
-					let self = this;
+				swal: function (icon, str) {
 					Swal.fire({
-						icon: 'error',
-						color: '#FFF',
-						iconColor: '#D8CDB9',
-						background: '#2F4F4F',
-						text: '登入失敗',
 						position: 'center',
-						confirmButtonText: '確定',
-						customClass: {
-							popup: 'custom-swal-popup'
-						},
-						showConfirmButton: true,
-						allowEscapeKey: false,
-						allowEnterKey: false,
-						allowOutsideClick: false,
-						closeOnClickOutside: false,
-						showClass: {
-							popup: 'animate__animated animate__fadeInDown'
-						},
-						hideClass: {
-							popup: 'animate__animated animate__fadeOutUp'
-						}
-					})
+						icon: icon,
+						title: str,
+						showConfirmButton: false,
+						timer: 1500
+					});
 				},
 			}
 

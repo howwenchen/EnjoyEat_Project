@@ -33,25 +33,7 @@ namespace EnjoyEat.Controllers
         {
             return View();
         }
-
-        //發送郵件確認
-        public async Task<IActionResult> Enable(string code)
-        {
-            var str = encrypt.AesDecryptToString(code);
-            var obj = JsonSerializer.Deserialize<AesValidationDto>(str);
-            if (DateTime.Now > obj.ExpiredDate)
-            {
-                return BadRequest("連結已過期");
-            }
-            var user = _db.MemberLogins.FirstOrDefault(x => x.Account == obj.Account);
-            if (user != null)
-            {
-                user.IsActive = true;
-                _db.SaveChanges();
-            }
-
-            return Ok($@"code:{code}  str:{str}");
-        }
+       
         public IActionResult RegisterSuccess()
         {
             return View();

@@ -76,7 +76,9 @@
                         </div>
                     </div>
                     <input type="text" class="form-label col-md-4" minlength="10" maxlength="10" v-model="phone" placeholder="請輸入電話">
-
+                    <div id="AccountHelpBlock" class="form-text nono" v-if="phonecheck">
+                        輸入電話長度過短，請重新確認
+                    </div>
 
                     <div class="col-md-2">
                         <div class="infoClass">
@@ -141,6 +143,7 @@
                     accountDuplicate: false,
                     emailDuplicate: false,
                     show: false,
+                    phonecheck:false,
                     firstName: "",
                     lastName: "",
                     phone: "",
@@ -177,6 +180,9 @@
                             Account: _this.account,
                             Password: _this.password,
                         };
+                        if(_this.phone.length<10){
+                        return _this.phonecheck = true;
+                        }
                         Swal.fire({
                             allowOutsideClick: false,
                         icon: 'info',

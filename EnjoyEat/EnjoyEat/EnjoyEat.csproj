@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
+    <Content Remove="Views\MemberManagement\EditPasswordIndex.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -149,6 +150,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\NewFolder1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\DTO\ProductsDTO.cs" />
   </ItemGroup>
 
 </Project>

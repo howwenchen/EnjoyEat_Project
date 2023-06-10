@@ -58,7 +58,7 @@
                                 <span class="third"></span>
                                 <span class="fourth"></span>
                             </button>
-                            <button class="btn">
+                            <button class="btn" @@click="reset">
                                 重新設定密碼
                                 <span class="first"></span>
                                 <span class="second"></span>
@@ -324,6 +324,10 @@
                     let date = new Date(this.memberInfo.birthday);
                     this.memberInfo.birthday=date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0')
                     return this.memberInfo.birthday;
+                },
+                //導向修改畫面
+                reset:function(){
+                    window.location.href = `/MemberLogin/ChangePd`
                 },
                 //修改資料
                 submitInfo: function () {
