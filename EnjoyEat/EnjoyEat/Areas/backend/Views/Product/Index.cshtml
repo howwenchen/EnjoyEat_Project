@@ -178,11 +178,11 @@
                 <div class="modal-body">
                     <label>餐點編號: </label><input type="text" class="form-control" v-model="newProduct.productId" disabled>
                     <label>餐點圖片: </label><input type="file" class="form-control form-control-sm bg-dark">@*@@change="selectImage()"*@
-                    <label>餐點名稱: </label><input type="text" class="form-control" v-model="newProduct.productName" required>
-                    <label>餐點成本: </label><input type="text" class="form-control" v-model="newProduct.costs" required>
-                    <label>餐點售價: </label><input type="text" class="form-control" v-model="newProduct.unitPrice" required>
+                    <label>餐點名稱(必填): </label><input type="text" class="form-control" v-model="newProduct.productName">
+                    <label>餐點成本(必填): </label><input type="text" class="form-control" v-model="newProduct.costs">
+                    <label>餐點售價(必填): </label><input type="text" class="form-control" v-model="newProduct.unitPrice">
                     <label>餐點庫存: </label><input type="text" class="form-control" v-model="newProduct.stock">
-                    <label>餐點子分類編號: </label>
+                    <label>餐點子分類編號(必填): </label>
                     <form action="#">
                         <select class="form-select" aria-label="Default select" v-model="newProduct.subCategoryId" required>
                             <option disabled selected value="">請選擇餐點子分類編號</option>
@@ -398,7 +398,7 @@
                     if (proIndex !== -1) {
                         var editedpro = _this.product[proIndex];
                         _this.newProduct.productId = editedpro.productId;
-                        _this.newProduct.mealImg  = editedpro.mealImg;
+                        _this.newProduct.mealImg = editedpro.mealImg;
                         _this.newProduct.productName = editedpro.productName;
                         _this.newProduct.costs = editedpro.costs;
                         _this.newProduct.unitPrice = editedpro.unitPrice;
