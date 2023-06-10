@@ -216,10 +216,10 @@
                                 this.onlinePaymentData = response.data; 
 
                                 // 填充表單元素
-                                document.getElementById('MerchantID').value = this.onlinePaymentData.MerchantID;
-                                document.getElementById('TradeInfo').value = this.onlinePaymentData.TradeInfo;
-                                document.getElementById('TradeSha').value = this.onlinePaymentData.TradeSha;
-                                document.getElementById('Version').value = this.onlinePaymentData.Version;
+                                document.getElementById('MerchantID').value = this.onlinePaymentData.merchantID;
+                                document.getElementById('TradeInfo').value = this.onlinePaymentData.tradeInfo;
+                                document.getElementById('TradeSha').value = this.onlinePaymentData.tradeSha;
+                                document.getElementById('Version').value = this.onlinePaymentData.version;
 
                                 // FORM SUBMIT換頁
                                 document.getElementById('payment-form').submit();

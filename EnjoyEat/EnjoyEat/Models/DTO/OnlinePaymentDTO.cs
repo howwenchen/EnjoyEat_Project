@@ -31,6 +31,7 @@ namespace EnjoyEat.Models.DTO
             public int? Amt { get; internal set; }
             [StringLength(maximumLength: 50)]
             public string ItemDesc { get; internal set; }
+            public int? TradeLimit { get; internal set; }
             [StringLength(maximumLength: 200)]
             public string? ReturnURL { get; internal set; }
             [StringLength(maximumLength: 200)]

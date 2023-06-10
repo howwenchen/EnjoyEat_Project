@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
 namespace EnjoyEat.Controllers
-{
+{   
     public class PaymentController : Controller
     {
         public IActionResult Index()
@@ -21,9 +21,10 @@ namespace EnjoyEat.Controllers
             return View();
         }
 
-        // GET: Payment/Return
-        [HttpGet]
-        public IActionResult Return()
+        // POST: Payment/OnlineReturn
+        [HttpPost]
+        [Route("Payment/OnlineReturn")]
+        public IActionResult OnlineReturn()
         {
             // 在這裡處理用戶返回後的相應操作
             // 根據需要執行相應的邏輯
