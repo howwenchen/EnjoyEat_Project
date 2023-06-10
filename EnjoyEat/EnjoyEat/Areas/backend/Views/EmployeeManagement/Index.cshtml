@@ -14,6 +14,25 @@
 			color: wheat;
 		}
 
+		#modals_container input, #modals_container select {
+			background: rgb(133, 133, 133);
+			border-radius: 5px;
+			color:black;
+		}
+
+		.modal select, .modal input {
+			color: black;
+		}
+
+		.modal-content {
+			background-color: #191C24;
+		}
+
+		.modal-footer button {
+			background-color: #6c757d;
+			border-radius: 5px;
+		}
+
 		#searchText {
 			margin-left: auto;
 			margin-right: 0px;
@@ -35,11 +54,11 @@
 
 <div class="container-fluid pt-4 px-4">
 	<div id="app" class="bg-secondary rounded h-100 p-4">
-		<h6 class="mb-4">員工管理</h6>
+		<h6 class="mb-4">員工管理系統</h6>
 		<div class="col-12 row">
 			@*新增按鍵*@
 			<!-- Modal trigger button -->
-			<button class="btn btn-primary col-md-1" @@click="showInsert()" data-toggle="modal" >
+			<button class="btn btn-primary col-md-1" @@click="showInsert()" data-toggle="modal">
 				<span><i class="fa-solid fa-circle-plus fa-beat"></i> 新增</span>
 			</button>
 			@*篩選欄位*@
@@ -84,10 +103,10 @@
 				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="modalTitleId" style="color: black;">新增員工資訊</h5>
+							<h5 class="modal-title" id="modalTitleId" style="color: white;">新增員工資訊</h5>
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
-						<div class="modal-body" style="color:white; background-color: brown;">
+						<div class="modal-body container" id="modals_container">
 							@*頁面內容Body*@
 							<div class="form-group">
 								<label class="form-label">員工姓名:</label>
@@ -103,7 +122,7 @@
 							</div>
 							<div class="form-group">
 								<label class="form-label">性別:</label>
-								<select class="form-control form-select" id="selectGender" v-model="gender" style="background-color: #000;">
+								<select class="form-control form-select" id="selectGender" v-model="gender">
 									<option :value="gd.value" v-for="gd in selectGender">{{gd.text}}</option>
 								</select>
 							</div>
@@ -117,7 +136,7 @@
 							</div>
 							<div class="form-group">
 								<label class="form-label">職稱:</label>
-								<select class="form-control form-select" id="selectRole" v-model="role" style="background-color: #000;">
+								<select class="form-control form-select" id="selectRole" v-model="role">
 									<option :value="rl.value" v-for="rl in selectRole">{{rl.text}}</option>
 								</select>
 							</div>
@@ -136,10 +155,10 @@
 				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="modalTitleId" style="color: black;">編輯員工資訊</h5>
+							<h5 class="modal-title" id="modalTitleId" style="color: white;">編輯員工資訊</h5>
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
-						<div class="modal-body" style="color:white; background-color: brown;">
+						<div class="modal-body container" id="modals_container">
 							@*頁面內容Body*@
 							<div class="form-group">
 								<label class="form-label">員工姓名:</label>
@@ -151,7 +170,7 @@
 							</div>
 							<div class="form-group">
 								<label class="form-label">性別:</label>
-								<select class="form-control form-select" id="selectGender" v-model="gender" style="background-color: #000;">
+								<select class="form-control form-select" id="selectGender" v-model="gender">
 									<option :value="gd.value" v-for="gd in selectGender">{{gd.text}}</option>
 								</select>
 							</div>
@@ -165,7 +184,7 @@
 							</div>
 							<div class="form-group">
 								<label class="form-label">職稱:</label>
-								<select class="form-control form-select" id="selectRole" v-model="role" style="background-color: #000;">
+								<select class="form-control form-select" id="selectRole" v-model="role">
 									<option :value="rl.value" v-for="rl in selectRole">{{rl.text}}</option>
 								</select>
 							</div>
@@ -184,10 +203,10 @@
 				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title" id="modalTitleId" style="color: black;">員工薪資資訊</h5>
+							<h5 class="modal-title" id="modalTitleId" style="color: white;">員工薪資資訊</h5>
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
-						<div class="modal-body" style="color:white; background-color: brown;">
+						<div class="modal-body container" id="modals_container">
 							@*頁面內容Body*@
 							<div class="form-group">
 								<label class="form-label" :value="role">職稱:</label>
@@ -199,13 +218,13 @@
 							</div>
 							<div class="form-group">
 								<label class="form-label">表現評比:</label>
-								<select class="form-control form-select" id="selectPerformance" v-model="performance" style="background-color: #000;">
+								<select class="form-control form-select" id="selectPerformance" v-model="performance">
 									<option :value="pr.value" v-for="pr in selectPerformance">{{pr.text}}</option>
 								</select>
 							</div>
 							<div class="form-group">
 								<label class="form-label">額外獎金:</label>
-								<input class="form-control" :value="getBonusAmount" style="background-color: #000;" readonly />
+								<input class="form-control" :value="getBonusAmount" readonly />
 							</div>
 							<div class="form-group" style="margin-top:10px; font-size:25px">
 								<label class="form-label">總薪資:</label>
@@ -225,7 +244,7 @@
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h1 class="modal-title fs-5" id="exampleModalLabel" style="color:black;">刪除員工資訊</h1>
+						<h1 class="modal-title fs-5" id="exampleModalLabel" style="color:white;">刪除員工資訊</h1>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body" style="font-size: 18px; display: inline-block;">

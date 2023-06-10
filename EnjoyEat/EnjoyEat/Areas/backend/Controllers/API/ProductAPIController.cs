@@ -173,14 +173,13 @@ namespace EnjoyEat.Areas.backend.Controllers.API
             }
         }
 
-        // 編輯餐點
+        // 更新餐點
         [HttpPost]
         public async Task<ApiResultDto> EditProduct([FromBody] ProductDTO meal)
         {
             try
             {
                 var pro = _context.Products.FirstOrDefault(p => p.ProductId == meal.ProductId);
-                if (pro == null) return new ApiResultDto() { Status = false, Message = "修改失敗" };
                 pro.MealImg = meal.MealImg;
                 pro.ProductName = meal.ProductName;
                 pro.Costs = meal.Costs;
@@ -190,6 +189,8 @@ namespace EnjoyEat.Areas.backend.Controllers.API
                 pro.Recipe = meal.Recipe;
                 pro.Stock = meal.Stock;
 
+                if (pro.ProductName == "") 
+                    return new ApiResultDto() { Status = false, Message = "新增失敗，請檢查必填欄位" };
                 await _context.SaveChangesAsync();
                 return new ApiResultDto() { Status = true, Message = "修改成功" };
             }

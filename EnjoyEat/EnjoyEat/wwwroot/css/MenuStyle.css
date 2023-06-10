@@ -39,3 +39,21 @@
     text-align: center;
     min-width: 110px;
 }
+
+#top-ten {
+    padding: 0;
+}
+
+.carousel-item {
+    padding: 40px 100px;
+}
+
+.carousel-item img {
+    width: 300px;
+    height: 300px;
+    margin: auto;
+}
+
+.sub-category-item {
+    color: yellow; /* 替換為你想要的顏色值 */
+}

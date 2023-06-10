@@ -71,18 +71,26 @@
 						</div>
 					</div>
 				</div>
+
+				
 				<div class="navbar-nav w-100">
-					<a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
 					<div class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa-solid fa-people-arrows me-2"></i>會員相關</a>
-						<div class="dropdown-menu bg-transparent border-0">
-							<a asp-area="backend" asp-controller="MemberManagement" asp-action="Index" class="nav-link scrollto">會員管理</a>
-							<a href="element.html" class="nav-link scrollto">訂單管理</a>
-							<a asp-area="backend" asp-controller="ReservationManagement" asp-action="Index" class="nav-link scrollto">訂位管理</a>
-						</div>
+						@if (User.Identity.IsAuthenticated && (User.IsInRole("staff") || User.IsInRole("manager")))
+						{
+							<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa-solid fa-people-arrows me-2"></i>會員相關</a>
+							<div class="dropdown-menu bg-transparent border-0">
+								<a asp-area="backend" asp-controller="MemberManagement" asp-action="Index" class="nav-link scrollto">會員管理</a>
+								<a href="element.html" class="nav-link scrollto">訂單管理</a>
+								<a asp-area="backend" asp-controller="ReservationManagement" asp-action="Index" class="nav-link scrollto">訂位管理</a>
+							</div>
+						}
+						
 					</div>
-					<a asp-area="backend" asp-controller="Product" asp-action="Index" class="nav-item nav-link"><i class="fa fa-th me-2"></i>產品管理</a>
-					<a asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>員工管理</a>
+					@if (User.Identity.IsAuthenticated && (User.IsInRole("staff") || User.IsInRole("manager")))
+					{
+						<a asp-area="backend" asp-controller="Product" asp-action="Index" class="nav-item nav-link"><i class="fa fa-th me-2"></i>產品管理</a>
+						<a asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>員工管理</a>
+					}
 					<div class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Login</a>
 						<div class="dropdown-menu bg-transparent border-0">
