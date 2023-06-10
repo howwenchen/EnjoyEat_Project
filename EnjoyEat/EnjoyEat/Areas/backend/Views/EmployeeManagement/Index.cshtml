@@ -35,16 +35,15 @@
 
 <div class="container-fluid pt-4 px-4">
 	<div id="app" class="bg-secondary rounded h-100 p-4">
-		<h6 class="mb-4" style="margin-top:25px;">員工管理</h6>
+		<h6 class="mb-4">員工管理</h6>
 		<div class="col-12 row">
 			@*新增按鍵*@
 			<!-- Modal trigger button -->
-			<button class="btn btn-primary col-md-1" @@click="showInsert()" data-toggle="modal" @*style="margin: 33px 0px"*@>
+			<button class="btn btn-primary col-md-1" @@click="showInsert()" data-toggle="modal" >
 				<span><i class="fa-solid fa-circle-plus fa-beat"></i> 新增</span>
 			</button>
 			@*篩選欄位*@
-			<input class="form-control col-md-4" id="searchText" @* style="width:150px; margin-left: -50px; margin-bottom:20px;"*@ placeholder="搜尋"
-				   v-model="filter" @@keyup="filterEmployeeManagementDTO" />
+			<input class="form-control col-md-4" id="searchText" placeholder="搜尋" v-model="filter" @@keyup="filterEmployeeManagementDTO" />
 		</div>
 		@*表格標題*@
 		<div class="form-group">
@@ -391,8 +390,6 @@
 								self.sweatAlert("warning", "無此權限，請洽主管單位!!");
 								return;
 							}
-
-							$("#salaryModal").modal("show");
 							var empIndex = -1;
 							for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
 								var emp = self.EmployeeManagementDTO[i];
@@ -409,6 +406,7 @@
 								self.bonus = editedSal.bonus;
 								self.performance = editedSal.performance;
 								self.totalSalary = editedSal.totalSalary;
+								$("#salaryModal").modal("show");
 							}
 						})
 				},
