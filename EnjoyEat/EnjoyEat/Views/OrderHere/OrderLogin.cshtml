@@ -1,17 +1,11 @@
-﻿@section Styles
-	{
-	<link href="~/orderforhere/orderforherelogincss/orderforhere.css" rel="stylesheet" />
-	<style>
-		.form-container {
-			display:inline-block;
-			justify-content: center;
-        }
-	</style>
+﻿
+@section Styles
+{
+    <link href="~/css/orderhere.css" rel="stylesheet" />
 }
 
 
 <!-- Start  -->
-
 <div class="form-container" id="Login">
 	<h2>內用點餐</h2>
 	<form>
@@ -35,7 +29,6 @@
 		</div>
 	</form>
 </div>
-
 <!-- End -->
 <!-- 快速註冊 -->
 @*<div class="dialog-overlay" id="dialog-overlay"></div>
@@ -131,7 +124,7 @@
 						.then(response => {
 							if (response.data) {
 
-								window.location.href = "/OrderForHere/StartOrder/Index";
+								window.location.href = "/OrderHere/Index";
 							}
 						})
 						.catch(error => {

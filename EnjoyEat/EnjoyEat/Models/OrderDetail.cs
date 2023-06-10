@@ -9,7 +9,7 @@ namespace EnjoyEat.Models
         public int ProductId { get; set; }
         public int OrderDetailId { get; set; }
         public decimal UnitPrice { get; set; }
-        public short Quantity { get; set; }
+        public int Quantity { get; set; }
         public float Discount { get; set; }
         public int SubtotalPrice { get; set; }
 

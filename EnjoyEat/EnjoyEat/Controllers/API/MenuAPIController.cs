@@ -1,4 +1,5 @@
-﻿using EnjoyEat.Models;
+﻿using EnjoyEat.Areas.OrderForHere.Models;
+using EnjoyEat.Models;
 using EnjoyEat.Models.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -116,7 +117,7 @@ namespace EnjoyEat.Controllers.API
             }
             catch (Exception ex)
             {
-                // Log the exception and return an error response
+                _logger.LogError(ex, "Error creating order.");
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -127,16 +128,11 @@ namespace EnjoyEat.Controllers.API
         {
             try
             {
-                var cartId = HttpContext.Session.GetInt32("CartId");
-                if (cartId == null)
-                {
-                    return NotFound("找不到購物車編號");
-                }
-
+                var memberId = HttpContext.Session.GetInt32("MemberId");
                 var cart = await _context.Carts
                     .Include(c => c.CartItems)
-                    .ThenInclude(i => i.Product)
-                    .FirstOrDefaultAsync(c => c.CartId == cartId);
+                .ThenInclude(i => i.Product)
+                    .FirstOrDefaultAsync(c => c.MemberId == memberId);
 
                 if (cart == null)
                 {
@@ -161,28 +157,22 @@ namespace EnjoyEat.Controllers.API
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting cart.");
-                return StatusCode(500, "Internal server error");
+                _logger.LogError(ex, "取得購物車時發生錯誤。");
+                return StatusCode(500, "內部伺服器錯誤");
             }
         }
 
         [HttpPost("/api/Menu/AddToCart")]
-        public async Task<ActionResult<CartItem>> AddToCart(CartItemViewModel item)
+        public async Task<ActionResult<CartItem>> AddToCart(CartItemViewModel item, int memberId)
         {
             if (item == null)
             {
-                return BadRequest("Invalid item.");
+                return BadRequest("無效的商品。");
             }
 
             try
             {
-                var cartId = HttpContext.Session.GetInt32("CartId");
-                if (cartId == null)
-                {
-                    return NotFound("找不到購物車編號。");
-                }
-
-                var cart = await _context.Carts.FindAsync(cartId);
+                var cart = await _context.Carts.FirstOrDefaultAsync(c => c.MemberId == memberId);
 
                 if (cart == null)
                 {
@@ -203,13 +193,13 @@ namespace EnjoyEat.Controllers.API
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding item to cart.");
-                return StatusCode(500, "Internal server error");
+                _logger.LogError(ex, "將商品加入購物車時發生錯誤。");
+                return StatusCode(500, "內部伺服器錯誤");
             }
         }
 
         [HttpPost("/api/Menu/RemoveFromCart")]
-        public async Task<IActionResult> RemoveFromCart(CartItemViewModel item)
+        public async Task<IActionResult> RemoveFromCart(CartItemViewModel item, int memberId)
         {
             if (item == null)
             {
@@ -218,13 +208,13 @@ namespace EnjoyEat.Controllers.API
 
             try
             {
-                var cartId = HttpContext.Session.GetInt32("CartId");
-                if (cartId == null)
+                var cart = await _context.Carts.FirstOrDefaultAsync(c => c.MemberId == memberId);
+                if (cart == null)
                 {
                     return NotFound("找不到購物車編號。");
                 }
 
-                var existingItem = await _context.CartItems.FirstOrDefaultAsync(c => c.CartId == cartId && c.ProductId == item.ProductId);
+                var existingItem = await _context.CartItems.FirstOrDefaultAsync(c => c.CartId == cart.CartId && c.ProductId == item.ProductId);
                 if (existingItem != null)
                 {
                     existingItem.Quantity -= item.Quantity;
@@ -239,8 +229,8 @@ namespace EnjoyEat.Controllers.API
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error removing item from cart.");
-                return StatusCode(500, "Internal server error");
+                _logger.LogError(ex, "從購物車移除商品時發生錯誤。");
+                return StatusCode(500, "內部伺服器錯誤");
             }
         }
 
@@ -295,37 +285,33 @@ namespace EnjoyEat.Controllers.API
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating cart.");
-                return StatusCode(500, "Internal server error");
+                _logger.LogError(ex, "更新購物車失敗");
+                return StatusCode(500, "內部伺服器錯誤");
             }
         }
 
         [HttpPost("/api/Menu/CreateCart")]
-        public async Task<ActionResult<int>> CreateCart()
+        public async Task<ActionResult<int>> CreateCart(int memberId)
         {
             try
             {
-                var cartId = HttpContext.Session.GetInt32("CartId");
-                if (cartId != null)
+                var cart = await _context.Carts.FirstOrDefaultAsync(c => c.MemberId == memberId);
+                if (cart != null)
                 {
-                    return Ok(cartId);
+                    return Ok(cart.CartId);
                 }
 
-                var newCart = new Cart();
+                var newCart = new Cart { MemberId = memberId };
                 _context.Carts.Add(newCart);
                 await _context.SaveChangesAsync();
-
-                HttpContext.Session.SetInt32("CartId", newCart.CartId);
 
                 return Ok(newCart.CartId);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error creating new cart.");
-                return StatusCode(500, "Internal server error");
+                _logger.LogError(ex, "創建新購物車時發生錯誤。");
+                return StatusCode(500, "內部伺服器錯誤");
             }
         }
-
-
     }
 }

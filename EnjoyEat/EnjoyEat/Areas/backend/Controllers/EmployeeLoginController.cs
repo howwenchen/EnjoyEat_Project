@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using EnjoyEat.Areas.OrderForHere.API;
+using EnjoyEat.Services;
 
 namespace EnjoyEat.Areas.backend.Controllers
 {
@@ -13,9 +14,11 @@ namespace EnjoyEat.Areas.backend.Controllers
 	public class EmployeeLoginController : Controller
 	{
 		private readonly db_a989fe_thm101team6Context _context;
-		public EmployeeLoginController(db_a989fe_thm101team6Context context)
+		private readonly EncryptService encrypt;
+		public EmployeeLoginController(db_a989fe_thm101team6Context context, EncryptService encrypt)
 		{
 			_context = context;
+			this.encrypt = encrypt;
 		}
 		public IActionResult Index()
 		{
@@ -47,6 +50,10 @@ namespace EnjoyEat.Areas.backend.Controllers
 		{
 			await HttpContext.SignOutAsync();
 			return RedirectToAction("Index", "EmployeeLogin");
+		}
+		public IActionResult Enable()
+		{
+			return View();
 		}
 	}
 }

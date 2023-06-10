@@ -12,7 +12,7 @@ namespace EnjoyEat.Services
         {
             this.key = configuration.GetSection("AesKey").Value;
         }
-        public string AesEncryptToBase64(string str)
+        public string AesEncryptToBase64(string str) //加密成AES再編碼成Base64
         {
             using Aes aes = Aes.Create();
             aes.Key = Encoding.UTF8.GetBytes(key);
@@ -31,7 +31,7 @@ namespace EnjoyEat.Services
                 return Convert.ToBase64String(memoryStream.ToArray());
             }
         }
-        public string AesDecryptToString(string str)
+        public string AesDecryptToString(string str) //解密
         {
             using Aes aes = Aes.Create();
             aes.Key = Encoding.UTF8.GetBytes(key);

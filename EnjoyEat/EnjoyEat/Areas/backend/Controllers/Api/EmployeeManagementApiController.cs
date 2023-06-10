@@ -1,12 +1,19 @@
-﻿using EnjoyEat.Models;
+﻿using EnjoyEat.Controllers;
+using EnjoyEat.Models;
 using EnjoyEat.Models.DTO;
+using EnjoyEat.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
+using System.Web;
 using static EnjoyEat.Models.DTO.EmployeeManagementDTO;
 using Employee = EnjoyEat.Models.Employee;
 
@@ -17,9 +24,11 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 	public class EmployeeManagementApiController : ControllerBase
 	{
 		private readonly db_a989fe_thm101team6Context _context;
-		public EmployeeManagementApiController(db_a989fe_thm101team6Context context)
+		private readonly EncryptService encrypt;
+		public EmployeeManagementApiController(db_a989fe_thm101team6Context context, EncryptService encrypt)
 		{
 			_context = context;
+			this.encrypt = encrypt;
 		}
 
 		//篩選
@@ -100,14 +109,14 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 		//編輯員工薪資
 		[Authorize(Roles = "manager")]
 		[HttpPost]
-		public ApiResultDto EditSalary([FromBody] EmployeeManagementDTO empDTO)
+		public ApiResultDto EditSalary([FromBody] EmpSalaryDTO empDTO)
 		{
 			try
 			{
 				var emp = _context.Employees.Include(x => x.EmployeesSalary).FirstOrDefault(e => e.EmployeeId == empDTO.EmployeeId);
 				if (emp == null) return new ApiResultDto() { Status = false, Message = "修改失敗" };
 
-				if(emp.EmployeesSalary == null)
+				if (emp.EmployeesSalary == null)
 				{
 					var empsla = new EmployeesSalary
 					{
@@ -127,7 +136,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 					emp.EmployeesSalary.TotalSalary = empDTO.TotalSalary;
 					emp.EmployeesSalary.Performance = empDTO.Performance;
 				}
-				
+
 				_context.SaveChanges();
 				return new ApiResultDto() { Status = true, Message = "修改成功" };
 			}
@@ -163,13 +172,38 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 				};
 
 				_context.Employees.Add(NewEmp);
-
 				_context.SaveChanges();
+
+				//寄驗證信
+				var obj = new AesValidationDto(empDTO.Account, DateTime.Now.AddDays(3));
+				var jString = JsonSerializer.Serialize(obj);
+				//加密工具
+				var code = encrypt.AesEncryptToBase64(jString);
+				var encode = HttpUtility.UrlEncode(code);
+				var mail = new MailMessage()
+				{
+					From = new MailAddress("thm101team66@gmail.com"),
+					Subject = "啟用員工帳號",
+					Body = @$"{empDTO.Name}您好，以下為你的員工資料，請確認
+							<br>員工帳號: `{empDTO.Account}`
+							<br>員工密碼: `{empDTO.Password}`
+							<br>請點這<a href=`https://localhost:7071/backend/EmployeeLogin/Enable?code={encode}`>此處</a>來啟用你的帳號",
+					IsBodyHtml = true,
+					BodyEncoding = Encoding.UTF8
+				};
+				mail.To.Add(new MailAddress(empDTO.Email));
+				using (var sm = new SmtpClient("smtp.gmail.com", 587))
+				{
+					sm.EnableSsl = true;
+					sm.Credentials = new NetworkCredential("thm101team66@gmail.com", "lepbkbyfphbmjwtx");
+					sm.Send(mail);
+				}
+
 				return new ApiResultDto() { Status = true, Message = "新增成功" };
 			}
 			catch (Exception)
 			{
-				return new ApiResultDto() { Status = true, Message = "新增失敗" };
+				return new ApiResultDto() { Status = false, Message = "新增失敗" };
 			}
 
 		}
@@ -183,7 +217,9 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 			{
 				var emp = _context.Employees.FirstOrDefault(e => e.EmployeeId == empDTO.EmployeeId);
 				if (emp == null) return false;
+				var empsal = _context.EmployeesSalaries.Where(e => e.EmployeeId == emp.EmployeeId);
 				_context.Employees.Remove(emp);
+				_context.EmployeesSalaries.RemoveRange(empsal);
 				_context.SaveChanges();
 				return true;
 			}
