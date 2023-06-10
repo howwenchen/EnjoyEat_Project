@@ -84,7 +84,7 @@
                                 <td v-if="order.isSuccess">已結帳</td>
                                 <td v-else>未結帳</td>
                                 <td>{{order.levelDiscount}}</td>
-                                <td>{{order.finalPrice}}</td>
+                                <td>{{order.countPrice}}</td>
                                 <td>
                                     <button type="button" class="btn btn-success btn-sm" v-if="order.isSuccess==false" @@click="check">
                                         結帳
@@ -188,7 +188,7 @@
                     isTakeway: '',
                     totalPrice: "",
                     levelDiscount: "",
-                    finalPrice:"",
+                    countPrice: "",
                 },
                 editInfo:{
                     unitPrice:"",
@@ -219,7 +219,7 @@
                             var isTakeway = item.isTakeway;
                             var totalPrice = item.totalPrice;
                             var levelDiscount = item.levelDiscount;
-                            var finalPrice = item.finalPrice;
+                            var countPrice = item.countPrice;
 
                             var regex = new RegExp(_this.searchText, 'i');
 
@@ -231,7 +231,7 @@
                                 regex.test(isTakeway) ||
                                 regex.test(totalPrice) ||
                                 regex.test(levelDiscount) ||
-                                regex.test(finalPrice)
+                                regex.test(countPrice)
                             ) {
                                 orderlist.push(item);
                             }
@@ -316,6 +316,7 @@
                         axios.delete(`/api/OrderBackend/DeleteOrderDetail/${order.orderDetailId}`)
                             .then(response => {
                                 alert("已成功刪除")
+                                _this.getOrder();
                             })
                     }
                 },

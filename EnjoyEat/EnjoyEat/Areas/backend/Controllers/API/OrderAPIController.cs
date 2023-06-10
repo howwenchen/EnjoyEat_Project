@@ -34,6 +34,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
                 LevelDiscount = x.LevelDiscount,
                 TotalPrice = x.TotalPrice,
                 FinalPrice = x.FinalPrice,
+                CountPrice=x.CountPrice,
             });
         }
 
