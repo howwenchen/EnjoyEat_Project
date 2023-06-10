@@ -1,5 +1,8 @@
 ﻿@section Styles{
     <style>
+        .btn{
+            margin:5px;
+        }
         .new{
             margin-left: 10px;
         }
@@ -91,58 +94,7 @@
                                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="send(member.memberId)">
                                         刪除
                                     </button>
-                                </td>
-
-                                <!--Edit Modal-->
-                                <div class="modal fade bookingdModal" id="editModal" data-bs-backdrop="static"
-                                     data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h3 class="modal-title" id="staticBackdropLabel">編輯會員</h3>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-
-                                            <div class="modal-body container" id="create_container">
-                                                <label>姓：</label>
-                                                <input v-model="editMember.lastName" type="text" id="create_lastName" class="w-100">
-                                                <label>名：</label>
-                                                <input v-model="editMember.firstName" type="text" id="create_firstName" class="w-100">
-                                                <label>電話：</label>
-                                                <input v-model="editMember.phone" type="text" id="create_phone" class="w-100" maxlength="10" minlength="10">
-                                                <label>性別：</label>
-                                                <select name="" id="Gender" class="form-select w-100" v-model="editMember.gender">
-                                                    <option value="" disabled selected></option>
-                                                    <option :value="g.value" v-for="g in Gender">{{g.txt}}</option>
-                                                </select>
-
-                                                <label>生日：</label>
-                                                <div id="d1" class="calendar">
-                                                    <date-picker v-model="editMember.birthday"
-                                                                 value-type="format"
-                                                                 name="Birthday"
-                                                                 id="datepicker"
-                                                                 class="col-lg-8 form-selectss "
-                                                                 :disabled-date="disablerange">
-                                                    </date-picker>
-                                                </div>
-
-                                                <label>郵件：</label>
-                                                <input v-model="editMember.email" type="text" id="create_email" class="w-100">
-
-                                                <label>地址：</label>
-                                                <input v-model="editMember.address" type="text" id="create_address" class="w-100">
-
-                                            </div>
-                                            <div class="modal-footer">
-                                                    <button @@click="cancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-                                                <button @@click="update" class="btn btn-primary" type="button" data-bs-dismiss="modal"><i class="fa-solid fa-square-check"></i> 儲存</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
+                                </td>                              
                                 <!--Delete Modal -->
                                 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -168,6 +120,56 @@
                 </table>
             </div>
             <!-- Table End -->
+            <!--Edit Modal-->
+            <div class="modal fade bookingdModal" id="editModal" data-bs-backdrop="static"
+                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title" id="staticBackdropLabel">編輯會員</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body container" id="create_container">
+                            <label>姓：</label>
+                            <input v-model="editMember.lastName" type="text" id="create_lastName" class="w-100">
+                            <label>名：</label>
+                            <input v-model="editMember.firstName" type="text" id="create_firstName" class="w-100">
+                            <label>電話：</label>
+                            <input v-model="editMember.phone" type="text" id="create_phone" class="w-100" maxlength="10" minlength="10">
+                            <label>性別：</label>
+                            <select name="" id="Gender" class="form-select w-100" v-model="editMember.gender">
+                                <option value="" disabled selected></option>
+                                <option :value="g.value" v-for="g in Gender">{{g.txt}}</option>
+                            </select>
+
+                            <label>生日：</label>
+                            <div id="d1" class="calendar">
+                                <date-picker v-model="editMember.birthday"
+                                             value-type="format"
+                                             name="Birthday"
+                                             id="datepicker"
+                                             class="col-lg-8 form-selectss "
+                                             :disabled-date="disablerange">
+                                </date-picker>
+                            </div>
+
+                            <label>郵件：</label>
+                            <input v-model="editMember.email" type="text" id="create_email" class="w-100">
+
+                            <label>地址：</label>
+                            <input v-model="editMember.address" type="text" id="create_address" class="w-100">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button @@click="cancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                            <button @@click="update" class="btn btn-primary" type="button" data-bs-dismiss="modal"><i class="fa-solid fa-square-check"></i> 儲存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <!--Create Modal-->
             <div class="modal fade bookingdModal" id="createModal" data-bs-backdrop="static"
