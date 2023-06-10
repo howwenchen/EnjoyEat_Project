@@ -38,7 +38,7 @@
             box-shadow: none;
             background: #0c0b09;
             border-color: #625b4b;
-            color: #625b4b;
+            color: #aaa;
             font-size: 14px;
             height: 44px;
         }
@@ -47,9 +47,6 @@
 }
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.css">
-@*<script async
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAK7PxnOc-lyX0bcs8yM5hjx8hdrm0tF9M">
-</script>*@
 <main id="main">
     <div id="d1">
         <!-- ======= Book A Table Section ======= -->
@@ -106,11 +103,6 @@
                                 </template>
                             </select>
                         </div>
-                    </div>
-                    <br />
-                    <label id="location">餐廳位置</label>
-                    <br />
-                    <div id="map" style="border: 0; width: 50%; height: 250px" frameborder="0" allowfullscreen>
                     </div>
                 </form>
             </div>
@@ -221,7 +213,6 @@
                 ReserveDate: null,
                 adultNumber: '',
                 kidNumber: '',
-                map: {},
                 mealTime: '',
                 dis: null,
                 disColor: "",
@@ -243,10 +234,6 @@
                     { value: "15:00", txt: '15:00' },
                     { value: "17:00", txt: '17:00' },
                     { value: "19:00", txt: '19:00' }],
-            },
-            mounted: function () {
-                let _this = this;
-                _this.initMap();
             },
             computed: {
                 disSet: function () {
@@ -296,25 +283,7 @@
                                 })
                     }
                 },
-                initMap: function () {
-                    let _this = this;
-                    let location = {
-                        lat: 25.043056733101256, // 經度
-                        lng: 121.52486142576117 // 緯度
-                    };
-                    _this.map = new google.maps.Map(document.getElementById("map"), {
-                        zoom: 16,
-                        center: location,
-                        mapTypeId: 'terrain'
-                    });
-                    var marker = new google.maps.Marker({
-                        position: location, // 使用正確的位置對象
-
-                        
-                        animation: google.maps.Animation.BOUNCE
-                    });
-                    marker.setMap(_this.map);
-                }
+               
                 }
             });
     </script>

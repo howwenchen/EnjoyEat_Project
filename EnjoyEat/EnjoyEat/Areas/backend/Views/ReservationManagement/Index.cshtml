@@ -29,11 +29,18 @@
             background-color: #6c757d;
             color: lightgray;
             border-radius: 5px;
-            width: 100%;
+            width: 90%;
             border: 1px solid gray;
             text-align:center;
-            
         }
+
+        #reservationNameInput, #AdultGuestInput
+        ,#KidGuestInput, #TimeInput{
+            width: 70%;
+        }
+
+
+
 
         /*新增訂位訊息的modal*/
         .modal-content {
@@ -76,29 +83,22 @@
           
             <div class="col-12 row">
                 <button class="btn btn-primary col-md-1" data-bs-toggle="modal" data-bs-target="#createModal">新增</button>
-@*                <date-picker v-model="searchDate"
-                             value-type="format"
-                             name="ReserveDate"
-                             id="datepicker"
-                             class="col-lg-7 form-selectss "
-                             @@keyup=" filterDate">
-                </date-picker>*@
                 <input class="form-control col-md-4" type="text" v-model="searchText" id="searchText" placeholder="搜尋" @@keyup="filterReserve" />
             </div>
      
             <div class="table-responsive">
-                <table class="table">
+                <table class="table" overflow=”auto”>
                     <thead>
                         <tr>
-                            <th scope="col" id="serial">#</th>
-                            <th scope="col" id="Name">訂位姓名</th>
-                            <th scope="col" id="Phone">電話</th>
-                            <th scope="col" id="AdultNumber">大人人數</th>
-                            <th scope="col" id="KidNumber">小孩人數</th>
-                            <th scope="col" id="DateTime">用餐日期</th>
-                            <th scope="col" id="MealTime">用餐時間</th>
-                            <th scope="col" id="Note">備註</th>
-                            <th scope="col" id="Operation">操作</th>
+                            <th id="serial">#</th>
+                            <th id="Name">訂位姓名</th>
+                            <th id="Phone">電話</th>
+                            <th id="AdultNumber">大人人數</th>
+                            <th id="KidNumber">小孩人數</th>
+                            <th id="DateTime">用餐日期</th>
+                            <th id="MealTime">用餐時間</th>
+                            <th id="Note">備註</th>
+                            <th id="Operation">操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -119,13 +119,13 @@
                             </template>
                             <template v-else>
                                 <td scope="row">{{rev.reserveId}}</td>
-                                <td><input v-model="rev.reservationName" /></td>
-                                <td><input v-model="rev.phoneNumber" /></td>
-                                <td><input v-model="rev.numberofAdultGuest" /></td>
-                                <td><input v-model="rev.numberofKidGuest" /></td>
-                                <td><input v-model="rev.reservationDate" /></td>
-                                <td><input v-model="rev.reservationTime" /></td>
-                                <td><input v-model="rev.note" /></td>
+                                <td><input id="reservationNameInput" v-model="rev.reservationName" /></td>
+                                <td><input id="phoneNumberInput" v-model="rev.phoneNumber" /></td>
+                                <td><input id="AdultGuestInput" v-model="rev.numberofAdultGuest" /></td>
+                                <td><input id="KidGuestInput" v-model="rev.numberofKidGuest" /></td>
+                                <td><input id="DateInput" v-model="rev.reservationDate" /></td>
+                                <td><input id="TimeInput" v-model="rev.reservationTime" /></td>
+                                <td><input id="noteinput" v-model="rev.note" /></td>
                                 <td>
                                     <button id="editbtn" type="button" class="btn btn-secondary btn-sm" @@click="update(rev)">儲存</button>
                                     <button id="deletebtn" type="button" class="btn btn-primary btn-sm" @@click="cancel(rev.reserveId)">取消</button>
@@ -240,7 +240,6 @@
                 filterInfo: [],
                 bookInfo: [],
                 searchText: '',
-                //searchDate: '',
                 original: {
                     reservationName: "",
                     phoneNumber: "",
@@ -284,27 +283,14 @@
             },
 
             methods: {
-                //filterDate: function () {
-                //    let _this = this;
-                //    var list = [];
-                //    for (var i = 0; i < _this.bookInfo.length; i++) {
-                //        var item = _this.bookInfo[i];
-                //        var reserveDate = item.reservationDate;
-                //        var regex = new RegExp(_this.searchDate, 'i');
-                //        if (regex.test(reserveDate)) {
-                //            list.push(item);
-                //        }
-                //    }
-                //    _this.filterInfo = list;
-                //},
                 filterReserve: function () {
                     let _this = this;
                     var reservelist = [];
                     if (_this.searchText === "") {
                         _this.getreserve();
                     } else {
-                        for (var i = 0; i < _this.reserveInfo.length; i++) {
-                            var item = _this.reserveInfo[i];
+                        for (var i = 0; i < _this.bookingInfo.length; i++) {
+                            var item = _this.bookingInfo[i];
                             var reserveId = item.reserveId;
                             var reservationName = item.reservationName;
                             var phone = item.phone;
@@ -332,7 +318,6 @@
                             }
                         }
                     }
-
                     _this.reserveInfo = reservelist;
                 },
                 formatDate: function () {
@@ -411,6 +396,7 @@
                     axios.get("/api/ReservationManagementApi/GetReservationManagement").then(
                         response => {                    
                             _this.reserveInfo = response.data;
+                            _this.bookingInfo = response.data;
                             _this.formatDate();
                             var temp = [];
                             for (var i = 0; i < _this.reserveInfo.length; i++) {
@@ -423,6 +409,7 @@
                     );
                 },
                 send: function (reserveId) {
+                    this.sendreserveid = reserveId;
                     this.sendreserveid = reserveId;
                 },
                 deleteReserve: function () {
