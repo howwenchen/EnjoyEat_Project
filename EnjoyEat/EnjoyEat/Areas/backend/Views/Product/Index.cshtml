@@ -143,7 +143,7 @@
                 </div>
                 <div class="modal-body">
                     <label>餐點編號(必填): </label><input type="text" class="form-control" v-model="newProduct.productId" placeholder="EX:70" required>
-                    <label>餐點圖片: </label><input type="file" class="form-control form-control-sm bg-dark">@* @@change="selectImage()"*@
+                    <label>餐點圖片: </label><input type="file" class="form-control form-control-sm bg-dark" @@change="selectImage">
                     <label>餐點名稱(必填): </label><input type="text" class="form-control" v-model="newProduct.productName" placeholder="EX:番茄牛喃燉飯" required>
                     <label>餐點成本(必填): </label><input type="text" class="form-control" v-model="newProduct.costs" placeholder="EX:200" required>
                     <label>餐點售價(必填): </label><input type="text" class="form-control" v-model="newProduct.unitPrice" placeholder="EX:400" required>
@@ -177,7 +177,7 @@
                 </div>
                 <div class="modal-body">
                     <label>餐點編號: </label><input type="text" class="form-control" v-model="newProduct.productId" disabled>
-                    <label>餐點圖片: </label><input type="file" class="form-control form-control-sm bg-dark">@*@@change="selectImage()"*@
+                    <label>餐點圖片: </label><input type="file" class="form-control form-control-sm bg-dark"@* @@change="selectImage"*@>
                     <label>餐點名稱(必填): </label><input type="text" class="form-control" v-model="newProduct.productName">
                     <label>餐點成本(必填): </label><input type="text" class="form-control" v-model="newProduct.costs">
                     <label>餐點售價(必填): </label><input type="text" class="form-control" v-model="newProduct.unitPrice">
@@ -360,7 +360,7 @@
                     let _this = this;
                     var request = {
                         ProductId: _this.newProduct.productId,
-                        MealImg: _this.newProduct.mealImg,
+                        MealImg: "/img/food/noPic.jpg",
                         ProductName: _this.newProduct.productName,
                         Costs: _this.newProduct.costs,
                         UnitPrice: _this.newProduct.unitPrice,
@@ -369,18 +369,26 @@
                         Description: _this.newProduct.description,
                         Recipt: _this.newProduct.recipe,
                     };
-                    //var d = new FormData();
-                    //d.append('image', _this.newProduct.mealImg);
-                    //axios.post(`${baseAddress}/api/ProductAPI/UploadImage`, d)
-
                     axios.post(`${baseAddress}/api/ProductAPI/CreateProduct`, request)
                         .then(response => {
                             $("#AddModal").modal("hide"); // 隱藏AddModal)
                             if (response.data.status == true) {
                                 _this.getProduct(); // 畫面刷新
                                 _this.successAlert(response);
+                                var d = new FormData();
+                                d.append('image', _this.newProduct.mealImg);
+                                d.append('productId', _this.newProduct.productId);
+                                axios.post(`${baseAddress}/api/ProductAPI/UploadImage`, d, {
+                                    headers: {
+                                        "Content-Type": "multipart/form-data",
+                                    }
+                                })
+                                    .then(response => {
+                                        _this.getProduct(); // 畫面刷新
+                                    });
                             } else {
                                 _this.errorAlert(response);
+                                return;
                             }
                         });
                 },
@@ -437,8 +445,21 @@
                             if (response.data.status == true) {
                                 _this.getProduct(); // 畫面刷新
                                 _this.successAlert(response);
+                                //var d = new FormData();
+                                //d.append('image', _this.newProduct.mealImg); 
+                                //d.append('productId', _this.newProduct.productId);
+                                //d.append('meal', JSON.stringify(request));
+                                //axios.post(`${baseAddress}/api/ProductAPI/UploadImage`, d, {
+                                //    headers: {
+                                //        "Content-Type": "multipart/form-data",
+                                //    }
+                                //})
+                                //    .then(response => {
+                                //        _this.getProduct(); // 畫面刷新
+                                //    });
                             } else {
                                 _this.errorAlert(response);
+                                return;
                             };
                             
                         });

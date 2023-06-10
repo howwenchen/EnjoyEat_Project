@@ -87,33 +87,40 @@ namespace EnjoyEat.Areas.backend.Controllers.API
             }
         }
 
-        //// 新增圖片
-        //[HttpPost]
-        //public async Task<ActionResult> UploadImage(IFormFile image)
-        //{
-        //    try
-        //    {
-        //        //using (var stream = System.IO.File.Create($@"C:\Users\Tibame_T14\Desktop\EnjoyEat\EnjoyEat\EnjoyEat\wwwroot\img\Food\{image.FileName}"))
-        //        //{
-        //        //    await image.CopyToAsync(stream);
-        //        //}
-        //        //return Ok(true);
-        //        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-        //        var filePath = Path.Combine("wwwroot", "img", "Food", fileName);
+        // 新增圖片
+        [HttpPost]
+        public async Task<ActionResult> UploadImage([FromForm]IFormFile image, [FromForm] int productId)
+        {
+            try
+            {
+                //using (var stream = System.IO.File.Create($@"C:\Users\Tibame_T14\Desktop\EnjoyEat\EnjoyEat\EnjoyEat\wwwroot\img\Food\{image.FileName}"))
+                //{
+                //    await image.CopyToAsync(stream);
+                //}
+                //return Ok(true);
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+                var filePath = Path.Combine("wwwroot","img", "Food", fileName);
 
-        //        using (var stream = new FileStream(filePath, FileMode.Create))
-        //        {
-        //            await image.CopyToAsync(stream);
-        //        }
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
 
-        //        return Ok(filePath);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.ToString());
-        //        return StatusCode(500, "Internal server error");
-        //    }
-        //}
+                var productData = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == productId);
+                //if (productData == null) {
+                //    return BadRequest("此商品不存在");
+                //}
+                productData.MealImg = $"/img/Food/{fileName}";
+                await _context.SaveChangesAsync();
+
+                return Ok(filePath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return StatusCode(500, "Internal server error");
+            }
+        }
 
         // 新增餐點
         [HttpPost]

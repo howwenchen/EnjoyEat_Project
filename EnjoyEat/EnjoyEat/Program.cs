@@ -24,7 +24,7 @@ namespace EnjoyEat
             builder.Services.AddSession(options =>
             {
                 options.Cookie.Name = "Session";
-                options.IdleTimeout = TimeSpan.FromHours(6); // ³]©w Session ¶¢¸m¶W®É®É¶¡
+                options.IdleTimeout = TimeSpan.FromHours(6); // ï¿½]ï¿½w Session ï¿½ï¿½ï¿½mï¿½Wï¿½É®É¶ï¿½
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
