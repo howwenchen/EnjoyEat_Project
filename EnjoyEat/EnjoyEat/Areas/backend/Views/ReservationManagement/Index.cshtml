@@ -84,7 +84,7 @@
                              @@keyup=" filterDate">
                 </date-picker>*@
                 <input class="form-control col-md-4" type="text" v-model="searchText" id="searchText" placeholder="搜尋" @@keyup="filterReserve" />
-                </div>
+            </div>
      
             <div class="table-responsive">
                 <table class="table">
@@ -280,27 +280,41 @@
                 //},
                 filterReserve: function () {
                     let _this = this;
-                    var request = { };
-                    //request.ReserveId = isNaN(parseInt(_this.searchText)) ? -1 : parseInt(_this.searchText);
-                    if (!isNaN(parseInt(_this.searchText))){
-                        request.ReserveId = request.ReservationName = request.PhoneNumber = request.NumberofAdultGuest = request.ReserveDate
-                            = request.ReserveTime  = request.NumberofKidGuest = request.Note = _this.searchText
-                    }
-                    else{
-                        request.ReservationName = request.PhoneNumber = request.NumberofAdultGuest = request.NumberofKidGuest = request.Note = _this.searchText;
-                    }
-                    
-                    axios.post(`/api/ReservationManagementApi/FilterReservation`, request).then(response => {
-                        _this.reserveInfo = response.data;
-                        _this.formatDate();
-                        var temp = []
+                    var reservelist = [];
+                    if (_this.searchText === "") {
+                        _this.getreserve();
+                    } else {
                         for (var i = 0; i < _this.reserveInfo.length; i++) {
                             var item = _this.reserveInfo[i];
-                            item.editStatus = false;
-                            temp.push(item);
+                            var reserveId = item.reserveId;
+                            var reservationName = item.reservationName;
+                            var phone = item.phone;
+                            var reservationDate = item.reservationDate.toString();
+                            var reservationTime = item.reservationTime.toString();
+                            var numberofAdultGuest = item.numberofAdultGuest;
+                            var email = item.email;
+                            var numberofKidGuest = item.numberofKidGuest;
+                            var note = item.note;
+
+                            var regex = new RegExp(_this.searchText, 'i');
+
+                            if (
+                                regex.test(reserveId) ||
+                                regex.test(reservationName) ||
+                                regex.test(reservationDate) ||
+                                regex.test(reservationTime) ||
+                                regex.test(phone) ||
+                                regex.test(numberofAdultGuest) ||
+                                regex.test(numberofKidGuest) ||
+                                regex.test(email) ||
+                                regex.test(note)
+                            ) {
+                                reservelist.push(item);
+                            }
                         }
-                        _this.reserveInfo = temp;
-                    });
+                    }
+
+                    _this.reserveInfo = reservelist;
                 },
                 formatDate: function () {
                     for (var i = 0; i < this.reserveInfo.length; i++) {

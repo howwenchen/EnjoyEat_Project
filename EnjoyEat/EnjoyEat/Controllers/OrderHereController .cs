@@ -10,6 +10,7 @@ namespace EnjoyEat.Controllers
         public IActionResult Index()
         {
             HttpContext.Session.SetString("IsTakeaway", "False");
+            HttpContext.Session.SetInt32("MemberId", 0);
             return View();
         }
         public IActionResult Order()
@@ -28,6 +29,10 @@ namespace EnjoyEat.Controllers
         {
             return View();
         }
+        public IActionResult OrderLogin()
+        {
+			return View();
+		}
     }
 }
 

@@ -115,6 +115,7 @@ public class OrderAPIController : Controller
 
     }
 
+    //加上transaction方式去避免按太快的時間差問題
     [HttpPost]
     public async Task<IActionResult> AddToCart(CartItemViewModel item)
     {
@@ -136,7 +137,7 @@ public class OrderAPIController : Controller
                 {
                     cart = new Cart
                     {
-                        MemberId = memberId.Value,
+                        MemberId = memberId.Value
                     };
                     _context.Carts.Add(cart);
                     await _context.SaveChangesAsync();
@@ -168,7 +169,7 @@ public class OrderAPIController : Controller
                     cart.CartItems.Add(cartItem);
                 }
 
-                await _context.SaveChangesAsync(); 
+                await _context.SaveChangesAsync();
                 return Ok(cart.CartItems);
             }
             else
@@ -281,79 +282,95 @@ public class OrderAPIController : Controller
         {
             return BadRequest(ModelState);
         }
-
-        try
-        {
-            if (IsUserLoggedIn())
+        using (var transaction = _context.Database.BeginTransaction())
+            try
             {
-                var memberId = HttpContext.Session.GetInt32("MemberId");
-                var cart = await _context.Carts
-                    .Include(c => c.CartItems)
-                    .FirstOrDefaultAsync(c => c.MemberId == memberId);
-
-                if (cart == null)
+                if (IsUserLoggedIn())
                 {
-                    return NotFound("找不到此購物車。");
-                }
-
-                var newCartItems = new List<CartItem>();
-
-                foreach (var item in cartViewModel.Items)
-                {
-                    var product = await _context.Products.FindAsync(item.ProductId);
-
-                    if (product == null)
+                    var memberId = HttpContext.Session.GetInt32("MemberId");
+                    var cart = await _context.Carts
+                                   //.FromSqlInterpolated($@"SELECT * FROM Cart WITH (UPDLOCK) WHERE MemberId = {memberId}")
+                                   .Include(c => c.CartItems)
+                                   .FirstOrDefaultAsync();
+                    if (cart == null)
                     {
-                        return NotFound($"Product with ID {item.ProductId} not found.");
+                        return NotFound("找不到此購物車。");
                     }
 
-                    var cartItem = new CartItem
+                    _context.CartItems.RemoveRange(cart.CartItems);
+                    await _context.SaveChangesAsync();
+
+                    var newCartItems = new List<CartItem>();
+
+                    foreach (var item in cartViewModel.Items)
                     {
-                        CartId = cart.CartId,
-                        ProductId = item.ProductId,
-                        Quantity = item.Quantity,
-                        ProductName = item.ProductName,
-                        UnitPrice = item.UnitPrice,
-                    };
+                        var product = await _context.Products.FindAsync(item.ProductId);
 
-                    newCartItems.Add(cartItem);
-                }
+                        if (product == null)
+                        {
+                            return NotFound($"Product with ID {item.ProductId} not found.");
+                        }
 
-                foreach (var newItem in newCartItems)
+                        var cartItem = new CartItem
+                        {
+                            CartId = cart.CartId,
+                            ProductId = item.ProductId,
+                            Quantity = item.Quantity,
+                            ProductName = item.ProductName,
+                            UnitPrice = (int)item.UnitPrice,
+                        };
+
+                        newCartItems.Add(cartItem);
+                    }
+
+                    await _context.CartItems.AddRangeAsync(newCartItems);
+                    await _context.SaveChangesAsync();
+                    //transaction.Commit(); // 提交事務，解除鎖定
+
+                    return Ok();
+                    }
+                else
                 {
-                    cart.CartItems.Add(newItem);
+                    var cart = HttpContext.Session.Get<CartViewModel>("Cart") ?? new CartViewModel();
+
+                    cart.Items.Clear();
+
+                    foreach (var item in cartViewModel.Items)
+                    {
+                        var cartItem = new CartItemViewModel
+                        {
+                            ProductId = item.ProductId,
+                            Quantity = item.Quantity,
+                            ProductName = item.ProductName,
+                            UnitPrice = item.UnitPrice,
+                        };
+                        cart.Items.Add(cartItem);
+                    }
+
+                    HttpContext.Session.Set("Cart", cart);
+
+                    return Ok();
                 }
+            }           
 
-                await _context.SaveChangesAsync();
+            //catch (DbUpdateConcurrencyException ex)
+            //{
+            //    // 樂觀併發控制例外處理
+            //    _logger.LogWarning(ex, "Concurrency error occurred while updating cart. Retrying...");
 
-                return Ok();
-            }
-            else
+            //    // 回滾事務
+            //    transaction.Rollback();
+
+            //    // 重新讀取資料並再次進行更新
+            //    return await UpdateCart(cartViewModel);
+            //}
+            catch (Exception ex)
             {
-                var cart = new CartViewModel();
-                foreach (var item in cartViewModel.Items)
-                {
-                    var cartItem = new CartItemViewModel
-                    {
-                        ProductId = item.ProductId,
-                        Quantity = item.Quantity,
-                        ProductName = item.ProductName,
-                        UnitPrice = item.UnitPrice,
-                    };
-                    cart.Items.Add(cartItem);
-                }
-                HttpContext.Session.Set("Cart", cart);
-
-                return Ok();
+                _logger.LogError(ex, "Error updating cart.");
+                //transaction.Rollback(); // 回滾事務
+                return StatusCode(500, "Internal server error");
             }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error updating cart.");
-            return StatusCode(500, "Internal server error");
-        }
     }
-
 
     [HttpGet]
     public IActionResult GetCartOrCreate()
@@ -376,14 +393,15 @@ public class OrderAPIController : Controller
                 var cartItemViewModels = cart.CartItems.Select(item => new CartItemViewModel
                 {
                     ProductId = item.ProductId,
-                    ProductName = item.Product?.ProductName,
-                    UnitPrice = item.Product.UnitPrice,
+                    ProductName = item.ProductName,
+                    UnitPrice = item.UnitPrice,
                     Quantity = (int)item.Quantity
                 }).ToList();
 
                 var cartViewModel = new CartViewModel
                 {
                     CartId = cart.CartId,
+                    MemberId = cart.MemberId,
                     Items = cartItemViewModels
                 };
 
@@ -420,27 +438,28 @@ public class OrderAPIController : Controller
                 {
                     return Ok(cart.CartId);
                 }
-
-                var newCart = new Cart
+                else
                 {
-                    MemberId = memberId
-                };
-                _context.Carts.Add(newCart);
-                _context.SaveChanges();
+                    var newCart = new Cart
+                    {
+                        MemberId = memberId
+                    };
+                    _context.Carts.Add(newCart);
+                    _context.SaveChanges();
 
-                return Ok(newCart.CartId);
+                    return Ok(newCart.CartId);
+                }
             }
             else
             {
                 var cart = new CartViewModel();
                 HttpContext.Session.Set("Cart", cart);
 
-                return Ok(cart.CartId);
+                return Ok(cart);
             }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating new cart.");
             return StatusCode(500, "Internal server error");
         }
     }
@@ -453,29 +472,45 @@ public class OrderAPIController : Controller
     {
         try
         {
-            var cart = new Cart
+            var order = new Order
             {
                 MemberId = cartViewModel.MemberId,
+                OrderDate = DateTime.Now,
+                IsTakeway = bool.Parse(HttpContext.Session.GetString("IsTakeaway")),
+                TotalPrice = cartViewModel.Items.Sum(item => item.Quantity * item.UnitPrice), // 計算總價格
+                IsSuccess = false, // 預設為未完成訂單
+                OrderDetails = new List<OrderDetail>(),
+                CustomerCount = null,
+                TableId = null,
+                CampaignDiscount = 0,
+                LevelDiscount = 1,
+                FinalPrice = cartViewModel.Items.Sum(item => item.Quantity * item.UnitPrice)
             };
 
             foreach (var item in cartViewModel.Items)
             {
-                var cartItem = new CartItem
+                var orderDetail = new OrderDetail
                 {
                     ProductId = item.ProductId,
-                    Quantity = item.Quantity
+                    UnitPrice = item.UnitPrice,
+                    Quantity = item.Quantity,
+                    Discount = 1,
+                    SubtotalPrice = (item.Quantity * item.UnitPrice)
                 };
-                cart.CartItems.Add(cartItem);
+                order.OrderDetails.Add(orderDetail);
             }
 
-            _context.Carts.Add(cart);
+            _context.Orders.Add(order);
             _context.SaveChanges();
 
-            return Ok(cart.CartId);
+            // 清空購物車
+            cartViewModel.Items.Clear();
+
+            return Ok(order.OrderId);
         }
         catch (Exception ex)
         {
-            // Log the exception and return an error response
+            _logger.LogError(ex, "Error creating order.");
             return StatusCode(500, "Internal server error");
         }
     }

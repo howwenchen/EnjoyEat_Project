@@ -46,7 +46,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
                 OrderId = od.OrderId,
                 ProductId = od.ProductId,
                 OrderDetailId =od.OrderDetailId,
-                //Quantity = od.Quantity,
+                Quantity = (short)od.Quantity,
                 UnitPrice = od.UnitPrice,
                 Discount = od.Discount,
                 SubtotalPrice = od.SubtotalPrice,

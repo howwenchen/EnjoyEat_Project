@@ -143,6 +143,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\OrderForHere\Data\" />
+    <Folder Include="Models\ViewModel\NewFolder\" />
     <Folder Include="wwwroot\img\AboutUs\" />
   </ItemGroup>
 

@@ -2,7 +2,6 @@
 	{
 	<link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
 	<style>
-
 		.titleName td {
 			font-size: 20px;
 		}
@@ -11,177 +10,235 @@
 			font-size: 18px;
 		}
 
-		.tdContent td:hover {
+		.tdContent :hover {
 			color: wheat;
 		}
+
+		#searchText {
+			margin-left: auto;
+			margin-right: 0px;
+			text-align: center;
+			width: 20%;
+		}
+
+			#searchText input {
+				background-color: #6c757d;
+				color: lightgray;
+				border-radius: 5px;
+				width: 100%;
+				border: 1px solid gray;
+				text-align: center;
+			}
 
 	</style>
 }
 
-<div id="app" class="container">
-	<div class="form-group">
-		@*新增按鍵*@
-		<!-- Modal trigger button -->
-		<button class="btn btn-primary btn-lg" @@click="showInsert()" data-toggle="modal" style="margin: 33px 0px">
-			<span><i class="fa-solid fa-circle-plus"></i> 新增</span>
-		</button>
-		@*篩選欄位*@
-		@*<div class="col-md-9">
-		<div class="row" style="width:40%; margin-right:auto; margin-left:0px;">
-		<label class="col-md-5">搜尋員工:</label>
-		<input class="form-contro col-md-5" style="width:150px; margin-left: -50px; margin-bottom:20px;" placeholder="輸入關鍵字"
-		v-model="filter" @@keyup="filterEmployeeManagementDTO()" />
+<div class="container-fluid pt-4 px-4">
+	<div id="app" class="bg-secondary rounded h-100 p-4">
+		<h6 class="mb-4">員工管理</h6>
+		<div class="col-12 row">
+			@*新增按鍵*@
+			<!-- Modal trigger button -->
+			<button class="btn btn-primary col-md-1" @@click="showInsert()" data-toggle="modal" >
+				<span><i class="fa-solid fa-circle-plus fa-beat"></i> 新增</span>
+			</button>
+			@*篩選欄位*@
+			<input class="form-control col-md-4" id="searchText" placeholder="搜尋" v-model="filter" @@keyup="filterEmployeeManagementDTO" />
 		</div>
-		</div>*@
-	</div>
-	@*表格標題*@
-	<div class="form-group">
-		<table class="table table-striped">
-			<thead>
-				<tr class="titleName">
-					<td>員工編號</td>
-					<td>員工帳號</td>
-					<td>員工姓名</td>
-					<td>生日</td>
-					<td>聯絡方式</td>
-					<td>Email</td>
-					<td>詳細資料</td>
-					<td>薪資</td>
-					<td>編輯</td>
-				</tr>
-			</thead>
-			@*表格內容*@
-			<tbody>
-				<tr v-for="item in EmployeeManagementDTO" class="tdContent">
-					<td>{{item.employeeId}}</td>
-					<td>{{item.account}}</td>
-					<td>{{item.name}}</td>
-					<td>{{getFormattedDate(item.birthday)}}</td>
-					<td>{{item.phone}}</td>
-					<td>{{item.email}}</td>
-					<td>詳細資料</td>
-					<td>薪資</td>
-					<td>
-						<a class="btn edit" @@click="edit(item.employeeId)"><i class="fa-solid fa-pen" style="color:yellow;" title="Edit"></i></a>
-						<a class="btn delete" @@click="deleteEmp(item.employeeId)"><i class="fa-solid fa-trash-can" title="Delete" style="color:red;"></i></a>
-					</td>
-				</tr>
-			<tbody>
-		</table>
-	</div>
-	@*新增用的互動視窗*@
-	<div class="form-group">
-		<div class="modal fade" id="insertModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="modalTitleId" style="color: black;">新增員工資訊</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body" style="color:white; background-color: brown;">
-						@*頁面內容Body*@
-						<div class="form-group">
-							<label class="form-label">員工姓名:</label>
-							<input class="form-control" v-model="name" />
+		@*表格標題*@
+		<div class="form-group">
+			<table class="table table-striped">
+				<thead>
+					<tr class="titleName">
+						<td>員工編號</td>
+						<td>職稱</td>
+						<td>員工帳號</td>
+						<td>員工姓名</td>
+						<td>聯絡方式</td>
+						<td>Email</td>
+						<td>薪資</td>
+						<td>編輯</td>
+					</tr>
+				</thead>
+				@*表格內容*@
+				<tbody>
+					<tr v-for="item in EmployeeManagementDTO" class="tdContent">
+						<td>{{item.employeeId}}</td>
+						<td>{{item.role}}</td>
+						<td>{{item.account}}</td>
+						<td>{{item.name}}</td>
+						<td>{{item.phone}}</td>
+						<td>{{item.email}}</td>
+						<td><a class="btn edit" @@click="salaryEdit(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="EditSalary"></i></a></td>
+						<td>
+							<a class="btn edit" @@click="edit(item.employeeId)"><i class="fa-solid fa-pen" style="color:lawngreen;" title="Edit"></i></a>
+							<a class="btn delete" @@click="deleteEmp(item.employeeId)"><i class="fa-solid fa-trash-can fa-fade" title="Delete" style="color:red;"></i></a>
+						</td>
+					</tr>
+				<tbody>
+			</table>
+		</div>
+		@*新增用的互動視窗*@
+		<div class="">
+			<div class="modal fade" id="insertModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalTitleId" style="color: black;">新增員工資訊</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
-						<div class="form-group">
-							<label class="form-label">員工帳號:</label>
-							<input class="form-control" v-model="account" />
+						<div class="modal-body" style="color:white; background-color: brown;">
+							@*頁面內容Body*@
+							<div class="form-group">
+								<label class="form-label">員工姓名:</label>
+								<input class="form-control" v-model="name" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">員工帳號:</label>
+								<input class="form-control" v-model="account" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">員工密碼:</label>
+								<input class="form-control" v-model="password" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">性別:</label>
+								<select class="form-control form-select" id="selectGender" v-model="gender" style="background-color: #000;">
+									<option :value="gd.value" v-for="gd in selectGender">{{gd.text}}</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label class="form-label">聯絡方式:</label>
+								<input class="form-control" v-model="phone" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">Email:</label>
+								<input class="form-control" v-model="email" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">職稱:</label>
+								<select class="form-control form-select" id="selectRole" v-model="role" style="background-color: #000;">
+									<option :value="rl.value" v-for="rl in selectRole">{{rl.text}}</option>
+								</select>
+							</div>
 						</div>
-						<div class="form-group">
-							<label class="form-label">員工密碼:</label>
-							<input class="form-control" v-model="password" />
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+							<button type="button" @@click="createEmp" class="btn btn-primary">新增</button>
 						</div>
-						<div class="form-group">
-							<label class="form-label">性別:</label>
-							<input class="form-control" v-model="gender" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">生日:</label>
-							<input class="form-control" v-model="birthday" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">聯絡方式:</label>
-							<input class="form-control" v-model="phone" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">Email:</label>
-							<input class="form-control" v-model="email" />
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-						<button type="button" @@click="createEmp" class="btn btn-primary">新增</button>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	@*編輯用的互動視窗*@
-	<div class="form-group">
-		<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="modalTitleId" style="color: black;">編輯員工資訊</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body" style="color:white; background-color: brown;">
-						@*頁面內容Body*@
-						<div class="form-group">
-							<label class="form-label">員工姓名:</label>
-							<input class="form-control" v-model="name" />
+		@*編輯用的互動視窗*@
+		<div class="">
+			<div class="modal fade" id="editModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalTitleId" style="color: black;">編輯員工資訊</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
-						<div class="form-group">
-							<label class="form-label">員工帳號:</label>
-							<input class="form-control" v-model="account" />
+						<div class="modal-body" style="color:white; background-color: brown;">
+							@*頁面內容Body*@
+							<div class="form-group">
+								<label class="form-label">員工姓名:</label>
+								<input class="form-control" v-model="name" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">員工帳號:</label>
+								<input class="form-control" v-model="account" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">性別:</label>
+								<select class="form-control form-select" id="selectGender" v-model="gender" style="background-color: #000;">
+									<option :value="gd.value" v-for="gd in selectGender">{{gd.text}}</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label class="form-label">聯絡方式:</label>
+								<input class="form-control" v-model="phone" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">Email:</label>
+								<input class="form-control" v-model="email" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">職稱:</label>
+								<select class="form-control form-select" id="selectRole" v-model="role" style="background-color: #000;">
+									<option :value="rl.value" v-for="rl in selectRole">{{rl.text}}</option>
+								</select>
+							</div>
 						</div>
-						<div class="form-group">
-							<label class="form-label">員工密碼:</label>
-							<input class="form-control" v-model="password" />
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+							<button type="button" @@click="update()" class="btn btn-primary">儲存</button>
 						</div>
-						<div class="form-group">
-							<label class="form-label">性別:</label>
-							<input class="form-control" v-model="gender" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">生日:</label>
-							<input class="form-control" v-model="birthday" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">聯絡方式:</label>
-							<input class="form-control" v-model="phone" />
-						</div>
-						<div class="form-group">
-							<label class="form-label">Email:</label>
-							<input class="form-control" v-model="email" />
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-						<button type="button" @@click="update()" class="btn btn-primary">儲存</button>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<!-- DeleteModal -->
-	<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel" style="color:black;">刪除員工資訊</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		@*薪資用的互動視窗*@
+		<div class="">
+			<div class="modal fade" id="salaryModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="modalTitleId" style="color: black;">員工薪資資訊</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body" style="color:white; background-color: brown;">
+							@*頁面內容Body*@
+							<div class="form-group">
+								<label class="form-label" :value="role">職稱:</label>
+								<span>{{ role }}</span>
+							</div>
+							<div class="form-group">
+								<label class="form-label">基本薪資:</label>
+								<input class="form-control" v-model="basicSalary" />
+							</div>
+							<div class="form-group">
+								<label class="form-label">表現評比:</label>
+								<select class="form-control form-select" id="selectPerformance" v-model="performance" style="background-color: #000;">
+									<option :value="pr.value" v-for="pr in selectPerformance">{{pr.text}}</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label class="form-label">額外獎金:</label>
+								<input class="form-control" :value="getBonusAmount" style="background-color: #000;" readonly />
+							</div>
+							<div class="form-group" style="margin-top:10px; font-size:25px">
+								<label class="form-label">總薪資:</label>
+								<span>{{ totalSalaryCount }}</span>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+							<button type="button" @@click="updateSalary()" class="btn btn-primary">儲存</button>
+						</div>
+					</div>
 				</div>
-				<div class="modal-body" style="font-size: 18px; display: inline-block;">
-					你確定要刪除? <br />
-					員工編號: {{employeeId}}<br />
-					員工姓名: {{name}}<br />
-					員工帳號: {{account}}
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" @@click="deleteComfirm()">確定</button>
+			</div>
+		</div>
+		<!-- 刪除用的互動視窗 -->
+		<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="exampleModalLabel" style="color:black;">刪除員工資訊</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body" style="font-size: 18px; display: inline-block;">
+						你確定要刪除? <br />
+						員工編號: {{employeeId}}<br />
+						職稱: {{role}}<br />
+						員工姓名: {{name}}<br />
+						員工帳號: {{account}}
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary" @@click="deleteComfirm()">確定</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -200,18 +257,51 @@
 			el: '#app',
 			data: {
 				EmployeeManagementDTO: [],
+				filter: '',
 				employeeId: '',
+				role: '',
+				selectRole: [{ value: 'manager', text: '主管' }, { value: 'staff', text: '員工' }],
 				name: '',
 				account: '',
-				password:'',
+				password: '',
 				gender: '',
-				birthday: '',
+				selectGender: [{ value: 'Male', text: 'Male' }, { value: 'Female', text: 'Female' }],
 				email: '',
 				phone: '',
+				basicSalary: 0,
+				bonus: '',
+				performance: '',
+				selectPerformance: [{ value: '甲', text: '甲' }, { value: '乙', text: '乙' }, { value: '丙', text: '丙' }],
+				totalSalary: '',
+				cookies: ''
 			},
 			mounted: function () {
 				let self = this;
 				self.getEmp();
+			},
+			computed: {
+				getBonusAmount() {
+					let self = this;
+					if (self.performance === "甲") {
+						return "3000";
+					}
+					if (self.performance === "乙") {
+						return "2000";
+					}
+					if (self.performance === "丙") {
+						return "1000";
+					}
+				},
+				totalSalaryCount() {
+					let self = this;
+					var basicSalary = parseInt(self.basicSalary);
+					var bonusAmount = parseInt(self.getBonusAmount);
+					if (isNaN(basicSalary) || isNaN(bonusAmount)) {
+						return 0;
+					}
+					var totalS = (basicSalary + bonusAmount).toString();
+					return totalS;
+				}
 			},
 			methods: {
 				getEmp: function () {
@@ -224,223 +314,240 @@
 							console.error(error);
 						});
 				},
+				filterEmployeeManagementDTO: function () {
+					let self = this;
+					var request = {};
+					request.employeeId = isNaN(Number(self.filter)) ? -1 : Number(self.filter);
+					request.name = request.account = request.email = request.phone = request.role = self.filter;
+					axios.post('/api/EmployeeManagementApi/FilterEmployees', request)
+						.then(response => {
+							self.EmployeeManagementDTO = response.data;
+						})
+				},
 				update: function () {
 					let self = this;
 					var request = {
 						employeeId: self.employeeId,
+						role: self.role,
 						name: self.name,
 						account: self.account,
-						password: self.password,
 						gender: self.gender,
-						birthday: self.birthday,
 						email: self.email,
-						phone: self.phone
+						phone: self.phone,
 					};
 					console.log(request);
 					axios.post("/api/EmployeeManagementApi/Edit", request)
 						.then(response => {
+							self.role = ""
 							self.name = ""
 							self.account = ""
-							self.password = ""
 							self.gender = ""
-							self.birthday = ""
 							self.email = ""
 							self.phone = ""
 							$("#editModal").modal("hide");
 							if (response.data) {
-								self.showSweetAlert();
+								self.sweatAlert("success", "編輯成功");
 								self.getEmp();
 								return;
 							}
 						})
 				},
 				edit: function (employeeId) {
-					$("#editModal").modal("show");
 					let self = this;
-					var empIndex = -1;
-					for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
-						var emp = self.EmployeeManagementDTO[i];
-						if (employeeId == emp.employeeId) {
-							empIndex = i;
-							break;
+					//判斷員工權限
+					axios.get('/api/EmployeeManagementApi/GetRoleFromCookie')
+						.then(res => {
+							if (res.data.status === false) {
+								self.sweatAlert("warning", "無此權限，請洽主管單位!!");
+								return;
+							}
+							$("#editModal").modal("show");
+							var empIndex = -1;
+							for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
+								var emp = self.EmployeeManagementDTO[i];
+								if (employeeId == emp.employeeId) {
+									empIndex = i;
+									break;
+								}
+							}
+							if (empIndex !== -1) {
+								var editedEmp = self.EmployeeManagementDTO[empIndex];
+								self.employeeId = editedEmp.employeeId;
+								self.role = editedEmp.role;
+								self.name = editedEmp.name;
+								self.account = editedEmp.account;
+								self.gender = editedEmp.gender;
+								self.email = editedEmp.email;
+								self.phone = editedEmp.phone;
+							}
+						})
+				},
+				salaryEdit: function (employeeId) {
+					let self = this;
+					axios.get('/api/EmployeeManagementApi/GetRoleFromCookie')
+						.then(res => {
+							if (res.data.status === false) {
+								self.sweatAlert("warning", "無此權限，請洽主管單位!!");
+								return;
+							}
+							var empIndex = -1;
+							for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
+								var emp = self.EmployeeManagementDTO[i];
+								if (employeeId == emp.employeeId) {
+									empIndex = i;
+									break;
+								}
+							}
+							if (empIndex !== -1) {
+								var editedSal = self.EmployeeManagementDTO[empIndex];
+								self.employeeId = editedSal.employeeId;
+								self.role = editedSal.role;
+								self.basicSalary = editedSal.basicSalary;
+								self.bonus = editedSal.bonus;
+								self.performance = editedSal.performance;
+								self.totalSalary = editedSal.totalSalary;
+								$("#salaryModal").modal("show");
+							}
+						})
+				},
+				updateSalary: function () {
+					let self = this;
+					var bonusAmount = self.getBonusAmount;
+					var newtotalSalary = self.totalSalaryCount;
+					var request = {
+						employeeId: self.employeeId,
+						basicSalary: self.basicSalary,
+						bonus: bonusAmount,
+						totalSalary: newtotalSalary,
+						performance: self.performance
+					};
+					console.log(request);
+					axios.post("/api/EmployeeManagementApi/EditSalary", JSON.stringify(request), {
+						headers: {
+							'Content-Type': 'application/json'
 						}
-					}
-					if (empIndex !== -1) {
-						var editedEmp = self.EmployeeManagementDTO[empIndex];
-						self.employeeId = editedEmp.employeeId;
-						self.name = editedEmp.name;
-						self.password = editedEmp.password;
-						self.account = editedEmp.account;
-						self.gender = editedEmp.gender;
-						self.birthday = editedEmp.birthday;
-						self.email = editedEmp.email;
-						self.phone = editedEmp.phone;
-					}
+					})
+						.then(response => {
+							self.basicSalary = ""
+							self.bonus = ""
+							self.performance = ""
+							self.totalSalary = ""
+							$("#salaryModal").modal("hide");
+							if (response.data) {
+								self.sweatAlert("success", "編輯成功");
+								self.getEmp();
+								return;
+							}
+						})
 				},
 				deleteEmp: function (employeeId) {
-					$("#deleteModal").modal("show");
 					let self = this;
-					var empIndex = -1;
-					for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
-						var emp = self.EmployeeManagementDTO[i];
-						if (employeeId == emp.employeeId) {
-							empIndex = i;
-							break;
-						}
-					}
-					if (empIndex !== -1) {
-						var editedEmp = self.EmployeeManagementDTO[empIndex];
-						self.employeeId = editedEmp.employeeId;
-						self.name = editedEmp.name;
-						self.account = editedEmp.account;
-						self.password = editedEmp.password;
-						self.gender = editedEmp.gender;
-						self.birthday = editedEmp.birthday;
-						self.email = editedEmp.email;
-						self.phone = editedEmp.phone;
-					}
+					//判斷員工權限
+					axios.get('/api/EmployeeManagementApi/GetRoleFromCookie')
+						.then(res => {
+							if (res.data.status === false) {
+								self.sweatAlert("warning", "無此權限，請洽主管單位!!");
+								return;
+							}
+							$("#deleteModal").modal("show");
+							var empIndex = -1;
+							for (var i = 0; i < self.EmployeeManagementDTO.length; i++) {
+								var emp = self.EmployeeManagementDTO[i];
+								if (employeeId == emp.employeeId) {
+									empIndex = i;
+									break;
+								}
+							}
+							if (empIndex !== -1) {
+								var editedEmp = self.EmployeeManagementDTO[empIndex];
+								self.employeeId = editedEmp.employeeId;
+								self.role = editedEmp.role;
+								self.name = editedEmp.name;
+								self.account = editedEmp.account;
+								self.password = editedEmp.password;
+								self.gender = editedEmp.gender;
+								self.email = editedEmp.email;
+								self.phone = editedEmp.phone;
+							}
+						})
 				},
 				deleteComfirm: function () {
 					let self = this;
 					var request = {
 						employeeId: self.employeeId,
+						role: self.role,
 						name: self.name,
 						account: self.account,
 						password: self.password,
 						gender: self.gender,
-						birthday: self.birthday,
 						email: self.email,
 						phone: self.phone
 					};
-					console.log(request);
 					axios.post("/api/EmployeeManagementApi/DeleteEmp", request)
 						.then(response => {
 							if (response.data) {
 								self.getEmp();
 								$("#deleteModal").modal("hide");
-								self.showSweetAlert3();
+								self.sweatAlert("success", "刪除成功");
 								return;
 							}
 						})
 				},
 				showInsert: function () {
 					let self = this;
-					self.name = ""
-					self.account = ""
-					self.password = ""
-					self.gender = ""
-					self.birthday = ""
-					self.email = ""
-					self.phone = ""
-					$("#insertModal").modal("show");
+					//判斷員工權限
+					axios.get('/api/EmployeeManagementApi/GetRoleFromCookie')
+						.then(res => {
+							if (res.data.status === false) {
+								self.sweatAlert("warning", "無此權限，請洽主管單位!!");
+								return;
+							}
+							self.role = ""
+							self.name = ""
+							self.account = ""
+							self.password = ""
+							self.gender = ""
+							self.email = ""
+							self.phone = ""
+							$("#insertModal").modal("show");
+						})
 				},
 				createEmp: function () {
 					let self = this;
+					if (!self.name || !self.account || !self.password || !self.gender || !self.phone || !self.email || !self.role) {
+						self.sweatAlert('warning', '請確實填寫員工資訊!');
+						return;
+					}
 					var request = {
-						name: "",
-						account: "",
-						password:"",
-						gender: "",
-						birthday: "",
-						email: "",
-						phone: ""
+						role: self.role,
+						name: self.name,
+						account: self.account,
+						password: self.password,
+						gender: self.gender,
+						email: self.email,
+						phone: self.phone,
 					};
 					console.log(request);
 					axios.post("/api/EmployeeManagementApi/CreateEmp", request)
 						.then(response => {
+							console.log(response);
 							$('#insertModal').modal('hide');
 							if (response.data) {
 								self.getEmp();
-								self.showSweetAlert2();
+								self.sweatAlert("success", "新增成功");
 								return;
 							}
 						});
 				},
-				showSweetAlert() {
-					let self = this;
+				sweatAlert: function (icon, text) {
 					Swal.fire({
-						icon: 'success',
-						color: '#FFF',
-						iconColor: '#D8CDB9',
-						background: '#2F4F4F',
-						text: '修改成功 !',
 						position: 'center',
-						confirmButtonText: '確定',
-						customClass: {
-							popup: 'custom-swal-popup'
-						},
-						showConfirmButton: true,
-						allowEscapeKey: false,
-						allowEnterKey: false,
-						allowOutsideClick: false,
-						closeOnClickOutside: false,
-						showClass: {
-							popup: 'animate__animated animate__fadeInDown'
-						},
-						hideClass: {
-							popup: 'animate__animated animate__fadeOutUp'
-						}
+						icon: icon,
+						title: text,
+						showConfirmButton: false,
+						timer: 1500
 					})
 				},
-				showSweetAlert2() {
-					let self = this;
-					Swal.fire({
-						icon: 'success',
-						color: '#FFF',
-						iconColor: '#D8CDB9',
-						background: '#2F4F4F',
-						text: '新增成功 !',
-						position: 'center',
-						confirmButtonText: '確定',
-						customClass: {
-							popup: 'custom-swal-popup'
-						},
-						showConfirmButton: true,
-						allowEscapeKey: false,
-						allowEnterKey: false,
-						allowOutsideClick: false,
-						closeOnClickOutside: false,
-						showClass: {
-							popup: 'animate__animated animate__fadeInDown'
-						},
-						hideClass: {
-							popup: 'animate__animated animate__fadeOutUp'
-						}
-					})
-				},
-				showSweetAlert3() {
-					let self = this;
-					Swal.fire({
-						icon: 'success',
-						color: '#FFF',
-						iconColor: '#D8CDB9',
-						background: '#2F4F4F',
-						text: '刪除成功 !',
-						position: 'center',
-						confirmButtonText: '確定',
-						customClass: {
-							popup: 'custom-swal-popup'
-						},
-						showConfirmButton: true,
-						allowEscapeKey: false,
-						allowEnterKey: false,
-						allowOutsideClick: false,
-						closeOnClickOutside: false,
-						showClass: {
-							popup: 'animate__animated animate__fadeInDown'
-						},
-						hideClass: {
-							popup: 'animate__animated animate__fadeOutUp'
-						}
-					})
-				},
-				getFormattedDate(date) {
-					if (date) {
-						return moment(date).format('YYYY/MM/DD');
-					}
-					return '';
-				},
-
 			}
 		});
 

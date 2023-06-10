@@ -291,9 +291,7 @@ namespace EnjoyEat.Controllers.API
             {
                 OrderId = od.OrderId,
                 ProductId = od.ProductId,
-                Discount = od.Discount,
-                OrderDetailId =od.OrderDetailId,
-                Quantity = od.Quantity,
+                Quantity = (short)od.Quantity,
                 UnitPrice = od.UnitPrice,
                 SubtotalPrice = od.SubtotalPrice,
                 ProductName =od.Product.ProductName,

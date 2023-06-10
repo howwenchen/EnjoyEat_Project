@@ -24,23 +24,28 @@ namespace EnjoyEat
             builder.Services.AddSession(options =>
             {
                 options.Cookie.Name = "Session";
-                options.IdleTimeout = TimeSpan.FromHours(2); // 設定 Session 閒置超時時間
+                options.IdleTimeout = TimeSpan.FromHours(6); // 設定 Session 閒置超時時間
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
             });
-            builder.Services.AddHttpContextAccessor();
+
+			builder.Services.AddHttpContextAccessor();
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(opt =>
             {
-                // Add cookie authentication options here
-            })
+				opt.LoginPath = "/areas/backend/EmployeeLogin/Index";
+				opt.AccessDeniedPath = "/areas/backend/EmployeeManagement/AccessDenied";
+				opt.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+
+			})
             .AddFacebook(facebookOptions =>
             {
                 facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
                 facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
             });
-
+            builder.Services.AddTransient<AesService>();
             builder.Services.AddTransient<HashService>();
             builder.Services.AddTransient<EncryptService>();
+            builder.Services.AddTransient<IPaymentService, PaymentService>();
 
             var app = builder.Build();
 

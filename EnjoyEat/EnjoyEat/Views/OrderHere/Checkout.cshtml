@@ -1,227 +1,381 @@
-﻿@using System.Composition
-@{
-    Layout = "_Layout";
+﻿@model IEnumerable<EnjoyEat.Models.ViewModel.MenuViewModel>
+@section Styles
+    {
+    <link href="~/orderforhere/startordercss/barfiller.css" rel="stylesheet" />
+    <link href="~/orderforhere/startordercss/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/orderforhere/startordercss/elegant-icons.css" rel="stylesheet" />
+    <link href="~/orderforhere/startordercss/flaticon.css" rel="stylesheet" />
+    <link href="~/orderforhere/startordercss/magnific-popup.css" rel="stylesheet" />
+    <link href="~/orderforhere/startordercss/nice-select.css" rel="stylesheet" />
+    <link href="~/orderforhere/startordercss/slicknav.min.css" rel="stylesheet" />
+    <link href="~/css/style.min.css" rel="stylesheet">
+    <link href="~/css/orderstyle.css" rel="stylesheet" />
+    <style>
+        #orderArea {
+            display: flex;
+            justify-content: space-evenly;
+            padding-top: 0;
+        }
+
+        .section-bg {
+            background-color: #1a1814;
+        }
+
+        .product__item {
+            text-align: center;
+        }
+
+        #orderItem {
+            position: sticky;
+            /*top: 116px;*/
+            z-index: 990;
+            transition: top 0.5s ease;
+            border: 2px solid #cda45e;
+            border-radius: 5px;
+            padding: 0px;
+            background-color: #111111
+        }
+
+        .orderRow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        #menu-flters li, #menu-flters-sub li {
+            margin: 0px;
+            list-style: none;
+            line-height: 0.8;
+            cursor: pointer;
+            display: inline-block;
+            padding: 8px 12px 10px 12px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 5px;
+            transition: all ease-in-out .3s;
+            border-radius: 50px;
+            font-family: "Playfair Display",serif;
+        }
+
+        #menu-flters, #menu-flters-sub {
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            width: 50%;
+        }
+
+        .cartIcon {
+            position: absolute;
+            right: 30px;
+            top: 60%;
+            transform: translateY(-50%);
+        }
+
+        .modal-content {
+            background-color: #cda45e;
+        }
+
+        .btn-secondary {
+            color: #fff;
+            background-color: #0c0b09
+        }
+
+            .btn-secondary a {
+                color: #fff;
+            }
+
+        .sub-filter-active {
+            background-color: darkorange;
+            color: #fff;
+            border-radius: 5px;
+            padding: 6px 10px 4px;
+        }
+
+    </style>
 }
 
-@section Styles{
-
-    <link href="~/css/style.css" rel="stylesheet" />
-    <link href="~/css/checkoutpagestyle.css" rel="stylesheet" />
-    <link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
-}
-<content_body id="app">
-    <!--======= Container =======-->
-    <div class="iphone">
-        <header class="form_header ">
-            <h1>Checkout</h1>
-        </header>
-        <div class="container position-relative "
-             data-aos="zoom-in"
-             data-aos-delay="100">
-
-            <div name="content"
-                 oncontextmenu="return false"
-                 class="snippet-body">
-                <!--標題區塊-->
-                <!--分隔線-->
-                <div class="pt-2 border-bottom mb-3"></div>
-                <div class="d-flex flex-column justify-content-between text-dark"
-                     id="order-heading">
-                    <div class="text-uppercase text-center">
-                        <p class="text-dark border border-2">訂單明細</p>
-                    </div>
-                    <div class="row">
-                        <div class="col text-start">訂單編號</div>
-                        <div class="col text-center">桌號</div>
-                        <div class="col text-center">人數</div>
-                    </div>
-                    <div class="row">
-                        <div class="col text-start">{{OrderItem.orderId}}</div>
-                        <div class="col text-center">{{OrderItem.tableId}}</div>
-                        <div class="col text-center">{{OrderItem.customerCount}}</div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col text-start">送出時間</div>
-                        <div class="col text-center">訂單狀態</div>
-                        <div class="col text-center">品項數</div>
-                    </div>
-                    <div class="row">
-                        <div class="col text-start">{{dateformat(OrderItem.orderDate)}}</div>
-                        <div class="col text-center">{{OrderItem.IsSuccess}}</div>
-                        <div class="col text-center">{{OrderItem.totalItems}}</div>
-                    </div>
-                    <!--分隔線-->
-                    <div class="pt-2 border-bottom mb-3"></div>
-                    <!--內容區塊-->
-                    <div class="wrapper">
-                        <div class="table-responsive">
-                            <table class="table table-borderless ">
-                                <thead>
-                                    <tr class="text-uppercase text-muted">
-                                        <th scope="col">餐點清單</th>
-                                        <th scope="col" class="text-center">數量</th>
-                                        <th scope="col" class="text-center">小計</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">
-                                            <span>
-                                                <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                                                     alt="apple"
-                                                     class="rounded-circle"
-                                                     width="30"
-                                                     height="30" />
-                                            </span>Babyblends: 1meal/day
-                                        </th>
-                                        <td> <b>1</b></td>
-                                        <td> <b>$69.86</b></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <span>
-                                                <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                                                     alt="apple"
-                                                     class="rounded-circle"
-                                                     width="30"
-                                                     height="30" />
-                                            </span>Babyblends: 1meal/day
-                                        </th>
-                                        <td><b>1</b></td>
-                                        <td><b>$69.86</b></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <span>
-                                                <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                                                     alt="apple"
-                                                     class="rounded-circle"
-                                                     width="30"
-                                                     height="30" />
-                                            </span>Babyblends: 1meal/day
-                                        </th>
-                                        <td><b>1</b></td>
-                                        <td><b>$69.86</b></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <span>
-                                                <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                                                     alt="apple"
-                                                     class="rounded-circle"
-                                                     width="30"
-                                                     height="30" />
-                                            </span>Babyblends: 1meal/day
-                                        </th>
-                                        <td><b>1</b></td>
-                                        <td><b>$69.86</b></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!--分隔線-->
-                        <div class="pt-2 border-bottom mb-3"></div>
-                        <!--付款選項-->
-                        <fieldset>
-                            <legend>請選擇付款方式</legend>
-                            <div class="row">
-                                <div class="form__radio col mx-2">
-                                    <label for="mastercard">
-                                        <i class="icon fa-regular fa-cash-register"></i>
-                                        內用結帳
-                                    </label>
-                                    <input id="mastercard" name="payment-method" type="radio" />
-                                </div>
-                                <div class="form__radio col mx-2">
-                                    <label for="mastercard">
-                                        <i class="icon fa-regular fa-cash-register"></i>
-                                        線上結帳
-                                    </label>
-                                    <input id="mastercard" name="payment-method" type="radio" />
-                                </div>
-                            </div>
-                        </fieldset>
-                        <!--折扣欄位-->
-                        <div class="text-black py-2" style="font-weight:600;font-size:calc(1.275rem + .3vw)">折扣計算</div>
-                    </div>
-                    <div class="align-items-center pl-3 py-2 mb-2 border-bottom">
-                        <div class="row">
-                            <div class="col">
-                                <div>會員等級折扣</div>
-                                <div>優惠碼折扣</div>
-                            </div>
-                            <div class="col">
-                                <div class="text-end">-{{currency(OrderItem.levelDiscountSum)}}</div>
-                                <div class="text-end">-{{currency(OrderItem.campaignDiscount)}}</div>
-                            </div>
+<div id="app">
+    @* Order Area *@
+    <div class="section-title">
+        <h2>外帶點餐</h2>
+        <p>歡迎查看美味的菜單</p>
+    </div>
+    <!-- 菜單類別選擇列 -->
+    <section id="orderItem" class="menu">
+        <div class="orderRow" data-aos="fade-up" data-aos-delay="100">
+            <!-- 主類別選擇列 -->
+            <ul id="menu-flters">
+                <li v-for="category in categories"
+                    :key="category.categoryId"
+                    v-if="categories"
+                    :value="category.categoryId"
+                    :class="{ 'filter-active': selectedCategoryId === category.categoryId }"
+                    v-on:click="selectedCategoryId = category.categoryId">
+                    {{ category.categoryName }}
+                </li>
+            </ul>
+        </div>
+        <div class="orderRow" data-aos="fade-up" data-aos-delay="100">
+            <!--子類別選擇列-->
+            <ul id="menu-flters-sub">
+                <li v-for="subCategory in filteredSubCategories"
+                    :key="subCategory.subCategoryId"
+                    :value="subCategory.subCategoryId"
+                    :class="{ 'sub-filter-active': selectedSubCategoryId === subCategory.subCategoryId }"
+                    v-on:click="selectedSubCategoryId = subCategory.subCategoryId"
+                    role="button">
+                    {{ subCategory.subCategoriesName }}
+                </li>
+            </ul>
+        </div>
+        <!-- 購物車按鈕 -->
+        <div class="cartIcon">
+            <button class="btn btn-link" type="button" data-bs-toggle="modal" data-bs-target="#cartModal" style="color:#FFFFFF">
+                <i class="fa fa-cart-shopping"></i>
+                <span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle p-2">${{ total }}</span>
+            </button>
+            @*<button class="btn btn-link" type="button" data-bs-toggle="modal" data-bs-target="#RecepitModal" style="color:#FFFFFF">
+            <i class="fa-solid fa-receipt"></i>
+            </button>*@
+        </div>
+    </section>
+    <!-- 菜單顯示區 -->
+    <section class="shop spad menu section-bg" data-aos="fade-up">
+        <div id="orderArea" class="row" data-aos="fade-up" data-aos-delay="100">
+            <div v-for="product in filteredProducts" :key="product.productId" class="col-lg-3 col-md-6 col-sm-6 menu-item">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg">
+                        <img :src="product.mealImg" style="width:200px; border-radius:15px" />
+                        <div class="product__label">
+                            <span>{{getSubCategoryName(product.subCategoryId) }}</span>
                         </div>
                     </div>
-                    <div class="align-items-center py-2 mb-2 border-bottom">
-                        <div class="row">
-                            <div class="col">
-                                <div>訂單總金額</div>
-                                <div>折扣金額</div>
-                                <div class="text-danger" style="font-size:larger">應付金額</div>
-                            </div>
-                            <div class="col">
-                                <div class="text-end">{{currency(OrderItem.totalPrice)}}</div>
-                                <div class="text-end">-{{currency(OrderItem.totalDiscount)}}</div>
-                                <div class="text-end text-danger" style="font-size:larger">{{currency(OrderItem.finalPrice)}}</div>
-                            </div>
+                    <div class="product__item__text">
+                        <h6><a href="#">{{product.productName}}</a></h6>
+                        <div class="product__item__price">${{product.unitPrice}}</div>
+                        <div class="cart_add">
+                            <a href="#" v-on:click="openModal(product)">Add to cart</a>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-danger" style="border-radius: 0.5em;">結帳</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 數量編輯 -->
+    <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">數量編輯</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="product__item__text">
+                        <h4>{{ selectedProduct.productName }}</h4>
+                        <div class="product__item__price text-light ">${{ selectedProduct.unitPrice }}</div>
+                        <br />
+                        <div class="row justify-content-evenly">
+                            <button type="button" class="col-2 btn btn-light btn-sm" v-on:click="removeFromCart(selectedProduct)"><i class="fa fa-minus"></i></button>
+                            <span class="col-2">{{ getQuantity(selectedProduct) }}</span>
+                            <button type="button" class="col-2 btn btn-light btn-sm" v-on:click="addToCart(selectedProduct)"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
+    @* Cart Modal *@
+    <!-- 購物車跳窗 -->
+    <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header border border-dark">
+                    <h5 class="modal-title text-body" id="cartModalLabel">您的購物車內容</h5>
+                    <button type="button" class="close text-body" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-body border border-dark">
+                    <!--購物車品項的標題-->
+                    <div class="row">
+                        <div class="col-1">#</div>
+                        <div class="col-7">餐點</div>
+                        <div class="col-2">價格</div>
+                        <div class="col-2">數量</div>
+                    </div>
+                    <br />
+                    <!-- 購物車品項 -->
+                    <div class="row cart-item" v-for="item in cart" :key="item.productId">
+                        <button class="d-inline-block col-1" v-on:click="removeFromCart(item)"><i class="fa fa-minus"></i></button>
+                        <p class="d-inline-block col-7">{{ item.productName }}</p>
+                        <p class="d-inline-block col-2">{{ currency(item.unitPrice) }}</p>
+                        <p class="d-inline-block col-2"> x {{ item.quantity }}</p>
+                    </div>
+                    <br />
+                    <!-- 購物車總金額 -->
+                    <p>總餐點數量: {{ totalQuantity }}</p>
+                    <p>總金額: {{ currency(total) }}</p>
+
+                </div>
+                <div class="modal-footer text-body">
+
+                    <!-- 結帳提交 -->
+                    <button class="btn btn-dark" v-on:click="submit">結帳</button>
+                    <button class="btn btn-dark" data-bs-dismiss="modal">繼續點餐</button>
+
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- End Container -->
 
-</content_body>
-
-@section Scripts{
-    <script src="~/js/main.js"></script>
-    <script src="~/font-awesome/js/all.min.js"></script>
-
+</div>
+@section Scripts
+    {
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <script src="~/orderforhere/startorderjs/jquery.barfiller.js"></script>
+    <script src="~/orderforhere/startorderjs/jquery.magnific-popup.min.js"></script>
+    <script src="~/orderforhere/startorderjs/jquery.nicescroll.min.js"></script>
+    <script src="~/orderforhere/startorderjs/jquery.slicknav.js"></script>
+    <script src="~/orderforhere/startorderjs/jquery.nice-select.min.js"></script>
+    <script src="~/orderforhere/startorderjs/jquery-3.3.1.min.js"></script>
     <script>
-        const app = new Vue({
+        window.addEventListener('scroll', () => {
+            const element = document.querySelector('#orderItem');
+            const scrollPosition = window.scrollY;
+            if (window.innerWidth > 990) {
+                element.style.top = scrollPosition < 530
+                    ? '116px' : '0px';
+            }
+            if (window.innerWidth <= 990 && window.innerWidth > 274) {
+                element.style.top = scrollPosition < 450 ? '60px' : '0px';
+            }
+            if (window.innerWidth <= 274) {
+                element.style.top = scrollPosition < 450 ? '88px' : '0px';
+            }
+        });
+        Vue.config.devtools = true;
+        var app = new Vue({
             el: '#app',
             data: {
-                OrderItem: {},
-                MemberId: '20230006', //等購物車寫完要改掉，memberId要從購物車傳過來
+                memberId: '',
+                products: [],
+                cart: [],
+                cartId: '',
+                total: 0,
+                selectedCategoryId: '', // 選擇的大分類
+                selectedSubCategoryId: '', // 選擇的子分類
+                selectedProduct: [], // 選擇的產品
+                categories: [], // 主類別清單
             },
-            created: function () {
-                this.getLatestOrderId();
+            computed: {
+                //利用flatmap+filter方法將符合目前所選擇大分類的對應子分類取出
+                filteredSubCategories() {
+                    if (this.selectedCategoryId) {
+                        return this.categories.flatMap(category => category.subCategories).filter(subCategory => subCategory.categoryId === this.selectedCategoryId);
+                    }
+                    return [];
+                },
+
+                //利用filter方法將符合目前所選擇子分類的對應產品取出
+                filteredProducts() {
+                    if (this.selectedSubCategoryId) {
+                        return this.products.filter(product => product.subCategoryId === this.selectedSubCategoryId);
+                    }
+                    return [];
+                },
+
+                //計算購物車內容的總餐點數量
+                totalQuantity() {
+                    if (this.cart) {
+                        return this.cart.reduce((sum, item) => sum + item.quantity, 0);
+                    }
+                    return 0;
+                }
             },
             methods: {
-                getLatestOrderId: function () {
-                    axios.get("/CheckoutPage/GetLatestOrder/" + this.MemberId)//等購物車寫完要拿掉this.
+                //添加到購物車
+                addToCart(product) {
+                    if (!product || !product.productId || !product.unitPrice) {
+                        alert('無效的商品資訊。');
+                        return;
+                    }
+                    let cartItem = this.cart.find(item => item.productId === product.productId);
+                    if (cartItem) {
+                        this.$set(cartItem, 'quantity', cartItem.quantity + 1);
+                    } else {
+                        this.cart.push({
+                            ...product,
+                            quantity: 1,
+                            memberId: this.memberId,
+                            unitPrice: product.unitPrice,
+                            cartId: this.cartId,
+                            productName: product.productName
+                        });
+                    }
+                    this.total += product.unitPrice;
+                    this.updateCartTotal();
+                    axios.post('/api/Order/AddToCart', {
+                        MemberId: this.memberId,
+                        ProductId: product.productId,
+                        ProductName: product.productName,
+                        Quantity: 1,
+                        UnitPrice: product.unitPrice
+                    })
                         .then(response => {
-                            this.getOrderItem(response.data);
+                            console.log(response.data);
                         })
-                        .catch(error => {
-                            console.log(error);
-                        })
+                        .catch(err => console.error(err));
                 },
-                getOrderItem: function (orderId) {
-                    axios.get("/CheckoutPage/GetOrder/" + orderId)
-                        .then(response => {
-                            this.OrderItem = response.data;
-                            this.OrderItem.totalDiscount = this.OrderItem.totalPrice - this.OrderItem.finalPrice;
-                            this.OrderItem.levelDiscountSum = (this.OrderItem.totalPrice - this.OrderItem.campaignDiscount)
-                                * (1 - this.OrderItem.levelDiscount);
+                //從購物車移除
+                removeFromCart(product) {
+                    let cartItem = this.cart.find(item => item.productId === product.productId);
+                    if (cartItem) {
+                        cartItem.quantity--;
+                        if (cartItem.quantity === 0) {
+                            this.cart = this.cart.filter(item => item.productId !== product.productId);
+                        }
+                        this.total -= product.unitPrice;
+                        this.updateCartTotal();
+                        axios.post('/api/Order/RemoveFromCart', {
+                            MemberId: this.memberId,
+                            ProductId: product.productId,
+                            ProductName: product.productName,
+                            Quantity: 1,
+                            UnitPrice: product.unitPrice
                         })
-                        .catch(error => {
-                            console.log(error);
-                        })
+                            .catch(err => console.error(err));
+                    }
+                },
+                //更新購物車金額
+                updateCartTotal() {
+                    this.total = this.cart.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
+                },
+                //取得餐點數量
+                getQuantity(product) {
+                    if (!product || !product.productId) {
+                        return 0;
+                    }
+                    let cartItem = this.cart.find(item => item.productId === product.productId);
+                    return cartItem ? cartItem.quantity : 0;
+                },
+                // 取得子分類名稱
+                getSubCategoryName(subCategoryId) {
+                    const subCategory = this.categories.flatMap(category => category.subCategories).find(subCategory => subCategory.subCategoryId === subCategoryId);
+                    return subCategory ? subCategory.subCategoriesName : '';
+                },
+                // 取得產品
+                openModal(product) {
+                    this.selectedProduct = product;
+                    $('#productModal').modal('show');
                 },
                 currency: function (value) {
-                    if (typeof value !== "number") {
-                        return value;
-                    }
                     var formatter = new Intl.NumberFormat('zh-TW', {
                         style: 'currency',
                         currency: 'TWD',
@@ -229,15 +383,74 @@
                     });
                     return formatter.format(value);
                 },
-                dateformat: function (date) {
-                    var formattedDateTime = date.replace('T', ' ');
-                    return formattedDateTime;
+                //使用者按下提交按鈕後，把購物車資料送出，並且清空購物車資料(watch的cart會同步把後台購物車清空）
+                submit() {
+                    if (this.cart.length === 0) {
+                        alert('您的購物車是空的，請先添加商品。');
+                        return;
+                    }
+                    axios.post('/api/Order/CreateOrder', { MemberId: this.memberId, Items: this.cart })
+                        .then(response => {
+                            alert('訂單已送出');
+                            this.cart = [];
+                            this.total = 0;
+                            window.location.href = '/OrderTogo/Checkout/' + response.data;
+                        }).catch(error => {
+                            alert('送出失敗');
+                            console.log(error);
+                        });
+                }
+            },
+            watch: {
+                //監聽大分類的變化，如果大分類被賦予新值，則預設顯示對應的第一個子分類
+                selectedCategoryId: function (newValue) {
+                    if (newValue) {
+                        let category = this.categories.find(category => category.categoryId === newValue);
+                        if (category && category.subCategories && category.subCategories.length > 0) {
+                            this.selectedSubCategoryId = category.subCategories[0].subCategoryId;
+                        }
+                    }
+                },
+                //監聽購物車內容的變化，並將變化後的內容傳送至前端
+                cart: {
+                    handler: function (after, before) {
+                        axios.post('/api/Order/UpdateCart', { cartViewModel: after })
+                            .then(response => {
+                                console.log(response);
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                    },
+                    deep: true
                 }
 
-            }
+            },
+            created: function () {
+                axios.get('/api/Order/GetMemberId')
+                    .then(response => {
+                        this.memberId = response.data;
+                    })
+                    .catch(err => console.error(err));
+                axios.get('/api/Order/CategoriesWithSubs')
+                    .then(response => this.categories = response.data)
+                    .catch(err => {
+                        console.error(err);
+                        alert('無法獲取菜單類別，請稍後再試。');
+                    });
+                axios.get('/api/Order/Products')
+                    .then(response => this.products = response.data)
+                    .catch(err => console.error(err));
+                axios.get('/api/Order/GetCartOrCreate')
+                    .then(response => {
+                        this.cart = response.data.items;
+                        this.cartId = response.data.cartId;
+                        this.updateCartTotal();
+                    })
+                    .catch(error => {
+                        console.error('獲取或創建購物車失敗:', error);
+                    });
+            },
         });
     </script>
-
-
-
-}
+    }
