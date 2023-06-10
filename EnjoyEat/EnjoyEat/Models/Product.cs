@@ -13,7 +13,7 @@ namespace EnjoyEat.Models
 
         public int ProductId { get; set; }
         public string? MealImg { get; set; }
-        public string ProductName { get; set; } 
+        public string ProductName { get; set; } = null!;
         public short UnitPrice { get; set; }
         public short Costs { get; set; }
         public short? Stock { get; set; }
