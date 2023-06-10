@@ -49,6 +49,7 @@ namespace EnjoyEat.Controllers.API
 				ReservationTime = r.ReservationTime,
 				NumberofAdultGuest = r.NumberofAdultGuest,
 				NumberofKidGuest = r.NumberofKidGuest,
+				Note=r.ReservationInformation.Note,
 			}).ToList();
 			return Ok(reservationInfo);
 		}
