@@ -1,5 +1,8 @@
 ﻿@section Styles{
     <style>
+        .btn{
+            margin:5px;
+        }
         .new {
             margin-left: 10px;
         }
@@ -63,7 +66,6 @@
                             <th scope="col">人數</th>
                             <th scope="col">內用/外帶</th>
                             <th scope="col">桌號</th>
-                            <th scope="col">消費總額</th>
                             <th scope="col">是否結帳</th>
                             <th scope="col">會員折扣</th>
                             <th scope="col">最終金額</th>
@@ -80,7 +82,6 @@
                                 <td v-if="order.isTakeway">外帶</td>
                                 <td v-else>內用</td>
                                 <td>{{order.tableId}}</td>
-                                <td>{{order.totalPrice}}</td>
                                 <td v-if="order.isSuccess">已結帳</td>
                                 <td v-else>未結帳</td>
                                 <td>{{order.levelDiscount}}</td>
@@ -132,7 +133,6 @@
                                             <td>{{order.quantity}}</td>
                                             <td>{{order.unitPrice}}</td>
                                             <td>{{order.discount}}</td>
-                                            <td>{{order.subtotalPrice}}</td>
                                             <td><button class="col btneditproducts btn-sm btn-light btnCheckinModal" type="button" @@click="edit(order)">修改明細</button></td>
                                              <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="deleteDetail(order)">刪除</button></td>
                                             </template>
@@ -186,7 +186,6 @@
                     orderDate: null,
                     customerCount: "",
                     isTakeway: '',
-                    totalPrice: "",
                     levelDiscount: "",
                     countPrice: "",
                 },
@@ -217,7 +216,6 @@
                             var orderDate = item.orderDate.toString();
                             var customerCount = item.customerCount;
                             var isTakeway = item.isTakeway;
-                            var totalPrice = item.totalPrice;
                             var levelDiscount = item.levelDiscount;
                             var countPrice = item.countPrice;
 
@@ -229,7 +227,6 @@
                                 regex.test(orderDate) ||
                                 regex.test(customerCount) ||
                                 regex.test(isTakeway) ||
-                                regex.test(totalPrice) ||
                                 regex.test(levelDiscount) ||
                                 regex.test(countPrice)
                             ) {
