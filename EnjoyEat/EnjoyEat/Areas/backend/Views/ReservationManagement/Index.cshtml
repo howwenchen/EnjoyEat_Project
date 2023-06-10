@@ -1,20 +1,18 @@
 ﻿@section Styles{
     <style>
-        .col-12 {
-            flex: 0 0 auto;
-            width: 100%;
-        }
-        .datepicker {
-            border: 0px;
-        }
 
-        div .mx-datepicker{
-            width: 50%
+        #btngroup {
+            display: flex;
+            white-space: nowrap;
+            min-width: 55px;
         }
-
-        .datepicker input {
-            height: 38px;
-            color: black;
+        #createBtn{
+            width: 10%;
+            box-sizing: border-box;
+            white-space: nowrap; /* 防止文字換行 */
+            overflow: hidden;
+            width:10%;
+            min-width: 50px;
         }
 
         /*搜尋input*/
@@ -23,6 +21,7 @@
             margin-right: 0px;
             text-align: center;
             width: 20%;
+            min-width: 200px;
         }
 
         td input{
@@ -31,16 +30,9 @@
             border-radius: 5px;
             width: 90%;
             border: 1px solid gray;
-            text-align:center;
+            text-align:left;
+            margin:0px;
         }
-
-        #reservationNameInput, #AdultGuestInput
-        ,#KidGuestInput, #TimeInput{
-            width: 70%;
-        }
-
-
-
 
         /*新增訂位訊息的modal*/
         .modal-content {
@@ -70,6 +62,7 @@
             background-color: #E8F0EF;
         }
 
+      
     </style>
 }
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.css">
@@ -82,7 +75,7 @@
             <h6 class="mb-4">訂位系統</h6>
           
             <div class="col-12 row">
-                <button class="btn btn-primary col-md-1" data-bs-toggle="modal" data-bs-target="#createModal">新增</button>
+                <button class="btn btn-primary col-md-1" id="createBtn" data-bs-toggle="modal" data-bs-target="#createModal">新增</button>
                 <input class="form-control col-md-4" type="text" v-model="searchText" id="searchText" placeholder="搜尋" @@keyup="filterReserve" />
             </div>
      
@@ -113,8 +106,10 @@
                                 <td>{{rev.reservationTime}}</td>
                                 <td>{{rev.note}}</td>
                                 <td>
+                                    <div id="btngroup">
                                     <button id="deletebtn" type="button" class="btn btn-secondary btn-sm" @@click="edit(rev.reserveId)">編輯</button>
                                     <button id="editbtn" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="send(rev.reserveId)">刪除</button>
+                                    </div>
                                 </td>
                             </template>
                             <template v-else>
@@ -127,8 +122,10 @@
                                 <td><input id="TimeInput" v-model="rev.reservationTime" /></td>
                                 <td><input id="noteinput" v-model="rev.note" /></td>
                                 <td>
+                                    <div id="btngroup">
                                     <button id="editbtn" type="button" class="btn btn-secondary btn-sm" @@click="update(rev)">儲存</button>
                                     <button id="deletebtn" type="button" class="btn btn-primary btn-sm" @@click="cancel(rev.reserveId)">取消</button>
+                                    </div>
                                 </td>
                             </template>
                         </tr>
@@ -163,7 +160,8 @@
                             <label class="col-md-8 "for="create_reserveName">訂位姓名：</label>
                             <input class="form-control col-md-4" v-model="create.ReserveName" type="text" id="create_reserveName">
                             <label for="create_phone">聯絡電話：</label>
-                            <input class="form-control col-2" v-model="create.Phone" type="text" id="create_phone"  maxlength="10" minlength="10">
+                                <input class="form-control col-2" v-model="create.Phone" type="text" id="create_phone" maxlength="10"
+                                       minlength="">
                                 <label for="create_phone">Email：</label>
                                 <input class="form-control col-2" v-model="create.Email" type="text" id="create_email" >
                             <label>用餐時段：</label>
