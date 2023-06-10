@@ -114,7 +114,7 @@
                                 <td>{{rev.note}}</td>
                                 <td>
                                     <button id="deletebtn" type="button" class="btn btn-secondary btn-sm" @@click="edit(rev.reserveId)">編輯</button>
-                                    <button id="editbtn" type="button" class="btn btn-primary btn-sm" @@click="deleteReserve(rev)">刪除</button>
+                                    <button id="editbtn" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="send(rev.reserveId)">刪除</button>
                                 </td>
                             </template>
                             <template v-else>
@@ -206,6 +206,24 @@
                     </div>
                 </div>
             </div>
+            <!--Delete Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">刪除確認</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            確定要刪除資料嗎?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @@click="deleteReserve()">確定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -231,6 +249,7 @@
                     reservationDate: null,
                     reservationTime: null,
                     note: "",
+                    sendreserveid:"",
                 },
                 people: [
                     { value: '1位大人', txt: '1位大人' },
@@ -403,16 +422,30 @@
                         }
                     );
                 },
-                deleteReserve: function (rev) {
+                send: function (reserveId) {
+                    this.sendreserveid = reserveId;
+                },
+                deleteReserve: function () {
                     //alert("delete")
                     let _this = this;
-                    var ret = confirm("確定要刪除嗎?")
-                    if (ret == true) {
-                        axios.delete(`/api/ReservationManagementApi/DeleteReservationManagement/${rev.reserveId}`)
+                    let reserveId = _this.sendreserveid;
+                        axios.delete(`/api/ReservationManagementApi/DeleteReservationManagement/${reserveId}`)
                             .then(response => {
                                 _this.getreserve();
+                            Swal.fire({
+                                allowOutsideClick: false,
+                                icon: 'success',
+                                color: '#333',
+                                iconColor: '#D8CDB9',
+                                background: '#FFF',
+                                text: '刪除成功',
+                                //text: '',
+                                showConfirmButton: false,
+                                timer: 1000,
+                                position: 'center'
                             })
-                    }
+                            })
+                    
                 },
                 createbook: function () {
                     let _this = this;
