@@ -6,7 +6,7 @@ namespace EnjoyEat.Services
     public class AesService
     {
         //AES加密且轉為16進位
-        public static string AesEncryptToHex(string input, string key, string iv)
+        public string AesEncryptToHex(string input, string key, string iv)
         {
             using Aes aes = Aes.Create();//建立加密物件
             //string轉型到bytes
@@ -35,9 +35,9 @@ namespace EnjoyEat.Services
             return outputData;
         }
         //AES解密
-        public static string AesDecryptFromHex(string hexInput, string key, string iv)
+        public string AesDecryptFromHex(string hexInput, string key, string iv)
         {
-            byte[] inputBytes = ToByteArray(hexInput);
+            byte[] inputBytes = ToByteArray(hexInput); //檢查錯誤
 
             using Aes aes = Aes.Create(); 
             byte[] keyBytes = Encoding.UTF8.GetBytes(key);
@@ -55,31 +55,39 @@ namespace EnjoyEat.Services
             return decryptedString;
         }
 
-        public static byte[] ToByteArray(string hexString)
+        public byte[] ToByteArray(string hexString)
         {
             int length = hexString.Length / 2;
             byte[] byteArray = new byte[length];
             for (int i = 0; i < length; i++)
             {
-                byteArray[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+                if (byte.TryParse(hexString.Substring(i * 2, 2), System.Globalization.NumberStyles.HexNumber, null, out byte result))
+                {
+                    byteArray[i] = result;
+                }
+                else
+                {
+                    throw new FormatException("Invalid hexadecimal string.");
+                }
             }
             return byteArray;
         }
 
+
         //產生檢查碼(SHA256)
-        public static string AddSHA256CheckCode(string input, string hashKey, string hashIV)
+        public string AddSHA256CheckCode(string input, string hashKey, string hashIV)
         {
-            string temp = $"{hashKey}&{input}&{hashIV}";
+            string temp = $"HashKey={hashKey}&{input}&HashIV={hashIV}";
 
             using (SHA256 sha256 = SHA256.Create())
             {
                 byte[] hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(temp));
-                string result = BitConverter.ToString(hashBytes).Replace("-", "").ToUpper();//SHA不分大小寫，此處照文件格式
-                temp += $":{result}";
+                temp = BitConverter.ToString(hashBytes).Replace("-", "").ToUpper();
             }
 
             return temp;
-
         }
+
+
     }
 }

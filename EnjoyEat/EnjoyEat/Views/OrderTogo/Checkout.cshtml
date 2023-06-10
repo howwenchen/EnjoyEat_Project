@@ -47,7 +47,7 @@
                         <div class="col text-center">品項數</div>
                     </div>
                     <div class="row">
-                        <div class="col text-start">{{dateformat(OrderItem.orderDate)}}</div>
+                        <div class="col text-start">{{formattedOrderDate}}</div>
                         <div class="col text-center">{{OrderItem.IsSuccess}}</div>
                         <div class="col text-center">{{OrderItem.totalItems}}</div>
                     </div>
@@ -56,7 +56,7 @@
                     <!--內容區塊-->
                     <div class="wrapper">
                         <div class="table-responsive">
-                            <table class="table table-borderless ">
+                            <table class="table table-borderless">
                                 <thead>
                                     <tr class="text-uppercase text-muted">
                                         <th scope="col">餐點清單</th>
@@ -65,61 +65,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <tr v-for="item in OrderItem.orderDetails" :key="item.productId">
                                         <th scope="row">
                                             <span>
-                                                <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                                                     alt="apple"
-                                                     class="rounded-circle"
-                                                     width="30"
-                                                     height="30" />
-                                            </span>Babyblends: 1meal/day
+                                                <img v-bind:src=item.mealImg alt="img missing" width="80" height="50" />
+                                            </span>
+                                            {{ item.productName }}
                                         </th>
-                                        <td> <b>1</b></td>
-                                        <td> <b>$69.86</b></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <span>
-                                                <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                                                     alt="apple"
-                                                     class="rounded-circle"
-                                                     width="30"
-                                                     height="30" />
-                                            </span>Babyblends: 1meal/day
-                                        </th>
-                                        <td><b>1</b></td>
-                                        <td><b>$69.86</b></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <span>
-                                                <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                                                     alt="apple"
-                                                     class="rounded-circle"
-                                                     width="30"
-                                                     height="30" />
-                                            </span>Babyblends: 1meal/day
-                                        </th>
-                                        <td><b>1</b></td>
-                                        <td><b>$69.86</b></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">
-                                            <span>
-                                                <img src="https://images.pexels.com/photos/206959/pexels-photo-206959.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                                                     alt="apple"
-                                                     class="rounded-circle"
-                                                     width="30"
-                                                     height="30" />
-                                            </span>Babyblends: 1meal/day
-                                        </th>
-                                        <td><b>1</b></td>
-                                        <td><b>$69.86</b></td>
+                                        <td><b>{{ item.quantity }}</b></td>
+                                        <td><b>{{ item.subtotalPrice }}</b></td>
                                     </tr>
                                 </tbody>
+
                             </table>
                         </div>
+                    </div>
+
 
                         <!--分隔線-->
                         <div class="pt-2 border-bottom mb-3"></div>
@@ -129,17 +90,17 @@
                             <div class="row">
                                 <div class="form__radio col mx-2">
                                     <label for="mastercard">
-                                        <i class="icon fa-regular fa-cash-register"></i>
+                                    <i class="fa fa-cash-register"></i>
                                         內用結帳
                                     </label>
-                                    <input id="mastercard" name="payment-method" type="radio" />
+                                    <input id="mastercard" name="payment-method" type="radio" v-model="paymentMethod" value="內用結帳" />
                                 </div>
                                 <div class="form__radio col mx-2">
                                     <label for="mastercard">
-                                        <i class="icon fa-regular fa-cash-register"></i>
+                                    <i class="fa fa-credit-card"></i>
                                         線上結帳
                                     </label>
-                                    <input id="mastercard" name="payment-method" type="radio" />
+                                <input id="mastercard" name="payment-method" type="radio" v-model="paymentMethod" value="線上結帳" />
                                 </div>
                             </div>
                         </fieldset>
@@ -153,7 +114,7 @@
                                 <div>優惠碼折扣</div>
                             </div>
                             <div class="col">
-                                <div class="text-end">-{{currency(OrderItem.levelDiscountSum)}}</div>
+                                <div class="text-end">-{{currency(levelDiscountSum)}}</div>
                                 <div class="text-end">-{{currency(OrderItem.campaignDiscount)}}</div>
                             </div>
                         </div>
@@ -167,17 +128,23 @@
                             </div>
                             <div class="col">
                                 <div class="text-end">{{currency(OrderItem.totalPrice)}}</div>
-                                <div class="text-end">-{{currency(OrderItem.totalDiscount)}}</div>
+                                <div class="text-end">-{{currency(totalDiscount)}}</div>
                                 <div class="text-end text-danger" style="font-size:larger">{{currency(OrderItem.finalPrice)}}</div>
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-danger" style="border-radius: 0.5em;">結帳</button>
+                <button type="button" class="btn btn-danger" style="border-radius: 0.5em;" @@click="processPayment">結帳</button>
                 </div>
             </div>
         </div>
-    </div>
-    </div>
+
+    <form id="payment-form" method="POST" action="https://ccore.newebpay.com/MPG/mpg_gateway" style="display: none;">
+        <input type="hidden" id="MerchantID" name="MerchantID" />
+        <input type="hidden" id="TradeInfo" name="TradeInfo" />
+        <input type="hidden" id="TradeSha" name="TradeSha" />
+        <input type="hidden" id="Version" name="Version" />
+    </form>
+    
     <!-- End Container -->
 
 </content_body>
@@ -187,37 +154,50 @@
     <script src="~/font-awesome/js/all.min.js"></script>
 
     <script>
+        
+
+        Vue.config.devtools = true;
         const app = new Vue({
             el: '#app',
             data: {
-                OrderItem: {},
-                MemberId: '20230006', //等購物車寫完要改掉，memberId要從購物車傳過來
+                OrderItem: [],
+                MemberId: '',
+                OrderId: '',
+                totalDiscount:'',
+                levelDiscountSum:'',
+                paymentMethod:'',
+                onlinePaymentData:[],
+            },
+            computed: {
+                formattedOrderDate() {
+                    var temp = String(this.OrderItem.orderDate);
+                    return temp.replace('T', ' ');}
             },
             created: function () {
-                this.getLatestOrderId();
+                axios.get("/Checkout/GetMemberAndOrder")
+                    .then(response => {
+                        this.MemberId = response.data.memberId;
+                        this.OrderId = response.data.orderId;
+                        console.log(this.OrderId);
+
+                        //確保先抓到memberId並存起來後，才開始抓訂單內容
+                        return axios.get("/Checkout/GetOrderDetails", {
+                            params: {
+                                OrderId: this.OrderId
+                            }
+                        });
+                    })
+                    .then(response => {
+                        this.OrderItem = response.data;
+                        this.totalDiscount = this.OrderItem.totalPrice - this.OrderItem.finalPrice;
+                        this.levelDiscountSum = (this.OrderItem.totalPrice - this.OrderItem.campaignDiscount)
+                            * (1 - this.OrderItem.levelDiscount);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
             },
             methods: {
-                getLatestOrderId: function () {
-                    axios.get("/CheckoutPage/GetLatestOrder/" + this.MemberId)//等購物車寫完要拿掉this.
-                        .then(response => {
-                            this.getOrderItem(response.data);
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        })
-                },
-                getOrderItem: function (orderId) {
-                    axios.get("/CheckoutPage/GetOrder/" + orderId)
-                        .then(response => {
-                            this.OrderItem = response.data;
-                            this.OrderItem.totalDiscount = this.OrderItem.totalPrice - this.OrderItem.finalPrice;
-                            this.OrderItem.levelDiscountSum = (this.OrderItem.totalPrice - this.OrderItem.campaignDiscount)
-                                * (1 - this.OrderItem.levelDiscount);
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        })
-                },
                 currency: function (value) {
                     if (typeof value !== "number") {
                         return value;
@@ -229,9 +209,28 @@
                     });
                     return formatter.format(value);
                 },
-                dateformat: function (date) {
-                    var formattedDateTime = date.replace('T', ' ');
-                    return formattedDateTime;
+                processPayment: function () {
+                    if (this.paymentMethod === '線上結帳') {
+                        axios.post("/Checkout/OnlinePayment", { orderId: this.OrderId })
+                            .then(response => {
+                                this.onlinePaymentData = response.data; 
+
+                                // 填充表單元素
+                                document.getElementById('MerchantID').value = this.onlinePaymentData.MerchantID;
+                                document.getElementById('TradeInfo').value = this.onlinePaymentData.TradeInfo;
+                                document.getElementById('TradeSha').value = this.onlinePaymentData.TradeSha;
+                                document.getElementById('Version').value = this.onlinePaymentData.Version;
+
+                                // FORM SUBMIT換頁
+                                document.getElementById('payment-form').submit();
+
+                            })
+                            .catch(error => {
+                                console.log(error);
+                            });
+                    } else {
+                        // 導向實體結帳頁面
+                    }
                 }
 
             }

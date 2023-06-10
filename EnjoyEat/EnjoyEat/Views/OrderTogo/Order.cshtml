@@ -48,6 +48,16 @@
             margin: 0px; 
             list-style:none;
             line-height: 0.8;
+            cursor: pointer;
+            display: inline-block;
+            padding: 8px 12px 10px 12px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 5px;
+            transition: all ease-in-out .3s;
+            border-radius: 50px;
+            font-family: "Playfair Display",serif;
         }
 
         #menu-flters, #menu-flters-sub {
@@ -115,7 +125,8 @@
                     :key="subCategory.subCategoryId"
                     :value="subCategory.subCategoryId"
                     :class="{ 'sub-filter-active': selectedSubCategoryId === subCategory.subCategoryId }"
-                    v-on:click="selectedSubCategoryId = subCategory.subCategoryId">
+                    v-on:click="selectedSubCategoryId = subCategory.subCategoryId"
+                    role="button">
                     {{ subCategory.subCategoriesName }}
                 </li>
             </ul>
@@ -184,7 +195,7 @@
     @* Cart Modal *@
     <!-- 購物車跳窗 -->
     <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header border border-dark">
                     <h5 class="modal-title text-body" id="cartModalLabel">您的購物車內容</h5>
@@ -228,6 +239,7 @@
 </div>
 @section Scripts
     {
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
     <script src="~/orderforhere/startorderjs/jquery.barfiller.js"></script>
     <script src="~/orderforhere/startorderjs/jquery.magnific-popup.min.js"></script>
     <script src="~/orderforhere/startorderjs/jquery.nicescroll.min.js"></script>
@@ -253,7 +265,7 @@
         var app = new Vue({
             el: '#app',
             data: {
-                memberId:"",
+                memberId: '',
                 products: [],
                 cart: [],
                 cartId: '',
@@ -378,13 +390,15 @@
                         alert('您的購物車是空的，請先添加商品。');
                         return;
                     }
-                    axios.post('/api/Order/CreateOrder', this.cart).then(response => {
+                    axios.post('/api/Order/CreateOrder', { MemberId: this.memberId, Items: this.cart })
+                    .then(response => {
                         alert('訂單已送出');
                         this.cart = [];
                         this.total = 0;
-                        window.location.href = '/CheckoutPage/?orderId=' + response.data.orderId;
+                        window.location.href = '/OrderTogo/Checkout/' + response.data;
                     }).catch(error => {
                         alert('送出失敗');
+                        console.log(error);
                     });
                 }
             },
@@ -416,7 +430,7 @@
             created: function () {
                 axios.get('/api/Order/GetMemberId')
                     .then(response => {
-                        this.memberId = response.data.memberId;
+                        this.memberId = response.data;
                     })
                     .catch(err => console.error(err));
                 axios.get('/api/Order/CategoriesWithSubs')

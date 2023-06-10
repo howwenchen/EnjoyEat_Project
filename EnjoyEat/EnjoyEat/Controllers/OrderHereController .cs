@@ -29,6 +29,10 @@ namespace EnjoyEat.Controllers
         {
             return View();
         }
+        public IActionResult OrderLogin()
+        {
+			return View();
+		}
     }
 }
 

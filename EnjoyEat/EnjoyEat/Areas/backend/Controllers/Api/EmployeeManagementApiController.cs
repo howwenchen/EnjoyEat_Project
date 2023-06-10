@@ -30,8 +30,8 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 				Gender = emp.Gender,
 				Phone = emp.Phone,
 				Email = emp.Email,
-				Birthday = emp.Birthday,
-				Education = emp.Education,
+				//Birthday = emp.Birthday,
+				//Education = emp.Education,
 			}).ToListAsync();
 			return emp;
 		}
@@ -74,7 +74,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 					Account = empDTO.Account,
 					Password = empDTO.Password,
 					Gender = empDTO.Gender,
-					Birthday = empDTO.Birthday,
+					//Birthday = empDTO.Birthday,
 					Phone = empDTO.Phone,
 					Email = empDTO.Email
 				};

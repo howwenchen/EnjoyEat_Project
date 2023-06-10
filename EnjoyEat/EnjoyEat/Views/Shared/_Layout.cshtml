@@ -25,8 +25,9 @@
     <link href="~/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
     <link href="~/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
     <link href="~/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
-
+    <link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="~/font-awesome/css/svg-with-js.min.css" rel="stylesheet" />
+    <link href="~/font-awesome/css/v5-font-face.min.css" rel="stylesheet" />
     <!-- Template Main CSS File -->
     <link href="~/css/style.min.css" rel="stylesheet">
     
@@ -50,7 +51,7 @@
                     <li><a class="nav-link scrollto" asp-controller="Menu" asp-action="Index">菜單</a></li>
                     <li><a class="nav-link scrollto" asp-area="" asp-controller="Home" asp-action="News">最新消息</a></li>
                     <li><a class="nav-link scrollto" asp-area="" asp-controller="Reservations" asp-action="Index">訂位</a></li>
-                    <li><a class="nav-link scrollto" asp-area="OrderForHere" asp-controller="OrderLogin" asp-action="Index">內用點餐</a></li>
+                    <li><a class="nav-link scrollto" asp-area="" asp-controller="OrderHere" asp-action="OrderLogin">內用點餐</a></li>
                     <li><a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index">後臺管理</a></li>
                      @if (User.Identity.IsAuthenticated)
                     {
@@ -171,6 +172,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/axios/axios.min.js"></script>
     <script src="~/vue/vue.min.js"></script>
+    <script src="~/font-awesome/js/all.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 
