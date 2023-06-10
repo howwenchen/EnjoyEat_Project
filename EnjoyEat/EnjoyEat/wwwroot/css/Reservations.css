@@ -1,5 +1,7 @@
-﻿.container label {
-    color: #AAAAAA;
+﻿
+/*reservation index頁面 start*/
+.container label {
+    color: #a4a17e;
     font-family: "Poppins",sans-serif;
     font-size: 14px;
 }
@@ -38,7 +40,7 @@
     box-shadow: none;
     background: #0c0b09;
     border-color: #625b4b;
-    color: #625b4b;
+    color: #aaa;
     font-size: 14px;
 }
 
@@ -55,11 +57,74 @@
     width: 100%;
     text-align: center;
 }
+/*datepicker*/
+.col-12 {
+    flex: 0 0 auto;
+    width: 100%;
+}
 
-/*booking頁面*/
+.datepicker {
+    border: 0px;
+}
+
+    .datepicker input {
+        height: 21px;
+        font-weight: 400;
+        line-height: 1.5;
+        display: block;
+        /* padding: .375rem 2.25rem .375rem .75rem;*/
+        border-radius: 0;
+        box-shadow: none;
+        background: #0c0b09;
+        border-color: #625b4b;
+        color: #aaa !important;
+    }
+
+div #d1 {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+    div #d1 .mx-datepicker {
+        width: 48%;
+        margin-bottom: 10px;
+    }
+
+.mx-calendar-content .cell.disabled {
+    background-color: #F2E6E6;
+    font-weight: lighter;
+}
+
+.mx-datepicker-main {
+    color: #aaa;
+    font-weight: bold;
+}
+
+.mx-calendar-content .cell:hover {
+    background-color: #721B29;
+    color: #aaa;
+}
+
+#datepicker input::placeholder {
+    color: #aaa; /* 在這裡更改顏色為你想要的顏色 */
+}
+
+option:disabled {
+    background-color: #F2E6E6;
+    color: #666;
+}
+
+/*欄位未填寫前button呈現灰色*/
+#finalReservation .nono {
+    background-color: #aaa
+}
+
+/*reservation index頁面 end*/
+
+/*booking頁面 start*/
 #sameMemberDiv {
     height: 40px;
-    color: #bab3a6;
+    color: #FFF;
     padding-left: 15px;
 }
 
@@ -89,73 +154,22 @@ textarea {
     overflow: auto; /*需要時顯示滾輪條  */
     height:150px;
 }
-
-/*datepicker*/
-.col-12 {
-    flex: 0 0 auto;
-    width: 100%;
+#bookinglist input, #bookinglist textarea {
+    color: #aaa, font-size: 14px;
 }
 
-.datepicker {
-    border: 0px;
-}
-
-    .datepicker input {
-        height: 21px;
-        font-weight: 400;
-        line-height: 1.5;
-        display: block;
-        /* padding: .375rem 2.25rem .375rem .75rem;*/
-        border-radius: 0;
-        box-shadow: none;
-        background: #0c0b09;
-        border-color: #625b4b;
-        color: #625b4b;
+    #bookinglist input::placeholder, #bookinglist textarea::placeholder {
+        color: #aaa;
     }
 
-div #d1 {
-    margin-top:10px;
-    margin-left: 10px;
-}
-
-div #d1 .mx-datepicker {
-    width: 48%;
-   margin-bottom:10px;
-}
-
-.mx-calendar-content .cell.disabled {
-    background-color: #F2E6E6;
-    font-weight: lighter;
-}
-
-.mx-datepicker-main {
-    color: #333;
-    font-weight: bold;
-}
-
-.mx-calendar-content .cell:hover {
-    background-color: #721B29;
-    color: white;
-}
-#datepicker input::placeholder {
-    color: #625b4b; /* 在這裡更改顏色為你想要的顏色 */
-}
-
-option:disabled {
-    background-color: #F2E6E6;
-    color: #666;
-}
-
-/*欄位未填寫前button呈現灰色*/
-#finalReservation .nono {
-    background-color: #aaa
-}
+/*booking頁面 end*/
 
 
-/*reservation success頁面*/
+/*reservation success頁面 start*/
+
 
 #bookConfirmInformation {
-    background-color: #696969;
+    background-color: #bab3a6;
     margin-top: 10px;
     margin-bottom: 10px;
     height: 250px;
@@ -186,6 +200,7 @@ option:disabled {
     font-family: "Poppins",sans-serif;
     font-size: 14px;
 }
+/*reservation success頁面 end*/
 
 /*contactUs頁面*/
 #enjoyEatLocation {
@@ -220,7 +235,7 @@ option:disabled {
     font-size: 14px;
     background: #0c0b09;
     border-color: #625b4b;
-    color: #aba18c;
+    color: #aaa;
     height: 44px;
 }
 
