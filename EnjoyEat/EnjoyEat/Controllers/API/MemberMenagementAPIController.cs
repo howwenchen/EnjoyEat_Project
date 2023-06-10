@@ -35,7 +35,6 @@ namespace EnjoyEat.Controllers.API
             this.encrypt = encrypt;
             this.hash = hash;
         }
-
         //註冊會員
         [HttpPost]
         public async Task<string> Register([FromBody]MemberRegisterViewModel model)
@@ -287,11 +286,13 @@ namespace EnjoyEat.Controllers.API
         [HttpGet]
         public IActionResult GetOrder()
         {
-            var memberId = HttpContext.Session.GetInt32("MemberId"); ;
+            var memberId = HttpContext.Session.GetInt32("MemberId"); 
             var orders = db.OrderDetails.Include(x =>x.Product).Where(o => o.Order.MemberId == memberId).Select(od => new MemberOrderDetailViewModel
             {
                 OrderId = od.OrderId,
                 ProductId = od.ProductId,
+                Discount = od.Discount,
+                OrderDetailId =od.OrderDetailId,
                 Quantity = od.Quantity,
                 UnitPrice = od.UnitPrice,
                 SubtotalPrice = od.SubtotalPrice,

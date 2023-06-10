@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\backend\Models\**" />
     <Compile Remove="Views\NewFolder1\**" />
+    <Content Remove="Areas\backend\Models\**" />
     <Content Remove="Views\NewFolder1\**" />
+    <EmbeddedResource Remove="Areas\backend\Models\**" />
     <EmbeddedResource Remove="Views\NewFolder1\**" />
+    <None Remove="Areas\backend\Models\**" />
     <None Remove="Views\NewFolder1\**" />
   </ItemGroup>
 
@@ -138,7 +142,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\backend\Models\" />
     <Folder Include="Areas\OrderForHere\Data\" />
     <Folder Include="wwwroot\img\AboutUs\" />
   </ItemGroup>
@@ -153,6 +156,10 @@
 
   <ItemGroup>
     <Compile Remove="Models\DTO\ProductsDTO.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\backend\Models\**" />
   </ItemGroup>
 
 </Project>
