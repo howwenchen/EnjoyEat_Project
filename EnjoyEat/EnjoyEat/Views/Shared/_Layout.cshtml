@@ -18,19 +18,20 @@
 		  rel="stylesheet">
 	<link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
 
-	<!-- Vendor CSS Files -->
-	<link href="~/vendor/animate.css/animate.min.css" rel="stylesheet">
-	<link href="~/vendor/aos/aos.css" rel="stylesheet">
-	<link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="~/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-	<link href="~/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-	<link href="~/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-	<link href="~/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
-
-	<!-- Template Main CSS File -->
-	<link href="~/css/style.min.css" rel="stylesheet">
-
+    <!-- Vendor CSS Files -->
+    <link href="~/vendor/animate.css/animate.min.css" rel="stylesheet">
+    <link href="~/vendor/aos/aos.css" rel="stylesheet">
+    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="~/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="~/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="~/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href="~/font-awesome/css/svg-with-js.min.css" rel="stylesheet" />
+    <link href="~/font-awesome/css/v5-font-face.min.css" rel="stylesheet" />
+    <!-- Template Main CSS File -->
+    <link href="~/css/style.min.css" rel="stylesheet">
+    
 
 	<!--預設檔案-->
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -45,34 +46,35 @@
 			<!-- Uncomment below if you prefer to use an image logo -->
 			<!-- <a href="index.html" class="logo me-auto me-lg-0"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
-			<nav id="navbar" class="navbar order-last order-lg-0">
-				<ul>
-					<li><a class="nav-link scrollto" asp-area="" asp-controller="AboutUs" asp-action="Index">關於我們</a></li>
-					<li><a class="nav-link scrollto" asp-controller="Menu" asp-action="Index">菜單</a></li>
-					<li><a class="nav-link scrollto" asp-area="" asp-controller="Home" asp-action="News">最新消息</a></li>
-					<li><a class="nav-link scrollto" asp-area="" asp-controller="Reservations" asp-action="Index">訂位</a></li>
-					<li><a class="nav-link scrollto" asp-area="OrderForHere" asp-controller="OrderLogin" asp-action="Index">內用點餐</a></li>
-					@if (User.Identity.IsAuthenticated)
-					{
-						<li><a class="nav-link scrollto" asp-area="" asp-controller="OrderTogo" asp-action="Order">外帶點餐</a></li>
-					}
-					else
-					{
-						<li><a class="nav-link scrollto" asp-area="" asp-controller="OrderTogo" asp-action="Index">外帶點餐</a></li>
-					}
-					<li><a class="nav-link scrollto" asp-controller="ContactUs" asp-action="ContactUs">聯絡我們</a></li>
-					@if (User.Identity.IsAuthenticated)
-					{
-						<li><a class="nav-link scrollto" asp-controller="MemberManagement" asp-action="Index">會員管理</a></li>
-						<li><a class="nav-link scrollto" asp-controller="MemberLogin" asp-action="Logout">會員登出</a></li>
-					}
-					else
-					{
-						<li><a class="nav-link scrollto" asp-controller="MemberLogin" asp-action="Index">會員登入</a></li>
-					}
-				</ul>
-				<i class="bi bi-list mobile-nav-toggle"></i>
-			</nav><!-- .navbar -->
+            <nav id="navbar" class="navbar order-last order-lg-0">
+                <ul>
+                    <li><a class="nav-link scrollto" asp-area="" asp-controller="AboutUs" asp-action="Index">關於我們</a></li>
+                    <li><a class="nav-link scrollto" asp-controller="Menu" asp-action="Index">菜單</a></li>
+                    <li><a class="nav-link scrollto" asp-area="" asp-controller="Home" asp-action="News">最新消息</a></li>
+                    <li><a class="nav-link scrollto" asp-area="" asp-controller="Reservations" asp-action="Index">訂位</a></li>
+                    <li><a class="nav-link scrollto" asp-area="" asp-controller="OrderHere" asp-action="OrderLogin">內用點餐</a></li>
+                    <li><a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index">後臺管理</a></li>
+                     @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a class="nav-link scrollto" asp-area="" asp-controller="OrderTogo" asp-action="Order">外帶點餐</a></li>
+                    }
+                    else
+                    {
+                        <li><a class="nav-link scrollto" asp-area="" asp-controller="OrderTogo" asp-action="Index">外帶點餐</a></li>
+                    }
+                    <li><a class="nav-link scrollto" asp-controller="ContactUs" asp-action="ContactUs">聯絡我們</a></li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a class="nav-link scrollto" asp-controller="MemberManagement" asp-action="Index">會員管理</a></li>
+                        <li><a class="nav-link scrollto" asp-controller="MemberLogin" asp-action="Logout">會員登出</a></li>                       
+                    }
+                    else
+                    {
+                        <li><a class="nav-link scrollto" asp-controller="MemberLogin" asp-action="Index">會員登入</a></li>
+                    }
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
 
 		</div>
 	</header><!-- End Header -->
@@ -153,13 +155,14 @@
 	<script src="~/vendor/swiper/swiper-bundle.min.js"></script>
 
 
-
-	<!-- Template Main JS File -->
-	<script src="~/js/main.js"></script>
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/js/site.js" asp-append-version="true"></script>
-	<script src="~/axios/axios.min.js"></script>
-	<script src="~/vue/vue.min.js"></script>
+ 
+    <!-- Template Main JS File -->
+    <script src="~/js/main.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/axios/axios.min.js"></script>
+    <script src="~/vue/vue.min.js"></script>
+    <script src="~/font-awesome/js/all.min.js"></script>
 
 	@await RenderSectionAsync("Scripts", required: false)
 

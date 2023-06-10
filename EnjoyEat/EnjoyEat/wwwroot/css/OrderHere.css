@@ -1,0 +1,181 @@
+﻿body {
+
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.form-container {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 15px;
+    border: solid 3px darkgoldenrod;
+    text-align: left;
+    width: 100%;
+    max-width: 400px;
+}
+
+    .form-container h2 {
+        margin-bottom: 40px;
+        text-align: center;
+    }
+
+    .form-container label {
+        display: inline-block;
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+
+    .form-container input {
+        display: inline-block;
+        margin-bottom: 10px;
+        font-size: 18px;
+        margin-left: 10px;
+        border-radius: 5px;
+    }
+
+        .form-container input[type="text"],
+        .form-container input[type="tel"] {
+            width: 150px;
+            padding: 5px;
+        }
+
+::-webkit-input-placeholder {
+    font-size: 8px;
+}
+
+.form-container input[type="submit"] {
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.register-button {
+    text-align: left;
+    margin-top: 20px;
+}
+
+    .register-button button {
+        background-color: #c95604;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+.register-info {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.start-order-button {
+    text-align: right;
+    margin-top: 20px;
+}
+
+    .start-order-button button {
+        background-color: #d9832d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+button:hover {
+    background-color: #b8380d;
+}
+
+.dialog-container {
+    display: none;
+    position: fixed;
+    width: 300px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(139, 111, 89);
+    padding: 20px;
+    border-radius: 5px;
+    z-index: 9999;
+    text-align: left;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.dialog-container.show {
+    display: block;
+}
+
+.dialog-container h3 {
+    margin-bottom: 20px;
+}
+
+.dialog-container label,
+.dialog-container input {
+    display: block;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.dialog-container .confirm-btn {
+    bottom: 10px;
+    background-color: #d9832d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.dialog-container .close-btn {
+    bottom: 10px;
+    background-color: #d9832d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+    .dialog-container button:hover,
+    .dialog-container .close-btn:hover {
+        background-color: #b8380d;
+    }
+
+.success-message {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(157, 134, 134, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 99999;
+    text-align: center;
+}
+
+    .success-message.show {
+        display: block;
+    }
+
+@media (min-width: 10000px) {
+    body {
+        height: auto;
+    }
+
+    .form-container {
+        width: 400px;
+    }
+}
