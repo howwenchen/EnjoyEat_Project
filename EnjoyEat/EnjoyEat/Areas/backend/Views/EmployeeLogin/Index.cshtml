@@ -1,6 +1,5 @@
 ﻿@section Styles
-	{
-
+{
 }
 
 <!-- Sign In Start -->
@@ -54,7 +53,7 @@
 							if (response.status === 200) {
 								self.swal('success', '登入成功');
 								setTimeout(function () {
-									window.location.href = "/backend/EmployeeManagement/Index";
+									window.location.href = "/backend/BackendHome/Index";
 								}, 1000);
 							} else {
 								self.swal('error', '帳號密碼錯誤');
