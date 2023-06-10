@@ -31,7 +31,10 @@
     <link href="~/font-awesome/css/v5-font-face.min.css" rel="stylesheet" />
     <!-- Template Main CSS File -->
     <link href="~/css/style.min.css" rel="stylesheet">
-    
+	@*地圖*@
+	<script async
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAK7PxnOc-lyX0bcs8yM5hjx8hdrm0tF9M">
+	</script>
 
 	<!--預設檔案-->
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -53,7 +56,6 @@
                     <li><a class="nav-link scrollto" asp-area="" asp-controller="Home" asp-action="News">最新消息</a></li>
                     <li><a class="nav-link scrollto" asp-area="" asp-controller="Reservations" asp-action="Index">訂位</a></li>
                     <li><a class="nav-link scrollto" asp-area="" asp-controller="OrderHere" asp-action="OrderLogin">內用點餐</a></li>
-                    <li><a class="nav-link scrollto" asp-area="backend" asp-controller="EmployeeManagement" asp-action="Index">後臺管理</a></li>
                      @if (User.Identity.IsAuthenticated)
                     {
                         <li><a class="nav-link scrollto" asp-area="" asp-controller="OrderTogo" asp-action="Order">外帶點餐</a></li>
@@ -163,6 +165,10 @@
     <script src="~/axios/axios.min.js"></script>
     <script src="~/vue/vue.min.js"></script>
     <script src="~/font-awesome/js/all.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+	<script sec="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.16/signalr.min.js"></script>"
+
+
 
 	@await RenderSectionAsync("Scripts", required: false)
 

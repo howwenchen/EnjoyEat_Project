@@ -34,6 +34,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
                 LevelDiscount = x.LevelDiscount,
                 TotalPrice = x.TotalPrice,
                 FinalPrice = x.FinalPrice,
+                CountPrice=x.CountPrice,
             });
         }
 
@@ -53,6 +54,35 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
                 ProductName = od.Product.ProductName,
             });
         }
+        [HttpPut("{OrderId}")]
+        //修改訂單狀態
+        public async Task<string> EditPayStatus(int OrderId)
+        {
+            var order=db.Orders.FirstOrDefault(x=>x.OrderId ==OrderId);
+            order.IsSuccess= true;
+            db.SaveChanges();
+            return "成功";
+        }
 
+        //修改訂單
+        [HttpPut]
+        public async Task<string> EditOrderDetail(BackendOrderDetailViewModel model)
+        {
+            var order = db.OrderDetails.FirstOrDefault(x => x.OrderDetailId == model.OrderDetailId);
+            order.OrderDetailId=model.OrderDetailId;
+            order.Quantity=model.Quantity;
+            order.Discount=model.Discount;
+            order.SubtotalPrice=model.SubtotalPrice;
+            db.SaveChanges();
+            return "成功";
+        }
+        [HttpDelete("{orderDetailId}")]
+        public async Task<string> DeleteOrderDetail(int orderDetailId)
+        {
+            var order = db.OrderDetails.FirstOrDefault(x => x.OrderDetailId == orderDetailId);
+            db.Remove(order);
+            db.SaveChanges();
+            return "刪除成功!";
+        }
     }
 }

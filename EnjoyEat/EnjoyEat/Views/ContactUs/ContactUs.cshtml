@@ -6,22 +6,21 @@
 <main id="main">
     <!-- ======= Contact Section ======= -->
     <section class="contact">
-        <div class="container" data-aos="fade-up">
+        <div class="container" data-aos="fade-up" id="contactUslist">
             <div class="section-title" data-aos="fade-up">
                 <h2>店家資訊</h2>
             </div>
             <div data-aos="fade-up" id="storeLocal">
-                <div class="row mt-5" id="enjoyEatLocation">
-                    <iframe style="border: 0; width: 50%; height: 350px"
-                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
-                            frameborder="0"
-                            allowfullscreen></iframe>
+                 <div class="row mt-5" id="enjoyEatLocation">
+                   
+                    <div id="map" style="border: 0; width: 50%; height: 300px" frameborder="0" allowfullscreen>
+                    </div>
                     <div class="col-lg-4" id="enjoyEatInformation">
                         <div class="info">
                             <div class="address">
                                 <i class="bi bi-geo-alt"></i>
                                 <h4>地址:</h4>
-                                <p>A108 Adam Street, New York, NY 535022</p>
+                                <p>100台北市中正區青島東路、紹興南街口</p>
                             </div>
 
                             <div class="open-hours">
@@ -42,7 +41,7 @@
                             <div class="phone">
                                 <i class="bi bi-phone"></i>
                                 <h4>電話:</h4>
-                                <p>+1 5589 55488 55s</p>
+                                <p>02 5589 55488 </p>
                             </div>
                         </div>
                     </div>
@@ -134,7 +133,7 @@
     {
     <script>
         let app = new Vue({
-            el: "#contactUsForm",
+            el: "#contactUslist",
             data: {
                 name: "",
                 email: "",
@@ -142,11 +141,16 @@
                 subject: "",
                 serviceOption: "",
                 message: "",
+                map: {},
                 servicelist: [
                     { value: '餐點品質', txt: '餐點品質' },
                     { value: '服務品質', txt: '服務品質' },
                     { value: '宴會及餐敘', txt: '宴會及餐敘' },
                     { value: '其他', txt: '其他' }],
+            },
+            mounted: function () {
+                let _this = this;
+                _this.initMap();
             },
             methods: {
                 submit: function () {
@@ -193,6 +197,161 @@
                             // text: '有地方還沒填哦!',
                         })
                     }
+                },
+                initMap: function () {
+                    let _this = this;
+                    let location = {
+                        lat: 25.043056733101256, // 經度
+                        lng: 121.52486142576117 // 緯度
+                    };
+                    _this.map = new google.maps.Map(document.getElementById("map"), {
+                        zoom: 16,
+                        center: location,
+                        mapTypeId: 'terrain',
+                        mapTypeControl: false,
+                        styles: [
+                            {
+                                featureType: "all",
+                                elementType: "labels.text.fill",
+                                stylers: [
+                                    {
+                                        color: "#ffffff"
+                                    }
+                                ]
+                            },
+                            {
+                                featureType: "all",
+                                elementType: "labels.text.stroke",
+                                stylers: [
+                                    {
+                                        color: "#000000"
+                                    },
+                                    {
+                                        lightness: 13
+                                    }
+                                ]
+                            },
+                            {
+                                featureType: "administrative",
+                                elementType: "geometry.fill",
+                                stylers: [
+                                    {
+                                        color: "#000000"
+                                    }
+                                ]
+                            },
+                            {
+                                featureType: "administrative",
+                                elementType: "geometry.stroke",
+                                stylers: [
+                                    {
+                                        color: "#144b53"
+                                    },
+                                    {
+                                        lightness: 14
+                                    },
+                                    {
+                                        weight: 1.4
+                                    }
+                                ]
+                            },
+                            {
+                                featureType: "landscape",
+                                elementType: "all",
+                                stylers: [
+                                    {
+                                        color: "#08304b"
+                                    }
+                                ]
+                            },
+                            {
+                                featureType: "poi",
+                                elementType: "geometry",
+                                stylers: [
+                                    {
+                                        color: "#0c4152"
+                                    },
+                                    {
+                                        lightness: 5
+                                    }
+                                ]
+                            },
+                            {
+                                featureType: "road.highway",
+                                elementType: "geometry.fill",
+                                stylers: [
+                                    {
+                                        color: "#000000"
+                                    }
+                                ]
+                            },
+                            {
+                                featureType: "road.highway",
+                                elementType: "geometry.stroke",
+                                stylers: [
+                                    {
+                                        color: "#0b434f"
+                                    },
+                                    {
+                                        lightness: 25
+                                    }
+                                ]
+                            },
+                            {
+                                featureType: "road.arterial",
+                                elementType: "geometry.fill",
+                                stylers: [
+                                    {
+                                        color: "#000000"
+                                    }
+                                ]
+                            },
+                            {
+                                featureType: "road.arterial",
+                                elementType: "geometry.stroke",
+                                stylers: [
+                                    {
+                                        color: "#0b3d51"
+                                    },
+                                    {
+                                        lightness: 16
+                                    }
+                                ]
+                            },
+                            {
+                                featureType: "road.local",
+                                elementType: "geometry",
+                                stylers: [
+                                    {
+                                        color: "#000000"
+                                    }
+                                ]
+                            },
+                            {
+                                featureType: "transit",
+                                elementType: "all",
+                                stylers: [
+                                    {
+                                        color: "#146474"
+                                    }
+                                ]
+                            },
+                            {
+                                featureType: "water",
+                                elementType: "all",
+                                stylers: [
+                                    {
+                                        color: "#021019"
+                                    }
+                                ]
+                            }
+                        ]
+                    });
+                    var marker = new google.maps.Marker({
+                        position: location, // 使用正確的位置對象
+                        animation: google.maps.Animation.BOUNCE //一直彈跳
+                    });
+                    marker.setMap(_this.map);
                 }
             }
         })

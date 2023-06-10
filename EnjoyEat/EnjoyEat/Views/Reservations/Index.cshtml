@@ -38,17 +38,14 @@
             box-shadow: none;
             background: #0c0b09;
             border-color: #625b4b;
-            color: #625b4b;
+            color: #aaa;
             font-size: 14px;
-            height:44px;
-        }
-
-        #location{
-        margin-bottom:15px;
+            height: 44px;
         }
 
     </style>
 }
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.css">
 <main id="main">
     <div id="d1">
@@ -90,14 +87,14 @@
                                          value-type="format"
                                          name="ReserveDate"
                                          id="datepicker"
-                                         class="datepicker p-0  form-control php-email-form "
+                                         class="datepicker p-0 "
                                          placeholder="請選擇用餐日期"
-                                         :disabled-date="disablerange">
+                                         :disabled-date="disablerange" style="color: #625b4b; !important">
                             </date-picker>
                         </div>
                     </div>
                     <div class="col-lg-6 form-group d-flex row">
-                        <label >用餐時段</label>
+                        <label>用餐時段</label>
                         <div id="mealTimePicker" class="">
                             <select name="time" id="mealTimePicker" class=" form-control " v-model="mealTime">
                                 <option value="" disabled selected>請選擇用餐時段</option>
@@ -106,15 +103,6 @@
                                 </template>
                             </select>
                         </div>
-                    </div>
-                    <br />
-                    <label id="location">餐廳位置</label>
-                    <br />
-                    <div data-aos="fade-up">
-                        <iframe style="border: 0; width: 50%; height: 250px"
-                                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
-                                frameborder="0" allowfullscreen>
-                        </iframe>
                     </div>
                 </form>
             </div>
@@ -211,6 +199,7 @@
 <!-- End Book A Table Section -->
 @section Scripts
     {
+
     <script src="~/axios/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
     <script>
@@ -294,7 +283,8 @@
                                 })
                     }
                 },
-            },
-        });
+               
+                }
+            });
     </script>
     }

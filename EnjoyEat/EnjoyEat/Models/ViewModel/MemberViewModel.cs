@@ -43,7 +43,20 @@ namespace EnjoyEat.Models.ViewModel
         public short Quantity { get; set; }
         public float Discount { get; set; }
         public int SubtotalPrice { get; set; }
+        public double? CountPrice { get; set; }
         public string ProductName { get; set; } = null!;
 
+    }
+    public class BackendOrderDetailViewModel
+    {
+        public int OrderDetailId { get; set; }
+        public short Quantity { get; set; }
+        public float Discount { get; set; }
+        public int SubtotalPrice { get; set; }
+    }
+    public class OrderStatusViewModel
+    {
+        public int OrderId { get; set; }
+        public bool IsSuccess { get; set; }
     }
 }

@@ -94,6 +94,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
             return "刪除成功!";
         }
 
+        [HttpPut]
         //修改資料
         public async Task<string> EditMember(MemberViewModel model)
         {

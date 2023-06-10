@@ -38,8 +38,15 @@ public class OrderAPIController : Controller
 
     //會員訪客判斷條件
     private bool IsUserLoggedIn()
-    {
-        return HttpContext.Session.GetInt32("MemberId") != null;
+    {   
+        if (HttpContext.Session.GetInt32("MemberId") == 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     //從session取得memberid回傳
@@ -133,44 +140,60 @@ public class OrderAPIController : Controller
                     .Include(c => c.CartItems)
                     .FirstOrDefaultAsync(c => c.MemberId == memberId);
 
-                if (cart == null)
+                using (var transaction = _context.Database.BeginTransaction())
                 {
-                    cart = new Cart
+                    try
                     {
-                        MemberId = memberId.Value
-                    };
-                    _context.Carts.Add(cart);
-                    await _context.SaveChangesAsync();
-                }
+                        if (cart == null)
+                        {
+                            cart = new Cart
+                            {
+                                MemberId = memberId.Value
+                            };
+                            _context.Carts.Add(cart);
+                            await _context.SaveChangesAsync();
+                        }
 
-                var product = await _context.Products.FindAsync(item.ProductId);
-                if (product == null)
-                {
-                    return BadRequest("Invalid product.");
-                }
+                        var product = await _context.Products.FindAsync(item.ProductId);
+                        if (product == null)
+                        {
+                            return BadRequest("Invalid product.");
+                        }
 
-                var existingItem = cart.CartItems.FirstOrDefault(c => c.ProductId == item.ProductId);
-                if (existingItem != null)
-                {
-                    existingItem.Quantity += item.Quantity;
-                }
-                else
-                {
-                    var cartItem = new CartItem
+                        var existingItem = cart.CartItems.FirstOrDefault(c => c.ProductId == item.ProductId);
+                        if (existingItem != null)
+                        {
+                            existingItem.Quantity += item.Quantity;
+                        }
+                        else
+                        {
+                            var cartItem = new CartItem
+                            {
+                                CartId = cart.CartId,
+                                ProductId = item.ProductId,
+                                Quantity = item.Quantity,
+                                ProductName = item.ProductName,
+                                UnitPrice = item.UnitPrice,
+                                Product = product
+                            };
+
+                            cart.CartItems.Add(cartItem);
+                        }
+
+                        await _context.SaveChangesAsync();
+
+                        transaction.Commit(); // Commit the transaction here
+
+                        return Ok(cart.CartItems);
+                    }
+                    catch (Exception ex)
                     {
-                        CartId = cart.CartId,
-                        ProductId = item.ProductId,
-                        Quantity = item.Quantity,
-                        ProductName = item.ProductName,
-                        UnitPrice = item.UnitPrice,
-                        Product = product
-                    };
+                        transaction.Rollback(); // Rollback the transaction in case of an error
 
-                    cart.CartItems.Add(cartItem);
+                        _logger.LogError(ex, "Error adding item to cart inside the transaction.");
+                        return StatusCode(500, "Internal server error");
+                    }
                 }
-
-                await _context.SaveChangesAsync();
-                return Ok(cart.CartItems);
             }
             else
             {
@@ -209,8 +232,6 @@ public class OrderAPIController : Controller
         }
     }
 
-
-
     [HttpPost]
     public async Task<IActionResult> RemoveFromCart(CartItemViewModel item)
     {
@@ -233,15 +254,30 @@ public class OrderAPIController : Controller
                     return NotFound("找不到此購物車。");
                 }
 
-                var existingItem = cart.CartItems.FirstOrDefault(c => c.ProductId == item.ProductId);
-                if (existingItem != null)
+                using (var transaction = _context.Database.BeginTransaction())
                 {
-                    existingItem.Quantity -= item.Quantity;
-                    if (existingItem.Quantity <= 0)
+                    try
                     {
-                        _context.CartItems.Remove(existingItem);
+                        var existingItem = cart.CartItems.FirstOrDefault(c => c.ProductId == item.ProductId);
+                        if (existingItem != null)
+                        {
+                            existingItem.Quantity -= item.Quantity;
+                            if (existingItem.Quantity <= 0)
+                            {
+                                _context.CartItems.Remove(existingItem);
+                            }
+                            await _context.SaveChangesAsync();
+
+                            transaction.Commit(); // Commit the transaction here
+                        }
                     }
-                    await _context.SaveChangesAsync();
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback(); // Rollback the transaction in case of an error
+
+                        _logger.LogError(ex, "Error removing item from cart inside the transaction.");
+                        return StatusCode(500, "Internal server error");
+                    }
                 }
 
                 return Ok();
@@ -274,6 +310,7 @@ public class OrderAPIController : Controller
             return StatusCode(500, "Internal server error");
         }
     }
+
 
     [HttpPost]
     public async Task<IActionResult> UpdateCart([FromBody] CartViewModel cartViewModel)
@@ -464,7 +501,41 @@ public class OrderAPIController : Controller
         }
     }
 
+    //清空購物車
+    [HttpPost]
+    public IActionResult ClearCart()
+    {
+        try
+        {
+            if (IsUserLoggedIn())
+            {
+                var memberId = HttpContext.Session.GetInt32("MemberId");
+                var cart = _context.Carts
+                    .Include(c => c.CartItems)
+                    .FirstOrDefault(c => c.MemberId == memberId);
 
+                if (cart == null)
+                {
+                    return NotFound("找不到此購物車。");
+                }
+
+                _context.CartItems.RemoveRange(cart.CartItems);
+                _context.SaveChanges();
+
+                return Ok();
+            }
+            else
+            {
+                HttpContext.Session.Remove("Cart");
+                return Ok();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error clearing cart.");
+            return StatusCode(500, "Internal server error");
+        }
+    }
 
     //建立訂單
     [HttpPost]

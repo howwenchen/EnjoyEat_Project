@@ -383,7 +383,7 @@
                     });
                     return formatter.format(value);
                 },
-                //使用者按下提交按鈕後，把購物車資料送出，並且清空購物車資料(watch的cart會同步把後台購物車清空）
+                //使用者按下提交按鈕後，把購物車資料送出，並且清空購物車資料
                 submit() {
                     if (this.cart.length === 0) {
                         alert('您的購物車是空的，請先添加商品。');
@@ -394,12 +394,21 @@
                             alert('訂單已送出');
                             this.cart = [];
                             this.total = 0;
+                            // 清空後台購物車
+                            axios.post('/api/Order/ClearCart')
+                                .then(() => {
+                                    console.log('後台購物車已清空');
+                                })
+                                .catch(error => {
+                                    console.error('清空後台購物車失敗:', error);
+                                });
                             window.location.href = '/OrderTogo/Checkout/' + response.data;
-                        }).catch(error => {
+                        })
+                        .catch(error => {
                             alert('送出失敗');
                             console.log(error);
                         });
-                }
+}
             },
             watch: {
                 //監聽大分類的變化，如果大分類被賦予新值，則預設顯示對應的第一個子分類
