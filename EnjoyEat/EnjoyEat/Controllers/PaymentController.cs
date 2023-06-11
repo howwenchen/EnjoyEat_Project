@@ -26,7 +26,7 @@ namespace EnjoyEat.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Notify(ResponseData responseData)
+        public async Task<IActionResult> Notify([FromBody] ResponseData responseData)
         {
             if (responseData != null)
             {
@@ -57,7 +57,7 @@ namespace EnjoyEat.Controllers
                 await _context.SaveChangesAsync();
                 ViewBag.Result = tradeInfo.Result;
                 
-                return View();
+                return Ok("訂單狀態已變更");
             }
 
             // If there is no data, return HTTP 400 Bad Request.

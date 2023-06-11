@@ -74,7 +74,7 @@ public class PaymentService : IPaymentService
         { "ItemDesc", "訂單編號： " + order.OrderId.ToString() },
         { "NotifyURL", _config["Payment:NotifyURL"] },
         { "ReturnURL", _config["Payment:ReturnURL"] },
-        { "ClientBackURL", "https://071e-60-250-79-114.ngrok-free.app" },
+        { "ClientBackURL", _config["Payment:ClientBackURL"] },
         { "Email", order.Email.ToString()},
         { "CREDIT", "1" },
         { "LINEPAY", "0" },
