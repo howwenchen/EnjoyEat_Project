@@ -6,7 +6,7 @@
 <div class="container" id="bookedConfirm">
     <div>
         <div class="flex-shrink-0" style="text-align:center">
-            <p><img src="~/img/success.png" id="successicon" />您已訂位成功!</p>
+            <p><img src="~/img/success.png" id="successicon"/>您已訂位成功!</p>
         </div>
     </div>
 </div>
@@ -34,6 +34,10 @@
                         <label id="bookNumber">用餐人數:</label>
                         <span>{{reserveInfo[0].numberofAdultGuest}}, {{reserveInfo[0].numberofKidGuest}}</span>
                     </div>
+                    <div>
+                        <label id="bookNumber">備註:</label>
+                        <span>{{reserveInfo[0].note}}</span>
+                    </div>
                 </div>
             </div>
             <br />
@@ -46,14 +50,13 @@
                         <span>
                             <img src="~/img/location.png" id="locationIcon" />
                             <span>
-                                新北市 中和區 ,
-                                灝文家
+                                100台北市中正區青島東路、紹興南街口
                             </span>
                         </span>
                     </div>
                     <div>
                         <img src="~/img/phone.png" id="phoneIcon" />
-                        <span>02 1234-6789</span>
+                        <span>02 5589 55488</span>
                     </div>
                 </div>
             </div>

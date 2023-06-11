@@ -120,6 +120,7 @@ namespace EnjoyEat.Controllers
 
                 // 從資料庫中根據 orderId 獲取訂單資訊
                 var order = await _context.Orders
+                                          .Include(o => o.Member)
                                           .Include(o => o.OrderDetails)
                                           .ThenInclude(od => od.Product) 
                                           .FirstOrDefaultAsync(o => o.OrderId == data.OrderId);
@@ -144,6 +145,8 @@ namespace EnjoyEat.Controllers
                     FinalPrice = order.FinalPrice,
                     IsSuccess = false, // 預設為未成功
                     TotalItems = order.OrderDetails.Sum(od => od.Quantity),
+                    //增加memberId查詢到email
+                    Email = order.Member.Email,
                     OrderDetails = order.OrderDetails.Select(od => new OrderDetailViewModel
                     {
                         OrderDetailId = od.OrderDetailId,

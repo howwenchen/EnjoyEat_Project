@@ -234,6 +234,26 @@
     <script src="~/orderforhere/startorderjs/jquery.slicknav.js"></script>
     <script src="~/orderforhere/startorderjs/jquery.nice-select.min.js"></script>
     <script src="~/orderforhere/startorderjs/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/paymentHub")
+            .build();
+
+        connection.on("PaymentStatusChanged", function (orderId, isPaid) {
+            if (isPaid) {
+                // 如果收到的付款狀態為已付款，則跳出提醒視窗
+                Swal.fire(
+                    '交易狀態提示',
+                    '訂單編號： ' + orderId + '付款成功',
+                    'success'
+                )
+            }
+        });
+
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+    </script>
     <script>
         window.addEventListener('scroll', () => {
             const element = document.querySelector('#orderItem');
