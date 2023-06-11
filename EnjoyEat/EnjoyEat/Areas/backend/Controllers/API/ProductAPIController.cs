@@ -187,6 +187,7 @@ namespace EnjoyEat.Areas.backend.Controllers.API
             try
             {
                 var pro = _context.Products.FirstOrDefault(p => p.ProductId == meal.ProductId);
+                //var file=new FileStream(pro.MealImg,FileAccess.Read)
                 pro.MealImg = meal.MealImg;
                 pro.ProductName = meal.ProductName;
                 pro.Costs = meal.Costs;

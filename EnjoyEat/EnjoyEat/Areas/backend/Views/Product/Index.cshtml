@@ -37,16 +37,20 @@
         }
 
         #tableArea::-webkit-scrollbar-track {
-                background: #6C7293;
+            background: #6C7293;
         }
 
         #tableArea::-webkit-scrollbar-thumb {
-                background: #111111;
-                border-radius: 2px;
+            background: #111111;
+            border-radius: 2px;
         }
 
         .pb-3 {
-             padding-bottom: 0 !important; 
+            padding-bottom: 0 !important;
+        }
+
+        .modal-body .img {
+            display: none;
         }
     </style>
 }
@@ -177,7 +181,13 @@
                 </div>
                 <div class="modal-body">
                     <label>餐點編號: </label><input type="text" class="form-control" v-model="newProduct.productId" disabled>
-                    <label>餐點圖片: </label><input type="file" class="form-control form-control-sm bg-dark"@* @@change="selectImage"*@>
+                    <label>餐點圖片: </label><div>
+                        <label :for="'id'+newProduct.productId" class="btn btn-light m-1">
+                            <input type="file" :id="'id'+newProduct.productId" class="form-control form-control-sm bg-dark img" @@change="selectImage" hidden>
+                            選取圖片
+                        </label>
+                        <span>{{ getFileName(newProduct.mealImg) }}</span>
+                    </div>
                     <label>餐點名稱(必填): </label><input type="text" class="form-control" v-model="newProduct.productName">
                     <label>餐點成本(必填): </label><input type="text" class="form-control" v-model="newProduct.costs">
                     <label>餐點售價(必填): </label><input type="text" class="form-control" v-model="newProduct.unitPrice">
@@ -211,13 +221,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                   <h6>確定刪除以下餐點嗎?</h6>
-                   <p>餐點編號: {{newProduct.productId}}</p>
-                   <p>餐點名稱: {{newProduct.productName}}</p>
-                   <div>
+                    <h6>確定刪除以下餐點嗎?</h6>
+                    <p>餐點編號: {{newProduct.productId}}</p>
+                    <p>餐點名稱: {{newProduct.productName}}</p>
+                    <div>
                         <p>餐點圖片:</p>
                         <img :src="baseUrl + newProduct.mealImg" style="width:80px; border-radius:2px" />
-                   </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">取消</button>
@@ -235,12 +245,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                   <p>餐點編號: {{newProduct.productId}}</p>
-                   <p>餐點名稱: {{newProduct.productName}}</p>
-                   <div>
+                    <p>餐點編號: {{newProduct.productId}}</p>
+                    <p>餐點名稱: {{newProduct.productName}}</p>
+                    <div>
                         <p>餐點圖片:</p>
                         <img :src="baseUrl + newProduct.mealImg" style="width:80px; border-radius:2px; margin-bottom:20px" />
-                   </div>
+                    </div>
                     <p>餐點食譜:</p>
                     <textarea class="form-control" disabled>{{newProduct.recipe}}</textarea>
                 </div>
@@ -355,6 +365,14 @@
                     _this.newProduct.mealImg = file;
                     console.log(_this.newProduct.mealImg);
                 },
+                // 圖片名稱
+                getFileName: function (filePath) {
+                    if (filePath && filePath.length > 0) {
+                        const fileName = filePath.split('/').pop();
+                        return fileName;
+                    }
+                    return "";
+                },
                 // 新增餐點
                 AddProduct: function () {
                     let _this = this;
@@ -393,7 +411,7 @@
                         });
                 },
                 // 編輯餐點
-                EditProduct: function(productId){
+                EditProduct: function (productId) {
                     let _this = this;
                     var proIndex = -1;
                     for (var i = 0; i < _this.product.length; i++) {
@@ -417,11 +435,11 @@
                     };
                 },
                 // 更新餐點
-                UpdateProduct: function(){
+                UpdateProduct: function () {
                     let _this = this;
                     var request = {
                         ProductId: _this.newProduct.productId,
-                        MealImg: _this.newProduct.mealImg,
+                        MealImg: "",
                         ProductName: _this.newProduct.productName,
                         Costs: _this.newProduct.costs,
                         UnitPrice: _this.newProduct.unitPrice,
@@ -430,42 +448,53 @@
                         Description: _this.newProduct.description,
                         Recipe: _this.newProduct.recipe,
                     };
-                    console.log(request);
-                    axios.post(`${baseAddress}/api/ProductAPI/EditProduct`, request)
+                    axios.post(`/api/ProductAPI/EditProduct`, request)
                         .then(response => {
+                            var d = new FormData();
+                            d.append('image', _this.newProduct.mealImg);
+                            d.append('productId', _this.newProduct.productId);
+                            axios.post(`${baseAddress}/api/ProductAPI/UploadImage`, d, {
+                                headers: {
+                                    "Content-Type": "multipart/form-data",
+                                }
+                            })
+                                .then(response => {
+                                    _this.getProduct(); // 畫面刷新
+                                });
+
                             _this.newProduct.mealImg = '',
-                            _this.newProduct.productName = '',
-                            _this.newProduct.costs = '',
-                            _this.newProduct.unitPrice = '',
-                            _this.newProduct.stock = '',
-                            _this.newProduct.subCategoryId = '',
-                            _this.newProduct.description = '',
-                            _this.newProduct.recipe = '',
-                            $("#EditModal").modal("hide"); // 隱藏EditModal
+                                _this.newProduct.productName = '',
+                                _this.newProduct.costs = '',
+                                _this.newProduct.unitPrice = '',
+                                _this.newProduct.stock = '',
+                                _this.newProduct.subCategoryId = '',
+                                _this.newProduct.description = '',
+                                _this.newProduct.recipe = '',
+                                $("#EditModal").modal("hide"); // 隱藏EditModal
                             if (response.data.status == true) {
                                 _this.getProduct(); // 畫面刷新
                                 _this.successAlert(response);
-                                //var d = new FormData();
-                                //d.append('image', _this.newProduct.mealImg); 
-                                //d.append('productId', _this.newProduct.productId);
-                                //d.append('meal', JSON.stringify(request));
-                                //axios.post(`${baseAddress}/api/ProductAPI/UploadImage`, d, {
-                                //    headers: {
-                                //        "Content-Type": "multipart/form-data",
-                                //    }
-                                //})
-                                //    .then(response => {
-                                //        _this.getProduct(); // 畫面刷新
-                                //    });
+                                var d = new FormData();
+                                d.append('image', _this.newProduct.mealImg);
+                                d.append('productId', _this.newProduct.productId);
+                                d.append('meal', JSON.stringify(request));
+                                axios.post(`${baseAddress}/api/ProductAPI/UploadImage`, d, {
+                                    headers: {
+                                        "Content-Type": "multipart/form-data",
+                                    }
+                                })
+                                    .then(response => {
+                                        _this.getProduct(); // 畫面刷新
+                                    });
                             } else {
                                 _this.errorAlert(response);
                                 return;
                             };
-                            
+
                         });
                 },
                 // 刪除餐點
-                DeleteProduct: function(){
+                DeleteProduct: function () {
                     let _this = this;
                     var request = {
                         ProductId: _this.newProduct.productId,
