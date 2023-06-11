@@ -1,1 +1,22 @@
 ﻿
+
+@{
+    ViewBag.Title = "Notify";
+}
+
+<body>
+<div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>交易明細</h2>
+                <p><strong>商家編號：</strong> @ViewBag.Result.MerchantID</p>
+                <p><strong>交易編號：</strong> @ViewBag.Result.TradeNo</p>
+                <p><strong>商家訂單編號：</strong> @ViewBag.Result.MerchantOrderNo</p>
+                <p><strong>付款金額：</strong> @ViewBag.Result.Amt</p>
+                <p><strong>付款時間：</strong> @ViewBag.Result.PayTime</p>
+                <p><strong>付款方式：</strong> @ViewBag.Result.PaymentType</p>
+                <p><strong>信用卡類別：</strong> @ViewBag.Result.PaymentMethod</p>
+            </div>
+        </div>
+    </div>
+</body>
