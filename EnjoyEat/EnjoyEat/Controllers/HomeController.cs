@@ -22,14 +22,18 @@ namespace EnjoyEat.Controllers
             _context = context;
         }
 
-        
-
         public IActionResult Index()
         {
             return View();
         }
+		public IActionResult BackendReturn()
+		{
+			HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+			HttpContext.Session.Clear();
+			return RedirectToAction("Index", "home");
+		}
 
-        public IActionResult Privacy()
+		public IActionResult Privacy()
         {
             return View();
         }
