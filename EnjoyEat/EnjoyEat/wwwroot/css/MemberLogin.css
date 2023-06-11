@@ -1,16 +1,24 @@
-﻿input {
-    font-size: 24px;
-}
-div .nono {
-    color: red;
-    text-align:center;
-}
-span{
-    margin-left:5px;
+﻿
+.breadcrumbs {
+    background-color: #c1a883c6;
+    border-radius: 10px;
+    color: #FFF;
+    width: 70%;
+    margin: 0 auto;
 }
 
-.rememberMe{
-    font-size:24px;
+div .nono {
+    color: maroon;
+    text-align: center;
+}
+
+h4 span {
+    margin-left: 5px;
+    font-size: 20px;
+}
+
+.rememberMe {
+    font-size: 24px;
 }
 
 #checkRember {
@@ -21,6 +29,7 @@ span{
 
 #Logo {
     text-align: center;
+    font-size: 30px;
     color: burlywood;
     margin-top: 30px;
 }
@@ -29,6 +38,24 @@ span{
     margin-top: 10px;
 }
 
-.btn {
-    margin-bottom: 5px;
+input {
+    font-size: 18px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    color: black;
+}
+
+#basicbtn {
+    justify-content: flex-end;
+    display: flex;
+}
+
+    #basicbtn #register, #basicbtn #login {
+        margin-right: 5px;
+        background-color: #cda45e;
+        border: 1px solid #cda45e;
+    }
+
+#forget {
+    margin-right: 50px;
 }

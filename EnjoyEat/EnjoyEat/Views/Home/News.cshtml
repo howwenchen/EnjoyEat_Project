@@ -1,34 +1,43 @@
 ﻿@section Styles{
     <style>
-    .pagination .page-link {
-        background-color: black;
-        color: white;
-        border-color: lightgray;
-    }
-    .pagenumber{
-        background-color:white;
-        color:black;
-    }
-    .modal-body h5{
-        padding:5px ;
-        display:inline-block;
-        color:white;
-        background-color:darkgrey;
-        border-radius:0.7em;
-        font-weight:800;
-    }
-    .modal-header{
-        background-color:rgba(0,0,0,0.7);
-        color:white;
-    }
+        .pagination .page-link {
+            background-color: black;
+            color: white;
+            border-color: #625b4b;
 
-    h6.card-title {
-        background-color:darkgray;
-        border-radius:0.7em;
-        padding:5px ;
-        display:inline-block;
-    }
-    
+        }
+
+        .pagenumber {
+            background-color: #c1a883c6;
+            color: black;
+        }
+
+        .modal-body h5 {
+            padding: 5px;
+            display: inline-block;
+            color: white;
+            background-color: #c1a883c6;
+            border-radius: 0.7em;
+            font-weight: 800;
+        }
+
+        .modal-header {
+            background-color: #c1a883c6;
+            color: white;
+        }
+
+         #closebtn {
+            background-color: #c1a883c6;
+            border-color: #c1a883c6;
+        }
+
+        h6.card-title {
+            background-color: #c1a883c6;
+            border-radius: 0.7em;
+            padding: 5px;
+            display: inline-block;
+            border-color: #625b4b;
+        }
     </style>
 }
 
@@ -50,14 +59,14 @@
                         <!-- 跳窗內容 -->
                         <div class="modal-header">
                             <h4 class="modal-title">{{ modalNews.title }}</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closebtn"></button>
                         </div>
                         <div class="modal-body text-body">
                             <h5>{{ modalNews.category }}</h5>
                             <p>{{ modalNews.content }}</p>
                         </div>
                         <div class="modal-footer text-body">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closebtn">Close</button>
                         </div>
                     </div>
                 </div>
@@ -90,7 +99,7 @@
                 currentPageNews: [],
                 currentPage: 1,
                 pageNumbers: [],
-                modalNews:{}
+                modalNews: {}
             },
             mounted: function () {
                 this.getPageCount();
@@ -104,7 +113,8 @@
                         var myModal = new bootstrap.Modal(document.getElementById('modal' + newsId));
                         myModal.show();
                     } else {
-                        console.log(`No news item found with newsId ${newsId}`);}
+                        console.log(`No news item found with newsId ${newsId}`);
+                    }
                 },
                 changePage: function (page) {
                     axios.get("/Home/GetNews/" + page)
