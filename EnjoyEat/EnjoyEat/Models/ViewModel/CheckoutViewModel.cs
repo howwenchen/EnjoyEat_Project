@@ -17,6 +17,7 @@ namespace EnjoyEat.Models.ViewModel
         public double? FinalPrice { get; set; }
         public string? FirstName { get; internal set; }
         public string? LastName { get; internal set; }
+        public string? Email { get; internal set; }
 
         public List<OrderDetailViewModel>? OrderDetails { get; set; }
         public int? TotalItems { get; set; }

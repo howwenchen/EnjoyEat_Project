@@ -74,9 +74,14 @@ public class PaymentService : IPaymentService
         { "ItemDesc", "訂單編號： " + order.OrderId.ToString() },
         { "NotifyURL", _config["Payment:NotifyURL"] },
         { "ReturnURL", _config["Payment:ReturnURL"] },
-        { "Credit", "1" },
-        { "LinePay", "1" },
-        { "AndroidPay", "1" }
+        { "ClientBackURL", "https://071e-60-250-79-114.ngrok-free.app" },
+        { "Email", order.Email.ToString()},
+        { "CREDIT", "1" },
+        { "LINEPAY", "0" },
+        { "SAMSUNGPAY", "0" },
+        { "ANDROIDPAY", "0" },
+        { "WEBATM", "0" }
+
     };
 
         var content = new FormUrlEncodedContent(values);
