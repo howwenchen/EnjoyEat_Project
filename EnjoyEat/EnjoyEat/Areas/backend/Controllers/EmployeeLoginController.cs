@@ -24,7 +24,12 @@ namespace EnjoyEat.Areas.backend.Controllers
 		{
 			return View();
 		}
-
+		public IActionResult ClearMemberCookies()
+		{
+			HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+			HttpContext.Session.Clear();
+			return RedirectToAction("Index", "EmployeeLogin");
+		}
 		[HttpPost]
 		public async Task<IActionResult> Login([FromBody] EmployeeManagementDTO model)
 		{
