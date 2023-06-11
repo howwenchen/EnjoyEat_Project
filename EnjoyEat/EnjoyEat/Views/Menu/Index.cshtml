@@ -23,45 +23,31 @@
                             aria-label="Slide 2"></button>
                     <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
                             aria-label="Slide 3"></button>
-                </div>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3"
+                            aria-label="Slide 4"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4"
+                            aria-label="Slide 5"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="5"
+                            aria-label="Slide 6"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="6"
+                            aria-label="Slide 7"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="7"
+                            aria-label="Slide 8"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="8"
+                            aria-label="Slide 9"></button>
+                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="9"
+                            aria-label="Slide 10"></button>
+                    </div>
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
+                <div v-for="(t, index) in temp.slice(1, 11)" :key="t.productId" :class="{'carousel-item': true, 'active': index == 0}">
                         <div class="row">
                             <div class="toptenimg col-md-8">
-                                <img src="/img/specials-1.png" class=" d-block" alt="Image 1">
+                                <img :src="baseUrl + t.mealImg" class=" d-block" alt="Image 1">
                             </div>
                         <div class="toptenitem col-md-4">
-                                <h3>推薦餐點 TOP<span style="font-size:35px">  1</span></h3><br>
-                                <h4>薑絲嚕嚕咪</h4>
-                                <p>$400</p><br>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="toptenimg col-md-8">
-                                <img src="/img/specials-2.png" class="d-block" alt="Image 2">
-                            </div>
-                        <div class="toptenitem col-md-4">
-                                <h3>推薦餐點 TOP<span style="font-size:35px">  2</span></h3><br>
-                                <h4>雨傘節沙拉</h4>
-                                <p>$150</p>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="toptenimg col-md-8">
-                                <img src="/img/specials-3.png" class="d-block" alt="Image 3">
-                            </div>
-                            <div class="toptenitem col-md-4">
-                                <h3>推薦餐點 TOP<span style="font-size:35px">  3</span></h3><br>
-                                <h3>膽汁牛肉麵</h3>
-                                <p>$250</p>
+                                <h3>推薦餐點 TOP<span style="font-size:35px">  {{index+1}}</span></h3><br>
+                                <h4>{{t.productName}}</h4>
+                                <p>${{t.unitPrice}}</p><br>
                                 <div class="carousel-caption">
                                 </div>
                             </div>
@@ -188,7 +174,13 @@
                         filterArr = _this.temp.filter(s => s.subCategoryId === _this.selectedSubCategoryId);
                     }
                     return filterArr;
-                }
+                },
+                //// 篩選Top10餐點
+                //filteredTopten() {
+                //let _this = this;
+                //let filterArr = _this.temp;
+                //return filterArr;
+                //}
             },
             watch: {
                 //監聽大分類的變化，如果大分類被賦予新值，則預設顯示對應的第一個子分類
