@@ -1,5 +1,13 @@
-h4{
-    margin-top:10px;
+.breadcrumbs {
+    background-color: #c1a883c6;
+    border-radius: 10px;
+    color: #FFF;
+    width: 80%;
+    margin: 0 auto;
+}
+h4 {
+    margin-top: 10px;
+    font-size:20px;
 }
 .form-label {
     border-radius: .25rem;
@@ -13,9 +21,10 @@ div .form-text{
 }
 
 #Logo {
+    margin-top: 30px;
     text-align: center;
     color: burlywood;
-    margin-top: 30px;
+    font-size: 30px;
 }
 
 .row {
@@ -28,20 +37,24 @@ div .form-text{
 .row .left {
     margin-left: 12px;
 }
+#AccountHelpBlock, #PasswordHelpBlock {
+    color:  silver;
+}
 
-.infoClass{
-    font-size:20px;
-    margin-bottom:10px;
+.infoClass {
+    font-size: 20px;
+    margin-bottom: 10px;
 }
 
 .form-label {
     font-size: 18px;
     margin-bottom: 10px;
 }
-.btn{
-
+#birthday {
+    font-size: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
-
 /*datePicker*/
 .datepicker {
     width: 100%;
@@ -67,14 +80,45 @@ div .form-text{
 }
 
     #datepicker input::placeholder {
-        color: black; /* 在這裡更改顏色為你想要的顏色 */
+        color: gray; /* 在這裡更改顏色為你想要的顏色 */
     }
 
 .mx-calendar-content .cell.disabled {
     background-color: #F2E6E6;
     font-weight: lighter;
 }
-
+#memberform input, #memberform select, #memberform textarea {
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: gray;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+#email, #address {
+margin-left:10px;
+}
+#submit {
+    justify-content: flex-end;
+    display: flex;
+}
+    #submit button {
+        margin-right: 5px;
+        background-color: #cda45e;
+        border: 1px solid #cda45e;
+    }
+#forgetPasswordlist input {
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: gray;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
 /*.Account-setting {
     right: 200px;
 }

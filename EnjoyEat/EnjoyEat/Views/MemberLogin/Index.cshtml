@@ -36,10 +36,11 @@
                     </h4>
                     <input type="password" aria-label="Password" v-model="password" placeholder="請輸入會員密碼"
                            maxlength="12" minlength="8" required>
-
-                    <button class="login btn btn-primary" type="button" @@click="login">登入</button>
-                    <button class="login btn btn-primary" type="button" @@click="register">註冊</button>
-                    <button class="login btn btn-danger" type="button" @@click="forget">忘記密碼</button>
+                    <div id="basicbtn">
+                        <button class="login btn btn-danger" type="button" id="forget" @@click="forget">忘記密碼</button>
+                        <button class="login btn btn-primary" type="button" id="register" @@click="register">註冊</button>
+                        <button class="login btn btn-primary" type="button" id="login" @@click="login">登入</button>
+                    </div>
                 </form>
 
             </section>
