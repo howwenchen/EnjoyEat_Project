@@ -66,7 +66,7 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 		[HttpGet]
 		public async Task<IEnumerable<EmployeeManagementDTO>> GetAll()
 		{
-			var emp = await _context.Employees.Select(emp =>
+			var emp = await _context.Employees.Include(e=>e.EmployeesSalary).Select(emp =>
 			new EmployeeManagementDTO
 			{
 				EmployeeId = emp.EmployeeId,
@@ -76,6 +76,10 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 				Gender = emp.Gender,
 				Phone = emp.Phone,
 				Email = emp.Email,
+				BasicSalary = emp.EmployeesSalary.BasicSalary,
+				Bonus = emp.EmployeesSalary.Bonus,
+				Performance = emp.EmployeesSalary.Performance,
+				TotalSalary = emp.EmployeesSalary.TotalSalary
 			}).ToListAsync();
 			return emp;
 		}
@@ -131,10 +135,10 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 				}
 				else
 				{
-					emp.EmployeesSalary.BasicSalary = empDTO.BasicSalary;
-					emp.EmployeesSalary.Bonus = empDTO.Bonus;
-					emp.EmployeesSalary.TotalSalary = empDTO.TotalSalary;
-					emp.EmployeesSalary.Performance = empDTO.Performance;
+                    empDTO.BasicSalary = emp.EmployeesSalary.BasicSalary;
+                    empDTO.Bonus = emp.EmployeesSalary.Bonus;
+                    empDTO.TotalSalary = emp.EmployeesSalary.TotalSalary;
+                    empDTO.Performance = emp.EmployeesSalary.Performance;
 				}
 
 				_context.SaveChanges();

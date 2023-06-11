@@ -58,7 +58,7 @@
 		<div class="col-12 row">
 			@*新增按鍵*@
 			<!-- Modal trigger button -->
-			<button class="btn btn-primary col-md-1" @@click="showInsert()" data-toggle="modal">
+			<button class="btn btn-primary col-md-2" @@click="showInsert()" data-toggle="modal">
 				<span><i class="fa-solid fa-circle-plus fa-beat"></i> 新增</span>
 			</button>
 			@*篩選欄位*@
@@ -209,6 +209,10 @@
 						<div class="modal-body container" id="modals_container">
 							@*頁面內容Body*@
 							<div class="form-group">
+								<label class="form-label" :value="name">員工姓名:</label>
+								<span>{{ name }}</span>
+							</div>
+							<div class="form-group">
 								<label class="form-label" :value="role">職稱:</label>
 								<span>{{ role }}</span>
 							</div>
@@ -272,7 +276,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
 	<script>
-		new Vue({
+		var a = new Vue({
 			el: '#app',
 			data: {
 				EmployeeManagementDTO: [],
@@ -420,6 +424,7 @@
 							if (empIndex !== -1) {
 								var editedSal = self.EmployeeManagementDTO[empIndex];
 								self.employeeId = editedSal.employeeId;
+								self.name = editedSal.name;
 								self.role = editedSal.role;
 								self.basicSalary = editedSal.basicSalary;
 								self.bonus = editedSal.bonus;
@@ -453,7 +458,7 @@
 							self.totalSalary = ""
 							$("#salaryModal").modal("hide");
 							if (response.data) {
-								self.sweatAlert("success", "編輯成功");
+								self.sweatAlert("success", "薪資更新成功");
 								self.getEmp();
 								return;
 							}

@@ -1,20 +1,4 @@
 ﻿@section Styles{
-    <style>
-        .toptenitem{
-            margin-top: 80px;
-        }
-
-        .toptenitem p {
-            font-size: 25px;
-        }
-
-        .toptenimg{
-            width: 400px;
-            height: 400px;
-            margin-left: 250px;
-            margin-bottom: 20px;
-        }
-    </style>
     <link href="~/css/menustyle.css" rel="stylesheet" />
 }
 @model IEnumerable<EnjoyEat.Models.ViewModel.MenuViewModel>
@@ -84,7 +68,6 @@
         <p>主廚推薦 TOP <span style="font-size:50px">10</span> !</p>
     </div>
     <section id="topten" class="top-ten section-bg">
-        
         <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"

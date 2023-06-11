@@ -12,6 +12,10 @@ namespace EnjoyEat.Models.DTO
 		public string? Account { get; set; }
 		public string? Password { get; set; }
 		public string? Role { get; set; }
+		public int? BasicSalary { get; set; }
+		public int? Bonus { get; set; }
+		public string? Performance { get; set; }
+		public int? TotalSalary { get; set; }
 
 	}
 }
