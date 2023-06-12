@@ -1,21 +1,7 @@
 ﻿@section Styles{
-    <style>
-        .toptenitem{
-            margin-top: 80px;
-        }
-
-        .toptenitem p {
-            font-size: 25px;
-        }
-
-        .toptenimg{
-            width: 400px;
-            height: 400px;
-            margin-left: 250px;
-            margin-bottom: 20px;
-        }
-    </style>
+    <link href="~/css/menustyle.css" rel="stylesheet" />
 }
+@model IEnumerable<EnjoyEat.Models.ViewModel.MenuViewModel>
 
 
 <!-- ======= Hero Section ======= -->
@@ -28,7 +14,7 @@
             </div>
             <div class="col-lg-4 d-flex align-items-center justify-content-center position-relative" data-aos="zoom-in"
                  data-aos-delay="200">
-                <a href="https://www.youtube.com/watch?v=yqqN5Yfbkp4" class="glightbox play-btn"></a>
+                <a href="https://www.youtube.com/watch?v=Q8UCYUtUqrg" class="glightbox play-btn"></a>
             </div>
 
         </div>
@@ -76,193 +62,61 @@
 
         </div>
     </section><!-- End Why Us Section -->
-
     <!--Top10 carousul section-->
-    <section id="top-ten" class="top-ten">
-        <div class="container" data-aos="fade-up">
-
-            <div class="section-title">
-                <h2>菜單精選</h2>
-                <p>主廚推薦 TOP <span style="font-size:50px">10</span> !</p>
+    <div class="section-title">
+        <h2>菜單精選</h2>
+        <p>主廚推薦 TOP <span style="font-size:50px">10</span> !</p>
+    </div>
+    <section id="topten" class="top-ten section-bg">
+        <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+                        aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3"
+                        aria-label="Slide 4"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4"
+                        aria-label="Slide 5"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="5"
+                        aria-label="Slide 6"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="6"
+                        aria-label="Slide 7"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="7"
+                        aria-label="Slide 8"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="8"
+                        aria-label="Slide 9"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="9"
+                        aria-label="Slide 10"></button>
             </div>
-
-            <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
-                            aria-current="true" aria-label="Slide 1"></button>
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
-                            aria-label="Slide 2"></button>
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
-                            aria-label="Slide 3"></button>
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3"
-                            aria-label="Slide 4"></button>
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4"
-                            aria-label="Slide 5"></button>
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="5"
-                            aria-label="Slide 6"></button>
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="6"
-                            aria-label="Slide 7"></button>
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="7"
-                            aria-label="Slide 8"></button>
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="8"
-                            aria-label="Slide 9"></button>
-                    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="9"
-                            aria-label="Slide 10"></button>
-                </div>
-
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <div class="row">
-                            <div class="toptenimg col-md-7">
-                                <img src="~/img/food/meat3.jpg" class=" d-block w-100" alt="Image 1">
-                            </div>
-                            <div class="toptenitem col-md-5">
-                                <h3>推薦餐點 TOP<span style="font-size:35px">  1</span></h3><br>
-                                <h4>通心菲力</h4>
-                                <p>Price: $400 </p><br>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
+            <div class="carousel-inner">
+                <div v-for="(t, index) in temp.slice(1, 11)" :key="t.productId" :class="{'carousel-item': true, 'active': index == 0}">
+                    <div class="row">
+                        <div class="toptenimg col-md-8">
+                            <img :src="baseUrl + t.mealImg" class=" d-block" alt="Image 1">
                         </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="toptenimg col-md-7">
-                                <img src="~/img/food/risotto3.jpg" class="d-block w-100" alt="Image 2">
-                            </div>
-                            <div class="toptenitem col-md-5">
-                                <h3>推薦餐點 TOP<span style="font-size:35px">  2</span></h3><br>
-                                <h4>咖哩龍蝦燉飯</h4>
-                                <p>Price: $450</p>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="toptenimg col-md-7">
-                                <img src="~/img/food/pasta1.jpg" class="d-block w-100" alt="Image 3">
-                            </div>
-                            <div class="toptenitem col-md-5">
-                                <h3>推薦餐點 TOP<span style="font-size:35px">  3</span></h3><br>
-                                <h3>辣炒蛤蠣義大利麵</h3>
-                                <p>Price: $350</p>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="toptenimg col-md-7">
-                                <img src="~/img/food/meat4.jpg" class="d-block w-100" alt="Image 4">
-                            </div>
-                            <div class="toptenitem col-md-5">
-                                <h3>推薦餐點 TOP<span style="font-size:35px">  4</span></h3><br>
-                                <h3>時蔬烤羊排</h3>
-                                <p>Price: $400</p>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="toptenimg col-md-7">
-                                <img src="~/img/food/pizza3.jpg" class="d-block w-100" alt="Image 5">
-                            </div>
-                            <div class="toptenitem col-md-5">
-                                <h3>推薦餐點 TOP<span style="font-size:35px">  5</span></h3><br>
-                                <h3>蘿勒起司披薩</h3>
-                                <p>Price: $250</p>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="toptenimg col-md-7">
-                                <img src="~/img/food/dessert3.jpg" class="d-block w-100" alt="Image 6">
-                            </div>
-                            <div class="toptenitem col-md-5">
-                                <h3>推薦餐點 TOP<span style="font-size:35px">  6</span></h3><br>
-                                <h3>可可慕斯蛋糕</h3>
-                                <p>Price: $150</p>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="toptenimg col-md-7">
-                                <img src="~/img/food/beverage2.jpg" class="d-block w-100" alt="Image 7">
-                            </div>
-                            <div class="toptenitem col-md-5">
-                                <h3>推薦餐點 TOP<span style="font-size:35px">  7</span></h3><br>
-                                <h3>抹茶撞奶</h3>
-                                <p>Price: $80</p>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="toptenimg col-md-7">
-                                <img src="~/img/food/beverage8.jpg" class="d-block w-100" alt="Image 8">
-                            </div>
-                            <div class="toptenitem col-md-5">
-                                <h3>推薦餐點 TOP<span style="font-size:35px">  8</span></h3><br>
-                                <h3>莓果奶昔</h3>
-                                <p>Price: $80</p>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="toptenimg col-md-7">
-                                <img src="~/img/food/dessert1.jpg" class="d-block w-100" alt="Image 9">
-                            </div>
-                            <div class="toptenitem col-md-5">
-                                <h3>推薦餐點 TOP<span style="font-size:35px">  9</span></h3><br>
-                                <h3>法式草莓奶油可麗餅</h3>
-                                <p>Price: $150</p>
-                                <div class="carousel-caption">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="toptenimg col-md-7">
-                                <img src="~/img/food/meat6.jpg" class="d-block w-100" alt="Image 10">
-                            </div>
-                            <div class="toptenitem col-md-5">
-                                <h3>推薦餐點 TOP<span style="font-size:35px">  10</span></h3><br>
-                                <h3>鮭魚佐燉時蔬</h3>
-                                <p>Price: $450</p>
-                                <div class="carousel-caption">
-                                </div>
+                        <div class="toptenitem col-md-4">
+                            <h3>推薦餐點 TOP<span style="font-size:35px">  {{index+1}}</span></h3><br>
+                            <h4>{{t.productName}}</h4>
+                            <p>${{t.unitPrice}}</p><br>
+                            <div class="carousel-caption">
                             </div>
                         </div>
                     </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
-                        data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
-                        data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
             </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
     </section>
     <!--Top10 carousul section end-->
@@ -454,5 +308,33 @@
 
 @section Scripts {
 
-    <script></script>
+    <script>
+        var app = new Vue({
+            el: '#topten',
+            data: {
+                baseUrl: '',
+                temp: [],
+                selectedCategoryId: '',
+                selectedSubCategoryId: '',
+                categories: [],
+            },
+            mounted:
+                function () {
+                    let _this = this;
+                    _this.baseUrl = window.location.origin + '/';
+                    //取得餐點
+                    axios.get('/api/menu/GetMenu')
+                        .then(response => {
+                            _this.temp = response.data;
+                        });
+                    // 取得類別
+                    axios.get('/api/Order/CategoriesWithSubs')
+                        .then(response => _this.categories = response.data)
+                        .catch(err => {
+                            console.error(err);
+                            alert('無法獲取菜單類別，請稍後再試。');
+                        });
+                }
+        });
+    </script>
 }

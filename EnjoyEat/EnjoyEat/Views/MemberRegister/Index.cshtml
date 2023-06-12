@@ -54,28 +54,28 @@
                     <span>會員基本資料</span>
                 </h4>
 
-                <div class="row">
+                <div class="row" id="memberform">
 
                     <div class="col-md-2">
                         <div class="infoClass">
                             姓氏:
                         </div>
                     </div>
-                    <input type="text" class="form-label col-md-4 " v-model="lastName" placeholder="請輸入姓氏">
+                    <input type="text" class="col-md-4 " v-model="lastName" placeholder="請輸入姓氏">
 
                     <div class="col-md-2">
                         <div class="infoClass">
                             名字:
                         </div>
                     </div>
-                    <input type="text" class="form-label col-md-4" v-model="firstName" placeholder="請輸入名字">
+                    <input type="text" class="col-md-4" v-model="firstName" placeholder="請輸入名字">
 
                     <div class="col-md-2">
                         <div class="infoClass">
                             電話:
                         </div>
                     </div>
-                    <input type="text" class="form-label col-md-4" minlength="10" maxlength="10" v-model="phone" placeholder="請輸入電話">
+                    <input type="text" class="col-md-4" minlength="10" maxlength="10" v-model="phone" placeholder="請輸入電話">
                     <div id="AccountHelpBlock" class="form-text nono" v-if="phonecheck">
                         輸入電話長度過短，請重新確認
                     </div>
@@ -85,17 +85,15 @@
                             性別:
                         </div>
                     </div>
-                    <select name="" class="col-md-4 book-a-table form-label" required v-model="gender">
+                    <select name="" class="col-md-4 " required v-model="gender">
                         <option value="" disabled selected>請選擇性別</option>
                         <option :value="g.value" v-for="g in genders">{{g.txt}}</option>
                     </select>
 
-                    <div class="col-md-8">
-                        <div class="infoClass">
-                            出生日期:
-                        </div>
+                    <div class="col-md-8" id="birthday">
+                        <label>出生日期:</label>
                     </div>
-                    <div id="d1" class="calendar col-md-4 ">
+                    <div id="d1" class="calendar ">
                         <!-- datepicker -->
                         <date-picker v-model="birthday"
                                      value-type="format"
@@ -113,14 +111,14 @@
                     <div id="AccountHelpBlock" class="form-text nono col-md-6" v-if="emailDuplicate">
                         您的電子郵件已註冊過
                     </div>
-                    <input type="email" class="left form-label col-md-11" v-model="email" placeholder="請輸入電子郵件">
+                    <input id="email" type="email" class="col-md-11" v-model="email" placeholder="請輸入電子郵件">
 
                     <div class="col-md-3">
                         <div class="infoClass">
                             聯絡地址:
                         </div>
                     </div>
-                    <input type="text" class="left form-label col-md-11" v-model="address" placeholder="請輸入聯絡地址">
+                    <input id="address" type="text" class="col-md-11" v-model="address" placeholder="請輸入聯絡地址">
                 </div>
                 <div class="d-grid gap-2 col-md-9 mx-auto">
                     <button class="btn btn-primary" type="button" @@click="submitInfo">送出</button>

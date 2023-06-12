@@ -45,7 +45,7 @@
 						password: self.password
 					};
 					if (!self.account || !self.password) {
-						self.swal('error', '帳號密碼錯誤');
+						self.swal('warning', '請輸入帳號密碼');
 						return
 					}
 					axios.post('EmployeeLogin/Login', request)
