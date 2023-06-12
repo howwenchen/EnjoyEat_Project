@@ -94,6 +94,15 @@
             padding: 6px 10px 4px;
         }
 
+        .btnMinus {
+            padding: 0;
+            margin: 5px 0;
+        }
+
+        .cart-item p {
+            margin-bottom: 0;
+            margin: auto;
+        }
     </style>
 }
 
@@ -214,7 +223,7 @@
                     <br />
                     <!-- 購物車品項 -->
                     <div class="row cart-item" v-for="item in cart" :key="item.productId">
-                        <button class="d-inline-block col-1" v-on:click="removeFromCart(item)"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-outline-secondary col-1 btnMinus" v-on:click="removeFromCart(item)"><i class="fa fa-minus"></i></button>
                         <p class="d-inline-block col-7">{{ item.productName }}</p>
                         <p class="d-inline-block col-2">{{ currency(item.unitPrice) }}</p>
                         <p class="d-inline-block col-2"> x {{ item.quantity }}</p>
