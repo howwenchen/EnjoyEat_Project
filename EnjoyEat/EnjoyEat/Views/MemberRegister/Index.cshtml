@@ -111,17 +111,17 @@
                     <div id="AccountHelpBlock" class="form-text nono col-md-6" v-if="emailDuplicate">
                         您的電子郵件已註冊過
                     </div>
-                    <input id="email" type="email" class="col-md-11" v-model="email" placeholder="請輸入電子郵件">
+                    <input id="email" type="email" class="form-control" v-model="email" placeholder="請輸入電子郵件">
 
                     <div class="col-md-3">
                         <div class="infoClass">
                             聯絡地址:
                         </div>
                     </div>
-                    <input id="address" type="text" class="col-md-11" v-model="address" placeholder="請輸入聯絡地址">
+                    <input id="address" type="text" class="form-control" v-model="address" placeholder="請輸入聯絡地址">
                 </div>
-                <div class="d-grid gap-2 col-md-9 mx-auto">
-                    <button class="btn btn-primary" type="button" @@click="submitInfo">送出</button>
+                <div id="submit">
+                    <button class="btn btn-primary" type="button" id="submitbtn" @@click="submitInfo">送出</button>
                 </div>
             </div>
         </section>

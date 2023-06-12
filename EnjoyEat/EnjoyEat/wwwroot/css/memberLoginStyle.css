@@ -103,11 +103,14 @@ margin-left:10px;
 #submit {
     justify-content: flex-end;
     display: flex;
+    margin-top:30px;
 }
     #submit button {
-        margin-right: 5px;
+        margin-right:5px;
         background-color: #cda45e;
         border: 1px solid #cda45e;
+        height:40px;
+        width:200px;
     }
 #forgetPasswordlist input {
     padding: .375rem .75rem;

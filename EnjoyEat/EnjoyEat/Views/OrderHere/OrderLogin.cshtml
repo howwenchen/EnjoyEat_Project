@@ -25,7 +25,7 @@
 		<p>尚未成為會員？</p>
 		</div>*@
 		<div class="start-order-button">
-			<button v-on:click="StartToOrder" class="btn btn-outline-warning btn-lg">開始點餐</button>
+			<button v-on:click="StartToOrder" class="btn btn-lg">開始點餐</button>
 		</div>
 	</form>
 </div>
@@ -135,12 +135,13 @@
 					let self = this;
 					Swal.fire({
 						icon: 'warning',
-						color: '#FFF',
-						iconColor: '#D8CDB9',
-						background: '#2F4F4F',
+						color: 'black',
+						iconColor: '#cda45e',
+						//background: '#2F4F4F',
 						text: '請輸入桌號或人數 !',
 						position: 'center',
 						confirmButtonText: '確定',
+						confirmButtonColor: '#cda45e',
 						customClass: {
 							popup: 'custom-swal-popup'
 						},

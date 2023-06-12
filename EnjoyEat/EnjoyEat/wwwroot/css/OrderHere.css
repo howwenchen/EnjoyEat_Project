@@ -1,25 +1,26 @@
 ﻿body {
-
     justify-content: center;
     align-items: center;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.9);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Poppins",sans-serif;
 }
 
 .form-container {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: #c1a883c6;
     padding: 20px;
     border-radius: 15px;
-    border: solid 3px darkgoldenrod;
+    border: solid 1px #625b4b;
     text-align: left;
     width: 100%;
     max-width: 400px;
+    margin: 0 auto;
 }
 
     .form-container h2 {
         margin-bottom: 40px;
         text-align: center;
+        color: #eec276;
     }
 
     .form-container label {
@@ -34,6 +35,11 @@
         font-size: 18px;
         margin-left: 10px;
         border-radius: 5px;
+        box-shadow: none;
+        background: #FFF;
+        border: 1px solid #aaa;
+        color: black;
+        text-align:right;
     }
 
         .form-container input[type="text"],
@@ -80,7 +86,7 @@
 }
 
     .start-order-button button {
-        background-color: #d9832d;
+        background-color: #cda45e;
         color: white;
         border: none;
         padding: 10px 20px;
@@ -89,7 +95,7 @@
     }
 
 button:hover {
-    background-color: #b8380d;
+    background-color: #ffd966;
 }
 
 .dialog-container {
