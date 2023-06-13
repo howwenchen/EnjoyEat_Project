@@ -1,3 +1,7 @@
 ﻿body, table, .form-select, .form-control, .sidebar .navbar .navbar-nav .nav-link, .table-striped > tbody > tr:nth-of-type(odd) {
     color: #ffffff !important;
 }
+
+.form-control:disabled, .form-control:read-only {
+    background-color: #000000;
+}

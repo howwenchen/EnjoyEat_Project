@@ -1,7 +1,9 @@
 ﻿using EnjoyEat.Models;
 using EnjoyEat.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using static NuGet.Packaging.PackagingConstants;
 
 namespace EnjoyEat.Controllers
@@ -14,13 +16,15 @@ namespace EnjoyEat.Controllers
             this._db = db;
         }
 
-        public IActionResult Index()
-        {
+		[Authorize(Roles = "User")]
+		public IActionResult Index()
+		{
             return View();
 
         }
 
-        public IActionResult EditPassword()
+		[Authorize(Roles = "User")]
+		public IActionResult EditPassword()
         {
             return View();
         }

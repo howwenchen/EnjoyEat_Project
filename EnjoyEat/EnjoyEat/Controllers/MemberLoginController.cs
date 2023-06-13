@@ -76,7 +76,7 @@ namespace EnjoyEat.Controllers
         }
 
 
-        [Authorize(Roles = "User")]
+        
         public IActionResult Logout()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
