@@ -1,53 +1,99 @@
 ﻿@section Styles{
-    <link href="~/css/reservations.css" rel="stylesheet" />
+    <style>
+        #storeLocal {
+            margin-bottom: 100px;
+        }
 
+        #enjoyEatInformation {                                             
+            margin-left: 100px;
+        }
+
+
+        #contactUsForm {
+            display: flex;
+            justify-content: center;
+            align-items      : center;
+            width: 100%;
+        }
+
+        #customerComment {
+            margin-top: 100px;
+        }
+
+        #contactQuestion {
+            font-size: 14px;
+            color: #bab3a6;
+            justify-content: center;
+        }
+
+        #commentOption {
+            border-radius: 0;
+            box-shadow: none;
+            font-size: 14px;
+            background: #0c0b09;
+            border-color: #625b4b;
+            color: #aaa;
+            height: 44px;
+        }
+
+        #contactUsForm input::placeholder, #contactUsForm textarea::placeholder, #contactUsForm select::placeholder {
+            color: #aaa;
+        }
+
+        #submitbtn {
+            background: #cda45e;
+            border: 0;
+            padding: 10px 35px;
+            color: #fff;
+            transition: .4s;
+            border-radius: 50px;
+        }
+
+    </style>
 }
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
 <main id="main">
     <!-- ======= Contact Section ======= -->
-    <section class="contact">
-        <div class="container" data-aos="fade-up" id="contactUslist">
+    <section class="contact" id="contactUslist">
+        <div class="container" data-aos="fade-up">
             <div class="section-title" data-aos="fade-up">
                 <h2>店家資訊</h2>
             </div>
-            <div data-aos="fade-up" id="storeLocal">
-                 <div class="row mt-5" id="enjoyEatLocation">
-                   
-                    <div id="map" style="border: 0; width: 50%; height: 300px" frameborder="0" allowfullscreen>
-                    </div>
-                    <div class="col-lg-4" id="enjoyEatInformation">
-                        <div class="info">
-                            <div class="address">
-                                <i class="bi bi-geo-alt"></i>
-                                <h4>地址:</h4>
-                                <p>100台北市中正區青島東路、紹興南街口</p>
-                            </div>
+            <div data-aos="fade-up" class="row mt-5" id="storeLocal">
+                    <div id="map" style="border: 0; width: 50%; height: 300px" frameborder="0" allowfullscreen></div>
+                <div class="col-lg-4" id="enjoyEatInformation">
+                    <div class="info">
+                        <div class="address">
+                            <i class="bi bi-geo-alt"></i>
+                            <h4>地址:</h4>
+                            <p>100台北市中正區青島東路、紹興南街口</p>
+                        </div>
 
-                            <div class="open-hours">
-                                <i class="bi bi-clock"></i>
-                                <h4>營業時間:</h4>
-                                <p>
-                                    Monday-Saturday:<br />
-                                    11:00 AM - 21:00PM
-                                </p>
-                            </div>
+                        <div class="open-hours">
+                            <i class="bi bi-clock"></i>
+                            <h4>營業時間:</h4>
+                            <p>
+                                Monday-Saturday:<br />
+                                11:00 AM - 21:00PM
+                            </p>
+                        </div>
 
-                            <div class="email">
-                                <i class="bi bi-envelope"></i>
-                                <h4>Email:</h4>
-                                <p>thm101team66@gmail.com</p>
-                            </div>
+                        <div class="email">
+                            <i class="bi bi-envelope"></i>
+                            <h4>Email:</h4>
+                            <p>thm101team66@gmail.com</p>
+                        </div>
 
-                            <div class="phone">
-                                <i class="bi bi-phone"></i>
-                                <h4>電話:</h4>
-                                <p>02 5589 55488 </p>
-                            </div>
+                        <div class="phone">
+                            <i class="bi bi-phone"></i>
+                            <h4>電話:</h4>
+                            <p>02 5589 55488 </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="content section-title" id="customerComment">
             <h2>顧客服務</h2>
             <br />
@@ -84,13 +130,15 @@
                                        id="phone"
                                        v-model="phone"
                                        placeholder="請輸入您的電話"
+                                       maxlength="10"
+                                       minlength="10"
                                        required />
                             </div>
                             <div class="col-md-6 form-group mt-3 mt-md-0">
-                                <select class="book-a-table form-control form-select" id="commentOption" v-model="serviceOption">
+                                <select class="book-a-table form-control form-select" id="commentOption" v-model="serviceOption" name="time">
                                     <option value="" disabled selected>請選擇服務項目</option>
                                     <template>
-                                        <option v-for="sq in servicelist" :value="sq.value">{{sq.txt}}</option>
+                                        <option :value="mt.value" v-for="mt in servicelist">{{mt.txt}}</option>
                                     </template>
                                 </select>
                             </div>
@@ -128,6 +176,7 @@
         </div>
     </section>
 </main>
+
 <!-- End Contact Section -->
 @section Scripts
     {

@@ -121,7 +121,7 @@
                                             <th scope="col">單價</th>
                                             <th scope="col">會員折扣</th>
                                             <th scope="col">小計金額</th>
-                                            <th scope="col">刪除</th>
+                                            <th scope="col" v-if="success==false">刪除</th>
                                             <th scope="col" v-if="success==false">修改</th>
                                         </tr>
                                     </thead>
@@ -134,7 +134,7 @@
                                             <td>{{order.unitPrice}}</td>
                                             <td>{{order.discount}}</td>
                                             <td>{{order.subtotalPrice}}</td>
-                                                <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="deleteDetail(order)">刪除</button></td>
+                                            <td><button v-if="success==false" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="deleteDetail(order)">刪除</button></td>
                                             <td><button v-if="success==false" class="col btneditproducts btn-sm btn-light btnCheckinModal" type="button" @@click="edit(order)">修改明細</button></td>
                                             </template>
                                         </tr>
@@ -173,27 +173,8 @@
     <script src="/axios/axios.min.js"></script>
     <script src="~/microsoft/signalr/dist/browser/signalr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue2-datepicker@3.11.0/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
     <script type="text/javascript">
-        var connection = new signalR.HubConnectionBuilder()
-            .withUrl("/paymentHub")
-            .build();
-
-        connection.on("PaymentStatusChanged", function (orderId, isPaid) {
-            if (isPaid) {
-                // 如果收到的付款狀態為已付款，則跳出提醒視窗
-                Swal.fire(
-                    '交易狀態提示',
-                    '訂單編號： ' + orderId + '付款成功',
-                    'success'
-                )
-            }
-        });
-
-        connection.start().catch(function (err) {
-            return console.error(err.toString());
-        });
-    </script>
-    <script>
         let app = new Vue({
             el: '#app',
             data: {
@@ -262,7 +243,7 @@
                 },
                 //結帳
                 check: function (orderId){
-                    this.signalr.invoke("TrackPaymentStatus",orderId.toString())
+                    this.signalr.invoke("TrackPaymentStatus", orderId.toString())
                     axios.put(`/api/OrderBackend/EditPayStatus/${orderId}`).then(response => {
                         this.getOrder();
                     })
@@ -333,17 +314,25 @@
                     );
                 },
                 //刪除訂單明細
-                deleteDetail:function(order){
+                deleteDetail: function (order) {
                     let _this = this;
-                    var ret = confirm("確定要刪除嗎?")
-                    if (ret == true) {
                         axios.delete(`/api/OrderBackend/DeleteOrderDetail/${order.orderDetailId}`)
                             .then(response => {
-                                alert("已成功刪除")
-                                _this.getOrder();
-                            })
-                    }
-                },
+                                Swal.fire({
+                                    allowOutsideClick: false,
+                                    icon: 'success',
+                                    color: '#333',
+                                    iconColor: '#D8CDB9',
+                                    background: '#FFF',
+                                    title: '訂單刪除成功',
+                                    showConfirmButton: false,
+                                    timer: 2000,
+                                    position: 'center'
+                                }).then(result => {
+                                    _this.getOrder();
+                                });
+                            });
+                }
             },
             mounted: function () {
                 let _this = this;
@@ -351,6 +340,16 @@
                 _this.signalr = new signalR.HubConnectionBuilder().withUrl("/PaymentHub").build();
                 _this.signalr.start()
                     .then(() => {
+                        _this.signalr.on("PaymentStatusChanged", function (orderId, isPaid) {
+                            if (isPaid) {
+                                // 如果收到的付款狀態為已付款，則跳出提醒視窗
+                                Swal.fire(
+                                    '交易狀態提示',
+                                    '訂單編號： ' + orderId + '付款成功',
+                                    'success'
+                                )
+                            }
+                        });
                         console.log("connection");
                     })
                     .catch((err) => {

@@ -541,43 +541,83 @@ public class OrderAPIController : Controller
     [HttpPost]
     public IActionResult CreateOrder([FromBody] CartViewModel cartViewModel)
     {
+        var IsTakeaway = bool.Parse(HttpContext.Session.GetString("IsTakeaway"));
         try
         {
-            var order = new Order
+            if (!IsTakeaway)
             {
-                MemberId = cartViewModel.MemberId,
-                OrderDate = DateTime.Now,
-                IsTakeway = bool.Parse(HttpContext.Session.GetString("IsTakeaway")),
-                TotalPrice = cartViewModel.Items.Sum(item => item.Quantity * item.UnitPrice), // 計算總價格
-                IsSuccess = false, // 預設為未完成訂單
-                OrderDetails = new List<OrderDetail>(),
-                CustomerCount = HttpContext.Session.GetInt32("CustomerCount") ?? null,
-                TableId = (short?)HttpContext.Session.GetInt32("TableId") ?? 0, 
-                CampaignDiscount = 0,
-                LevelDiscount = 1,
-                FinalPrice = cartViewModel.Items.Sum(item => item.Quantity * item.UnitPrice)
-            };
-
-            foreach (var item in cartViewModel.Items)
-            {
-                var orderDetail = new OrderDetail
+                var order = new Order
                 {
-                    ProductId = item.ProductId,
-                    UnitPrice = item.UnitPrice,
-                    Quantity = item.Quantity,
-                    Discount = 1,
-                    SubtotalPrice = (item.Quantity * item.UnitPrice)
+                    MemberId = cartViewModel.MemberId,
+                    OrderDate = DateTime.Now,
+                    IsTakeway = bool.Parse(HttpContext.Session.GetString("IsTakeaway")),
+                    TotalPrice = cartViewModel.Items.Sum(item => item.Quantity * item.UnitPrice), // 計算總價格
+                    IsSuccess = false, // 預設為未完成訂單
+                    OrderDetails = new List<OrderDetail>(),
+                    CustomerCount = HttpContext.Session.GetInt32("CustomerCount") ?? 0,
+                    TableId = (short?)HttpContext.Session.GetInt32("TableId") ?? 0,
+                    CampaignDiscount = 0,
+                    LevelDiscount = 1,
+                    FinalPrice = cartViewModel.Items.Sum(item => item.Quantity * item.UnitPrice)
                 };
-                order.OrderDetails.Add(orderDetail);
+                foreach (var item in cartViewModel.Items)
+                {
+                    var orderDetail = new OrderDetail
+                    {
+                        ProductId = item.ProductId,
+                        UnitPrice = item.UnitPrice,
+                        Quantity = item.Quantity,
+                        Discount = 1,
+                        SubtotalPrice = (item.Quantity * item.UnitPrice)
+                    };
+                    order.OrderDetails.Add(orderDetail);
+                }
+
+                _context.Orders.Add(order);
+                _context.SaveChanges();
+
+                // 清空購物車
+                cartViewModel.Items.Clear();
+
+                return Ok(order.OrderId);
             }
 
-            _context.Orders.Add(order);
-            _context.SaveChanges();
+            else
+            {
+                var order = new Order
+                {
+                    MemberId = cartViewModel.MemberId,
+                    OrderDate = DateTime.Now,
+                    IsTakeway = bool.Parse(HttpContext.Session.GetString("IsTakeaway")),
+                    TotalPrice = cartViewModel.Items.Sum(item => item.Quantity * item.UnitPrice), // 計算總價格
+                    IsSuccess = false, // 預設為未完成訂單
+                    OrderDetails = new List<OrderDetail>(),
+                    CampaignDiscount = 0,
+                    LevelDiscount = 1,
+                    FinalPrice = cartViewModel.Items.Sum(item => item.Quantity * item.UnitPrice)
+                };
+                foreach (var item in cartViewModel.Items)
+                {
+                    var orderDetail = new OrderDetail
+                    {
+                        ProductId = item.ProductId,
+                        UnitPrice = item.UnitPrice,
+                        Quantity = item.Quantity,
+                        Discount = 1,
+                        SubtotalPrice = (item.Quantity * item.UnitPrice)
+                    };
+                    order.OrderDetails.Add(orderDetail);
+                }
 
-            // 清空購物車
-            cartViewModel.Items.Clear();
+                _context.Orders.Add(order);
+                _context.SaveChanges();
 
-            return Ok(order.OrderId);
+                // 清空購物車
+                cartViewModel.Items.Clear();
+
+                return Ok(order.OrderId);
+            }
+            
         }
         catch (Exception ex)
         {

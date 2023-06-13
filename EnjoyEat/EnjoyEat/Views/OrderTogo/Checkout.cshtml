@@ -152,7 +152,7 @@
 @section Scripts{
     <script src="~/js/main.js"></script>
     <script src="~/font-awesome/js/all.min.js"></script>
-
+    <script src="~/microsoft/signalr/dist/browser/signalr.min.js"></script>
     <script>
         
 
@@ -167,6 +167,7 @@
                 levelDiscountSum:'',
                 paymentMethod:'',
                 onlinePaymentData:[],
+                signalr:[]
             },
             computed: {
                 formattedOrderDate() {
@@ -180,7 +181,7 @@
                         this.OrderId = response.data.orderId;
                         console.log(this.OrderId);
 
-                        //確保先抓到memberId並存起來後，才開始抓訂單內容
+                        // 確保先抓到 memberId 並存起來後，才開始抓訂單內容
                         return axios.get("/Checkout/GetOrderDetails", {
                             params: {
                                 OrderId: this.OrderId
@@ -190,12 +191,30 @@
                     .then(response => {
                         this.OrderItem = response.data;
                         this.totalDiscount = this.OrderItem.totalPrice - this.OrderItem.finalPrice;
-                        this.levelDiscountSum = (this.OrderItem.totalPrice - this.OrderItem.campaignDiscount)
-                            * (1 - this.OrderItem.levelDiscount);
+                        this.levelDiscountSum = (this.OrderItem.totalPrice - this.OrderItem.campaignDiscount) * (1 - this.OrderItem.levelDiscount);
                     })
                     .catch(error => {
                         console.log(error);
-                    })
+                    });
+            },
+            mounted: function () {
+                this.signalr = new signalR.HubConnectionBuilder()
+                    .withUrl("/paymentHub", { query: { orderId: this.OrderId.toString() } })
+                    .configureLogging(signalR.LogLevel.Information)
+                    .build();
+                this.signalr.on("PaymentStatusChanged", (isSuccess) => {
+                    if (isSuccess) {
+                        swal({
+                            title: "付款成功",
+                            text: "感謝您的購買！",
+                            icon: "success",
+                            button: "返回首頁",
+                        }).then(() => {
+                            window.location.href = '/';
+                        });
+                    }
+                });
+                this.signalr.start().catch(err => console.error(err.toString()));
             },
             methods: {
                 currency: function (value) {
@@ -239,32 +258,13 @@
                             timer: 3000000,    
                         }).then(() => {
                             //追蹤訂單結帳狀態
-                            this.trackPaymentStatus(this.OrderId);
+                            console.log(this.OrderId);
+                            this.trackPaymentStatus(this.OrderId.toString());
                         });
                     }
                 },
                 trackPaymentStatus: function (orderId) {
-                    let connection = new signalR.HubConnectionBuilder()
-                        .withUrl("/paymentHub")
-                        .configureLogging(signalR.LogLevel.Information)
-                        .build();
-
-                    connection.start().then(() => {
-                        connection.invoke("TrackPaymentStatus", orderId);
-                    }).catch(err => console.error(err.toString()));
-
-                    connection.on("PaymentStatusChanged", (isSuccess) => {
-                        if (isSuccess) {
-                            swal({
-                                title: "付款成功",
-                                text: "感謝您的購買！",
-                                icon: "success",
-                                button: "返回首頁",
-                            }).then(() => {
-                                window.location.href = '/';  
-                            });
-                        }
-                    });
+                    this.signalr.invoke("TrackPaymentStatus", orderId.toString()).catch(err => console.error(err.toString()));
                 }
             }
         });
