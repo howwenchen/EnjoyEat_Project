@@ -15,17 +15,19 @@ public class PaymentHub : Hub
 
     public override Task OnConnectedAsync()
     {
-        var orderId = Context.GetHttpContext().Request.Query["orderId"].ToString();
-
-        _usersConnections.TryAdd(orderId, Context.ConnectionId);
+        if (Context.GetHttpContext().Request.Query.TryGetValue("orderId", out var orderId))
+        {
+            _usersConnections.TryAdd(orderId, Context.ConnectionId);
+        }
 
         return base.OnConnectedAsync();
     }
 
+
     public async Task TrackPaymentStatus(string orderId)
     {
         bool isPaid = CheckPaymentStatus(orderId);
-        if (_usersConnections.TryGetValue(orderId, out var connectionId))
+        if (_usersConnections.TryGetValue(orderId.ToString(), out var connectionId))
         {
             await Clients.Client(connectionId).SendAsync("PaymentStatusChanged", isPaid);
         }
