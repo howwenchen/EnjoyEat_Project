@@ -168,7 +168,7 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.QuestionId).HasColumnName("QuestionID");
 
-                entity.Property(e => e.AnswerContent).HasColumnType("text");
+                entity.Property(e => e.AnswerContent).HasMaxLength(300);
 
                 entity.Property(e => e.AnswerDatetime).HasColumnType("datetime");
 
@@ -180,7 +180,7 @@ namespace EnjoyEat.Models
 
                 entity.Property(e => e.Phone).HasMaxLength(15);
 
-                entity.Property(e => e.QuestionContent).HasColumnType("text");
+                entity.Property(e => e.QuestionContent).HasMaxLength(300);
 
                 entity.Property(e => e.QuestionDatetime).HasColumnType("datetime");
 
