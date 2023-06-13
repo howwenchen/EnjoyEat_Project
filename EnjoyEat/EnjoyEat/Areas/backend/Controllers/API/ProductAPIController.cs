@@ -3,15 +3,18 @@ using EnjoyEat.Areas.OrderForHere.Models;
 using EnjoyEat.Models;
 using EnjoyEat.Models.DTO;
 using EnjoyEat.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace EnjoyEat.Areas.backend.Controllers.API
 {
     [Route("api/ProductAPI/[action]")]
     [ApiController]
+    [Authorize(Roles = "manager,staff")]
     public class ProductAPIController : ControllerBase
     {
         private readonly db_a989fe_thm101team6Context _context;

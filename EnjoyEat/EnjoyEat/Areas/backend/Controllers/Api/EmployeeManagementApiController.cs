@@ -21,7 +21,8 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 {
 	[Route("api/EmployeeManagementApi/[action]")]
 	[ApiController]
-	public class EmployeeManagementApiController : ControllerBase
+    [Authorize(Roles = "manager,staff")]
+    public class EmployeeManagementApiController : ControllerBase
 	{
 		private readonly db_a989fe_thm101team6Context _context;
 		private readonly EncryptService encrypt;
