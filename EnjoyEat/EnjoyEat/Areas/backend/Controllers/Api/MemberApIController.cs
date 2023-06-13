@@ -1,14 +1,17 @@
 ﻿using EnjoyEat.Models;
 using EnjoyEat.Models.ViewModel;
 using EnjoyEat.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Security.Policy;
 
 namespace EnjoyEat.Areas.backend.Controllers.Api
 {
     [Route("api/memberbackend/[action]")]
     [ApiController]
+    [Authorize(Roles = "manager,staff")]
     public class MemberApIController : ControllerBase
     {
         private readonly db_a989fe_thm101team6Context db;

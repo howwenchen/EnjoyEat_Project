@@ -2,16 +2,19 @@
 using EnjoyEat.Models;
 using EnjoyEat.Models.DTO;
 using EnjoyEat.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Linq;
 
 namespace EnjoyEat.Areas.backend.Controllers.Api
 {
     [Route("api/ReservationManagementApi/[action]")]
     [ApiController]
+    [Authorize(Roles = "manager,staff")]
     public class ReservationManagementAPIController : ControllerBase
     {
         private readonly db_a989fe_thm101team6Context db;
