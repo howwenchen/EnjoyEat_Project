@@ -1,6 +1,55 @@
 ﻿@section Styles{
-    <link href="~/css/reservations.css" rel="stylesheet" />
+    <style>
+        #storeLocal {
+            margin-bottom: 100px;
+        }
 
+        #enjoyEatInformation {
+            margin-left: 100px;
+        }
+
+
+        #contactUsForm {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        #customerComment {
+            margin-top: 100px;
+        }
+
+        #contactQuestion {
+            font-size: 14px;
+            color: #bab3a6;
+            justify-content: center;
+        }
+
+        #commentOption {
+            border-radius: 0;
+            box-shadow: none;
+            font-size: 14px;
+            background: #0c0b09;
+            border-color: #625b4b;
+            color: #aaa;
+            height: 44px;
+        }
+
+        #contactUsForm input::placeholder, #contactUsForm textarea::placeholder, #contactUsForm select::placeholder {
+            color: #aaa;
+        }
+
+        #submitbtn {
+            background: #cda45e;
+            border: 0;
+            padding: 10px 35px;
+            color: #fff;
+            transition: .4s;
+            border-radius: 50px;
+        }
+
+    </style>
 }
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.5/dist/sweetalert2.all.min.js"></script>
 <main id="main">
@@ -10,10 +59,8 @@
             <div class="section-title" data-aos="fade-up">
                 <h2>店家資訊</h2>
             </div>
-            <div data-aos="fade-up" id="storeLocal">
-                <div class="row mt-5" id="enjoyEatLocation">
-                    <div id="map" style="border: 0; width: 50%; height: 300px" frameborder="0" allowfullscreen>
-                </div>
+            <div data-aos="fade-up" class="row mt-5" id="storeLocal">
+                    <div id="map" style="border: 0; width: 50%; height: 300px" frameborder="0" allowfullscreen></div>
                 <div class="col-lg-4" id="enjoyEatInformation">
                     <div class="info">
                         <div class="address">
