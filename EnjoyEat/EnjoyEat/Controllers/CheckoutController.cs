@@ -44,14 +44,17 @@ namespace EnjoyEat.Controllers
                 .OrderByDescending(o => o.OrderDate)
                 .Select(o => o.OrderId)
                 .FirstOrDefaultAsync();
+            var order = await _context.Orders.FindAsync(orderId);
+            var customerCount = order.CustomerCount;
+            var tableId = order.TableId;
 
             if (memberId == null)
             {
                 return NotFound("未登入");
             }
 
-            //回傳memberId跟OrderId
-            return Json(new { memberId, orderId });
+            //回傳memberId跟OrderId跟order
+            return Json(new { memberId, orderId, customerCount, tableId });
         }
 
 

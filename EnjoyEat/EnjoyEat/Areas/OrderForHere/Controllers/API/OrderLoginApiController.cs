@@ -106,9 +106,9 @@ namespace EnjoyEat.Areas.OrderForHere.API
 		//}
 
 		[HttpGet]
-		public short GetMaxGuests(short tableNumber)
+		public short GetMaxGuests(short tableId)
 		{
-			var table = _context.Tables.FirstOrDefault(t => t.TableId == tableNumber);
+			var table = _context.Tables.FirstOrDefault(t => t.TableId == tableId);
 			if (table != null)
 			{
 				return table.Capacity;
@@ -125,10 +125,10 @@ namespace EnjoyEat.Areas.OrderForHere.API
 		{
 			if (!string.IsNullOrEmpty(request.TableId) && !string.IsNullOrEmpty(request.CustomerCount))
 			{
-				HttpContext.Session.SetString("tableNumber", request.TableId);
-				HttpContext.Session.SetString("partySize", request.CustomerCount);
-				Console.WriteLine("tableNumber: " + HttpContext.Session.GetString("tableNumber"));
-				Console.WriteLine("partySize: " + HttpContext.Session.GetString("partySize"));
+				HttpContext.Session.SetInt32("TableId", int.Parse(request.TableId));
+				HttpContext.Session.SetInt32("CustomerCount", int.Parse(request.CustomerCount));
+				Console.WriteLine("TableId: " + HttpContext.Session.GetString("TableId"));
+				Console.WriteLine("CustomerCount: " + HttpContext.Session.GetString("CustomerCount"));
 
 				return Ok("開始點餐");
 			}

@@ -167,6 +167,7 @@
                 levelDiscountSum: '',
                 paymentMethod: '',
                 onlinePaymentData: [],
+                Order:[],
             },
             computed: {
                 formattedOrderDate() {
@@ -231,7 +232,7 @@
                             });
                     } else if (this.paymentMethod === '內用結帳') {
                         swal({
-                            title: "訂單編號:" + this.OrderId + "已提交",
+                            title: "訂單編號:" + this.OrderId + " 已提交",
                             text: "請至櫃台出示畫面付款",
                             icon: "info",
                             showCancelButton: false,
