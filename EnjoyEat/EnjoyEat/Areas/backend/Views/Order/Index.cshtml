@@ -262,7 +262,7 @@
                 },
                 //結帳
                 check: function (orderId){
-                    //this.signalr.invoke("TrackPaymentStatus",orderId)
+                    this.signalr.invoke("TrackPaymentStatus",orderId.toString())
                     axios.put(`/api/OrderBackend/EditPayStatus/${orderId}`).then(response => {
                         this.getOrder();
                     })
