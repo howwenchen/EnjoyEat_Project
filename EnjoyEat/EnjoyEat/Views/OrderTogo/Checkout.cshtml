@@ -152,7 +152,7 @@
 @section Scripts{
     <script src="~/js/main.js"></script>
     <script src="~/font-awesome/js/all.min.js"></script>
-
+    <script src="~/microsoft/signalr/dist/browser/signalr.min.js"></script>
     <script>
         
 
@@ -167,6 +167,7 @@
                 levelDiscountSum:'',
                 paymentMethod:'',
                 onlinePaymentData:[],
+                signalr:[]
             },
             computed: {
                 formattedOrderDate() {
@@ -196,6 +197,26 @@
                     .catch(error => {
                         console.log(error);
                     })
+            },
+            mounted: function () {
+                this.signalr = new signalR.HubConnectionBuilder()
+                    .withUrl("/paymentHub?orderId=" + this.OrderId)
+                    .configureLogging(signalR.LogLevel.Information)
+                    .build();
+                this.signalr.on("PaymentStatusChanged", (isSuccess) => {
+                    if (isSuccess) {
+                        swal({
+                            title: "付款成功",
+                            text: "感謝您的購買！",
+                            icon: "success",
+                            button: "返回首頁",
+                        }).then(() => {
+                            window.location.href = '/';
+                        });
+                    }
+                });
+
+                this.signalr.start().catch(err => console.error(err.toString()));
             },
             methods: {
                 currency: function (value) {
@@ -239,32 +260,13 @@
                             timer: 3000000,    
                         }).then(() => {
                             //追蹤訂單結帳狀態
+                            console.log(this.OrderId);
                             this.trackPaymentStatus(this.OrderId);
                         });
                     }
                 },
                 trackPaymentStatus: function (orderId) {
-                    let connection = new signalR.HubConnectionBuilder()
-                        .withUrl("/paymentHub")
-                        .configureLogging(signalR.LogLevel.Information)
-                        .build();
-
-                    connection.start().then(() => {
-                        connection.invoke("TrackPaymentStatus", orderId);
-                    }).catch(err => console.error(err.toString()));
-
-                    connection.on("PaymentStatusChanged", (isSuccess) => {
-                        if (isSuccess) {
-                            swal({
-                                title: "付款成功",
-                                text: "感謝您的購買！",
-                                icon: "success",
-                                button: "返回首頁",
-                            }).then(() => {
-                                window.location.href = '/';  
-                            });
-                        }
-                    });
+                    this.signalr.invoke("TrackPaymentStatus", orderId).catch(err => console.error(err.toString()));
                 }
             }
         });

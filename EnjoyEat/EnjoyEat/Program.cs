@@ -1,5 +1,4 @@
 using EnjoyEat.Areas.OrderForHere.Models;
-using EnjoyEat.Hubs;
 using EnjoyEat.Models;
 using EnjoyEat.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -68,7 +67,7 @@ namespace EnjoyEat
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<PaymentHub>("/paymentHub");
+                endpoints.MapHub<PaymentHub>("/PaymentHub");
             });
 
             app.MapControllerRoute(

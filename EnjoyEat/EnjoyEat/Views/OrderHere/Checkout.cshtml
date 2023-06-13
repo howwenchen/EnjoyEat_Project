@@ -246,7 +246,7 @@
                     }
                 },
                 trackPaymentStatus: function (orderId) {
-                    let connection = new signalR.HubConnectionBuilder()
+                    let c = new signalR.HubConnectionBuilder()
                         .withUrl("/paymentHub")
                         .configureLogging(signalR.LogLevel.Information)
                         .build();
