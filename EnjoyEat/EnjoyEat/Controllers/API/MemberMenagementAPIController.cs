@@ -44,7 +44,7 @@ namespace EnjoyEat.Controllers.API
                 return "郵件已註冊過";
             }
 
-            var user = db.MemberLogins.FirstOrDefault(x => x.Account == model.Account);
+            var user =await db.MemberLogins.FirstOrDefaultAsync(x => x.Account == model.Account);
             if (user != null)
             {
                 return "帳號已註冊過";
@@ -63,7 +63,7 @@ namespace EnjoyEat.Controllers.API
                 LevelDiscount = 0.95,
             };
             db.Members.Add(MemberInfo);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             int memberId = MemberInfo.MemberId;
             
             string salt = Guid.NewGuid().ToString("N");
@@ -77,8 +77,8 @@ namespace EnjoyEat.Controllers.API
                 IsActive =false,
             };
             
-            db.MemberLogins.Add(MemberAccount);
-            db.SaveChanges();
+            await db.MemberLogins.AddAsync(MemberAccount);
+            await db.SaveChangesAsync();
 
             //寄信
             var obj = new AesValidationDto(model.Account,DateTime.Now.AddDays(3));
