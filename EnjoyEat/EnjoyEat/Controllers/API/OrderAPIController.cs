@@ -551,8 +551,8 @@ public class OrderAPIController : Controller
                 TotalPrice = cartViewModel.Items.Sum(item => item.Quantity * item.UnitPrice), // 計算總價格
                 IsSuccess = false, // 預設為未完成訂單
                 OrderDetails = new List<OrderDetail>(),
-                CustomerCount = null,
-                TableId = null,
+                CustomerCount = HttpContext.Session.GetInt32("CustomerCount") ?? null,
+                TableId = (short?)HttpContext.Session.GetInt32("TableId") ?? 0, 
                 CampaignDiscount = 0,
                 LevelDiscount = 1,
                 FinalPrice = cartViewModel.Items.Sum(item => item.Quantity * item.UnitPrice)
