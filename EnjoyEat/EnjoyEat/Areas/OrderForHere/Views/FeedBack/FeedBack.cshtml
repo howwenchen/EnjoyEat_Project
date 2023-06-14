@@ -365,15 +365,16 @@
                                 iconColor: '#D8CDB9',
                                 background: '#FFF',
                                 title: '送出成功',
+                                Timer: 2000,
                                 //text: '',
                                 html: '<div class="custom-swal-container"><div class="custom-swal-message">謝謝您的光臨!</div></div>',
                                 showConfirmButton: false,
                                 position: 'center'
                             })
-                        })
+                            .then(()=>{windows.location.href="/";
+                        });
                 }
              },
         })
     </script>
-
 }

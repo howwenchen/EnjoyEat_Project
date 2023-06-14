@@ -399,14 +399,18 @@
                 //使用者按下提交按鈕後，把購物車資料送出，並且清空購物車資料
                 submit() {
                     if (this.cart.length === 0) {
-                        alert('您的購物車是空的，請先添加商品。');
+                        swal('Oops!', '您的購物車是空的，請先添加商品。', 'warning');
                         return;
                     }
                     axios.post('/api/Order/CreateOrder', { MemberId: this.memberId, Items: this.cart })
                         .then(response => {
-                            alert('訂單已送出');
-                            this.cart = [];
-                            this.total = 0;
+                            swal({
+                                title: "Success!",
+                                text: "訂單已送出",
+                                icon: "success",
+                                timer: 1000,
+                                buttons: false
+                            });
                             // 清空後台購物車
                             axios.post('/api/Order/ClearCart')
                                 .then(() => {
@@ -418,7 +422,6 @@
                             window.location.href = '/OrderTogo/Checkout/' + response.data;
                         })
                         .catch(error => {
-                            alert('送出失敗');
                             console.log(error);
                         });
                 }

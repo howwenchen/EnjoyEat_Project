@@ -9,12 +9,16 @@
   <ItemGroup>
     <Compile Remove="Areas\backend\Models\**" />
     <Compile Remove="Views\NewFolder1\**" />
+    <Compile Remove="Views\Payment\**" />
     <Content Remove="Areas\backend\Models\**" />
     <Content Remove="Views\NewFolder1\**" />
+    <Content Remove="Views\Payment\**" />
     <EmbeddedResource Remove="Areas\backend\Models\**" />
     <EmbeddedResource Remove="Views\NewFolder1\**" />
+    <EmbeddedResource Remove="Views\Payment\**" />
     <None Remove="Areas\backend\Models\**" />
     <None Remove="Views\NewFolder1\**" />
+    <None Remove="Views\Payment\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -123,6 +127,7 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.SassCompiler" Version="1.62.1" />
+    <PackageReference Include="Chart.js" Version="3.7.1" />
 
 
 
@@ -162,6 +167,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Areas\backend\Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Payment\**" />
   </ItemGroup>
 
 </Project>
