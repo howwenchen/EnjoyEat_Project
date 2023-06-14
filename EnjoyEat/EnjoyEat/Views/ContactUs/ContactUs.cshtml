@@ -4,7 +4,7 @@
             margin-bottom: 100px;
         }
 
-        #enjoyEatInformation {
+        #enjoyEatInformation {                                             
             margin-left: 100px;
         }
 
@@ -12,7 +12,7 @@
         #contactUsForm {
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items      : center;
             width: 100%;
         }
 
@@ -130,6 +130,8 @@
                                        id="phone"
                                        v-model="phone"
                                        placeholder="請輸入您的電話"
+                                       maxlength="10"
+                                       minlength="10"
                                        required />
                             </div>
                             <div class="col-md-6 form-group mt-3 mt-md-0">

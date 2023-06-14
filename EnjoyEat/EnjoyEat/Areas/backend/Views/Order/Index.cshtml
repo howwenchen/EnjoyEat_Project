@@ -242,11 +242,13 @@
                     _this.orderInfo = orderlist;
                 },
                 //結帳
-                check: function (orderId){
-                    this.signalr.invoke("TrackPaymentStatus", orderId.toString())
+                check: function (orderId) {
+                    let _this = this;
+                    _this.signalr.invoke("TrackPaymentStatus", orderId.toString())
+                        .catch(err => console.error(err.toString()));
                     axios.put(`/api/OrderBackend/EditPayStatus/${orderId}`).then(response => {
-                        this.getOrder();
-                    })
+                        _this.getOrder();
+                    });
                 },
                 //取得訂單明細
                 getOrderDetail:function(order){

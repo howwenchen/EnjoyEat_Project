@@ -26,43 +26,49 @@ namespace EnjoyEat.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Notify([FromBody] ResponseData responseData)
+        [Route("Payment/Notify")]
+        [Consumes("application/json", "application/x-www-form-urlencoded")]
+        public async Task<IActionResult> Notify([FromForm] ResponseData responseData)
         {
             if (responseData != null)
             {
                 // 將回傳加密資訊從 hex string 轉回 byte array   
                 byte[] tradeInfoBytes = _aesService.ToByteArray(responseData.TradeInfo);
 
-                // 移除 PKCS7 填充
-                byte[] unpaddedTradeInfoBytes = _aesService.RemovePKCS7Padding(tradeInfoBytes);
-
                 // 轉換回 string 且移除多餘的 dash
-                string unpaddedTradeInfo = BitConverter.ToString(unpaddedTradeInfoBytes).Replace("-", "");
+                string unpaddedTradeInfo = BitConverter.ToString(tradeInfoBytes).Replace("-", "");
 
                 // AES 解密
-                var decryptedTradeInfo = _aesService.AesDecryptFromHex(unpaddedTradeInfo, _config["Payment: HashKey"], _config["Payment:HashIV"]);
+                var decryptedTradeInfo = _aesService.AesDecryptFromHex(unpaddedTradeInfo, _config["Payment:HashKey"], _config["Payment:HashIV"]);
 
                 // 驗證 SHA256 雜湊值
-                var calculatedTradeSha = _aesService.AddSHA256CheckCode(decryptedTradeInfo, _config["Payment: HashKey"], _config["Payment:HashIV"]);
+                var calculatedTradeSha = _aesService.AddSHA256CheckCode(decryptedTradeInfo, _config["Payment:HashKey"], _config["Payment:HashIV"]);
                 if (calculatedTradeSha != responseData.TradeSha)
                 {
                     return BadRequest("Invalid TradeSha.");
                 }
 
-                TradeInfoResponse tradeInfo = JsonConvert.DeserializeObject<TradeInfoResponse>(decryptedTradeInfo);
+                TradeInfoResponse? tradeInfo = JsonConvert.DeserializeObject<TradeInfoResponse>(decryptedTradeInfo);
+                string serializedTradeInfo = _aesService.SerializeObject(tradeInfo);
 
                 //將這筆回傳OrderId的Order的IsSuccess的狀態改成true
-                var order = await _context.Orders.FindAsync(tradeInfo.Result.MerchantOrderNo);
-                order.IsSuccess = true;
-                await _context.SaveChangesAsync();
-                ViewBag.Result = tradeInfo.Result;
-                
-                return Ok("訂單狀態已變更");
+                if (tradeInfo != null)
+                {
+                    var order = await _context.Orders.FindAsync(tradeInfo.Result.MerchantOrderNo);
+                    if (order == null)
+                    {
+                        return NotFound("Order not found.");
+                    }
+                    order.IsSuccess = true;
+                    await _context.SaveChangesAsync();
+                    ViewBag.Result = tradeInfo;
+                    return Ok("訂單狀態已變更");
+                }
+
+                return BadRequest();
             }
 
-            // If there is no data, return HTTP 400 Bad Request.
-            return BadRequest();
+            return BadRequest("Invalid response data.");
         }
-
     }
 }

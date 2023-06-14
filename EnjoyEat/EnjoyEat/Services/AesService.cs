@@ -1,5 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace EnjoyEat.Services
 {
@@ -88,6 +90,15 @@ namespace EnjoyEat.Services
             return temp;
         }
 
+        public string SerializeObject(object obj)
+        {
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+                WriteIndented = true
+            };
 
+            return JsonSerializer.Serialize(obj, options);
+        }
     }
 }

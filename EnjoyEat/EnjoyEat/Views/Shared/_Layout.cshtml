@@ -55,7 +55,6 @@
                     <li><a class="nav-link scrollto" asp-controller="Menu" asp-action="Index">菜單</a></li>
                     <li><a class="nav-link scrollto" asp-area="" asp-controller="Home" asp-action="News">最新消息</a></li>
                     <li><a class="nav-link scrollto" asp-area="" asp-controller="Reservations" asp-action="Index">訂位</a></li>
-                    <li><a class="nav-link scrollto" asp-area="" asp-controller="OrderHere" asp-action="OrderLogin">內用點餐</a></li>
                      @if (User.Identity.IsAuthenticated)
                     {
                         <li><a class="nav-link scrollto" asp-area="" asp-controller="OrderTogo" asp-action="Order">外帶點餐</a></li>

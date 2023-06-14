@@ -154,8 +154,6 @@
     <script src="~/font-awesome/js/all.min.js"></script>
     <script src="~/microsoft/signalr/dist/browser/signalr.min.js"></script>
     <script>
-        
-
         Vue.config.devtools = true;
         const app = new Vue({
             el: '#app',
@@ -163,58 +161,43 @@
                 OrderItem: [],
                 MemberId: '',
                 OrderId: '',
-                totalDiscount:'',
-                levelDiscountSum:'',
-                paymentMethod:'',
-                onlinePaymentData:[],
-                signalr:[]
+                totalDiscount: '',
+                levelDiscountSum: '',
+                paymentMethod: '',
+                onlinePaymentData: [],
+                signalr: null,
+                isPaid:""
             },
             computed: {
                 formattedOrderDate() {
                     var temp = String(this.OrderItem.orderDate);
-                    return temp.replace('T', ' ');}
+                    return temp.replace('T', ' ');
+                }
             },
-            created: function () {
-                axios.get("/Checkout/GetMemberAndOrder")
-                    .then(response => {
-                        this.MemberId = response.data.memberId;
-                        this.OrderId = response.data.orderId;
-                        console.log(this.OrderId);
+            async created() {
+                try {
+                    let response = await axios.get("/Checkout/GetMemberAndOrder");
+                    this.MemberId = response.data.memberId;
+                    this.OrderId = response.data.orderId;
+                    console.log(this.OrderId);
 
-                        // 確保先抓到 memberId 並存起來後，才開始抓訂單內容
-                        return axios.get("/Checkout/GetOrderDetails", {
-                            params: {
-                                OrderId: this.OrderId
-                            }
-                        });
-                    })
-                    .then(response => {
-                        this.OrderItem = response.data;
-                        this.totalDiscount = this.OrderItem.totalPrice - this.OrderItem.finalPrice;
-                        this.levelDiscountSum = (this.OrderItem.totalPrice - this.OrderItem.campaignDiscount) * (1 - this.OrderItem.levelDiscount);
-                    })
-                    .catch(error => {
-                        console.log(error);
+                    // 確保先抓到 memberId 並存起來後，才開始抓訂單內容
+                    response = await axios.get("/Checkout/GetOrderDetails", {
+                        params: {
+                            OrderId: this.OrderId
+                        }
                     });
-            },
-            mounted: function () {
-                this.signalr = new signalR.HubConnectionBuilder()
-                    .withUrl("/paymentHub", { query: { orderId: this.OrderId.toString() } })
-                    .configureLogging(signalR.LogLevel.Information)
-                    .build();
-                this.signalr.on("PaymentStatusChanged", (isSuccess) => {
-                    if (isSuccess) {
-                        swal({
-                            title: "付款成功",
-                            text: "感謝您的購買！",
-                            icon: "success",
-                            button: "返回首頁",
-                        }).then(() => {
-                            window.location.href = '/';
-                        });
-                    }
-                });
-                this.signalr.start().catch(err => console.error(err.toString()));
+
+                    this.OrderItem = response.data;
+                    this.totalDiscount = this.OrderItem.totalPrice - this.OrderItem.finalPrice;
+                    this.levelDiscountSum = (this.OrderItem.totalPrice - this.OrderItem.campaignDiscount) * (1 - this.OrderItem.levelDiscount);
+
+                    // Create SignalR connection after OrderId is retrieved
+                    this.connectSignalR();
+                }
+                catch (error) {
+                    console.log(error);
+                }
             },
             methods: {
                 currency: function (value) {
@@ -232,7 +215,7 @@
                     if (this.paymentMethod === '線上結帳') {
                         axios.post("/Checkout/OnlinePayment", { orderId: this.OrderId })
                             .then(response => {
-                                this.onlinePaymentData = response.data; 
+                                this.onlinePaymentData = response.data;
 
                                 // 填充表單元素
                                 document.getElementById('MerchantID').value = this.onlinePaymentData.merchantID;
@@ -249,22 +232,68 @@
                             });
                     } else if (this.paymentMethod === '內用結帳') {
                         swal({
-                            title: "訂單編號:"+this.OrderId+"已提交",
+                            title: "訂單編號:" + this.OrderId + "已提交",
                             text: "請至櫃台出示畫面付款",
                             icon: "info",
-                            showCancelButton:false,
-                            showConfirmButton:false,
+                            showCancelButton: false,
+                            showConfirmButton: false,
                             buttons: false,
-                            timer: 3000000,    
+                            timer: 3000000,
                         }).then(() => {
                             //追蹤訂單結帳狀態
                             console.log(this.OrderId);
                             this.trackPaymentStatus(this.OrderId.toString());
                         });
+                    } else {
+                        swal({
+                            title: "WARNING",
+                            text: "請選擇付款方式",    
+                            icon: "warning",
+                            showConfirmButton: true,
+                            confirmButtonText: "確定",
+                        }).then(() => {
+                            console.log("錯誤");
+                        });
                     }
                 },
-                trackPaymentStatus: function (orderId) {
-                    this.signalr.invoke("TrackPaymentStatus", orderId.toString()).catch(err => console.error(err.toString()));
+                trackPaymentStatus: async function (orderId) {
+                    try {
+                        await this.signalr.invoke("TrackPaymentStatus", orderId.toString());
+                    } catch (error) {
+                        console.error(error);
+                        throw error;
+                    }
+                },
+                async connectSignalR() {
+                    try {
+                        this.signalr = new signalR.HubConnectionBuilder()
+                            .withUrl("/PaymentHub", { query: { orderId: this.OrderId } })
+                            .withAutomaticReconnect()  // 添加這一行來啟用自動重新連接
+                            .build();
+                        this.signalr.on("PaymentStatusChanged", (orderId, isPaid) => {
+                            console.log(`PaymentStatusChanged event received. OrderId: ${orderId}, IsPaid: ${isPaid}`);
+                            if (isPaid) {
+                                swal({
+                                    title: "付款成功",
+                                    text: "訂單編號：" + orderId + "，感謝您的購買！",
+                                    icon: "success",
+                                    button: "返回首頁",
+                                }).then(() => {
+                                    window.location.href = '/';
+                                });
+                            }
+                        });
+                        await this.signalr.start();
+                        console.log("SignalR Connected.");
+                    }
+                    catch (err) {
+                        console.error(err.toString());
+                    }
+                }
+            },
+            beforeDestroy() {
+                if (this.signalr) {
+                    this.signalr.stop();
                 }
             }
         });
