@@ -121,7 +121,7 @@
                                             <th scope="col">單價</th>
                                             <th scope="col">會員折扣</th>
                                             <th scope="col">小計金額</th>
-                                            <th scope="col">刪除</th>
+                                            <th scope="col" v-if="success==false">刪除</th>
                                             <th scope="col" v-if="success==false">修改</th>
                                         </tr>
                                     </thead>
@@ -134,7 +134,7 @@
                                             <td>{{order.unitPrice}}</td>
                                             <td>{{order.discount}}</td>
                                             <td>{{order.subtotalPrice}}</td>
-                                                <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="deleteDetail(order)">刪除</button></td>
+                                            <td><button v-if="success==false" type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="deleteDetail(order)">刪除</button></td>
                                             <td><button v-if="success==false" class="col btneditproducts btn-sm btn-light btnCheckinModal" type="button" @@click="edit(order)">修改明細</button></td>
                                             </template>
                                         </tr>

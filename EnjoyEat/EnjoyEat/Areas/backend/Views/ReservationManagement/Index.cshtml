@@ -1,6 +1,24 @@
 ﻿@section Styles{
     <style>
-
+        .form-myself{
+        display: block;
+        width: 100%;
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #6C7293;
+        background-color: #000;
+        background-clip: padding-box;
+        border: 1px solid #000;
+        appearance: none;
+        border-radius: 5px;
+        transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+    }
+    textarea.form-myself{
+            min-height: calc(1.5em + 0.75rem + 2px);
+    }
+    
         #btngroup {
             display: flex;
             white-space: nowrap;
@@ -147,7 +165,7 @@
 
                             <div id=" col-12 col-xl-6 row">
                             <label for="datepicker" class="col-12 col-form-label">用餐日期：</label>
-                            <date-picker v-model="create.reserveDate"
+                                <date-picker  v-model="create.reserveDate"
                                              value-type="format"
                                              name="ReserveDate"
                                              id="datepicker"
@@ -158,14 +176,14 @@
                             </div>
                             <div id="modal_container">
                             <label class="col-md-8 "for="create_reserveName">訂位姓名：</label>
-                            <input class="form-control col-md-4" v-model="create.ReserveName" type="text" id="create_reserveName">
+                                <input class="form-myself col-md-4" v-model="create.ReserveName" type="text" id="create_reserveName">
                             <label for="create_phone">聯絡電話：</label>
-                                <input class="form-control col-2" v-model="create.Phone" type="text" id="create_phone" maxlength="10"
+                                <input class="form-myself col-2" v-model="create.Phone" type="text" id="create_phone" maxlength="10"
                                        minlength="">
                                 <label for="create_phone">Email：</label>
-                                <input class="form-control col-2" v-model="create.Email" type="text" id="create_email" >
+                                <input class="form-myself col-2" v-model="create.Email" type="text" id="create_email">
                             <label>用餐時段：</label>
-                            <select class="form-control col-2" name="" id="ReserveTime" v-model="create.ReserveTime">
+                                <select class="form-myself col-2" name="" id="ReserveTime" v-model="create.ReserveTime">
                                 <option value="" disabled selected></option>
                                 <template>
                                     <option :value="t.value" v-for="t in Time">{{t.txt}}</option>
@@ -173,7 +191,7 @@
                             </select>
 
                             <label>大人人數：</label>
-                            <select class="form-control col-2" name="" id="people" v-model="create.Adult">
+                                <select class="form-myself col-2" name="" id="people" v-model="create.Adult">
                                 <option value="" disabled selected></option>
                                 <template>
                                     <option :value="peo.value" v-for="peo in people">{{peo.txt}}</option>
@@ -181,14 +199,14 @@
                             </select>
 
                             <label>小孩人數：</label>
-                            <select class="form-control col-2" name="" id="Kid" v-model="create.Kid">
+                                <select class="form-myself col-2" name="" id="Kid" v-model="create.Kid">
                                 <option value="" disabled selected></option>
                                 <template>
                                     <option :value="k.value" v-for="k in kid">{{k.txt}}</option>
                                 </template>
                             </select>
                             <label>備註：</label>
-                            <textarea class="form-control col-2"
+                                <textarea class="form-myself col-2"
                                       name="message"
                                       rows="5"
                                       v-model="create.note"
