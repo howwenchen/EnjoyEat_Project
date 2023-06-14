@@ -2,15 +2,18 @@
 using EnjoyEat.Models;
 using EnjoyEat.Models.ViewModel;
 using EnjoyEat.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace EnjoyEat.Areas.backend.Controllers.Api
 {
     [Route("api/OrderBackend/[action]")]
     [ApiController]
-    public class OrderAPIController : Controller
+	[Authorize(Roles = "manager,staff")]
+	public class OrderAPIController : Controller
     {
         private readonly db_a989fe_thm101team6Context db;
         public OrderAPIController(db_a989fe_thm101team6Context db)
