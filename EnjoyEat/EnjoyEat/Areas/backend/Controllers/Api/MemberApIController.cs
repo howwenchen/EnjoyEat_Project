@@ -11,8 +11,13 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 {
     [Route("api/memberbackend/[action]")]
     [ApiController]
+<<<<<<< HEAD
 	[Authorize(Roles = "manager,staff")]
 	public class MemberApIController : ControllerBase
+=======
+    [Authorize(Roles = "manager,staff")]
+    public class MemberApIController : ControllerBase
+>>>>>>> d432b430a87a6667fe599a58e1682bd9314c2fc5
     {
         private readonly db_a989fe_thm101team6Context db;
         private readonly HashService hash;
