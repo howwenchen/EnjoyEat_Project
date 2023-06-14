@@ -12,13 +12,8 @@ namespace EnjoyEat.Areas.backend.Controllers.Api
 {
     [Route("api/OrderBackend/[action]")]
     [ApiController]
-<<<<<<< HEAD
 	[Authorize(Roles = "manager,staff")]
 	public class OrderAPIController : Controller
-=======
-    [Authorize(Roles = "manager,staff")]
-    public class OrderAPIController : Controller
->>>>>>> d432b430a87a6667fe599a58e1682bd9314c2fc5
     {
         private readonly db_a989fe_thm101team6Context db;
         public OrderAPIController(db_a989fe_thm101team6Context db)
