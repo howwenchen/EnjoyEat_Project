@@ -90,7 +90,7 @@ namespace EnjoyEat.Controllers.API
             {
                 From = new MailAddress("thm101team66@gmail.com"),
                 Subject = "啟用網站驗證",
-                Body = @$"請點這<a href=`https://localhost:7071/MemberLogin/Success?code={encode}`>此處</a>來啟用你的帳號",
+                Body = @$"請點這<a href=`https://enjoyeat.azurewebsites.net/MemberLogin/Success?code={encode}`>此處</a>來啟用你的帳號",
                 IsBodyHtml = true,
                 BodyEncoding = Encoding.UTF8,
             };
@@ -195,7 +195,7 @@ namespace EnjoyEat.Controllers.API
             {
                 From = new MailAddress("thm101team66@gmail.com"),
                 Subject = "重新設定密碼",
-                Body = @$"請點這<a href=`https://localhost:7071/MemberLogin/ChangePDSC?code={encode}`>這裡</a>重新設定密碼",
+                Body = @$"請點這<a href=`https://enjoyeat.azurewebsites.net/MemberLogin/ChangePDSC?code={encode}`>這裡</a>重新設定密碼",
                 IsBodyHtml = true,
                 BodyEncoding = Encoding.UTF8,
             };

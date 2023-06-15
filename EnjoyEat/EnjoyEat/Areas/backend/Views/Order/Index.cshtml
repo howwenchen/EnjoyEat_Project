@@ -146,8 +146,8 @@
                                             <td>{{order.unitPrice}}</td>
                                             <td><input class="form-label" v-model="order.discount" /></td>
                                             <td>{{count}}</td>
+                                            <td><button type="button" class=" btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="deleteDetail(order)">刪除</button></td>
                                             <td><button class=" btneditproducts btn-light btn-sm btnCheckinModal" type="button" @@click="update(order)">儲存明細</button></td>
-                                            <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" @@click="deleteDetail(order)">刪除</button></td>
                                             </template>
                                         </tr>
                                     </tbody>
