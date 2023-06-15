@@ -199,6 +199,8 @@
                 regis: false,
                 signalr:{},
                 success:false,
+                connection: null,
+                OrderId:""
             },
             computed:{
                 count:function(){
@@ -244,11 +246,39 @@
                 //結帳
                 check: function (orderId) {
                     let _this = this;
-                    _this.signalr.invoke("TrackPaymentStatus", orderId.toString())
-                        .catch(err => console.error(err.toString()));
-                    axios.put(`/api/OrderBackend/EditPayStatus/${orderId}`).then(response => {
-                        _this.getOrder();
-                    });
+                    _this.OrderId = orderId;
+                    console.log(this.OrderId);
+                    //先改變訂單的付款狀態
+                    axios.put(`/api/OrderBackend/EditPayStatus/${orderId}`)
+                        .then(response => {
+                            //再建立連線並傳入orderId
+                            _this.connection = new signalR.HubConnectionBuilder()
+                                .withUrl(`/PaymentHub?orderId=${this.OrderId}`) // 傳入orderId
+                                .build();
+
+                            //設置訊息接收監聽器
+                            _this.connection.on("PaymentStatusChanged", function (isPaid) {
+                                if (isPaid) {
+                                    Swal.fire(
+                                        `訂單編號: ${_this.OrderId}`,
+                                        '訂單付款成功',
+                                        'success'
+                                    );
+                                };
+                            });
+
+                            //開始連線
+                            _this.connection.start()
+                                .then(() => {
+                                    //連線成功後呼叫signalr去發送訊息
+                                    _this.connection.invoke("TrackPaymentStatus", orderId.toString())
+                                        .catch(err => console.error(err.toString()));
+                                    _this.getOrder();
+                                })
+                                .catch((err) => {
+                                    console.log(err.toString());
+                                });
+                        });
                 },
                 //取得訂單明細
                 getOrderDetail:function(order){
@@ -339,25 +369,8 @@
             mounted: function () {
                 let _this = this;
                 _this.getOrder();
-                _this.signalr = new signalR.HubConnectionBuilder().withUrl("/PaymentHub").build();
-                _this.signalr.start()
-                    .then(() => {
-                        _this.signalr.on("PaymentStatusChanged", function (orderId, isPaid) {
-                            if (isPaid) {
-                                // 如果收到的付款狀態為已付款，則跳出提醒視窗
-                                Swal.fire(
-                                    '交易狀態提示',
-                                    '訂單編號： ' + orderId + '付款成功',
-                                    'success'
-                                )
-                            }
-                        });
-                        console.log("connection");
-                    })
-                    .catch((err) => {
-                        console.log(err.toString());
-                    });
-            }
-        });
+            },
+        }
+    )
     </script>
 }

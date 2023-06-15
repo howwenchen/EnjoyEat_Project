@@ -152,10 +152,10 @@
 @section Scripts{
     <script src="~/js/main.js"></script>
     <script src="~/font-awesome/js/all.min.js"></script>
+    <script src="~/microsoft/signalr/dist/browser/signalr.min.js"></script>
+
 
     <script>
-
-
         Vue.config.devtools = true;
         const app = new Vue({
             el: '#app',
@@ -167,7 +167,8 @@
                 levelDiscountSum: '',
                 paymentMethod: '',
                 onlinePaymentData: [],
-                Order:[],
+                Order: [],
+                connection: null,
             },
             computed: {
                 formattedOrderDate() {
@@ -176,24 +177,46 @@
                 }
             },
             created: function () {
+                let _this = this;
                 axios.get("/Checkout/GetMemberAndOrder")
                     .then(response => {
-                        this.MemberId = response.data.memberId;
-                        this.OrderId = response.data.orderId;
-                        console.log(this.OrderId);
+                        _this.MemberId = response.data.memberId;
+                        _this.OrderId = response.data.orderId;
+                        console.log(_this.OrderId);
 
-                        //確保先抓到memberId並存起來後，才開始抓訂單內容
+                        // 建立SignalR連接
+                        _this.connection = new signalR.HubConnectionBuilder()
+                            .withUrl(`/PaymentHub?orderId=${this.OrderId}`)
+                            .configureLogging(signalR.LogLevel.Information)
+                            .build();
+
+                        _this.connection.on("PaymentStatusChanged", (isSuccess) => {
+                            if (isSuccess) {
+                                swal({
+                                    title: "付款成功",
+                                    text: "感謝您的購買！",
+                                    icon: "success",
+                                    button: "返回首頁",
+                                }).then(() => {
+                                    window.location.href = '/';
+                                });
+                            }
+                        });
+
+                        _this.connection.start()
+                            .catch(err => console.error(err.toString()));
+
                         return axios.get("/Checkout/GetOrderDetails", {
                             params: {
-                                OrderId: this.OrderId
+                                OrderId: _this.OrderId
                             }
                         });
                     })
                     .then(response => {
-                        this.OrderItem = response.data;
-                        this.totalDiscount = this.OrderItem.totalPrice - this.OrderItem.finalPrice;
-                        this.levelDiscountSum = (this.OrderItem.totalPrice - this.OrderItem.campaignDiscount)
-                            * (1 - this.OrderItem.levelDiscount);
+                        _this.OrderItem = response.data;
+                        _this.totalDiscount = _this.OrderItem.totalPrice - _this.OrderItem.finalPrice;
+                        _this.levelDiscountSum = (_this.OrderItem.totalPrice - _this.OrderItem.campaignDiscount)
+                            * (1 - _this.OrderItem.levelDiscount);
                     })
                     .catch(error => {
                         console.log(error);
@@ -212,62 +235,35 @@
                     return formatter.format(value);
                 },
                 processPayment: function () {
-                    if (this.paymentMethod === '線上結帳') {
-                        axios.post("/Checkout/OnlinePayment", { orderId: this.OrderId })
+                    let _this = this;
+                    if (_this.paymentMethod === '線上結帳') {
+                        axios.post("/Checkout/OnlinePayment", { orderId: _this.OrderId })
                             .then(response => {
-                                this.onlinePaymentData = response.data;
+                                _this.onlinePaymentData = response.data;
 
-                                // 填充表單元素
-                                document.getElementById('MerchantID').value = this.onlinePaymentData.merchantID;
-                                document.getElementById('TradeInfo').value = this.onlinePaymentData.tradeInfo;
-                                document.getElementById('TradeSha').value = this.onlinePaymentData.tradeSha;
-                                document.getElementById('Version').value = this.onlinePaymentData.version;
+                                document.getElementById('MerchantID').value = _this.onlinePaymentData.merchantID;
+                                document.getElementById('TradeInfo').value = _this.onlinePaymentData.tradeInfo;
+                                document.getElementById('TradeSha').value = _this.onlinePaymentData.tradeSha;
+                                document.getElementById('Version').value = _this.onlinePaymentData.version;
 
-                                // FORM SUBMIT換頁
                                 document.getElementById('payment-form').submit();
-
                             })
                             .catch(error => {
                                 console.log(error);
                             });
-                    } else if (this.paymentMethod === '內用結帳') {
+                    } else if (_this.paymentMethod === '內用結帳') {
                         swal({
-                            title: "訂單編號:" + this.OrderId + " 已提交",
+                            title: "訂單編號:" + _this.OrderId + " 已提交",
                             text: "請至櫃台出示畫面付款",
                             icon: "info",
                             showCancelButton: false,
                             showConfirmButton: false,
                             buttons: false,
+                            closeOnClickOutside: false, 
                             timer: 3000000,
-                        }).then(() => {
-                            //追蹤訂單結帳狀態
-                            this.trackPaymentStatus(this.OrderId);
                         });
                     }
                 },
-                trackPaymentStatus: function (orderId) {
-                    let c = new signalR.HubConnectionBuilder()
-                        .withUrl("/paymentHub")
-                        .configureLogging(signalR.LogLevel.Information)
-                        .build();
-
-                    connection.start().then(() => {
-                        connection.invoke("TrackPaymentStatus", orderId);
-                    }).catch(err => console.error(err.toString()));
-
-                    connection.on("PaymentStatusChanged", (isSuccess) => {
-                        if (isSuccess) {
-                            swal({
-                                title: "付款成功",
-                                text: "感謝您的購買！",
-                                icon: "success",
-                                button: "返回首頁",
-                            }).then(() => {
-                                window.location.href = '/';
-                            });
-                        }
-                    });
-                }
             }
         });
     </script>

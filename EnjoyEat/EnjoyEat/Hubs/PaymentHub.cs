@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 public class PaymentHub : Hub
 {
     private readonly db_a989fe_thm101team6Context _dbContext;
-    private static ConcurrentDictionary<string, string> _usersConnections = new ConcurrentDictionary<string, string>();
+    //private static ConcurrentDictionary<string, string> _usersConnections = new ConcurrentDictionary<string, string>();
+    private static ConcurrentDictionary<string, ConcurrentBag<string>> _usersConnections = new ConcurrentDictionary<string, ConcurrentBag<string>>();
     private readonly ILogger<PaymentHub> _logger;
 
     public PaymentHub(db_a989fe_thm101team6Context dbContext, ILogger<PaymentHub> logger)
@@ -18,11 +19,17 @@ public class PaymentHub : Hub
 
     public override async Task OnConnectedAsync()
     {
+        var query = Context.GetHttpContext().Request.Query;
+        foreach (var param in query)
+        {
+            _logger.LogInformation($"Key: {param.Key}, Value: {param.Value}");
+        }
+
+        //從後台訂單管理來的連線獲取OrderId
         if (Context.GetHttpContext().Request.Query.TryGetValue("orderId", out var orderId))
         {
-            _usersConnections.AddOrUpdate(orderId.ToString(), Context.ConnectionId, (key, oldValue) => Context.ConnectionId);
-            await TrackPaymentStatus(orderId);
-
+            var connectionIds = _usersConnections.GetOrAdd(orderId.ToString(), _ => new ConcurrentBag<string>());
+            connectionIds.Add(Context.ConnectionId);
             // 紀錄連線資訊
             _logger.LogInformation($"Connection ID: {Context.ConnectionId} connected for order ID: {orderId}");
         }
@@ -37,10 +44,10 @@ public class PaymentHub : Hub
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        var item = _usersConnections.FirstOrDefault(x => x.Value == Context.ConnectionId);
+        var item = _usersConnections.FirstOrDefault(x => x.Value.Contains(Context.ConnectionId));
         if (item.Key != null)
         {
-            _usersConnections.TryRemove(item.Key, out _);
+            item.Value.TryTake(out _);
         }
 
         return base.OnDisconnectedAsync(exception);
@@ -50,12 +57,20 @@ public class PaymentHub : Hub
     {
         Console.WriteLine($"TrackPaymentStatus called with orderId: {orderId}");
 
+        //此orderId的訂單是否付款成功
         bool isPaid = CheckPaymentStatus(orderId);
-        if (_usersConnections.TryGetValue(orderId.ToString(), out var connectionId))
+        //如果此OrderId有已記錄的connectionId，則發送PaymentStatusChanged事件
+        if (_usersConnections.TryGetValue(orderId.ToString(), out var connectionIds))
         {
-            Console.WriteLine($"Sending PaymentStatusChanged to connection ID: {connectionId} with status: {isPaid}");
-            await Clients.Client(connectionId).SendAsync("PaymentStatusChanged", isPaid);
+            foreach (var connectionId in connectionIds)
+            {
+                Console.WriteLine($"Sending PaymentStatusChanged to connection ID: {connectionId} with status: {isPaid}");
+                //發送PaymentStatusChanged事件
+                //await Clients.Client(connectionId).SendAsync("PaymentStatusChanged", isPaid);
+                await Clients.Client(connectionId).SendAsync("PaymentStatusChanged", isPaid);
+            }
         }
+        await Clients.All.SendAsync("PaymentStatusChanged", isPaid);
     }
 
 
@@ -65,11 +80,6 @@ public class PaymentHub : Hub
         var order = _dbContext.Orders.FirstOrDefault(o => o.OrderId == id);
         if (order != null)
         {
-            // 先更新 IsSuccess 屬性
-            order.IsSuccess = true;
-            _dbContext.SaveChanges();
-
-            // 再返回更新後的值
             return order.IsSuccess;
         }
         else
