@@ -126,7 +126,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.SassCompiler" Version="1.62.1" />
     <PackageReference Include="Chart.js" Version="3.7.1" />
 
 

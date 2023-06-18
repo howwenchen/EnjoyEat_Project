@@ -1,16 +1,7 @@
 ﻿using EnjoyEat.Models;
-using EnjoyEat.Models.ViewModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Drawing.Text;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
-using AspNetCore;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
 using EnjoyEat.Services;
 using System.Text.Json;
 
